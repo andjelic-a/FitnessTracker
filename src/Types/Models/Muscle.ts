@@ -1,4 +1,6 @@
-export default class Muscle {
+import IModel from "./IModel";
+
+export default class Muscle implements IModel {
   id: number;
   name: string;
   muscleGroupId: number;

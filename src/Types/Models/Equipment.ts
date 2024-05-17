@@ -1,4 +1,6 @@
-export default class Equipment {
+import IModel from "./IModel";
+
+export default class Equipment implements IModel {
   id: number;
   name: string;
   usedInExercises: number[];

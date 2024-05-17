@@ -1,4 +1,6 @@
-export default class MuscleGroup {
+import IModel from "./IModel";
+
+export default class MuscleGroup implements IModel {
   id: number;
   name: string;
   muscles: number[];

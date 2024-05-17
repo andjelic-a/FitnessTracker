@@ -1,20 +1,22 @@
-export default class Set {
-  id: string;
+import IModel, { Guid } from "./IModel";
+
+export default class Set implements IModel {
+  id: Guid;
   repRange_Bottom: number;
   repRange_Top: number;
   toFailure: boolean;
   dropSet: boolean;
   exercise: number;
-  creator: string;
+  creator: Guid;
 
   constructor(
-    id: string,
+    id: Guid,
     repRange_Bottom: number,
     repRange_Top: number,
     toFailure: boolean,
     dropSet: boolean,
     exercise: number,
-    creator: string
+    creator: Guid
   ) {
     this.id = id;
     this.repRange_Bottom = repRange_Bottom;

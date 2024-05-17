@@ -1,19 +1,21 @@
-export default class User {
-  id: string;
+import IModel, { Guid } from "./IModel";
+
+export default class User implements IModel {
+  id: Guid;
   name: string;
   email: string;
-  weights: number[];
-  createdWorkouts: number[];
-  createdExerciseSets: number[];
+  weights: Guid[];
+  createdWorkouts: Guid[];
+  createdExerciseSets: Guid[];
   bookmarks: number[];
 
   constructor(
-    id: string,
+    id: Guid,
     name: string,
     email: string,
-    weights: number[],
-    createdWorkouts: number[],
-    createdExerciseSets: number[],
+    weights: Guid[],
+    createdWorkouts: Guid[],
+    createdExerciseSets: Guid[],
     bookmarks: number[]
   ) {
     this.id = id;

@@ -1,8 +1,10 @@
-export default class Exercise {
+import IModel from "./IModel";
+
+export default class Exercise implements IModel {
   id: number;
   name: string;
   images: number[];
-  equipments: number[];
+  equipment: number[];
   primaryMuscleGroups: number[];
   secondaryMuscleGroups: number[];
   primaryMuscles: number[];
@@ -14,7 +16,7 @@ export default class Exercise {
     id: number,
     name: string,
     images: number[],
-    equipments: number[],
+    equipment: number[],
     primaryMuscleGroups: number[],
     secondaryMuscleGroups: number[],
     primaryMuscles: number[],
@@ -25,7 +27,7 @@ export default class Exercise {
     this.id = id;
     this.name = name;
     this.images = images;
-    this.equipments = equipments;
+    this.equipment = equipment;
     this.primaryMuscleGroups = primaryMuscleGroups;
     this.secondaryMuscleGroups = secondaryMuscleGroups;
     this.primaryMuscles = primaryMuscles;

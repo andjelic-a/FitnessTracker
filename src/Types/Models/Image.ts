@@ -1,4 +1,6 @@
-export default class Image {
+import IModel from "./IModel";
+
+export default class Image implements IModel {
   id: number;
   imageURL: string;
   exercise: number;

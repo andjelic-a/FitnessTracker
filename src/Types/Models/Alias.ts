@@ -1,4 +1,6 @@
-export default class Alias {
+import IModel from "./IModel";
+
+export default class Alias implements IModel {
   id: number;
   alias: string;
   exercise: number;

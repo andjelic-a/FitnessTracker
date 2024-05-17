@@ -1,10 +1,12 @@
-export default class WorkoutSet {
-  id: string;
-  targetSets: number;
-  workout: string;
-  set: string;
+import IModel, { Guid } from "./IModel";
 
-  constructor(id: string, targetSets: number, workout: string, set: string) {
+export default class WorkoutSet implements IModel {
+  id: Guid;
+  targetSets: number;
+  workout: Guid;
+  set: Guid;
+
+  constructor(id: Guid, targetSets: number, workout: Guid, set: Guid) {
     this.id = id;
     this.targetSets = targetSets;
     this.workout = workout;
