@@ -2,15 +2,43 @@ import { useGSAP } from "@gsap/react";
 import "./Navigation.scss";
 import gsap from "gsap";
 import Flip from "gsap/Flip";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 gsap.registerPlugin(Flip);
 
-export default function Navigation() {
+interface NavigationProps {
+  shown: boolean;
+}
+
+export default function Navigation({ shown }: NavigationProps) {
   const { contextSafe } = useGSAP();
   const isAnimationActive = useRef(false);
   const selectedNavigationItemRef = useRef<number>(0);
   const navigationContainerRef = useRef<HTMLDivElement>(null);
   const selectionIndicatorRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    shown ? playAppearAnimation() : playDisappearAnimation();
+  }, [shown]);
+
+  const playAppearAnimation = contextSafe(() => {
+    if (!navigationContainerRef.current) return;
+
+    gsap.to(navigationContainerRef.current, {
+      x: 0,
+      duration: 0.3,
+      ease: "sine.inOut",
+    });
+  });
+
+  const playDisappearAnimation = contextSafe(() => {
+    if (!navigationContainerRef.current) return;
+
+    gsap.to(navigationContainerRef.current, {
+      x: "-100%",
+      duration: 0.3,
+      ease: "sine.inOut",
+    });
+  });
 
   const playSelectAnimation = contextSafe((i: number) => {
     if (
@@ -138,7 +166,7 @@ export default function Navigation() {
         Profile
       </div>
       <div onClick={() => onSelect(4)} className="navigation-item">
-        Discover
+        Nutrition
       </div>
       <div className="selection-indicator" ref={selectionIndicatorRef}>
         ●

@@ -1,9 +1,10 @@
 .navigation {
-  grid-column: 1;
-  grid-row: 2;
+  position: fixed;
+  top: 10svh;
   width: 5vw;
-  height: 100vh;
+  height: 90svh;
   padding: 2rem 2rem;
+  transform: translate(-100%, 0);
 
   display: grid;
   grid-template-rows: repeat(5, max-content);
@@ -11,6 +12,8 @@
   grid-template-columns: 2em 1fr;
   grid-auto-flow: column;
   place-items: center start;
+
+  background-color: #000;
 
   user-select: none;
 
