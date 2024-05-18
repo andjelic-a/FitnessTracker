@@ -2,15 +2,51 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.scss";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+import Error from "./Components/Error/Error.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <Error />,
     children: [
       {
-        path: "/user",
+        path: "/",
+        element: <div>Home</div>,
+      },
+      {
+        path: "exercises",
+        element: (
+          <div>
+            Exercises
+            <Outlet />
+          </div>
+        ),
+        children: [
+          {
+            path: ":exerciseId",
+            element: <div>Exercise</div>,
+          },
+        ],
+      },
+      {
+        path: "workouts",
+        element: (
+          <div>
+            Workouts
+            <Outlet />
+          </div>
+        ),
+        children: [
+          {
+            path: ":workoutId",
+            element: <div>workout</div>,
+          },
+        ],
+      },
+      {
+        path: "user",
         element: (
           <div>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae
@@ -129,121 +165,123 @@ const router = createBrowserRouter([
             tempore explicabo. Nostrum, itaque. Mollitia quaerat dolorem iusto
             aliquid. Exercitationem adipisci, voluptate amet sint saepe sit
             minus, eveniet, inventore quasi ea a cupiditate iusto quia ullam
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            sapiente fugit ea facilis, magnam temporibus provident, excepturi
-            illum ipsa ad assumenda voluptates autem officiis? Aut quas ab,
-            laboriosam illum autem architecto exercitationem unde mollitia
-            ratione. Vitae similique rerum nemo qui tempora velit, adipisci
-            atque praesentium ipsum obcaecati at nihil repellendus voluptatem
-            tenetur officiis, quisquam possimus corporis. Quaerat facere
-            inventore omnis possimus molestiae at, nam voluptatum veniam rem
-            optio et perspiciatis! Et harum, corporis totam amet praesentium
+            non! Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. sapiente
+            fugit ea facilis, magnam temporibus provident, excepturi illum ipsa
+            ad assumenda voluptates autem officiis? Aut quas ab, laboriosam
+            illum autem architecto exercitationem unde mollitia ratione. Vitae
+            similique rerum nemo qui tempora velit, adipisci atque praesentium
+            ipsum obcaecati at nihil repellendus voluptatem tenetur officiis,
+            quisquam possimus corporis. Quaerat facere inventore omnis possimus
+            molestiae at, nam voluptatum veniam rem optio et perspiciatis! Et
+            harum, corporis totam amet praesentium assumenda nobis esse ut rerum
+            est? Maxime excepturi labore distinctio dolorum, nam modi quasi ut
+            qui inventore iusto rem tempore explicabo. Nostrum, itaque. Mollitia
+            quaerat dolorem iusto aliquid. Exercitationem adipisci, voluptate
+            amet sint saepe sit minus, eveniet, inventore quasi ea a cupiditate
+            iusto quia ullam non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. sapiente fugit ea facilis, magnam temporibus provident,
+            excepturi illum ipsa ad assumenda voluptates autem officiis? Aut
+            quas ab, laboriosam illum autem architecto exercitationem unde
+            mollitia ratione. Vitae similique rerum nemo qui tempora velit,
+            adipisci atque praesentium ipsum obcaecati at nihil repellendus
+            voluptatem tenetur officiis, quisquam possimus corporis. Quaerat
+            facere inventore omnis possimus molestiae at, nam voluptatum veniam
+            rem optio et perspiciatis! Et harum, corporis totam amet praesentium
             assumenda nobis esse ut rerum est? Maxime excepturi labore
             distinctio dolorum, nam modi quasi ut qui inventore iusto rem
             tempore explicabo. Nostrum, itaque. Mollitia quaerat dolorem iusto
             aliquid. Exercitationem adipisci, voluptate amet sint saepe sit
             minus, eveniet, inventore quasi ea a cupiditate iusto quia ullam
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            sapiente fugit ea facilis, magnam temporibus provident, excepturi
-            illum ipsa ad assumenda voluptates autem officiis? Aut quas ab,
-            laboriosam illum autem architecto exercitationem unde mollitia
-            ratione. Vitae similique rerum nemo qui tempora velit, adipisci
-            atque praesentium ipsum obcaecati at nihil repellendus voluptatem
-            tenetur officiis, quisquam possimus corporis. Quaerat facere
-            inventore omnis possimus molestiae at, nam voluptatum veniam rem
-            optio et perspiciatis! Et harum, corporis totam amet praesentium
+            non! Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. sapiente
+            fugit ea facilis, magnam temporibus provident, excepturi illum ipsa
+            ad assumenda voluptates autem officiis? Aut quas ab, laboriosam
+            illum autem architecto exercitationem unde mollitia ratione. Vitae
+            similique rerum nemo qui tempora velit, adipisci atque praesentium
+            ipsum obcaecati at nihil repellendus voluptatem tenetur officiis,
+            quisquam possimus corporis. Quaerat facere inventore omnis possimus
+            molestiae at, nam voluptatum veniam rem optio et perspiciatis! Et
+            harum, corporis totam amet praesentium assumenda nobis esse ut rerum
+            est? Maxime excepturi labore distinctio dolorum, nam modi quasi ut
+            qui inventore iusto rem tempore explicabo. Nostrum, itaque. Mollitia
+            quaerat dolorem iusto aliquid. Exercitationem adipisci, voluptate
+            amet sint saepe sit minus, eveniet, inventore quasi ea a cupiditate
+            iusto quia ullam non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. non! Repudiandae hic dignissimos aliquam adipisci
+            cupiditate. sapiente fugit ea facilis, magnam temporibus provident,
+            excepturi illum ipsa ad assumenda voluptates autem officiis? Aut
+            quas ab, laboriosam illum autem architecto exercitationem unde
+            mollitia ratione. Vitae similique rerum nemo qui tempora velit,
+            adipisci atque praesentium ipsum obcaecati at nihil repellendus
+            voluptatem tenetur officiis, quisquam possimus corporis. Quaerat
+            facere inventore omnis possimus molestiae at, nam voluptatum veniam
+            rem optio et perspiciatis! Et harum, corporis totam amet praesentium
             assumenda nobis esse ut rerum est? Maxime excepturi labore
             distinctio dolorum, nam modi quasi ut qui inventore iusto rem
             tempore explicabo. Nostrum, itaque. Mollitia quaerat dolorem iusto
             aliquid. Exercitationem adipisci, voluptate amet sint saepe sit
             minus, eveniet, inventore quasi ea a cupiditate iusto quia ullam
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            sapiente fugit ea facilis, magnam temporibus provident, excepturi
-            illum ipsa ad assumenda voluptates autem officiis? Aut quas ab,
-            laboriosam illum autem architecto exercitationem unde mollitia
-            ratione. Vitae similique rerum nemo qui tempora velit, adipisci
-            atque praesentium ipsum obcaecati at nihil repellendus voluptatem
-            tenetur officiis, quisquam possimus corporis. Quaerat facere
-            inventore omnis possimus molestiae at, nam voluptatum veniam rem
-            optio et perspiciatis! Et harum, corporis totam amet praesentium
-            assumenda nobis esse ut rerum est? Maxime excepturi labore
-            distinctio dolorum, nam modi quasi ut qui inventore iusto rem
-            tempore explicabo. Nostrum, itaque. Mollitia quaerat dolorem iusto
-            aliquid. Exercitationem adipisci, voluptate amet sint saepe sit
-            minus, eveniet, inventore quasi ea a cupiditate iusto quia ullam
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            sapiente fugit ea facilis, magnam temporibus provident, excepturi
-            illum ipsa ad assumenda voluptates autem officiis? Aut quas ab,
-            laboriosam illum autem architecto exercitationem unde mollitia
-            ratione. Vitae similique rerum nemo qui tempora velit, adipisci
-            atque praesentium ipsum obcaecati at nihil repellendus voluptatem
-            tenetur officiis, quisquam possimus corporis. Quaerat facere
-            inventore omnis possimus molestiae at, nam voluptatum veniam rem
-            optio et perspiciatis! Et harum, corporis totam amet praesentium
-            assumenda nobis esse ut rerum est? Maxime excepturi labore
-            distinctio dolorum, nam modi quasi ut qui inventore iusto rem
-            tempore explicabo. Nostrum, itaque. Mollitia quaerat dolorem iusto
-            aliquid. Exercitationem adipisci, voluptate amet sint saepe sit
-            minus, eveniet, inventore quasi ea a cupiditate iusto quia ullam
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
-            non! Repudiandae hic dignissimos aliquam adipisci cupiditate.
+            non! Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate. non!
+            Repudiandae hic dignissimos aliquam adipisci cupiditate.
           </div>
         ),
+      },
+      {
+        path: "nutrition",
+        element: <div>Nutrition</div>,
       },
     ],
   },
