@@ -1,0 +1,28 @@
+#page {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 10svh 1fr;
+
+  #page-content {
+    grid-row: 2;
+    overflow-y: scroll;
+    width: 100%;
+    padding: 2rem 1rem;
+    box-sizing: border-box;
+  }
+
+  #header {
+    grid-row: 1;
+    width: 100%;
+    padding: 2rem 1.5rem 0 1.5rem;
+    box-sizing: border-box;
+
+    * {
+      margin: 0;
+    }
+  }
+}
