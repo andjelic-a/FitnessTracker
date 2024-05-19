@@ -12,7 +12,7 @@ type Query<T extends IModel> = `${keyof Include<T>}=${string}`;
 
 export default async function Get<T extends IModel>(
   apiEndpoint: string,
-  include?: IncludeKeys<T> | IncludeKeys<T>[],
+  include?: IncludeKeys<T> | IncludeKeys<T>[] | "none" | "all",
   q?: Query<T> | Query<T>[],
   limit: number = 10,
   offset: number = 0
