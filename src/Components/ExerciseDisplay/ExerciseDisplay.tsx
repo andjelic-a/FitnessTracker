@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import Exercise from "../../Types/Models/Exercise";
 import { Suspense, useEffect } from "react";
-import { GetOne, GetOneFetchPromise } from "../../Data/Get";
 
 export default function ExerciseDisplay() {
   const exerciseDefer = useLoaderData() as ReturnType<
@@ -33,7 +32,7 @@ export const SingleExerciseLoader = async ({
   params: { exerciseId },
 }: SingleExerciseLoaderArguments) => {
   if (!exerciseId) throw new Error("No exerciseId provided");
-  
+
   return defer({
     critical1: fetch(`http://192.168.1.100:5054/api/exercise/${exerciseId}`, {
       method: "GET",

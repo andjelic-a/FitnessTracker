@@ -9,6 +9,7 @@ export default function Exercises() {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
+      {/*@ts-expect-error*/}
       <Await resolve={exercises.exercises}>
         {(exercises: Exercise[]) => (
           <div>
@@ -24,6 +25,6 @@ export default function Exercises() {
 
 export const ExerciseLoader = async () => {
   return defer({
-    exercises: await Get<Exercise>("exercise", "none", undefined, 10, 0),
+    exercises: Get<Exercise>("exercise", "none", undefined, 10, 0),
   });
 };

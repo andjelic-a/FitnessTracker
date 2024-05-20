@@ -3,13 +3,18 @@ import "./Navigation.scss";
 import gsap from "gsap";
 import Flip from "gsap/Flip";
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 gsap.registerPlugin(Flip);
 
 interface NavigationProps {
   shown: boolean;
+  items: {
+    name: string;
+    path: string;
+  }[];
 }
 
-export default function Navigation({ shown }: NavigationProps) {
+export default function Navigation({ shown, items }: NavigationProps) {
   const { contextSafe } = useGSAP();
   const isAnimationActive = useRef(false);
   const selectedNavigationItemRef = useRef<number>(0);
@@ -153,21 +158,16 @@ export default function Navigation({ shown }: NavigationProps) {
 
   return (
     <div className="navigation" ref={navigationContainerRef}>
-      <div onClick={() => onSelect(0)} className="navigation-item selected">
-        Home
-      </div>
-      <div onClick={() => onSelect(1)} className="navigation-item">
-        Exercises
-      </div>
-      <div onClick={() => onSelect(2)} className="navigation-item">
-        Workouts
-      </div>
-      <div onClick={() => onSelect(3)} className="navigation-item">
-        Profile
-      </div>
-      <div onClick={() => onSelect(4)} className="navigation-item">
-        Nutrition
-      </div>
+      {items.map((item, i) => (
+        <Link
+          key={i}
+          to={item.path}
+          onClick={() => onSelect(i)}
+          className={`navigation-item ${i === 0 ? "selected" : ""}`}
+        >
+          {item.name}
+        </Link>
+      ))}
       <div className="selection-indicator" ref={selectionIndicatorRef}>
         ●
       </div>
