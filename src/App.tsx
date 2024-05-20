@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import Navigation from "./Components/Navigation/Navigation";
 import "./App.scss";
 import Icon from "./Components/Icon/Icon";
-import { Suspense, useState } from "react";
+import { useState } from "react";
 
 function App() {
   const [isNavigationShown, setIsNavigationShown] = useState(false);
