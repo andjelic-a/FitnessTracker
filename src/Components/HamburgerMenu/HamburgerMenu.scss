@@ -1,10 +1,7 @@
 .hamburger-menu {
     margin-left: 30px;
-    width: 3%;
-    min-width: 40px;
-    max-width: 60px;
-    height: 4.5%;
-    min-height: 60px;
+    width: 30px;
+    height: 40px;
     position: relative;
     cursor: pointer;
 
@@ -49,4 +46,17 @@
     }
 }
 
+@media screen and (max-width: 400px) {
+    .hamburger-menu{
+        width: 25px;
+        height: 35px;
+    }
+}
 
+@media screen and (min-height: 1080px) {
+    .hamburger-menu{
+        margin-left: 2%;
+        width: 2%;
+        height: 40%;
+    }
+}
