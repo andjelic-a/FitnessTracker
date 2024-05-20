@@ -1,14 +1,29 @@
-import { useLoaderData } from "react-router-dom";
+import { Await, defer, useLoaderData } from "react-router-dom";
 import Get from "../Data/Get";
 import Exercise from "../Types/Models/Exercise";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
 export default function Exercises() {
-  const exercises = useLoaderData() as Exercise[];
+  const exercises = useLoaderData() as ReturnType<typeof ExerciseLoader>;
   useEffect(() => console.log(exercises), [exercises]);
 
-  return <div>Exercises</div>;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Await resolve={exercises.exercises}>
+        {(exercises: Exercise[]) => (
+          <div>
+            {exercises.map((exercise) => (
+              <div key={exercise.id}>{exercise.name}</div>
+            ))}
+          </div>
+        )}
+      </Await>
+    </Suspense>
+  );
 }
 
-export const ExerciseLoader = async () =>
-  await Get<Exercise>("exercise", "none", undefined, 10, 0);
+export const ExerciseLoader = async () => {
+  return defer({
+    exercises: await Get<Exercise>("exercise", "none", undefined, 10, 0),
+  });
+};

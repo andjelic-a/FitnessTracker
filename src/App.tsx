@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import Navigation from "./Components/Navigation/Navigation";
 import "./App.scss";
 import Icon from "./Components/Icon/Icon";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 function App() {
   const [isNavigationShown, setIsNavigationShown] = useState(false);
@@ -24,9 +24,11 @@ function App() {
 
         <Navigation shown={isNavigationShown} />
 
-        <div id="page-content">
-          <Outlet />
-        </div>
+        <Suspense fallback={<div>Loading...</div>}>
+          <div id="page-content">
+            <Outlet />
+          </div>
+        </Suspense>
       </div>
     </>
   );

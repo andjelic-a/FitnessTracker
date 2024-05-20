@@ -5,6 +5,9 @@ import "./index.scss";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import Error from "./Components/Error/Error.tsx";
 import Exercises, { ExerciseLoader } from "./Pages/Exercises.tsx";
+import ExerciseDisplay, {
+  SingleExerciseLoader,
+} from "./Components/ExerciseDisplay/ExerciseDisplay.tsx";
 
 const router = createBrowserRouter([
   {
@@ -23,7 +26,8 @@ const router = createBrowserRouter([
         children: [
           {
             path: ":exerciseId",
-            element: <div>Exercise</div>,
+            element: <ExerciseDisplay />,
+            loader: SingleExerciseLoader,
           },
         ],
       },

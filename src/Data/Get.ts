@@ -34,6 +34,25 @@ export default async function Get<T extends IModel>(
     }
   );
 
-  const json = await result.json();
-  return json as T[];
+  return result.json() as Promise<T[]>;
+}
+
+export async function GetOne<T extends IModel>(
+  apiEndpoint: string,
+  id: string
+): Promise<T> {
+  const result = await fetch(`${BaseAPIUrl}/${apiEndpoint}/${id}`, {
+    method: "GET",
+  });
+
+  return result.json() as Promise<T>;
+}
+
+export async function GetOneFetchPromise<T extends IModel>(
+  apiEndpoint: string,
+  id: string
+): Promise<T> {
+  return fetch(`${BaseAPIUrl}/${apiEndpoint}/${id}`, {
+    method: "GET",
+  }).then((result) => result.json());
 }
