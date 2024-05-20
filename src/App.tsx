@@ -22,7 +22,31 @@ function App() {
           </h1>
         </div>
 
-        <Navigation shown={isNavigationShown} />
+        <Navigation
+          shown={isNavigationShown}
+          items={[
+            {
+              name: "Home",
+              path: "/",
+            },
+            {
+              name: "Exercises",
+              path: "/exercises",
+            },
+            {
+              name: "Workouts",
+              path: "/workouts",
+            },
+            {
+              name: "Profile",
+              path: "/me",
+            },
+            {
+              name: "Nutrition",
+              path: "/nutrition",
+            },
+          ]}
+        />
 
         <div id="page-content">
           <Outlet />

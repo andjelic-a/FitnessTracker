@@ -3,22 +3,54 @@ import "./Navigation.scss";
 import gsap from "gsap";
 import Flip from "gsap/Flip";
 import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 gsap.registerPlugin(Flip);
 
 interface NavigationProps {
   shown: boolean;
+  items: {
+    name: string;
+    path: `/${string}`;
+  }[];
 }
 
-export default function Navigation({ shown }: NavigationProps) {
+export default function Navigation({ shown, items }: NavigationProps) {
   const { contextSafe } = useGSAP();
   const isAnimationActive = useRef(false);
   const selectedNavigationItemRef = useRef<number>(0);
   const navigationContainerRef = useRef<HTMLDivElement>(null);
   const selectionIndicatorRef = useRef<HTMLDivElement>(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     shown ? playAppearAnimation() : playDisappearAnimation();
   }, [shown]);
+
+  useEffect(() => {
+    if (
+      !navigationContainerRef.current ||
+      !selectionIndicatorRef.current ||
+      items.length < 1
+    )
+      return;
+
+    const locationURLParts = window.location.pathname
+      .split("/")
+      .filter((x) => x !== "");
+
+    const pagePath =
+      locationURLParts.length < 1 ? "/" : "/" + locationURLParts[0];
+
+    let pagePathIdx = items.findIndex((x) => x.path === pagePath);
+    if (pagePathIdx === -1) pagePathIdx = 0;
+
+    selectedNavigationItemRef.current = pagePathIdx;
+    navigationContainerRef.current?.children[pagePathIdx].classList.add(
+      "selected"
+    );
+    selectionIndicatorRef.current.style.gridRow = `${pagePathIdx + 1}`;
+  }, [items, navigationContainerRef.current, selectionIndicatorRef.current]);
 
   const playAppearAnimation = contextSafe(() => {
     if (!navigationContainerRef.current) return;
@@ -147,27 +179,27 @@ export default function Navigation({ shown }: NavigationProps) {
     });
   });
 
-  function onSelect(i: number) {
+  function handleSelect(i: number, path: string) {
+    if (i === selectedNavigationItemRef.current) return;
+
     playSelectAnimation(i);
+    navigate(path);
   }
 
   return (
     <div className="navigation" ref={navigationContainerRef}>
-      <div onClick={() => onSelect(0)} className="navigation-item selected">
-        Home
-      </div>
-      <div onClick={() => onSelect(1)} className="navigation-item">
-        Exercises
-      </div>
-      <div onClick={() => onSelect(2)} className="navigation-item">
-        Workouts
-      </div>
-      <div onClick={() => onSelect(3)} className="navigation-item">
-        Profile
-      </div>
-      <div onClick={() => onSelect(4)} className="navigation-item">
-        Nutrition
-      </div>
+      {items.map((item, i) => (
+        <div
+          key={i}
+          onClick={() => handleSelect(i, item.path)}
+          className={`navigation-item`}
+          style={{
+            gridRow: i + 1,
+          }}
+        >
+          {item.name}
+        </div>
+      ))}
       <div className="selection-indicator" ref={selectionIndicatorRef}>
         ●
       </div>
