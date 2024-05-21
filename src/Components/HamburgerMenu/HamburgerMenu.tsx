@@ -1,7 +1,11 @@
-import { useRef } from "react";
+import { DOMAttributes, HTMLAttributes, useRef } from "react";
 import "./HamburgerMenu.scss";
 
-function HamburgerMenu() {
+interface HamburgerMenuProps
+  extends DOMAttributes<HTMLElement>,
+    HTMLAttributes<HTMLElement> {}
+
+function HamburgerMenu({ ...attributes }: HamburgerMenuProps) {
   const hamburgerMenuRef = useRef<HTMLDivElement>(null);
 
   const ClickHandler = () => {
@@ -10,19 +14,17 @@ function HamburgerMenu() {
   };
 
   return (
-    <>
-      <div className="hamburger-menu-wrapper">
-        <div
-          className="hamburger-menu"
-          ref={hamburgerMenuRef}
-          onClick={ClickHandler}
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
+    <div className="hamburger-menu-wrapper" {...attributes}>
+      <div
+        className="hamburger-menu"
+        ref={hamburgerMenuRef}
+        onClick={ClickHandler}
+      >
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
-    </>
+    </div>
   );
 }
 
