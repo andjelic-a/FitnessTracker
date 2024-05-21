@@ -25,6 +25,9 @@ export default function Exercises() {
 
 export const ExerciseLoader = async () => {
   return defer({
-    exercises: Get<Exercise>("exercise", "none", undefined, 10, 0),
+    exercises: Get<Exercise, ["images", "primaryMuscleGroups"]>(
+      "exercise",
+      "images, primaryMuscleGroups"
+    ),
   });
 };
