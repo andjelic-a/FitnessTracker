@@ -1,13 +1,12 @@
 import IModel from "../Types/Models/IModel";
-import { Join } from "../Types/Utility/StringLiteralsUtility";
 
 // type a = Join<RemoveEmpty<Split<"a b c d", "b">>>;
 
-type Narrow<
+export type Narrow<
   OriginalEntity extends IModel,
   KeysToNarrow extends
-    | IncludeKeys<OriginalEntity>
-    | IncludeKeys<OriginalEntity>[]
+    | keyof OriginalEntity
+    | (keyof OriginalEntity)[]
     | "none"
     | "all"
     | undefined
@@ -17,11 +16,11 @@ type Narrow<
   ? {}
   : KeysToNarrow extends "all"
   ? OriginalEntity
-  : KeysToNarrow extends IncludeKeys<OriginalEntity>[]
+  : KeysToNarrow extends (keyof OriginalEntity)[]
   ? {
       [K in KeysToNarrow[number]]: OriginalEntity[K];
     }
-  : KeysToNarrow extends IncludeKeys<OriginalEntity>
+  : KeysToNarrow extends keyof OriginalEntity
   ? Narrow<OriginalEntity, [KeysToNarrow]>
   : never;
 
@@ -35,25 +34,23 @@ type IncludeKeys<T extends IModel> = keyof Include<T>;
 
 type Query<T extends IModel> = `${keyof Include<T>}=${string}`;
 
-export default async function Get<
-  T extends IModel,
-  Include extends
-    | IncludeKeys<T>
-    | IncludeKeys<T>[]
-    | "none"
-    | "all"
-    | undefined = undefined
->(
+export default async function Get<T extends IModel>(
   apiEndpoint: string,
-  include?: Include extends any[] ? Join<Include, ", "> : Include,
+  include?: IncludeKeys<T> | IncludeKeys<T>[] | "none" | "all",
   q?: Query<T> | Query<T>[],
   limit: number = 10,
   offset: number = 0
-): Promise<Narrow<T, Include>[]> {
+): Promise<T[]> {
   const queryString = !q ? undefined : Array.isArray(q) ? q.join(";") : q;
+  const includeString =
+    !include || include === "none"
+      ? "none"
+      : Array.isArray(include)
+      ? include.join(",")
+      : include;
 
   const result = await fetch(
-    `${BaseAPIUrl}/${apiEndpoint}?include=${include}&${
+    `${BaseAPIUrl}/${apiEndpoint}?include=${includeString}&${
       queryString ? queryString : ""
     }&limit=${limit}&offset=${offset}`,
     {
@@ -61,7 +58,7 @@ export default async function Get<
     }
   );
 
-  return result.json() as Promise<Narrow<T, Include>[]>;
+  return result.json() as Promise<T[]>;
 }
 
 export async function GetOne<T extends IModel>(

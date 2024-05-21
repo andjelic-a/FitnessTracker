@@ -1,5 +1,5 @@
 import { Await, defer, useLoaderData } from "react-router-dom";
-import Get from "../Data/Get";
+import Get, { Narrow } from "../Data/Get";
 import Exercise from "../Types/Models/Exercise";
 import { Suspense, useEffect } from "react";
 
@@ -9,9 +9,8 @@ export default function Exercises() {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      {/*@ts-expect-error*/}
-      <Await resolve={exercises.exercises}>
-        {(exercises: Exercise[]) => (
+      <Await resolve={"exercises" in exercises ? exercises.exercises : []}>
+        {(exercises: Narrow<Exercise, ["id", "name", "aliases"]>[]) => (
           <div>
             {exercises.map((exercise) => (
               <div key={exercise.id}>{exercise.name}</div>
@@ -25,9 +24,6 @@ export default function Exercises() {
 
 export const ExerciseLoader = async () => {
   return defer({
-    exercises: Get<Exercise, ["images", "primaryMuscleGroups"]>(
-      "exercise",
-      "images, primaryMuscleGroups"
-    ),
+    exercises: Get<Exercise>("exercise", "images", undefined, 10, 0),
   });
 };
