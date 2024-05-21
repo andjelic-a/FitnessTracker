@@ -1,3 +1,5 @@
+@import "./Pallete.scss";
+
 #page {
   width: 100vw;
   height: 100vh;
@@ -12,14 +14,15 @@
     overflow-y: scroll;
     width: 100%;
     padding: 2rem 1rem;
-    box-sizing: border-box;
   }
 
-  #header {
+  & header {
+    display: flex;
+    align-items: center;
+    background-color: $dark-400;
     grid-row: 1;
     width: 100%;
-    padding: 2rem 1.5rem 0 1.5rem;
-    box-sizing: border-box;
+    padding: 10px;
 
     * {
       margin: 0;

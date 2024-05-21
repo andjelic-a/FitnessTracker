@@ -1,26 +1,21 @@
 import { Outlet } from "react-router-dom";
 import Navigation from "./Components/Navigation/Navigation";
 import "./App.scss";
-import Icon from "./Components/Icon/Icon";
 import { useState } from "react";
+import HamburgerMenu from "./Components/HamburgerMenu/HamburgerMenu";
 
 function App() {
   const [isNavigationShown, setIsNavigationShown] = useState(false);
 
   return (
     <>
-      <div id="page">
-        <div id="header">
-          <h1>
-            <Icon
-              style={{ cursor: "pointer" }}
-              name="hamburger"
+      <section id="page">
+        <header>
+        <HamburgerMenu
               onClick={() => setIsNavigationShown(!isNavigationShown)}
             />
-            &nbsp; Fitness Tracker &nbsp;
-            <Icon name="dumbbell" />
-          </h1>
-        </div>
+            <h1>Fitness Tracker</h1>
+        </header>
 
         <Navigation
           shown={isNavigationShown}
@@ -48,10 +43,10 @@ function App() {
           ]}
         />
 
-        <div id="page-content">
+        <section id="page-content">
           <Outlet />
-        </div>
-      </div>
+        </section>
+      </section>
     </>
   );
 }
