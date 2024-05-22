@@ -5,13 +5,13 @@
   top: 10svh;
   width: 13vw;
   height: 90svh;
-  padding: 2rem 4rem 2rem 2rem;
+  padding: 4rem 8rem 4rem 4rem;
   transform: translate(-100%, 0);
 
   display: grid;
   grid-template-rows: repeat(25, max-content);
-  row-gap: 1rem;
-  grid-template-columns: 2em 1fr;
+  row-gap: 2rem;
+  grid-template-columns: 2.8rem 1fr;
   grid-auto-flow: column;
   place-items: center start;
 
@@ -19,6 +19,7 @@
   backdrop-filter: blur(10px);
 
   user-select: none;
+  font-size: 1.8rem;
 
   .selection-indicator {
     grid-row: 1;
@@ -40,7 +41,7 @@
       height: 2px;
       background-color: #fff;
 
-      transform: translate(0, 1.75rem);
+      transform: translate(0, 2.5rem);
       transition: 175ms;
       transition-timing-function: ease-in-out;
     }

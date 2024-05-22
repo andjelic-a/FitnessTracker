@@ -8,6 +8,8 @@
   grid-template-columns: 1fr;
   grid-template-rows: 10svh 1fr;
 
+  font-size: 1.8rem;
+
   #page-content {
     grid-row: 2;
     width: 100%;
@@ -19,11 +21,11 @@
     background-color: $dark-400;
     grid-row: 1;
     width: 100%;
-    padding: 0 2rem 0 2rem;
+    padding: 0 4rem 0 4rem;
 
     & h1 {
-      font-size: 1.8rem;
-      margin-left: 10px;
+      font-size: 2.6rem;
+      margin-left: 2.4rem;
     }
   }
 }

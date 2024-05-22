@@ -4,6 +4,8 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-weight: 400;
 
+  font-size: 10px;
+
   color: rgba(255, 255, 255, 0.87);
   background-color: $dark-100;
 
@@ -17,4 +19,10 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+@media screen and (max-width: 425px) {
+  :root{
+    font-size: 8px;
+  }
 }
