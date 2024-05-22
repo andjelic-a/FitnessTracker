@@ -10,7 +10,6 @@ function HamburgerMenu({ ...attributes }: HamburgerMenuProps) {
 
   const ClickHandler = () => {
     hamburgerMenuRef.current?.classList.toggle("active");
-    console.log(hamburgerMenuRef);
   };
 
   return (
