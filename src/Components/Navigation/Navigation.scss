@@ -60,3 +60,15 @@
     }
   }
 }
+
+@media screen and (max-width: 430px) {
+  .navigation {
+    width: 40vw;
+  }
+}
+
+@media screen and (max-width: 1024px) and (min-width: 450px) {
+  .navigation {
+    width: 25vw;
+  }
+}
