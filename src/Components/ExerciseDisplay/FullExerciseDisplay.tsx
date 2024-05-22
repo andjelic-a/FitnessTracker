@@ -1,3 +1,4 @@
+import "./FullExerciseDisplay.scss";
 import {
   Await,
   LoaderFunctionArgs,
@@ -7,18 +8,20 @@ import {
   useLoaderData,
 } from "react-router-dom";
 import Exercise from "../../Types/Models/Exercise";
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
+import { getOne } from "../../Data/Get";
 
-export default function ExerciseDisplay() {
-  const exerciseDefer = useLoaderData() as ReturnType<
-    typeof SingleExerciseLoader
-  >;
-  useEffect(() => console.log(exerciseDefer), [exerciseDefer]);
+export default function FullExerciseDisplay() {
+  const data = useLoaderData() as ReturnType<typeof SingleExerciseLoader>;
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <Await resolve={exerciseDefer}>
-        {(exercise: Exercise) => <div>{exercise.name}</div>}
+      <Await resolve={"exercise" in data ? data.exercise : null}>
+        {(exercise: Exercise) => (
+          <div className="full-exercise-display">
+            <h1>{exercise.name}</h1>
+          </div>
+        )}
       </Await>
     </Suspense>
   );
@@ -34,8 +37,6 @@ export const SingleExerciseLoader = async ({
   if (!exerciseId) throw new Error("No exerciseId provided");
 
   return defer({
-    critical1: fetch(`http://192.168.1.100:5054/api/exercise/${exerciseId}`, {
-      method: "GET",
-    }).then((result) => result.json()),
+    exercise: getOne<Exercise>("exercise", exerciseId),
   });
 };
