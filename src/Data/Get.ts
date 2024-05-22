@@ -3,7 +3,7 @@ import { IncludeKeys, Query } from "../Types/Utility/Models";
 
 const BaseAPIUrl = "http://192.168.1.100:5054/api";
 
-export default async function Get<T extends IModel>(
+export default async function get<T extends IModel>(
   apiEndpoint: string,
   include?: IncludeKeys<T> | IncludeKeys<T>[] | "none" | "all",
   q?: Query<T> | Query<T>[],
@@ -11,15 +11,8 @@ export default async function Get<T extends IModel>(
   offset: number = 0
 ): Promise<T[]> {
   const queryString = !q ? undefined : Array.isArray(q) ? q.join(";") : q;
-  const includeString =
-    !include || include === "none"
-      ? "none"
-      : Array.isArray(include)
-      ? include.join(",")
-      : include;
-
   return fetch(
-    `${BaseAPIUrl}/${apiEndpoint}?include=${includeString}&${
+    `${BaseAPIUrl}/${apiEndpoint}?include=${getIncludeString(include)}&${
       queryString ? queryString : ""
     }&limit=${limit}&offset=${offset}`,
     {
@@ -28,11 +21,25 @@ export default async function Get<T extends IModel>(
   ).then((result) => result.json()) as Promise<T[]>;
 }
 
-export async function GetOne<T extends IModel>(
+export async function getOne<T extends IModel>(
   apiEndpoint: string,
-  id: string
+  id: string,
+  include?: IncludeKeys<T> | IncludeKeys<T>[] | "none" | "all"
 ): Promise<T> {
-  return fetch(`${BaseAPIUrl}/${apiEndpoint}/${id}`, {
-    method: "GET",
-  }).then((result) => result.json());
+  return fetch(
+    `${BaseAPIUrl}/${apiEndpoint}/${id}?include=${getIncludeString(include)}}`,
+    {
+      method: "GET",
+    }
+  ).then((result) => result.json());
+}
+
+function getIncludeString<T extends IModel>(
+  include?: IncludeKeys<T> | IncludeKeys<T>[] | "none" | "all"
+) {
+  return !include || include === "none"
+    ? "none"
+    : Array.isArray(include)
+    ? include.join(",")
+    : include;
 }

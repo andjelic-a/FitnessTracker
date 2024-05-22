@@ -4,10 +4,10 @@ import App from "./App.tsx";
 import "./index.scss";
 import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import Error from "./Components/Error/Error.tsx";
-import Exercises, { ExerciseLoader } from "./Pages/Exercises.tsx";
-import ExerciseDisplay, {
+import Exercises, { ExerciseLoader } from "./Pages/Exercises/Exercises.tsx";
+import FullExerciseDisplay, {
   SingleExerciseLoader,
-} from "./Components/ExerciseDisplay/ExerciseDisplay.tsx";
+} from "./Components/ExerciseDisplay/FullExerciseDisplay.tsx";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: ":exerciseId",
-            element: <ExerciseDisplay />,
+            element: <FullExerciseDisplay />,
             loader: SingleExerciseLoader,
           },
         ],
