@@ -1,7 +1,9 @@
+@import "../../Palette.scss";
+
 .navigation {
   position: fixed;
   top: 10svh;
-  width: 5vw;
+  width: 13vw;
   height: 90svh;
   padding: 2rem 4rem 2rem 2rem;
   transform: translate(-100%, 0);
@@ -13,7 +15,8 @@
   grid-auto-flow: column;
   place-items: center start;
 
-  background-color: #000;
+  background-color: #5c5c5c70;
+  backdrop-filter: blur(10px);
 
   user-select: none;
 
@@ -43,7 +46,7 @@
     }
 
     &:not(.selected):hover::before {
-      width: 60%;
+      width: 80%;
     }
 
     &.selected {

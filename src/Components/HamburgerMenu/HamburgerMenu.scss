@@ -1,4 +1,4 @@
-@import "../../Pallete.scss";
+@import "../../Palette.scss";
 
 .hamburger-menu-wrapper {
   position: relative;
@@ -7,7 +7,6 @@
   align-items: center;
   width: 40px;
   height: 40px;
-  margin-left: 30px;
   border: 2px solid $dark-100;
   border-radius: 5px;
   transition: 0.3s ease;

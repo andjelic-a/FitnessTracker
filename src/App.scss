@@ -1,9 +1,8 @@
-@import "./Pallete.scss";
+@import "./Palette.scss";
 
 #page {
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
 
   display: grid;
   grid-template-columns: 1fr;
@@ -11,9 +10,7 @@
 
   #page-content {
     grid-row: 2;
-    overflow-y: scroll;
     width: 100%;
-    padding: 2rem 1rem;
   }
 
   & header {
@@ -22,10 +19,11 @@
     background-color: $dark-400;
     grid-row: 1;
     width: 100%;
-    padding: 10px;
+    padding: 0 2rem 0 2rem;
 
-    * {
-      margin: 0;
+    & h1 {
+      font-size: 1.8rem;
+      margin-left: 10px;
     }
   }
 }

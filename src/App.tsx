@@ -11,10 +11,10 @@ function App() {
     <>
       <section id="page">
         <header>
-        <HamburgerMenu
-              onClick={() => setIsNavigationShown(!isNavigationShown)}
-            />
-            <h1>Fitness Tracker</h1>
+          <HamburgerMenu
+            onClick={() => setIsNavigationShown(!isNavigationShown)}
+          />
+          <h1>Fitness Tracker</h1>
         </header>
 
         <Navigation
