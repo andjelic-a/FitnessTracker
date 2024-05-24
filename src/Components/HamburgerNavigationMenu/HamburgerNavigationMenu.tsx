@@ -1,15 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./HamburgerNavigationMenu.scss";
-import "../Navigation/Navigation.scss";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Flip from "gsap/Flip";
 import { useNavigate } from "react-router-dom";
 gsap.registerPlugin(Flip);
-
-/* interface HamburgerMenuProps
-  extends DOMAttributes<HTMLElement>,
-    HTMLAttributes<HTMLElement> {} */
 
 type NavigationItem = {
   name: string;
@@ -28,32 +23,122 @@ export default function HamburgerNavigationMenu({ items }: NavigationProps) {
     if (!navigationContainerRef.current || !hamburgerMenuRef.current) return;
 
     isAnimationActive.current = true;
-    hamburgerMenuRef.current.classList.toggle("active");
 
     hamburgerMenuRef.current.classList.contains("active")
-      ? playAppearAnimation()
-      : playDisappearAnimation();
+      ? playDisappearAnimation()
+      : playAppearAnimation();
   };
 
+  //TODO: Replace with callbacks all contextSafe calls
   const playAppearAnimation = contextSafe(() => {
-    gsap.to(navigationContainerRef.current, {
-      x: 0,
+    if (!hamburgerMenuRef.current || !navigationContainerRef.current) return;
+
+    const startLineOldState = Flip.getState(
+      hamburgerMenuRef.current.children[2]
+    );
+
+    hamburgerMenuRef.current.classList.add("active");
+    const startLineRect =
+      hamburgerMenuRef.current.children[2].getBoundingClientRect();
+    gsap.set(navigationContainerRef.current, {
+      top: startLineRect.y,
+      left: startLineRect.x,
+      width: startLineRect.width,
+    });
+
+    const timeline = gsap.timeline();
+    timeline.add(
+      Flip.from(startLineOldState, {
+        duration: 0.07,
+        ease: "sine.in",
+      }),
+      0
+    );
+
+    timeline.to(navigationContainerRef.current, {
+      scaleY: 1,
       duration: 0.3,
-      ease: "sine.inOut",
-      onComplete: () => {
-        isAnimationActive.current = false;
+      ease: "none",
+    });
+
+    timeline.to(
+      navigationContainerRef.current,
+      {
+        width: "15vw",
+        duration: 0.3,
+        ease: "sine.out",
       },
+      ">-0.07"
+    );
+
+    timeline.to(
+      navigationContainerRef.current.children,
+      {
+        x: "0%",
+        stagger: 0.05,
+        opacity: 1,
+        duration: 0.3,
+        ease: "sine.inOut",
+      },
+      "<+0.05"
+    );
+
+    timeline.eventCallback("onComplete", () => {
+      isAnimationActive.current = false;
+      console.log("a");
     });
   });
 
   const playDisappearAnimation = contextSafe(() => {
-    gsap.to(navigationContainerRef.current, {
-      x: "-100%",
-      duration: 0.3,
-      ease: "sine.inOut",
-      onComplete: () => {
-        isAnimationActive.current = false;
+    if (!hamburgerMenuRef.current || !navigationContainerRef.current) return;
+
+    const startLineOldState = Flip.getState(
+      hamburgerMenuRef.current.children[2]
+    );
+
+    const startLineRect =
+      hamburgerMenuRef.current.children[2].getBoundingClientRect();
+    const timeline = gsap.timeline();
+
+    timeline.to(navigationContainerRef.current, {
+      width: startLineRect.width,
+      duration: 0.25,
+      ease: "sine.in",
+    });
+
+    timeline.to(
+      navigationContainerRef.current.children,
+      {
+        x: "-100%",
+        stagger: 0.03,
+        opacity: 0,
+        duration: 0.2,
+        ease: "sine.inOut",
       },
+      "<+0.025"
+    );
+
+    timeline.to(
+      navigationContainerRef.current,
+      {
+        scaleY: 0,
+        duration: 0.3,
+        ease: "none",
+      },
+      `<+0.25`
+    );
+
+    hamburgerMenuRef.current.classList.remove("active");
+    timeline.add(
+      Flip.from(startLineOldState, {
+        duration: 0.03,
+        ease: "none",
+      })
+    );
+
+    timeline.eventCallback("onComplete", () => {
+      isAnimationActive.current = false;
+      console.log("b");
     });
   });
 
