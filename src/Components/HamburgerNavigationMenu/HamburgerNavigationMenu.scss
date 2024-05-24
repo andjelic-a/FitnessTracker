@@ -7,7 +7,6 @@
   align-items: center;
   width: 40px;
   height: 40px;
-  margin-left: 30px;
   border: 2px solid $dark-100;
   border-radius: 5px;
 }
@@ -120,6 +119,13 @@
   place-items: center start;
   user-select: none;
 
+  //Initial state needed for first animation
+  .selection-indicator,
+  .navigation-item {
+    transform: translate(-5vw, 0);
+    opacity: 0;
+  }
+
   .selection-indicator {
     grid-row: 1;
     grid-column: 1;
@@ -162,4 +168,9 @@
   * {
     opacity: 1;
   }
+}
+
+.current-page {
+  cursor: pointer;
+  user-select: none;
 }
