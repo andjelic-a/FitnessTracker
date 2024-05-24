@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./HamburgerNavigationMenu.scss";
 import "../Navigation/Navigation.scss";
 import { useGSAP } from "@gsap/react";
@@ -58,14 +58,14 @@ export default function HamburgerNavigationMenu({ items }: NavigationProps) {
   });
 
   const isAnimationActive = useRef<boolean>(false);
-  const selectedNavigationItemRef = useRef<number>(0);
+  const [selectedNavigationItemIdx, setSelectedNavigationItemIdx] =
+    useState<number>(0);
   const navigationContainerRef = useRef<HTMLDivElement>(null);
   const selectionIndicatorRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   function handleSelect(i: number, path: string) {
-    if (i === selectedNavigationItemRef.current || isAnimationActive.current)
-      return;
+    if (i === selectedNavigationItemIdx || isAnimationActive.current) return;
 
     playSelectAnimation(i);
     navigate(path);
@@ -77,9 +77,7 @@ export default function HamburgerNavigationMenu({ items }: NavigationProps) {
     isAnimationActive.current = true;
 
     const oldSelectedNavigationItem =
-      navigationContainerRef.current?.children[
-        selectedNavigationItemRef.current
-      ];
+      navigationContainerRef.current?.children[selectedNavigationItemIdx];
     const newSelectedNavigationItem =
       navigationContainerRef.current.children[i];
 
@@ -106,7 +104,7 @@ export default function HamburgerNavigationMenu({ items }: NavigationProps) {
 
     timeline.add(
       Flip.from(selectionIndicator_State, {
-        duration: 0.17 * Math.abs(i - selectedNavigationItemRef.current),
+        duration: 0.17 * Math.abs(i - selectedNavigationItemIdx),
         ease: "sine.inOut",
       }),
       0
@@ -118,7 +116,7 @@ export default function HamburgerNavigationMenu({ items }: NavigationProps) {
         {
           x: "1.5em", //TODO: Make this a variable or prop or something that is not hardcoded
           duration: 0.2,
-          repeatDelay: 0.04 * Math.abs(i - selectedNavigationItemRef.current),
+          repeatDelay: 0.04 * Math.abs(i - selectedNavigationItemIdx),
           yoyo: true,
           repeat: 1,
         },
@@ -127,13 +125,13 @@ export default function HamburgerNavigationMenu({ items }: NavigationProps) {
     }
 
     //Animates the elements in between the old and new selected navigation items
-    if (selectedNavigationItemRef.current < i) {
-      for (let j = selectedNavigationItemRef.current + 1; j < i; j++)
+    if (selectedNavigationItemIdx < i) {
+      for (let j = selectedNavigationItemIdx + 1; j < i; j++)
         addNavigationItemsToTimeline(
           navigationContainerRef.current?.children[j]
         );
     } else {
-      for (let j = selectedNavigationItemRef.current - 1; j > i; j--)
+      for (let j = selectedNavigationItemIdx - 1; j > i; j--)
         addNavigationItemsToTimeline(
           navigationContainerRef.current?.children[j]
         );
@@ -150,16 +148,16 @@ export default function HamburgerNavigationMenu({ items }: NavigationProps) {
       Flip.from(oldSelectedNavigationItem_State, {
         duration: 0.33,
       }),
-      "<-0.075"
+      "<"
     );
 
+    setSelectedNavigationItemIdx(i);
     timeline.eventCallback("onComplete", () => {
-      selectedNavigationItemRef.current = i;
       isAnimationActive.current = false;
-      //   gsap.set(navigationContainerRef.current!.children, { x: 0 });
     });
   });
 
+  //On refresh / startup / loading the page, select the correct navigation item
   useEffect(() => {
     if (
       !navigationContainerRef.current ||
@@ -178,7 +176,7 @@ export default function HamburgerNavigationMenu({ items }: NavigationProps) {
     let pagePathIdx = items.findIndex((x) => x.path === pagePath);
     if (pagePathIdx === -1) pagePathIdx = 0;
 
-    selectedNavigationItemRef.current = pagePathIdx;
+    setSelectedNavigationItemIdx(pagePathIdx);
     navigationContainerRef.current?.children[pagePathIdx].classList.add(
       "selected"
     );
@@ -199,7 +197,15 @@ export default function HamburgerNavigationMenu({ items }: NavigationProps) {
         </div>
       </div>
 
-      <div className="navigation" ref={navigationContainerRef}>
+      <h1>{items[selectedNavigationItemIdx].name}</h1>
+
+      <div
+        className="navigation"
+        ref={navigationContainerRef}
+        style={{
+          gridTemplateRows: `repeat(${items.length}, max-content)`,
+        }}
+      >
         {items.map((item, i) => (
           <div
             key={i}
