@@ -187,7 +187,13 @@ export default function Navigation({ shown, items }: NavigationProps) {
   }
 
   return (
-    <div className="navigation" ref={navigationContainerRef}>
+    <div
+      className="navigation"
+      ref={navigationContainerRef}
+      style={{
+        gridTemplateRows: `repeat(${items.length}, max-content)`,
+      }}
+    >
       {items.map((item, i) => (
         <div
           key={i}
