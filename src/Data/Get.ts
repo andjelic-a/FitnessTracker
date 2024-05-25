@@ -1,7 +1,7 @@
 import IModel from "../Types/Models/IModel";
 import { IncludeKeys, Query } from "../Types/Utility/Models";
 
-const BaseAPIUrl = "http://192.168.1.100:5054/api";
+const baseAPIUrl = "http://192.168.1.100:5054/api";
 
 export default async function get<T extends IModel>(
   apiEndpoint: string,
@@ -12,7 +12,7 @@ export default async function get<T extends IModel>(
 ): Promise<T[]> {
   const queryString = !q ? undefined : Array.isArray(q) ? q.join(";") : q;
   return fetch(
-    `${BaseAPIUrl}/${apiEndpoint}?include=${getIncludeString(include)}&${
+    `${baseAPIUrl}/${apiEndpoint}?include=${getIncludeString(include)}&${
       queryString ? queryString : ""
     }&limit=${limit}&offset=${offset}`,
     {
@@ -27,7 +27,7 @@ export async function getOne<T extends IModel>(
   include?: IncludeKeys<T> | IncludeKeys<T>[] | "none" | "all"
 ): Promise<T> {
   return fetch(
-    `${BaseAPIUrl}/${apiEndpoint}/${id}?include=${getIncludeString(include)}}`,
+    `${baseAPIUrl}/${apiEndpoint}/${id}?include=${getIncludeString(include)}}`,
     {
       method: "GET",
     }

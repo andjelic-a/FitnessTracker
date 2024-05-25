@@ -25,7 +25,8 @@ function App() {
               },
               {
                 name: "Profile",
-                path: "/me",
+                defaultPath: "/me",
+                alternatePaths: ["/login"],
               },
               {
                 name: "Nutrition",
@@ -41,7 +42,7 @@ function App() {
           <section>
             <Outlet />
           </section>
-          
+
           <footer>© 2024 FITNESS TRACKER</footer>
         </section>
       </section>

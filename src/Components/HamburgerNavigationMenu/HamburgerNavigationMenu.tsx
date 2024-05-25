@@ -8,8 +8,15 @@ gsap.registerPlugin(Flip);
 
 type NavigationItem = {
   name: string;
-  path: `/${string}`;
-};
+} & (
+  | {
+      path: `/${string}`;
+    }
+  | {
+      defaultPath: `/${string}`;
+      alternatePaths: `/${string}`[];
+    }
+);
 
 type NavigationProps = {
   items: NavigationItem[];
@@ -276,7 +283,14 @@ export default function HamburgerNavigationMenu({
     const pagePath =
       locationURLParts.length < 1 ? "/" : "/" + locationURLParts[0];
 
-    let pagePathIdx = items.findIndex((x) => x.path === pagePath);
+    let pagePathIdx = items.findIndex((x) => {
+      if ("path" in x) return x.path === pagePath;
+      else
+        return (
+          x.defaultPath === pagePath ||
+          x.alternatePaths.includes(pagePath as `/${string}`)
+        );
+    });
     if (pagePathIdx === -1) pagePathIdx = 0;
 
     setSelectedNavigationItemIdx(pagePathIdx);
@@ -314,7 +328,9 @@ export default function HamburgerNavigationMenu({
         {items.map((item, i) => (
           <div
             key={i}
-            onClick={() => handleSelect(i, item.path)}
+            onClick={() =>
+              handleSelect(i, "path" in item ? item.path : item.defaultPath)
+            }
             className={`navigation-item`}
             style={{
               gridRow: i + 1,
