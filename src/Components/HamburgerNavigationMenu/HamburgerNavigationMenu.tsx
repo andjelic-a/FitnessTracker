@@ -13,9 +13,13 @@ type NavigationItem = {
 
 type NavigationProps = {
   items: NavigationItem[];
+  id?: string;
 };
 
-export default function HamburgerNavigationMenu({ items }: NavigationProps) {
+export default function HamburgerNavigationMenu({
+  items,
+  id,
+}: NavigationProps) {
   const hamburgerMenuRef = useRef<HTMLDivElement>(null);
   const { contextSafe } = useGSAP();
   const isAnimationActive = useRef<boolean>(false);
@@ -283,7 +287,7 @@ export default function HamburgerNavigationMenu({ items }: NavigationProps) {
   }, [items, navigationContainerRef.current, selectionIndicatorRef.current]);
 
   return (
-    <>
+    <div id={id}>
       <div className="hamburger-menu-wrapper">
         <div
           className="hamburger-menu"
@@ -296,7 +300,9 @@ export default function HamburgerNavigationMenu({ items }: NavigationProps) {
         </div>
       </div>
 
-      <h1>{items[selectedNavigationItemIdx].name}</h1>
+      <h1 className="current-page" onClick={ClickHandler}>
+        {items[selectedNavigationItemIdx].name}
+      </h1>
 
       <div
         className="navigation"
@@ -321,6 +327,6 @@ export default function HamburgerNavigationMenu({ items }: NavigationProps) {
           ●
         </div>
       </div>
-    </>
+    </div>
   );
 }

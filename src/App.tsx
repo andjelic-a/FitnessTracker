@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import "./App.scss";
 import HamburgerNavigationMenu from "./Components/HamburgerNavigationMenu/HamburgerNavigationMenu";
+import Icon from "./Components/Icon/Icon";
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <section id="page">
         <header>
           <HamburgerNavigationMenu
+            id="navigation"
             items={[
               {
                 name: "Home",
@@ -31,11 +33,16 @@ function App() {
               },
             ]}
           />
-          <h1>Fitness Tracker</h1>
+          <h1 id="site-title">Fitness Tracker</h1>
+          <Icon id="logo" name="dumbbell" />
         </header>
 
         <section id="page-content">
-          <Outlet />
+          <section>
+            <Outlet />
+          </section>
+          
+          <footer>© 2024 FITNESS TRACKER</footer>
         </section>
       </section>
     </>
