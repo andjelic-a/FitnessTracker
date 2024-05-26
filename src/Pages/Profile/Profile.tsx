@@ -7,8 +7,8 @@ import { Immutable } from "../../Types/Utility/Models";
 export default function Profile() {
   const navigate = useNavigate();
   useEffect(() => {
-    if (!getIsLoggedIn()) navigate("/login");
     console.log("check");
+    if (!getIsLoggedIn()) navigate("/login");
   }, [navigate]);
 
   const userData = useLoaderData() as ReturnType<typeof profileLoader>;
@@ -33,8 +33,8 @@ export default function Profile() {
   );
 }
 
-export const profileLoader = async () => {
+export async function profileLoader() {
   return defer({
     user: getCurrentUserData(),
   });
-};
+}
