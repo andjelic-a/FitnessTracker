@@ -3,11 +3,12 @@
 #page {
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
 
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 10svh 1fr;
+
+  font-size: 1.8rem;
 
   #page-content {
     grid-row: 2;
@@ -37,7 +38,7 @@
     background-color: $dark-400;
     grid-row: 1;
     width: 100%;
-    padding: 10px 1vw;
+    padding: 0 4rem 0 4rem;
 
     #navigation {
       grid-column: 1;
@@ -59,5 +60,16 @@
       font-size: 3rem;
       place-self: center end;
     }
+
+    & h1 {
+      font-size: 2.6rem;
+      margin-left: 2.4rem;
+    }
+  }
+}
+
+@media screen and (max-width: 425px) {
+  header {
+    padding: 0 2rem 0 2rem !important;
   }
 }

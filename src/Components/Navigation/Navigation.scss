@@ -1,20 +1,25 @@
+@import "../../Palette.scss";
+
 .navigation {
   position: fixed;
   top: 10svh;
-  width: 15vw;
+  width: 13vw;
   height: 90svh;
-  padding: 2rem 4rem 2rem 2rem;
+  padding: 4rem 8rem 4rem 4rem;
   transform: translate(-100%, 0);
 
   display: grid;
-  row-gap: 1rem;
-  grid-template-columns: 2em 1fr;
+  grid-template-rows: repeat(25, max-content);
+  row-gap: 2rem;
+  grid-template-columns: 2.8rem 1fr;
   grid-auto-flow: column;
   place-items: center start;
 
-  background-color: #000;
+  background-color: #5c5c5c70;
+  backdrop-filter: blur(10px);
 
   user-select: none;
+  font-size: 1.8rem;
 
   .selection-indicator {
     grid-row: 1;
@@ -36,13 +41,13 @@
       height: 2px;
       background-color: #fff;
 
-      transform: translate(0, 1.75rem);
+      transform: translate(0, 2.5rem);
       transition: 175ms;
       transition-timing-function: ease-in-out;
     }
 
     &:not(.selected):hover::before {
-      width: 60%;
+      width: 80%;
     }
 
     &.selected {
@@ -53,5 +58,17 @@
         width: 100%;
       }
     }
+  }
+}
+
+@media screen and (max-width: 430px) {
+  .navigation {
+    width: 40vw;
+  }
+}
+
+@media screen and (max-width: 1024px) and (min-width: 450px) {
+  .navigation {
+    width: 25vw;
   }
 }
