@@ -300,10 +300,6 @@ export default function HamburgerNavigationMenu({
         </div>
       </div>
 
-      <h1 className="current-page" onClick={ClickHandler}>
-        {items[selectedNavigationItemIdx].name}
-      </h1>
-
       <div
         className="navigation"
         ref={navigationContainerRef}
