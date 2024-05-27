@@ -104,15 +104,17 @@
 
 .navigation {
   background-color: #000;
-  position: fixed;
-  width: 0;
+  border-radius: 0.5rem;
+  position: absolute;
+  width: 10em !important;
   height: fit-content;
   scale: 1 0;
   transform-origin: top center;
+  padding: 0.5em 1em 0.5em 1em;
 
   display: grid;
   row-gap: 1rem;
-  grid-template-columns: 2em 1fr;
+  grid-template-columns: 1.3em 1fr;
   grid-auto-flow: column;
   place-items: center start;
   user-select: none;
@@ -141,16 +143,16 @@
       content: "";
       display: block;
       width: 0;
-      height: 2px;
+      height: 0.2rem;
       background-color: #fff;
 
-      transform: translate(0, 1.75rem);
+      transform: translate(0, 2.5rem);
       transition: 175ms;
       transition-timing-function: ease-in-out;
     }
 
     &:not(.selected):hover::before {
-      width: 60%;
+      width: 80%;
     }
 
     &.selected {
