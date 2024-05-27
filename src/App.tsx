@@ -41,9 +41,16 @@ function App() {
           <section>
             <Outlet />
           </section>
-          
-          <footer>© 2024 FITNESS TRACKER</footer>
         </section>
+
+        <footer>
+          <div id="media">
+          <a href="#"><Icon id="brands" name="instagram" /></a>
+          <a href="#"><Icon id="brands" name="facebook" /></a>
+          <a href="#"><Icon id="brands" name="github" /></a>
+          </div>
+          © 2024 FITNESS TRACKER
+        </footer>
       </section>
     </>
   );

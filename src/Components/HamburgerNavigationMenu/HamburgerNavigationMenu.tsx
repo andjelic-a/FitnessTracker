@@ -79,7 +79,7 @@ export default function HamburgerNavigationMenu({
       timeline.to(
         navigationContainerRef.current,
         {
-          width: "15vw",
+          width: "10em",
           duration: 0.3,
           ease: "sine.out",
         },
