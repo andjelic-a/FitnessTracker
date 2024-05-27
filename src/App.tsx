@@ -25,7 +25,8 @@ function App() {
               },
               {
                 name: "Profile",
-                path: "/me",
+                defaultPath: "/me",
+                alternatePaths: ["/login"],
               },
               {
                 name: "Nutrition",
@@ -45,9 +46,15 @@ function App() {
 
         <footer>
           <div id="media">
-          <a href="#"><Icon id="brands" name="instagram" /></a>
-          <a href="#"><Icon id="brands" name="facebook" /></a>
-          <a href="#"><Icon id="brands" name="github" /></a>
+            <a href="#">
+              <Icon id="brands" name="instagram" />
+            </a>
+            <a href="#">
+              <Icon id="brands" name="facebook" />
+            </a>
+            <a href="#">
+              <Icon id="brands" name="github" />
+            </a>
           </div>
           © 2024 FITNESS TRACKER
         </footer>
