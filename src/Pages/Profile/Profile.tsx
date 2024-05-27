@@ -1,6 +1,6 @@
 import { Suspense, useEffect } from "react";
-import { Await, defer, useLoaderData, useNavigate } from "react-router-dom";
-import { getCurrentUserData, getIsLoggedIn } from "../../Data/User";
+import { Await, useLoaderData, useNavigate } from "react-router-dom";
+import { getIsLoggedIn } from "../../Data/User";
 import User from "../../Types/Models/User";
 import { Immutable } from "../../Types/Utility/Models";
 
@@ -11,14 +11,21 @@ export default function Profile() {
     if (!getIsLoggedIn()) navigate("/login");
   }, [navigate]);
 
-  const userData = useLoaderData() as ReturnType<typeof profileLoader>;
+  const userData = useLoaderData() as Promise<unknown>;
 
   return (
     <div>
       Profile
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={"user" in userData ? userData.user : null}>
-          {(data: Immutable<Omit<User, "id">>) => <div>{data.name}</div>}
+          {(loadedUserData: Immutable<Omit<User, "id">> | null) => {
+            if (!loadedUserData) {
+              navigate("/login");
+              return null;
+            }
+
+            return <div>{loadedUserData.name}</div>;
+          }}
         </Await>
       </Suspense>
       <button
@@ -31,10 +38,4 @@ export default function Profile() {
       </button>
     </div>
   );
-}
-
-export async function profileLoader() {
-  return defer({
-    user: getCurrentUserData(),
-  });
 }
