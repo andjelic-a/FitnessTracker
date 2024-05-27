@@ -12,7 +12,7 @@ import { Suspense } from "react";
 import { Immutable, Narrow } from "../../Types/Utility/Models";
 
 export default function Exercises() {
-  const exercises = useLoaderData() as ReturnType<typeof ExerciseLoader>;
+  const exercises = useLoaderData() as ReturnType<typeof exerciseLoader>;
   const navigate = useNavigate();
 
   return (
@@ -44,7 +44,7 @@ export default function Exercises() {
   );
 }
 
-export const ExerciseLoader = async () => {
+export const exerciseLoader = async () => {
   return defer({
     exercises: get<Exercise>("exercise", "images", undefined, 10, 0),
   });

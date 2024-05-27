@@ -2,12 +2,20 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.scss";
-import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  Outlet,
+  RouterProvider,
+  createBrowserRouter,
+  defer,
+} from "react-router-dom";
 import Error from "./Components/Error/Error.tsx";
-import Exercises, { ExerciseLoader } from "./Pages/Exercises/Exercises.tsx";
+import Exercises, { exerciseLoader } from "./Pages/Exercises/Exercises.tsx";
 import FullExerciseDisplay, {
   SingleExerciseLoader,
 } from "./Components/ExerciseDisplay/FullExerciseDisplay.tsx";
+import Profile from "./Pages/Profile/Profile.tsx";
+import Login from "./Pages/Login/Login.tsx";
+import { getCurrentUserData } from "./Data/User.ts";
 
 const router = createBrowserRouter([
   {
@@ -22,7 +30,7 @@ const router = createBrowserRouter([
       {
         path: "exercises",
         element: <Exercises />,
-        loader: ExerciseLoader,
+        loader: exerciseLoader,
         children: [
           {
             path: ":exerciseId",
@@ -48,7 +56,15 @@ const router = createBrowserRouter([
       },
       {
         path: "me",
-        element: <div>User</div>,
+        element: <Profile />,
+        loader: async () =>
+          defer({
+            user: getCurrentUserData(),
+          }),
+      },
+      {
+        path: "login",
+        element: <Login />,
       },
       {
         path: "nutrition",
