@@ -7,9 +7,10 @@ import {
   defer,
   useLoaderData,
 } from "react-router-dom";
-import Exercise from "../../Types/Models/Exercise";
 import { Suspense } from "react";
 import { getOne } from "../../Data/Get";
+import { FullExercise } from "../../Types/Models/FullExercise";
+import { Immutable } from "../../Types/Utility/Models";
 
 export default function FullExerciseDisplay() {
   const data = useLoaderData() as ReturnType<typeof SingleExerciseLoader>;
@@ -17,9 +18,17 @@ export default function FullExerciseDisplay() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Await resolve={"exercise" in data ? data.exercise : null}>
-        {(exercise: Exercise) => (
+        {(exercise: Immutable<FullExercise>) => (
           <div className="full-exercise-display">
-            <h1>{exercise.name}</h1>
+            <img
+              src={
+                exercise.images.length > 0 ? exercise.images[0].imageURL : ""
+              }
+              alt=""
+            />
+            <div className="info">
+              <h1>{exercise.name}</h1>
+            </div>
           </div>
         )}
       </Await>
@@ -37,6 +46,6 @@ export const SingleExerciseLoader = async ({
   if (!exerciseId) throw new Error("No exerciseId provided");
 
   return defer({
-    exercise: getOne<Exercise>("exercise", exerciseId),
+    exercise: getOne<FullExercise>("FullExercise", exerciseId, "all"),
   });
 };

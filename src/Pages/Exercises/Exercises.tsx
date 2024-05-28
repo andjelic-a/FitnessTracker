@@ -7,9 +7,9 @@ import {
   useNavigate,
 } from "react-router-dom";
 import get from "../../Data/Get";
-import Exercise from "../../Types/Models/Exercise";
 import { Suspense } from "react";
 import { Immutable, Narrow } from "../../Types/Utility/Models";
+import { FullExercise } from "../../Types/Models/FullExercise";
 
 export default function Exercises() {
   const exercises = useLoaderData() as ReturnType<typeof exerciseLoader>;
@@ -19,7 +19,7 @@ export default function Exercises() {
     <Suspense fallback={<div>Loading...</div>}>
       <Await resolve={"exercises" in exercises ? exercises.exercises : []}>
         {(
-          exercises: Immutable<Narrow<Exercise, ["id", "name", "images"]>>[]
+          exercises: Immutable<Narrow<FullExercise, ["id", "name", "images"]>>[]
         ) => (
           <div className="exercises-page-container">
             <Outlet />
@@ -32,7 +32,15 @@ export default function Exercises() {
                     key={exercise.id}
                     onClick={() => navigate(`/exercises/${exercise.id}`)}
                   >
-                    {exercise.name}
+                    <p>{exercise.name}</p>
+                    <img
+                      src={
+                        exercise.images.length > 0
+                          ? exercise.images[0].imageURL
+                          : ""
+                      }
+                      alt=""
+                    />
                   </div>
                 );
               })}
@@ -46,6 +54,6 @@ export default function Exercises() {
 
 export const exerciseLoader = async () => {
   return defer({
-    exercises: get<Exercise>("exercise", "images", undefined, 10, 0),
+    exercises: get<FullExercise>("FullExercise", "images", undefined, 10, 0),
   });
 };
