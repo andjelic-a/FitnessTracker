@@ -1,13 +1,14 @@
-import { InputHTMLAttributes, useRef, useState } from "react";
+import { InputHTMLAttributes, RefObject, useState } from "react";
 import "./InputField.scss";
 import Icon from "../Icon/Icon";
 
 interface InputFieldProps {
   placeholder?: string;
-  onEnter?: (enteredText: string) => boolean | undefined | null | void;
+  onEnter?: (enteredText: string) => void;
   iconName?: string | null | undefined;
   className?: string;
   id?: string;
+  ref?: RefObject<HTMLInputElement>;
 }
 
 export default function InputField({
@@ -18,9 +19,9 @@ export default function InputField({
   id,
   onChange,
   onKeyDown,
+  ref,
   ...eventHandlers
 }: InputFieldProps & InputHTMLAttributes<HTMLInputElement>) {
-  const inputField = useRef<HTMLInputElement>(null);
   const [enteredText, setEnteredText] = useState<string>("");
 
   function renderIcon() {
@@ -36,16 +37,13 @@ export default function InputField({
           name={id ?? "input-field" + Math.random().toString()}
           type="text"
           placeholder={placeholder}
-          ref={inputField}
           onChange={(e) => {
             setEnteredText(e.target.value);
             onChange?.(e);
           }}
+          ref={ref}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              const answer = onEnter?.(enteredText);
-              if (answer && inputField.current) inputField.current.value = "";
-            }
+            if (e.key === "Enter") onEnter?.(enteredText);
 
             onKeyDown?.(e);
           }}
