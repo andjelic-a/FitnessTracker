@@ -11,18 +11,11 @@
   font-size: 1.8rem;
 
   #page-content {
-    grid-row: 2;
-    width: 100%;
-    display: grid;
-    grid-template-rows: 1fr max-content;
-
-    //Actual content
-    section {
-      grid-row: 1;
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     footer {
-      grid-row: 2;
       width: 100%;
       place-self: center end;
       display: grid;

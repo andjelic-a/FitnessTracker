@@ -1,0 +1,70 @@
+@import "../../Palette.scss";
+
+.auth-container {
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 25%;
+  height: 85%;
+  border-radius: 30px;
+  background-color: red;
+
+  & .auth-heading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20%;
+  }
+
+  & .auth-inputs {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 60%;
+  }
+
+  & .auth-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    height: 20%;
+    width: 100%;
+
+    & button {
+      width: 10em;
+      height: 3em;
+      border-radius: 10px;
+
+      background-color: $dark-500;
+      color: white;
+      border: none;
+
+      cursor: pointer;
+      font-size: 1.6rem;
+    }
+
+    & button:hover {
+      background-color: $dark-400;
+      border: 2px solid $dark-300;
+      border-top: none;
+      border-left: none;
+    }
+  }
+}
+
+@media screen and (min-width: 1920px) {
+  .auth-container {
+    width: 20%;
+  }
+}
+
+@media screen and (max-width: 950px) {
+    .auth-container {
+      width: 40%;
+      min-width: 250px;
+    }
+  }

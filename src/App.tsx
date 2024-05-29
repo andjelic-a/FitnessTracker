@@ -39,9 +39,7 @@ function App() {
         </header>
 
         <section id="page-content">
-          <section>
-            <Outlet />
-          </section>
+          <Outlet />
         </section>
 
         <footer>
