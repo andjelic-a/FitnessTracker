@@ -1,20 +1,32 @@
 import { useEffect, useRef } from "react";
 import { getIsLoggedIn, login } from "../../Data/User";
 import { useNavigate } from "react-router-dom";
+import InputField from "../../Components/InputField/InputField";
 
 export default function Login() {
-  const emailField = useRef<HTMLInputElement>(null);
-  const passwordField = useRef<HTMLInputElement>(null);
-
   const navigate = useNavigate();
   useEffect(() => {
     if (getIsLoggedIn()) navigate("/me");
     console.log("check");
   }, [navigate]);
 
+  const emailField = useRef<HTMLInputElement>(null);
+  const passwordField = useRef<HTMLInputElement>(null);
+
   return (
     <div>
       <p>Login</p>
+      <InputField
+        placeholder="Email"
+        iconName="envelope"
+        onEnter={(enteredText) => console.log(enteredText)}
+      />
+
+      <InputField
+        placeholder="Password"
+        iconName="key"
+        onEnter={(enteredText) => console.log(enteredText)}
+      />
       <input type="text" ref={emailField} />
       <input type="password" ref={passwordField} />
       <button
