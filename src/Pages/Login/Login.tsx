@@ -15,47 +15,54 @@ export default function Login() {
   const passwordField = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="auth-container">
-      <section className="auth-heading">
-        <h3>Register</h3>
-      </section>
+    <div className="login-page">
+      <div className="auth-container">
+        <section className="auth-heading">
+          <h2>Log in</h2>
+        </section>
 
-      <section className="auth-inputs">
-        <InputField
-          inputRef={emailField}
-          placeholder="Email"
-          iconName="envelope"
-          onEnter={(enteredText) => console.log(enteredText)}
-        />
+        <section className="auth-inputs">
+          <InputField
+            inputRef={emailField}
+            placeholder="Email"
+            className="input-field"
+            iconName="envelope"
+            onEnter={(enteredText) => console.log(enteredText)}
+          />
 
-        <InputField
-          inputRef={passwordField}
-          placeholder="Password"
-          iconName="key"
-          onEnter={(enteredText) => console.log(enteredText)}
-        />
-      </section>
+          <InputField
+            inputRef={passwordField}
+            placeholder="Password"
+            className="input-field"
+            iconName="key"
+            onEnter={(enteredText) => console.log(enteredText)}
+          />
+        </section>
 
-      <section className="auth-buttons">
-        <button
-          onClick={async () => {
-            if (
-              !emailField.current ||
-              !passwordField.current ||
-              !emailField.current.value ||
-              !passwordField.current.value
-            )
-              return;
+        <section className="auth-buttons">
+          <button
+            onClick={async () => {
+              if (
+                !emailField.current ||
+                !passwordField.current ||
+                !emailField.current.value ||
+                !passwordField.current.value
+              )
+                return;
 
-            if (
-              await login(emailField.current.value, passwordField.current.value)
-            )
-              navigate("/me");
-          }}
-        >
-          Sign in
-        </button>
-      </section>
+              if (
+                await login(
+                  emailField.current.value,
+                  passwordField.current.value
+                )
+              )
+                navigate("/me");
+            }}
+          >
+            Log in
+          </button>
+        </section>
+      </div>
     </div>
   );
 }

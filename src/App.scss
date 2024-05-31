@@ -10,18 +10,6 @@
 
   font-size: 1.8rem;
 
-  #page-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    footer {
-      width: 100%;
-      place-self: center end;
-      display: grid;
-    }
-  }
-
   header {
     display: flex;
     justify-content: space-between;
