@@ -27,7 +27,7 @@ export async function getOne<T extends IModel>(
   include?: IncludeKeys<T> | IncludeKeys<T>[] | "none" | "all"
 ): Promise<T> {
   return fetch(
-    `${baseAPIUrl}/${apiEndpoint}/${id}?include=${getIncludeString(include)}}`,
+    `${baseAPIUrl}/${apiEndpoint}/${id}?include=${getIncludeString(include)}`,
     {
       method: "GET",
     }

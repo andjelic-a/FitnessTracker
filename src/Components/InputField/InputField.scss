@@ -1,0 +1,49 @@
+@use "../../Palette.scss" as *;
+
+.input-field {
+  $side-padding: 0.75em;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+
+  border: 3px solid $dark-200;
+  background-color: $dark-300;
+  color: #fff;
+  padding: 0.5em $side-padding;
+  border-radius: 0.75em;
+
+  &:has(:focus) {
+    background-color: $dark-200;
+    border: 3px solid $dark-500;
+  }
+
+  &,
+  * {
+    font-size: 1.5rem;
+  }
+
+  div {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+
+    * {
+      padding: 0;
+    }
+
+    input {
+      background-color: transparent;
+      color: #fff;
+      width: 100%;
+      height: 100%;
+
+      margin: auto;
+      border: none;
+      outline: none;
+    }
+  }
+}

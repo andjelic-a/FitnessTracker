@@ -30,12 +30,11 @@ export async function getAuthorization(): Promise<string | null> {
 
   return await fetch(`${baseAPIUrl}/user/refresh`, {
     headers: { Authorization: `Bearer ${jwt}` },
-    method: "PUT",
+    method: "GET",
     credentials: "include",
   })
     .then((result) => result.text())
     .then((newToken) => {
-      console.log("new token ---> " + newToken);
       if (newToken === "Invalid token") {
         localStorage.removeItem("token");
         return null;
@@ -75,6 +74,38 @@ export async function login(email: string, password: string): Promise<boolean> {
     },
     credentials: "include",
     body: JSON.stringify({ email, password }),
+  })
+    .then((result) => result.text())
+    .then((newToken) => {
+      if (!newToken) return false;
+
+      localStorage.setItem("token", newToken);
+      return true;
+    })
+    .catch((err) => {
+      console.error(err);
+      return false;
+    });
+}
+
+export async function register(
+  name: string,
+  email: string,
+  password: string
+): Promise<boolean> {
+  if (password.length < 8 || email === "" || name === "") return false;
+
+  return fetch(`${baseAPIUrl}/user/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      name,
+      email,
+      password,
+    }),
   })
     .then((result) => result.text())
     .then((newToken) => {

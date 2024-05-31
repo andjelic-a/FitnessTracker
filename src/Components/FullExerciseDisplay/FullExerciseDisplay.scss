@@ -1,0 +1,18 @@
+@import "../../Palette.scss";
+
+.full-exercise-display {
+  border: 3px solid #fff;
+  display: grid;
+  grid-template-columns: 4fr 6fr;
+  column-gap: 2vw;
+
+  img {
+    grid-column: 1;
+    aspect-ratio: auto;
+    width: 100%;
+  }
+
+  .info {
+    grid-column: 2;
+  }
+}

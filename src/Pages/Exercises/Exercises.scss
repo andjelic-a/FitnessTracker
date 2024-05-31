@@ -1,14 +1,13 @@
 .exercises-page-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   height: 100%;
   width: 100%;
 
   &:has(.full-exercise-display) .exercise-cards-container {
-    flex-wrap: nowrap;
-    
+    display: none;
   }
 
   .exercise-cards-container {

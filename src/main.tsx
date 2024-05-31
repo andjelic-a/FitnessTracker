@@ -12,7 +12,7 @@ import Error from "./Components/Error/Error.tsx";
 import Exercises, { exerciseLoader } from "./Pages/Exercises/Exercises.tsx";
 import FullExerciseDisplay, {
   SingleExerciseLoader,
-} from "./Components/ExerciseDisplay/FullExerciseDisplay.tsx";
+} from "./Components/FullExerciseDisplay/FullExerciseDisplay.tsx";
 import Profile from "./Pages/Profile/Profile.tsx";
 import Login from "./Pages/Login/Login.tsx";
 import { getCurrentUserData } from "./Data/User.ts";
