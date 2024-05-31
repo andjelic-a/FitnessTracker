@@ -36,6 +36,11 @@ export default function HamburgerNavigationMenu({
   const selectionIndicatorRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
+  useEffect(
+    () => console.log(selectedNavigationItemIdx),
+    [selectedNavigationItemIdx]
+  );
+
   const ClickHandler = () => {
     if (
       !navigationContainerRef.current ||
@@ -298,7 +303,7 @@ export default function HamburgerNavigationMenu({
       "selected"
     );
     selectionIndicatorRef.current.style.gridRow = `${pagePathIdx + 1}`;
-  }, [items, navigationContainerRef.current, selectionIndicatorRef.current]);
+  }, [items]);
 
   return (
     <div id={id}>
