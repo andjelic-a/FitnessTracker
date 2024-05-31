@@ -3,6 +3,7 @@ import { getIsLoggedIn, login } from "../../Data/User";
 import { useNavigate } from "react-router-dom";
 import InputField from "../../Components/InputField/InputField";
 import "./Login.scss";
+import SignUp from "../SignUp/SignUp";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ export default function Login() {
     <div className="login-page">
       <div className="auth-container">
         <section className="auth-heading">
-          <h2>Log in</h2>
+          <label>Log in</label>
         </section>
 
         <section className="auth-inputs">
