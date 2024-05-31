@@ -3,9 +3,9 @@ import InputField from "../../../Components/InputField/InputField";
 import { useRef } from "react";
 
 interface SignUpProps {
-    isActive: boolean;
-    onToggle: () => void;
-  }
+  isActive: boolean;
+  onToggle: () => void;
+}
 
 function SignUp({ isActive, onToggle }: SignUpProps) {
   const emailField = useRef<HTMLInputElement>(null);
@@ -17,10 +17,18 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
   return (
     <div className={class1 + " " + class2}>
       <section className="signup-heading">
-      <label onClick={onToggle}>Sign up</label>
+        <label onClick={onToggle}>Sign up</label>
       </section>
 
       <section className="signup-inputs">
+        <InputField
+          inputRef={emailField}
+          placeholder="Name"
+          className="input-field"
+          iconName="user"
+          onEnter={(enteredText: any) => console.log(enteredText)}
+        />
+
         <InputField
           inputRef={emailField}
           placeholder="Email"
@@ -36,6 +44,7 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
           iconName="key"
           onEnter={(enteredText: any) => console.log(enteredText)}
         />
+
       </section>
 
       <section className="signup-buttons">

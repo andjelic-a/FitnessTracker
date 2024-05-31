@@ -17,11 +17,12 @@
     color: #fff;
     font-size: 3rem;
     font-weight: 700;
-    
+
     & label {
       margin: 6rem;
       cursor: pointer;
-      transition: .5s ease-in-out;
+      transition: 0.4s ease-in-out;
+      transition-delay: 0.3s;
     }
   }
 
@@ -35,7 +36,7 @@
 
     & .input-field {
       width: 80%;
-      height: 5rem;
+      height: 4.5rem;
       border: none;
       border-radius: 0.5rem;
     }
@@ -46,12 +47,12 @@
     justify-content: center;
     align-items: center;
 
-    height: 20%;
+    height: 23%;
     width: 100%;
 
     & button {
       width: 16rem;
-      height: 4.5rem;
+      height: 5rem;
       border-radius: 0.5rem;
 
       background-color: $dark-500;
@@ -61,18 +62,23 @@
       cursor: pointer;
       font-size: 1.8rem;
       font-weight: 550;
-      transition: .2s ease-in;
+      transition: 0.2s ease-in;
     }
 
     & button:hover {
       background-color: $dark-600;
-      box-shadow: 0.05rem .2rem .5rem #0000001b;
+      box-shadow: 0.05rem 0.2rem 0.5rem #0000001b;
     }
   }
 }
 
-.login-not-active label{
-  scale: .667;
+.login-not-active .login-heading label {
+  scale: 0.667;
+  transform: translateY(-6rem);
+}
+
+.login-active .login-heading label {
+  transition-delay: 0s;
 }
 
 @media screen and (min-width: 1920px) {
@@ -82,8 +88,8 @@
 }
 
 @media screen and (max-width: 950px) {
-    .auth-container {
-      width: 40%;
-      min-width: 250px;
-    }
+  .auth-container {
+    width: 40%;
+    min-width: 250px;
   }
+}
