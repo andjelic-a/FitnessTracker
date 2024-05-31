@@ -36,11 +36,6 @@ export default function HamburgerNavigationMenu({
   const selectionIndicatorRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
-  useEffect(
-    () => console.log(selectedNavigationItemIdx),
-    [selectedNavigationItemIdx]
-  );
-
   const ClickHandler = () => {
     if (
       !navigationContainerRef.current ||
