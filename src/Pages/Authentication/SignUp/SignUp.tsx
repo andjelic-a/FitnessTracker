@@ -1,6 +1,8 @@
 import "./SignUp.scss";
 import InputField from "../../../Components/InputField/InputField";
 import { useRef } from "react";
+import { register } from "../../../Data/User";
+import { useNavigate } from "react-router-dom";
 
 interface SignUpProps {
   isActive: boolean;
@@ -8,6 +10,10 @@ interface SignUpProps {
 }
 
 function SignUp({ isActive, onToggle }: SignUpProps) {
+
+  const navigate = useNavigate();
+
+  const usernameField = useRef<HTMLInputElement>(null);
   const emailField = useRef<HTMLInputElement>(null);
   const passwordField = useRef<HTMLInputElement>(null);
 
@@ -22,8 +28,8 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
 
       <section className="signup-inputs">
         <InputField
-          inputRef={emailField}
-          placeholder="Name"
+          inputRef={usernameField}
+          placeholder="Username"
           className="input-field"
           iconName="user"
           onEnter={(enteredText: any) => console.log(enteredText)}
@@ -48,7 +54,30 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
       </section>
 
       <section className="signup-buttons">
-        <button>Sign up</button>
+        <button
+        onClick={async () => {
+          if (
+            !usernameField.current ||
+            !emailField.current ||
+            !passwordField.current ||
+            !emailField.current.value ||
+            !passwordField.current.value ||
+            !usernameField.current.value
+          )
+            return;
+
+          if (
+            await register(
+              usernameField.current.value,
+              emailField.current.value,
+              passwordField.current.value
+            )
+          )
+            navigate("/me");
+        }}
+        >
+          Sign up
+        </button>
       </section>
     </div>
   );
