@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import { getIsLoggedIn, login } from "../../Data/User";
 import { useNavigate } from "react-router-dom";
 import InputField from "../../Components/InputField/InputField";
-import { compressImage } from "../../Data/ImageCompression";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -13,8 +12,6 @@ export default function Login() {
 
   const emailField = useRef<HTMLInputElement>(null);
   const passwordField = useRef<HTMLInputElement>(null);
-
-  const fileUploadRef = useRef<HTMLInputElement>(null);
 
   return (
     <div>
@@ -50,17 +47,6 @@ export default function Login() {
       >
         Login
       </button>
-
-      <input
-        type="file"
-        name="file-test"
-        ref={fileUploadRef}
-        onChange={async (e) => {
-          if (!e.target.files) return;
-
-          console.log(await compressImage(e.target.files[0]));
-        }}
-      />
     </div>
   );
 }
