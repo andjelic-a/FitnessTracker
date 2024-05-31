@@ -1,19 +1,26 @@
 import "./SignUp.scss";
-import InputField from "../../Components/InputField/InputField";
+import InputField from "../../../Components/InputField/InputField";
 import { useRef } from "react";
 
-function SignUp() {
-    const emailField = useRef<HTMLInputElement>(null);
+interface SignUpProps {
+    isActive: boolean;
+    onToggle: () => void;
+  }
+
+function SignUp({ isActive, onToggle }: SignUpProps) {
+  const emailField = useRef<HTMLInputElement>(null);
   const passwordField = useRef<HTMLInputElement>(null);
 
-    return(
-    <div className="login-page">
-    <div className="auth-container">
-      <section className="auth-heading">
-        <label>Log in</label>
+  const class1 = "signup-container";
+  const class2 = isActive ? "signup-active" : "signup-not-active";
+
+  return (
+    <div className={class1 + " " + class2}>
+      <section className="signup-heading">
+      <label onClick={onToggle}>Sign up</label>
       </section>
 
-      <section className="auth-inputs">
+      <section className="signup-inputs">
         <InputField
           inputRef={emailField}
           placeholder="Email"
@@ -31,16 +38,11 @@ function SignUp() {
         />
       </section>
 
-      <section className="auth-buttons">
-        <button>
-          Log in
-        </button>
+      <section className="signup-buttons">
+        <button>Sign up</button>
       </section>
-
-      <SignUp />
     </div>
-  </div>
-    );
+  );
 }
 
 export default SignUp;

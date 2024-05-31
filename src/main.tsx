@@ -14,7 +14,7 @@ import FullExerciseDisplay, {
   SingleExerciseLoader,
 } from "./Components/FullExerciseDisplay/FullExerciseDisplay.tsx";
 import Profile from "./Pages/Profile/Profile.tsx";
-import Login from "./Pages/Login/Login.tsx";
+import Authentication from "./Pages/Authentication/Authentication.tsx";
 import { getCurrentUserData } from "./Data/User.ts";
 
 const router = createBrowserRouter([
@@ -63,8 +63,8 @@ const router = createBrowserRouter([
           }),
       },
       {
-        path: "login",
-        element: <Login />,
+        path: "authentication",
+        element: <Authentication />,
       },
       {
         path: "nutrition",

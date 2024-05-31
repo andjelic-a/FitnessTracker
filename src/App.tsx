@@ -26,7 +26,7 @@ function App() {
               {
                 name: "Profile",
                 defaultPath: "/me",
-                alternatePaths: ["/login"],
+                alternatePaths: ["/authentication"],
               },
               {
                 name: "Nutrition",

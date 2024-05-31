@@ -1,38 +1,32 @@
-@import "../../Palette.scss";
+@import "../../../Palette.scss";
 
-.login-page {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.auth-container {
+.signup-container {
+  position: relative;
   width: 35rem;
-  height: 45rem;
-  border-radius: 1rem;
-  border: 0.2rem solid $dark-200;
-  background-color: $dark-400;
-  box-shadow: 0.5rem 2rem 5rem #000;
+  height: 40rem;
 
-  & .auth-heading {
+  border-radius: 1rem;
+  background-color: $dark-600;
+  border-radius: 65% / 15%;
+  margin-top: 2rem;
+  transition: .7s ease-in-out;
+
+  & .signup-heading {
     display: flex;
     justify-content: center;
     width: 100%;
-
     color: #fff;
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 700;
-    
+
     & label {
-      margin: 6rem;
+      margin: 2rem 5rem 5rem 5rem;
       cursor: pointer;
-      transition: .5s ease-in-out;
+      transition: 0.5s ease-in-out;
     }
-    cursor: pointer;
   }
 
-  & .auth-inputs {
+  & .signup-inputs {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -48,7 +42,7 @@
     }
   }
 
-  & .auth-buttons {
+  & .signup-buttons {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -73,20 +67,17 @@
 
     & button:hover {
       background-color: $dark-600;
-      box-shadow: 0.05rem .2rem .5rem #0000001b;
+      box-shadow: 0.05rem 0.2rem 0.5rem #0000001b;
     }
   }
 }
 
-@media screen and (min-width: 1920px) {
-  .auth-container {
-    width: 20%;
+.signup-active {
+  & .signup-heading label {
+    font-size: 3rem;
+    scale: 1;
   }
+
+  transform: translateY(-27rem);
 }
 
-@media screen and (max-width: 950px) {
-    .auth-container {
-      width: 40%;
-      min-width: 250px;
-    }
-  }

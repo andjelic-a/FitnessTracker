@@ -1,28 +1,29 @@
-import { useEffect, useRef } from "react";
-import { getIsLoggedIn, login } from "../../Data/User";
+import { useRef, useState } from "react";
+import { login } from "../../../Data/User";
 import { useNavigate } from "react-router-dom";
-import InputField from "../../Components/InputField/InputField";
-import "./Login.scss";
-import SignUp from "../SignUp/SignUp";
+import InputField from "../../../Components/InputField/InputField";
+import "./LogIn.scss";
+import SignUp from "../SignUp/SignUp.tsx";
 
 export default function Login() {
   const navigate = useNavigate();
-  useEffect(() => {
-    if (getIsLoggedIn()) navigate("/me");
-    console.log("check");
-  }, [navigate]);
 
   const emailField = useRef<HTMLInputElement>(null);
   const passwordField = useRef<HTMLInputElement>(null);
 
+  const [isLoginActive, setIsLoginActive] = useState(true);
+
+  function handleLabelClick() {
+    setIsLoginActive((prevState) => !prevState);
+  }
+
   return (
-    <div className="login-page">
-      <div className="auth-container">
-        <section className="auth-heading">
-          <label>Log in</label>
+      <div className={`login-container ${isLoginActive ? "login-active" : "login-not-active"}`}>
+        <section className="login-heading">
+          <label onClick={handleLabelClick}>Log in</label>
         </section>
 
-        <section className="auth-inputs">
+        <section className="login-inputs">
           <InputField
             inputRef={emailField}
             placeholder="Email"
@@ -40,7 +41,7 @@ export default function Login() {
           />
         </section>
 
-        <section className="auth-buttons">
+        <section className="login-buttons">
           <button
             onClick={async () => {
               if (
@@ -63,7 +64,8 @@ export default function Login() {
             Log in
           </button>
         </section>
+
+        <SignUp isActive={!isLoginActive} onToggle={handleLabelClick} />
       </div>
-    </div>
   );
 }
