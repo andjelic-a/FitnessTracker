@@ -7,7 +7,7 @@ import MuscleGroup from "../../../../Types/Models/MuscleGroup";
 import Muscle from "../../../../Types/Models/Muscle";
 import Equipment from "../../../../Types/Models/Equipment";
 
-type FullMuscleGroup = Immutable<{
+export type FullMuscleGroup = Immutable<{
   id: number;
   name: string;
   muscles: Immutable<Narrow<Muscle, ["id", "name"]>>[];
