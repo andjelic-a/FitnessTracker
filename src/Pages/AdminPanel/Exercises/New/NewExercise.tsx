@@ -7,6 +7,7 @@ import MuscleGroup from "../../../../Types/Models/MuscleGroup";
 import Muscle from "../../../../Types/Models/Muscle";
 import Equipment from "../../../../Types/Models/Equipment";
 import NewExerciseMuscleSelection from "./NewExerciseMuscleSelection";
+import NewExerciseEquipmentSelection from "./NewExerciseEquipmentSelection";
 
 export type FullMuscleGroup = Immutable<{
   id: number;
@@ -26,6 +27,8 @@ export default function NewExercise() {
 
   const selectedSecondaryMuscleGroups = useRef<number[]>([]);
   const selectedSecondaryMuscles = useRef<number[]>([]);
+
+  const selectedEquipment = useRef<number[]>([]);
 
   function connectMuscleGroups(
     muscleGroups: Immutable<Narrow<MuscleGroup, ["id", "name"]>>[],
@@ -88,7 +91,12 @@ export default function NewExercise() {
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={"equipment" in data ? data.equipment : []}>
           {(equipment: Immutable<Narrow<Equipment, ["id", "name"]>>[]) => (
-            <div>{equipment.map((x) => x.id)}</div>
+            <NewExerciseEquipmentSelection
+              equipment={equipment}
+              onSelectionChanged={(equipment) => {
+                selectedEquipment.current = equipment;
+              }}
+            />
           )}
         </Await>
       </Suspense>
@@ -108,6 +116,7 @@ export default function NewExercise() {
       selectedSecondaryMuscleGroups.current,
       selectedSecondaryMuscles.current
     );
+    console.log("equipment", selectedEquipment.current);
 
     console.log("save");
   }

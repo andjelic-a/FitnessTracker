@@ -47,7 +47,7 @@ export default function NewExerciseMuscleSelection({
             {x.muscles.map((muscle) => (
               <div
                 key={"muscle-" + muscle.id}
-                className={`muscle ${
+                className={`option ${
                   selectedMuscles.some((x) => x.id === muscle.id)
                     ? "selected"
                     : ""
