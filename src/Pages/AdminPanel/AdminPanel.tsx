@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import "./AdminPanel.scss";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { getCurrentUserData, getIsLoggedIn } from "../../Data/User";
 
 export default function AdminPanel() {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -18,24 +17,7 @@ export default function AdminPanel() {
     if (parts.length !== 3) return;
 
     const payload = JSON.parse(window.atob(parts[1]));
-
-    if (payload.role !== "Admin") return;
-
-    getCurrentUserData()
-      .then((user) => {
-        console.log(user);
-
-        if (!user) {
-          navigate("/login");
-          return;
-        }
-
-        setIsAdmin(true);
-      })
-      .catch(() => {
-        localStorage.removeItem("token");
-        navigate("/login");
-      });
+    setIsAdmin(payload.role === "Admin");
   }, []);
 
   if (!isAdmin) return null;

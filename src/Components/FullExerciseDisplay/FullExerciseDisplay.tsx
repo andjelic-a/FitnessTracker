@@ -20,12 +20,7 @@ export default function FullExerciseDisplay() {
       <Await resolve={"exercise" in data ? data.exercise : null}>
         {(exercise: Immutable<FullExercise>) => (
           <div className="full-exercise-display">
-            <img
-              src={
-                exercise.images.length > 0 ? exercise.images[0].imageURL : ""
-              }
-              alt=""
-            />
+            <img src={exercise.image} alt="" />
             <div className="info">
               <h1>{exercise.name}</h1>
             </div>

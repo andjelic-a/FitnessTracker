@@ -7,15 +7,13 @@ import {
   useNavigate,
 } from "react-router-dom";
 import get from "../../Data/Get";
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
 import { Immutable, Narrow } from "../../Types/Utility/Models";
 import { FullExercise } from "../../Types/Models/FullExercise";
 
 export default function Exercises() {
   const exercises = useLoaderData() as ReturnType<typeof exerciseLoader>;
   const navigate = useNavigate();
-
-  useEffect(() => console.log("a"), []);
 
   return (
     <Suspense fallback={<div>Loading...</div>}>

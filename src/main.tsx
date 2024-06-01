@@ -18,6 +18,8 @@ import Login from "./Pages/Login/Login.tsx";
 import { getCurrentUserData } from "./Data/User.ts";
 import AdminPanel from "./Pages/AdminPanel/AdminPanel.tsx";
 import AdminExercisePanel from "./Pages/AdminPanel/Exercises/AdminExercisePanel.tsx";
+import NewExercise from "./Pages/AdminPanel/Exercises/New/NewExercise.tsx";
+import { newExerciseLoader } from "./Pages/AdminPanel/Exercises/New/NewExerciseLoader.tsx";
 
 const router = createBrowserRouter([
   {
@@ -79,6 +81,12 @@ const router = createBrowserRouter([
           {
             path: "exercises",
             element: <AdminExercisePanel />,
+            loader: exerciseLoader,
+          },
+          {
+            path: "exercises/new",
+            element: <NewExercise />,
+            loader: newExerciseLoader,
           },
         ],
       },
