@@ -1,11 +1,12 @@
 import { Await, useLoaderData } from "react-router-dom";
 import { newExerciseLoader } from "./NewExerciseLoader";
-import "./NewExerciseLoader.scss";
+import "./NewExercise.scss";
 import { Suspense, useRef } from "react";
 import { Immutable, Narrow } from "../../../../Types/Utility/Models";
 import MuscleGroup from "../../../../Types/Models/MuscleGroup";
 import Muscle from "../../../../Types/Models/Muscle";
 import Equipment from "../../../../Types/Models/Equipment";
+import NewExerciseMuscleSelection from "./NewExerciseMuscleSelection";
 
 export type FullMuscleGroup = Immutable<{
   id: number;
@@ -19,6 +20,12 @@ export default function NewExercise() {
   const nameFieldRef = useRef<HTMLInputElement>(null);
   const imageFieldRef = useRef<HTMLInputElement>(null);
   const descriptionFieldRef = useRef<HTMLTextAreaElement>(null);
+
+  const selectedPrimaryMuscleGroups = useRef<number[]>([]);
+  const selectedPrimaryMuscles = useRef<number[]>([]);
+
+  const selectedSecondaryMuscleGroups = useRef<number[]>([]);
+  const selectedSecondaryMuscles = useRef<number[]>([]);
 
   function connectMuscleGroups(
     muscleGroups: Immutable<Narrow<MuscleGroup, ["id", "name"]>>[],
@@ -55,10 +62,24 @@ export default function NewExercise() {
             Immutable<Narrow<MuscleGroup, ["id", "name"]>>[],
             Immutable<Narrow<Muscle, ["id", "name", "muscleGroupId"]>>[]
           ]) => (
-            <div>
-              <div>
-                {JSON.stringify(connectMuscleGroups(muscleGroups, muscles))}
-              </div>
+            <div className="new-exercise-muscle-selection-container">
+              <NewExerciseMuscleSelection
+                title="Primary"
+                onSelectionChanged={(muscleGroups, muscles) => {
+                  selectedPrimaryMuscleGroups.current = muscleGroups;
+                  selectedPrimaryMuscles.current = muscles;
+                }}
+                muscleGroups={connectMuscleGroups(muscleGroups, muscles)}
+              />
+
+              <NewExerciseMuscleSelection
+                title="Secondary"
+                onSelectionChanged={(muscleGroups, muscles) => {
+                  selectedSecondaryMuscleGroups.current = muscleGroups;
+                  selectedSecondaryMuscles.current = muscles;
+                }}
+                muscleGroups={connectMuscleGroups(muscleGroups, muscles)}
+              />
             </div>
           )}
         </Await>
@@ -66,8 +87,8 @@ export default function NewExercise() {
 
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={"equipment" in data ? data.equipment : []}>
-          {(equipment: Immutable<Narrow<Equipment, ["id", "name"]>>) => (
-            <div>{JSON.stringify(equipment)}</div>
+          {(equipment: Immutable<Narrow<Equipment, ["id", "name"]>>[]) => (
+            <div>{equipment.map((x) => x.id)}</div>
           )}
         </Await>
       </Suspense>
@@ -77,6 +98,17 @@ export default function NewExercise() {
   );
 
   async function save() {
+    console.log(
+      "primary",
+      selectedPrimaryMuscleGroups.current,
+      selectedPrimaryMuscles.current
+    );
+    console.log(
+      "secondary",
+      selectedSecondaryMuscleGroups.current,
+      selectedSecondaryMuscles.current
+    );
+
     console.log("save");
   }
 }

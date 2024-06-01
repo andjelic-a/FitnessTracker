@@ -23,7 +23,7 @@ export default function AdminPanel() {
   if (!isAdmin) return null;
 
   return (
-    <div>
+    <div className="admin-panel-container">
       <Outlet />
 
       <Link className="admin-panel-link" to="exercises">
