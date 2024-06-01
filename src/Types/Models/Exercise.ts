@@ -5,12 +5,12 @@ export default class Exercise implements IModel {
   name: string;
   description: string;
   image: string;
-  equipment: number[];
-  primaryMuscleGroups: number[];
-  secondaryMuscleGroups: number[];
-  primaryMuscles: number[];
-  secondaryMuscles: number[];
-  aliases: number[];
+  equipmentIds: number[];
+  primaryMuscleGroupIds: number[];
+  secondaryMuscleGroupIds: number[];
+  primaryMuscleIds: number[];
+  secondaryMuscleIds: number[];
+  aliaseIds: number[];
 
   constructor(
     id: number,
@@ -28,11 +28,11 @@ export default class Exercise implements IModel {
     this.name = name;
     this.description = description;
     this.image = image;
-    this.equipment = equipment;
-    this.primaryMuscleGroups = primaryMuscleGroups;
-    this.secondaryMuscleGroups = secondaryMuscleGroups;
-    this.primaryMuscles = primaryMuscles;
-    this.secondaryMuscles = secondaryMuscles;
-    this.aliases = aliases;
+    this.equipmentIds = equipment;
+    this.primaryMuscleGroupIds = primaryMuscleGroups;
+    this.secondaryMuscleGroupIds = secondaryMuscleGroups;
+    this.primaryMuscleIds = primaryMuscles;
+    this.secondaryMuscleIds = secondaryMuscles;
+    this.aliaseIds = aliases;
   }
 }

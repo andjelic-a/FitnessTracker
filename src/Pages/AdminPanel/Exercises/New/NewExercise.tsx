@@ -8,6 +8,8 @@ import Muscle from "../../../../Types/Models/Muscle";
 import Equipment from "../../../../Types/Models/Equipment";
 import NewExerciseMuscleSelection from "./NewExerciseMuscleSelection";
 import NewExerciseEquipmentSelection from "./NewExerciseEquipmentSelection";
+import Exercise from "../../../../Types/Models/Exercise";
+import { compressImage } from "../../../../Data/ImageCompression";
 
 export type FullMuscleGroup = Immutable<{
   id: number;
@@ -119,5 +121,42 @@ export default function NewExercise() {
     console.log("equipment", selectedEquipment.current);
 
     console.log("save");
+
+    if (
+      !nameFieldRef.current ||
+      nameFieldRef.current.value ||
+      !imageFieldRef.current ||
+      !imageFieldRef.current.files ||
+      !descriptionFieldRef.current ||
+      !descriptionFieldRef.current.value
+    )
+      return;
+
+    const name = nameFieldRef.current.value;
+    const image = imageFieldRef.current.files[0];
+    const description = descriptionFieldRef.current.value;
+
+    const primaryMuscleGroups = selectedPrimaryMuscleGroups.current;
+    const primaryMuscles = selectedPrimaryMuscles.current;
+
+    const secondaryMuscleGroups = selectedSecondaryMuscleGroups.current;
+    const secondaryMuscles = selectedSecondaryMuscles.current;
+
+    const equipment = selectedEquipment.current;
+
+    const exercise: Exercise = new Exercise(
+      0,
+      name,
+      await compressImage(image),
+      description,
+      primaryMuscleGroups,
+      primaryMuscles,
+      secondaryMuscleGroups,
+      secondaryMuscles,
+      equipment,
+      [] //TODO: add aliases
+    );
+
+    console.log(exercise);
   }
 }
