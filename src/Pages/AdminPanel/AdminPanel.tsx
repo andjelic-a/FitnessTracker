@@ -9,7 +9,7 @@ export default function AdminPanel() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      navigate("/login");
+      navigate("/authentication");
       return;
     }
 
