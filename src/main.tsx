@@ -16,6 +16,8 @@ import FullExerciseDisplay, {
 import Profile from "./Pages/Profile/Profile.tsx";
 import Authentication from "./Pages/Authentication/Authentication.tsx";
 import { getCurrentUserData } from "./Data/User.ts";
+import AdminPanel from "./Pages/AdminPanel/AdminPanel.tsx";
+import AdminExercisePanel from "./Pages/AdminPanel/Exercises/AdminExercisePanel.tsx";
 
 const router = createBrowserRouter([
   {
@@ -69,6 +71,16 @@ const router = createBrowserRouter([
       {
         path: "nutrition",
         element: <div>Nutrition</div>,
+      },
+      {
+        path: "admin",
+        element: <AdminPanel />,
+        children: [
+          {
+            path: "exercises",
+            element: <AdminExercisePanel />,
+          },
+        ],
       },
     ],
   },

@@ -16,7 +16,9 @@ export function isJWTExpired(jwt: string) {
   return exp * 1000 < Date.now();
 }
 
-export async function getAuthorization(): Promise<string | null> {
+export async function getAuthorizationHeader(): Promise<
+  `Bearer ${string}` | null
+> {
   const jwt = localStorage.getItem("token");
   if (jwt === null) return null;
 
@@ -26,7 +28,7 @@ export async function getAuthorization(): Promise<string | null> {
     return null;
   }
 
-  if (!isJWTExpired(jwt)) return "Bearer " + jwt;
+  if (!isJWTExpired(jwt)) return `Bearer ${jwt}`;
 
   return await fetch(`${baseAPIUrl}/user/refresh`, {
     headers: { Authorization: `Bearer ${jwt}` },
@@ -41,7 +43,7 @@ export async function getAuthorization(): Promise<string | null> {
       }
 
       localStorage.setItem("token", newToken);
-      return "Bearer " + newToken;
+      return `Bearer ${newToken}` as `Bearer ${string}`;
     })
     .catch((err) => {
       console.error("err --->" + err);
@@ -51,10 +53,10 @@ export async function getAuthorization(): Promise<string | null> {
 }
 
 export async function getCurrentUserData() {
-  const bearer = await getAuthorization();
+  const bearer = await getAuthorizationHeader();
   if (!bearer) return null;
 
-  return fetch(`${baseAPIUrl}/user/authenticate`, {
+  return fetch(`${baseAPIUrl}/user`, {
     method: "GET",
     headers: {
       Authorization: bearer,
