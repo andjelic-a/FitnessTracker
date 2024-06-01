@@ -26,7 +26,7 @@ function App() {
               {
                 name: "Profile",
                 defaultPath: "/me",
-                alternatePaths: ["/login"],
+                alternatePaths: ["/authentication"],
               },
               {
                 name: "Nutrition",
@@ -39,9 +39,7 @@ function App() {
         </header>
 
         <section id="page-content">
-          <section>
-            <Outlet />
-          </section>
+          <Outlet />
         </section>
 
         <footer>

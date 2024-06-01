@@ -8,7 +8,8 @@ interface InputFieldProps {
   iconName?: string | null | undefined;
   className?: string;
   id?: string;
-  ref?: RefObject<HTMLInputElement>;
+  inputRef?: RefObject<HTMLInputElement>;
+  containerRef?: RefObject<HTMLDivElement>;
 }
 
 export default function InputField({
@@ -19,7 +20,8 @@ export default function InputField({
   id,
   onChange,
   onKeyDown,
-  ref,
+  inputRef,
+  containerRef,
   ...eventHandlers
 }: InputFieldProps & InputHTMLAttributes<HTMLInputElement>) {
   const [enteredText, setEnteredText] = useState<string>("");
@@ -29,7 +31,7 @@ export default function InputField({
   }
 
   return (
-    <div className={`input-field` + (className ? ` ${className}` : "")} id={id}>
+    <div ref={containerRef} className={`input-field` + (className ? ` ${className}` : "")} id={id}>
       {renderIcon()}
 
       <div>
@@ -41,7 +43,7 @@ export default function InputField({
             setEnteredText(e.target.value);
             onChange?.(e);
           }}
-          ref={ref}
+          ref={inputRef}
           onKeyDown={(e) => {
             if (e.key === "Enter") onEnter?.(enteredText);
 

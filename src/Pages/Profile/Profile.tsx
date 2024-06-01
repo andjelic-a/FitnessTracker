@@ -8,7 +8,7 @@ export default function Profile() {
   const navigate = useNavigate();
   useEffect(() => {
     console.log("check");
-    if (!getIsLoggedIn()) navigate("/login");
+    if (!getIsLoggedIn()) navigate("/authentication");
   }, [navigate]);
 
   const userData = useLoaderData() as Promise<unknown>;
@@ -20,7 +20,7 @@ export default function Profile() {
         <Await resolve={"user" in userData ? userData.user : null}>
           {(loadedUserData: Immutable<Omit<User, "id">> | null) => {
             if (!loadedUserData) {
-              navigate("/login");
+              navigate("/authentication");
               return null;
             }
 
@@ -31,7 +31,7 @@ export default function Profile() {
       <button
         onClick={() => {
           localStorage.removeItem("token");
-          navigate("/login");
+          navigate("/authentication");
         }}
       >
         Logout

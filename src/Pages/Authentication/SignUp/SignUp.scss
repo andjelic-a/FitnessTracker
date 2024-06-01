@@ -1,0 +1,83 @@
+@import "../../../Palette.scss";
+
+.signup-container {
+  position: relative;
+  width: 35rem;
+  height: 50rem;
+
+  border-radius: 1rem;
+  background-color: $dark-600;
+  border-radius: 65% / 15%;
+  margin-top: 2rem;
+  transition: 0.7s ease-in-out;
+
+  & .signup-heading {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 700;
+
+    & label {
+      margin: 2rem 5rem 4rem 5rem;
+      cursor: pointer;
+      transition: 0.5s ease-in-out;
+    }
+  }
+
+  & .signup-inputs {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 0.5em;
+    margin-bottom: 1rem;
+
+    & .input-field {
+      width: 80%;
+      height: 4.5rem;
+      border: none;
+      border-radius: 0.5rem;
+    }
+  }
+
+  & .signup-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 20%;
+    width: 100%;
+
+    & button {
+      width: 16rem;
+      height: 4.5rem;
+      border-radius: 0.5rem;
+
+      background-color: $dark-500;
+      color: white;
+      border: none;
+
+      cursor: pointer;
+      font-size: 1.8rem;
+      font-weight: 550;
+      transition: 0.2s ease-in;
+    }
+
+    & button:hover {
+      background-color: $dark-600;
+      box-shadow: 0.05rem 0.2rem 0.5rem #0000001b;
+    }
+  }
+}
+
+.signup-active {
+  & .signup-heading label {
+    font-size: 3rem;
+    scale: 1;
+  }
+
+  transform: translateY(-32rem);
+}

@@ -79,7 +79,7 @@ export async function login(email: string, password: string): Promise<boolean> {
   })
     .then((result) => result.text())
     .then((newToken) => {
-      if (!newToken) return false;
+      if (newToken === "Incorrect email or password") return false;
 
       localStorage.setItem("token", newToken);
       return true;
@@ -111,7 +111,7 @@ export async function register(
   })
     .then((result) => result.text())
     .then((newToken) => {
-      if (!newToken) return false;
+      if (newToken === "User already exists") return false;
 
       localStorage.setItem("token", newToken);
       return true;
