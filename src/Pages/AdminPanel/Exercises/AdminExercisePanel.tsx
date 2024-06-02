@@ -20,7 +20,7 @@ export default function AdminExercisePanel() {
                 <div
                   className="exercise-card"
                   key={exercise.id}
-                  onClick={() => navigate(`/exercises/${exercise.id}`)}
+                  onClick={() => navigate(`${exercise.id}`)}
                 >
                   <p>{exercise.name}</p>
                 </div>

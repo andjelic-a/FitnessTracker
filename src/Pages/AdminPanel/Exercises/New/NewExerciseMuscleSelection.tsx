@@ -3,6 +3,7 @@ import { FullMuscleGroup } from "./NewExercise";
 import Muscle from "../../../../Types/Models/Muscle";
 
 type NewExerciseMuscleSelectionProps = {
+  selectedOnStart: number[];
   muscleGroups: FullMuscleGroup[];
   onSelectionChanged: (
     selectedMuscleGroupIds: number[],
@@ -15,8 +16,17 @@ export default function NewExerciseMuscleSelection({
   muscleGroups,
   onSelectionChanged,
   title,
+  selectedOnStart,
 }: NewExerciseMuscleSelectionProps) {
   const [selectedMuscles, setSelectedMuscles] = useState<Muscle[]>([]);
+
+  useEffect(() => {
+    setSelectedMuscles(
+      muscleGroups
+        .flatMap((x) => x.muscles)
+        .filter((x) => selectedOnStart.includes(x.id)) as Muscle[]
+    );
+  }, [selectedOnStart]);
 
   useEffect(() => {
     onSelectionChanged(

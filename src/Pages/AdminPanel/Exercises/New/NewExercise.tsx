@@ -70,6 +70,7 @@ export default function NewExercise() {
           ]) => (
             <div className="new-exercise-muscle-selection-container">
               <NewExerciseMuscleSelection
+                selectedOnStart={[]}
                 title="Primary"
                 onSelectionChanged={(muscleGroups, muscles) => {
                   selectedPrimaryMuscleGroups.current = muscleGroups;
@@ -79,6 +80,7 @@ export default function NewExercise() {
               />
 
               <NewExerciseMuscleSelection
+                selectedOnStart={[]}
                 title="Secondary"
                 onSelectionChanged={(muscleGroups, muscles) => {
                   selectedSecondaryMuscleGroups.current = muscleGroups;
@@ -150,11 +152,11 @@ export default function NewExercise() {
       name,
       description,
       await compressImage(image),
-      primaryMuscleGroups,
-      primaryMuscles,
-      secondaryMuscleGroups,
-      secondaryMuscles,
       equipment,
+      primaryMuscleGroups,
+      secondaryMuscleGroups,
+      primaryMuscles,
+      secondaryMuscles,
       [] //TODO: add aliases
     );
 
