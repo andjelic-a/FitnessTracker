@@ -2,22 +2,21 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.scss";
-import {
-  Outlet,
-  RouterProvider,
-  createBrowserRouter,
-  defer,
-} from "react-router-dom";
+import { RouterProvider, createBrowserRouter, defer } from "react-router-dom";
 import Error from "./Components/Error/Error.tsx";
-import Exercises, { exerciseLoader } from "./Pages/Exercises/Exercises.tsx";
-import FullExerciseDisplay, {
-  SingleExerciseLoader,
-} from "./Components/FullExerciseDisplay/FullExerciseDisplay.tsx";
+import Exercises from "./Pages/Exercises/Exercises.tsx";
+import FullExerciseDisplay from "./Components/FullExerciseDisplay/FullExerciseDisplay.tsx";
 import Profile from "./Pages/Profile/Profile.tsx";
 import Authentication from "./Pages/Authentication/Authentication.tsx";
 import { getCurrentUserData } from "./Data/User.ts";
 import AdminPanel from "./Pages/AdminPanel/AdminPanel.tsx";
 import AdminExercisePanel from "./Pages/AdminPanel/Exercises/AdminExercisePanel.tsx";
+import NewExercise from "./Pages/AdminPanel/Exercises/New/NewExercise.tsx";
+import { newExerciseLoader } from "./Pages/AdminPanel/Exercises/New/NewExerciseLoader.tsx";
+import exerciseLoader from "./Pages/Exercises/ExerciseLoader.ts";
+import singleExerciseLoader from "./Components/FullExerciseDisplay/SingleExerciseLoader.ts";
+import UpdateExercise from "./Pages/AdminPanel/Exercises/Update/UpdateExercise.tsx";
+import updateExerciseLoader from "./Pages/AdminPanel/Exercises/Update/UpdateExerciseLoader.ts";
 
 const router = createBrowserRouter([
   {
@@ -33,28 +32,19 @@ const router = createBrowserRouter([
         path: "exercises",
         element: <Exercises />,
         loader: exerciseLoader,
-        children: [
-          {
-            path: ":exerciseId",
-            element: <FullExerciseDisplay />,
-            loader: SingleExerciseLoader,
-          },
-        ],
+      },
+      {
+        path: "exercises/:exerciseId",
+        element: <FullExerciseDisplay />,
+        loader: singleExerciseLoader,
       },
       {
         path: "workouts",
-        element: (
-          <div>
-            Workouts
-            <Outlet />
-          </div>
-        ),
-        children: [
-          {
-            path: ":workoutId",
-            element: <div>workout</div>,
-          },
-        ],
+        element: <div>Workouts</div>,
+      },
+      {
+        path: "workouts/:workoutId",
+        element: <div>workout</div>,
       },
       {
         path: "me",
@@ -79,6 +69,17 @@ const router = createBrowserRouter([
           {
             path: "exercises",
             element: <AdminExercisePanel />,
+            loader: exerciseLoader,
+          },
+          {
+            path: "exercises/new",
+            element: <NewExercise />,
+            loader: newExerciseLoader,
+          },
+          {
+            path: "exercises/:exerciseId",
+            element: <UpdateExercise />,
+            loader: updateExerciseLoader,
           },
         ],
       },
