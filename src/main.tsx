@@ -16,6 +16,7 @@ import { newExerciseLoader } from "./Pages/AdminPanel/Exercises/New/NewExerciseL
 import exerciseLoader from "./Pages/Exercises/ExerciseLoader.ts";
 import singleExerciseLoader from "./Components/FullExerciseDisplay/SingleExerciseLoader.ts";
 import UpdateExercise from "./Pages/AdminPanel/Exercises/Update/UpdateExercise.tsx";
+import updateExerciseLoader from "./Pages/AdminPanel/Exercises/Update/UpdateExerciseLoader.ts";
 
 const router = createBrowserRouter([
   {
@@ -78,7 +79,7 @@ const router = createBrowserRouter([
           {
             path: "exercises/:exerciseId",
             element: <UpdateExercise />,
-            loader: singleExerciseLoader,
+            loader: updateExerciseLoader,
           },
         ],
       },

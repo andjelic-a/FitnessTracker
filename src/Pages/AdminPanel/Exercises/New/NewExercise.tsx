@@ -11,12 +11,7 @@ import Exercise from "../../../../Types/Models/Exercise";
 import { compressImage } from "../../../../Data/ImageCompression";
 import { post } from "../../../../Data/Post";
 import EquipmentSelector from "../../Selectors/Equipment/EquipmentSelector";
-
-export type FullMuscleGroup = Immutable<{
-  id: number;
-  name: string;
-  muscles: Immutable<Narrow<Muscle, ["id", "name"]>>[];
-}>;
+import { connectMuscleGroups } from "../../../../Types/Models/FullMuscleGroup";
 
 export default function NewExercise() {
   const data = useLoaderData() as ReturnType<typeof newExerciseLoader>;
@@ -32,24 +27,6 @@ export default function NewExercise() {
   const selectedSecondaryMuscles = useRef<number[]>([]);
 
   const selectedEquipment = useRef<number[]>([]);
-
-  function connectMuscleGroups(
-    muscleGroups: Immutable<Narrow<MuscleGroup, ["id", "name"]>>[],
-    muscles: Immutable<Narrow<Muscle, ["id", "name", "muscleGroupId"]>>[]
-  ): FullMuscleGroup[] {
-    const fullMuscleGroups: FullMuscleGroup[] = [];
-    muscleGroups.forEach((muscleGroup) => {
-      fullMuscleGroups.push({
-        id: muscleGroup.id,
-        name: muscleGroup.name,
-        muscles: muscles.filter(
-          (muscle) => muscle.muscleGroupId === muscleGroup.id
-        ),
-      });
-    });
-
-    return fullMuscleGroups;
-  }
 
   return (
     <div className="new-exercise-container">
@@ -97,6 +74,7 @@ export default function NewExercise() {
         <Await resolve={"equipment" in data ? data.equipment : []}>
           {(equipment: Immutable<Narrow<Equipment, ["id", "name"]>>[]) => (
             <EquipmentSelector
+              selectedOnStart={[]}
               equipment={equipment}
               onSelectionChanged={(equipment) => {
                 selectedEquipment.current = equipment;

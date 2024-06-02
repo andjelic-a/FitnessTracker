@@ -3,11 +3,11 @@ import { getAuthorizationHeader } from "./User";
 
 const baseAPIUrl = "http://localhost:5054/api";
 
-export async function post<T extends IModel>(apiEndpoint: string, data: T) {
+export async function put<T extends IModel>(apiEndpoint: string, data: T) {
   console.log(`${baseAPIUrl}/${apiEndpoint}`, JSON.stringify(data));
 
   return fetch(`${baseAPIUrl}/${apiEndpoint}`, {
-    method: "POST",
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Authorization: (await getAuthorizationHeader()) as string,

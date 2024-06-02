@@ -4,6 +4,7 @@ import Equipment from "../../../../Types/Models/Equipment";
 import { Immutable, Narrow } from "../../../../Types/Utility/Models";
 
 type EquipmentSelectorProps = {
+  selectedOnStart: number[];
   equipment: Immutable<Narrow<Equipment, ["id", "name"]>>[];
   onSelectionChanged: (selectedEquipmentIds: number[]) => void;
 };
@@ -11,10 +12,17 @@ type EquipmentSelectorProps = {
 export default function EquipmentSelector({
   equipment: muscleGroups,
   onSelectionChanged,
+  selectedOnStart,
 }: EquipmentSelectorProps) {
   const [selectedEquipment, setSelectedEquipment] = useState<
     Immutable<Narrow<Equipment, ["id", "name"]>>[]
   >([]);
+
+  useEffect(() => {
+    setSelectedEquipment(
+      muscleGroups.filter((x) => selectedOnStart.includes(x.id))
+    );
+  }, [muscleGroups, selectedOnStart]);
 
   useEffect(
     () => onSelectionChanged(selectedEquipment.map((x) => x.id)),
