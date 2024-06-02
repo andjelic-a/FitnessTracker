@@ -1,16 +1,9 @@
 import "./FullExerciseDisplay.scss";
-import {
-  Await,
-  LoaderFunctionArgs,
-  ParamParseKey,
-  Params,
-  defer,
-  useLoaderData,
-} from "react-router-dom";
+import { Await, useLoaderData } from "react-router-dom";
 import { Suspense } from "react";
-import { getOne } from "../../Data/Get";
 import { FullExercise } from "../../Types/Models/FullExercise";
 import { Immutable } from "../../Types/Utility/Models";
+import singleExerciseLoader from "./SingleExerciseLoader";
 
 export default function FullExerciseDisplay() {
   const data = useLoaderData() as ReturnType<typeof singleExerciseLoader>;
@@ -30,17 +23,3 @@ export default function FullExerciseDisplay() {
     </Suspense>
   );
 }
-
-interface SingleExerciseLoaderArguments extends LoaderFunctionArgs {
-  params: Params<ParamParseKey<":exerciseId">>;
-}
-
-export const singleExerciseLoader = async ({
-  params: { exerciseId },
-}: SingleExerciseLoaderArguments) => {
-  if (!exerciseId) throw new Error("No exerciseId provided");
-
-  return defer({
-    exercise: getOne<FullExercise>("FullExercise", exerciseId, "all"),
-  });
-};

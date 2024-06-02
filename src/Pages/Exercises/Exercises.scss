@@ -1,28 +1,15 @@
 .exercises-page-container {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
   height: 100%;
   width: 100%;
 
-  &:has(.full-exercise-display) .exercise-cards-container {
-    display: none;
-  }
-
-  .exercise-cards-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-
-    .exercise-card {
-      flex-basis: 30%;
-      border: 1px solid #fff;
-      border-radius: 10px;
-    }
+  .exercise-card {
+    flex-basis: 30%;
+    border: 1px solid #fff;
+    border-radius: 10px;
   }
 }
