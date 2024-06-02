@@ -1,8 +1,9 @@
+import "./MuscleSelector.scss";
 import { useEffect, useState } from "react";
-import { FullMuscleGroup } from "./NewExercise";
+import { FullMuscleGroup } from "../../Exercises/New/NewExercise";
 import Muscle from "../../../../Types/Models/Muscle";
 
-type NewExerciseMuscleSelectionProps = {
+type MuscleSelectorProps = {
   selectedOnStart: number[];
   muscleGroups: FullMuscleGroup[];
   onSelectionChanged: (
@@ -12,12 +13,12 @@ type NewExerciseMuscleSelectionProps = {
   title: "Primary" | "Secondary";
 };
 
-export default function NewExerciseMuscleSelection({
+export default function MuscleSelector({
   muscleGroups,
   onSelectionChanged,
   title,
   selectedOnStart,
-}: NewExerciseMuscleSelectionProps) {
+}: MuscleSelectorProps) {
   const [selectedMuscles, setSelectedMuscles] = useState<Muscle[]>([]);
 
   useEffect(() => {

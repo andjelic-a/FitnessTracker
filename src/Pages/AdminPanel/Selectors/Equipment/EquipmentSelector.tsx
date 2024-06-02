@@ -1,16 +1,17 @@
+import "./EquipmentSelector.scss";
 import { useEffect, useState } from "react";
 import Equipment from "../../../../Types/Models/Equipment";
 import { Immutable, Narrow } from "../../../../Types/Utility/Models";
 
-type NewExerciseMuscleSelectionProps = {
+type EquipmentSelectorProps = {
   equipment: Immutable<Narrow<Equipment, ["id", "name"]>>[];
   onSelectionChanged: (selectedEquipmentIds: number[]) => void;
 };
 
-export default function NewExerciseEquipmentSelection({
+export default function EquipmentSelector({
   equipment: muscleGroups,
   onSelectionChanged,
-}: NewExerciseMuscleSelectionProps) {
+}: EquipmentSelectorProps) {
   const [selectedEquipment, setSelectedEquipment] = useState<
     Immutable<Narrow<Equipment, ["id", "name"]>>[]
   >([]);

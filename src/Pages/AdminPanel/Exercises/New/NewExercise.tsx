@@ -6,11 +6,11 @@ import { Immutable, Narrow } from "../../../../Types/Utility/Models";
 import MuscleGroup from "../../../../Types/Models/MuscleGroup";
 import Muscle from "../../../../Types/Models/Muscle";
 import Equipment from "../../../../Types/Models/Equipment";
-import NewExerciseMuscleSelection from "./NewExerciseMuscleSelection";
-import NewExerciseEquipmentSelection from "./NewExerciseEquipmentSelection";
+import MuscleSelector from "../../Selectors/Muscle/MuscleSelector";
 import Exercise from "../../../../Types/Models/Exercise";
 import { compressImage } from "../../../../Data/ImageCompression";
 import { post } from "../../../../Data/Post";
+import EquipmentSelector from "../../Selectors/Equipment/EquipmentSelector";
 
 export type FullMuscleGroup = Immutable<{
   id: number;
@@ -69,7 +69,7 @@ export default function NewExercise() {
             Immutable<Narrow<Muscle, ["id", "name", "muscleGroupId"]>>[]
           ]) => (
             <div className="new-exercise-muscle-selection-container">
-              <NewExerciseMuscleSelection
+              <MuscleSelector
                 selectedOnStart={[]}
                 title="Primary"
                 onSelectionChanged={(muscleGroups, muscles) => {
@@ -79,7 +79,7 @@ export default function NewExercise() {
                 muscleGroups={connectMuscleGroups(muscleGroups, muscles)}
               />
 
-              <NewExerciseMuscleSelection
+              <MuscleSelector
                 selectedOnStart={[]}
                 title="Secondary"
                 onSelectionChanged={(muscleGroups, muscles) => {
@@ -96,7 +96,7 @@ export default function NewExercise() {
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={"equipment" in data ? data.equipment : []}>
           {(equipment: Immutable<Narrow<Equipment, ["id", "name"]>>[]) => (
-            <NewExerciseEquipmentSelection
+            <EquipmentSelector
               equipment={equipment}
               onSelectionChanged={(equipment) => {
                 selectedEquipment.current = equipment;

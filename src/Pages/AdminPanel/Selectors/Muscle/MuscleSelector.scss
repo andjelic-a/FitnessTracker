@@ -1,0 +1,47 @@
+.new-exercise-muscle-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 30vw;
+
+  .muscle-group {
+    border: 1px solid #fff;
+    padding: 2rem 1rem 2rem 1rem;
+
+    h1 {
+      margin: 0 1rem;
+    }
+
+    .muscle-group-muscles {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-left: 4rem;
+    }
+  }
+}
+
+.option {
+  cursor: pointer;
+  width: fit-content;
+
+  &::before {
+    content: "";
+    display: block;
+    width: 0;
+    height: 0.2rem;
+    background-color: #fff;
+
+    transform: translate(0, 2.5rem);
+    transition: 175ms;
+    transition-timing-function: ease-in-out;
+  }
+
+  &:not(.selected):hover::before {
+    width: 70%;
+  }
+
+  &.selected::before {
+    width: 90%;
+  }
+}
