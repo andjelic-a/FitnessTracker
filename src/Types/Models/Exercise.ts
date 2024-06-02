@@ -10,7 +10,7 @@ export default class Exercise implements IModel {
   secondaryMuscleGroupIds: number[];
   primaryMuscleIds: number[];
   secondaryMuscleIds: number[];
-  aliaseIds: number[];
+  aliasIds: number[];
 
   constructor(
     id: number,
@@ -33,6 +33,6 @@ export default class Exercise implements IModel {
     this.secondaryMuscleGroupIds = secondaryMuscleGroups;
     this.primaryMuscleIds = primaryMuscles;
     this.secondaryMuscleIds = secondaryMuscles;
-    this.aliaseIds = aliases;
+    this.aliasIds = aliases;
   }
 }

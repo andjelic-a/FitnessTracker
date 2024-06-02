@@ -13,7 +13,7 @@ import { FullExercise } from "../../Types/Models/FullExercise";
 import { Immutable } from "../../Types/Utility/Models";
 
 export default function FullExerciseDisplay() {
-  const data = useLoaderData() as ReturnType<typeof SingleExerciseLoader>;
+  const data = useLoaderData() as ReturnType<typeof singleExerciseLoader>;
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -35,7 +35,7 @@ interface SingleExerciseLoaderArguments extends LoaderFunctionArgs {
   params: Params<ParamParseKey<":exerciseId">>;
 }
 
-export const SingleExerciseLoader = async ({
+export const singleExerciseLoader = async ({
   params: { exerciseId },
 }: SingleExerciseLoaderArguments) => {
   if (!exerciseId) throw new Error("No exerciseId provided");

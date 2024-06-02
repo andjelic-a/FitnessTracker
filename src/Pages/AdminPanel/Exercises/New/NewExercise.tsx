@@ -10,6 +10,7 @@ import NewExerciseMuscleSelection from "./NewExerciseMuscleSelection";
 import NewExerciseEquipmentSelection from "./NewExerciseEquipmentSelection";
 import Exercise from "../../../../Types/Models/Exercise";
 import { compressImage } from "../../../../Data/ImageCompression";
+import { post } from "../../../../Data/Post";
 
 export type FullMuscleGroup = Immutable<{
   id: number;
@@ -124,7 +125,7 @@ export default function NewExercise() {
 
     if (
       !nameFieldRef.current ||
-      nameFieldRef.current.value ||
+      !nameFieldRef.current.value ||
       !imageFieldRef.current ||
       !imageFieldRef.current.files ||
       !descriptionFieldRef.current ||
@@ -147,8 +148,8 @@ export default function NewExercise() {
     const exercise: Exercise = new Exercise(
       0,
       name,
-      await compressImage(image),
       description,
+      await compressImage(image),
       primaryMuscleGroups,
       primaryMuscles,
       secondaryMuscleGroups,
@@ -158,5 +159,6 @@ export default function NewExercise() {
     );
 
     console.log(exercise);
+    await post("exercise", exercise);
   }
 }

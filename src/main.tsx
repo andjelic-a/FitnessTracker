@@ -9,9 +9,9 @@ import {
   defer,
 } from "react-router-dom";
 import Error from "./Components/Error/Error.tsx";
-import Exercises, { exerciseLoader } from "./Pages/Exercises/Exercises.tsx";
+import Exercises from "./Pages/Exercises/Exercises.tsx";
 import FullExerciseDisplay, {
-  SingleExerciseLoader,
+  singleExerciseLoader,
 } from "./Components/FullExerciseDisplay/FullExerciseDisplay.tsx";
 import Profile from "./Pages/Profile/Profile.tsx";
 import Authentication from "./Pages/Authentication/Authentication.tsx";
@@ -20,6 +20,7 @@ import AdminPanel from "./Pages/AdminPanel/AdminPanel.tsx";
 import AdminExercisePanel from "./Pages/AdminPanel/Exercises/AdminExercisePanel.tsx";
 import NewExercise from "./Pages/AdminPanel/Exercises/New/NewExercise.tsx";
 import { newExerciseLoader } from "./Pages/AdminPanel/Exercises/New/NewExerciseLoader.tsx";
+import exerciseLoader from "./Pages/Exercises/ExerciseLoader.ts";
 
 const router = createBrowserRouter([
   {
@@ -35,13 +36,11 @@ const router = createBrowserRouter([
         path: "exercises",
         element: <Exercises />,
         loader: exerciseLoader,
-        children: [
-          {
-            path: ":exerciseId",
-            element: <FullExerciseDisplay />,
-            loader: SingleExerciseLoader,
-          },
-        ],
+      },
+      {
+        path: "exercises/:exerciseId",
+        element: <FullExerciseDisplay />,
+        loader: singleExerciseLoader,
       },
       {
         path: "workouts",

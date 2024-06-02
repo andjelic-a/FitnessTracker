@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import { Immutable, Narrow } from "../../../Types/Utility/Models";
 import Exercise from "../../../Types/Models/Exercise";
-import { exerciseLoader } from "../../Exercises/Exercises";
+import exerciseLoader from "../../Exercises/ExerciseLoader";
 
 export default function AdminExercisePanel() {
   const exercises = useLoaderData() as ReturnType<typeof exerciseLoader>;
