@@ -1,5 +1,5 @@
 import "./UpdateExercise.scss";
-import { Await, useLoaderData } from "react-router-dom";
+import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import { Immutable, Narrow } from "../../../../Types/Utility/Models";
 import { FullExercise } from "../../../../Types/Models/FullExercise";
 import { Suspense, useRef } from "react";
@@ -13,8 +13,10 @@ import updateExerciseLoader from "./UpdateExerciseLoader";
 import EquipmentSelector from "../../Selectors/Equipment/EquipmentSelector";
 import Exercise from "../../../../Types/Models/Exercise";
 import { put } from "../../../../Data/Put";
+import { deleteEntity } from "../../../../Data/Delete";
 
 export default function UpdateExercise() {
+  const navigate = useNavigate();
   const data = useLoaderData() as ReturnType<typeof updateExerciseLoader>;
 
   const selectedPrimaryMuscleGroups = useRef<number[]>([]);
@@ -77,16 +79,30 @@ export default function UpdateExercise() {
             />
 
             <button
-              onClick={() =>
+              onClick={() => {
+                navigate("/admin/exercises");
                 save(
                   exercise.id,
                   exercise.name,
                   exercise.image,
                   exercise.description
-                )
-              }
+                );
+              }}
             >
               Save
+            </button>
+
+            <br />
+            <br />
+            <br />
+
+            <button
+              onClick={() => {
+                navigate("/admin/exercises");
+                deleteEntity("exercise", exercise.id);
+              }}
+            >
+              Delete
             </button>
           </div>
         )}

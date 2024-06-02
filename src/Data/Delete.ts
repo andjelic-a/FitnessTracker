@@ -1,15 +1,14 @@
-import IModel from "../Types/Models/IModel";
+import { Guid } from "../Types/Models/IModel";
 import { getAuthorizationHeader } from "./User";
 
 const baseAPIUrl = "http://localhost:5054/api";
 
-export async function put<T extends IModel>(apiEndpoint: string, data: T) {
-  return fetch(`${baseAPIUrl}/${apiEndpoint}`, {
-    method: "PUT",
+export async function deleteEntity(apiEndpoint: string, id: number | Guid) {
+  return fetch(`${baseAPIUrl}/${apiEndpoint}/${id}`, {
+    method: "Delete",
     headers: {
       "Content-Type": "application/json",
       Authorization: (await getAuthorizationHeader()) as string,
     },
-    body: JSON.stringify(data),
   }).catch((err) => console.error(err));
 }
