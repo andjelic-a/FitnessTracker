@@ -17,6 +17,7 @@ import exerciseLoader from "./Pages/Exercises/ExerciseLoader.ts";
 import singleExerciseLoader from "./Components/FullExerciseDisplay/SingleExerciseLoader.ts";
 import UpdateExercise from "./Pages/AdminPanel/Exercises/Update/UpdateExercise.tsx";
 import updateExerciseLoader from "./Pages/AdminPanel/Exercises/Update/UpdateExerciseLoader.ts";
+import FormattedText from "./Components/FormattedText/FormattedText.tsx";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +27,9 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <div>Home</div>,
+        element: (
+          <FormattedText>{`Te*st*ing *_formatted_* */text/ a/s/d asd fg sd*`}</FormattedText>
+        ),
       },
       {
         path: "exercises",
