@@ -3,7 +3,6 @@ import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import { Immutable, Narrow } from "../../../../Types/Utility/Models";
 import { FullExercise } from "../../../../Types/Models/FullExercise";
 import { Suspense, useRef } from "react";
-import FormattedText from "../../../../Components/FormattedText/FormattedText";
 import MuscleGroup from "../../../../Types/Models/MuscleGroup";
 import Muscle from "../../../../Types/Models/Muscle";
 import Equipment from "../../../../Types/Models/Equipment";
@@ -20,7 +19,9 @@ export default function UpdateExercise() {
   const navigate = useNavigate();
   const data = useLoaderData() as ReturnType<typeof updateExerciseLoader>;
 
+  const nameFieldRef = useRef<HTMLInputElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
+  const descriptionFieldRef = useRef<HTMLTextAreaElement>(null);
 
   const selectedPrimaryMuscleGroups = useRef<number[]>([]);
   const selectedPrimaryMuscles = useRef<number[]>([]);
@@ -47,7 +48,12 @@ export default function UpdateExercise() {
           Immutable<Narrow<Equipment, ["id", "name"]>>[]
         ]) => (
           <div className="update-exercise-container">
-            <h1>{exercise.name}</h1>
+            <input
+              type="text"
+              placeholder="Name"
+              ref={nameFieldRef}
+              defaultValue={exercise.name}
+            />
 
             <div className="update-exercise-image-container">
               <h2>Current Image</h2>
@@ -61,7 +67,11 @@ export default function UpdateExercise() {
               />
             </div>
 
-            <FormattedText children={exercise.description} />
+            <textarea
+              placeholder="Description"
+              ref={descriptionFieldRef}
+              defaultValue={exercise.description}
+            />
 
             <div className="update-exercise-muscle-selection-container">
               <MuscleSelector
@@ -96,7 +106,7 @@ export default function UpdateExercise() {
             <button
               onClick={() => {
                 navigate("/admin/exercises");
-                save(exercise.id, exercise.name, exercise.description);
+                save(exercise.id);
               }}
             >
               Save
@@ -122,11 +132,12 @@ export default function UpdateExercise() {
     </Suspense>
   );
 
-  async function save(id: number, name: string, description: string) {
+  async function save(id: number) {
+    const name = nameFieldRef.current?.value;
     const image = imageRef.current?.src;
+    const description = descriptionFieldRef.current?.value;
 
     if (!name || !image || !description) return;
-    console.log(image);
 
     const primaryMuscleGroups = selectedPrimaryMuscleGroups.current;
     const primaryMuscles = selectedPrimaryMuscles.current;
