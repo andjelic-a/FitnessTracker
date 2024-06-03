@@ -17,6 +17,7 @@ import exerciseLoader from "./Pages/Exercises/ExerciseLoader.ts";
 import singleExerciseLoader from "./Components/FullExerciseDisplay/SingleExerciseLoader.ts";
 import UpdateExercise from "./Pages/AdminPanel/Exercises/Update/UpdateExercise.tsx";
 import updateExerciseLoader from "./Pages/AdminPanel/Exercises/Update/UpdateExerciseLoader.ts";
+import FormattedText from "./Components/FormattedText/FormattedText.tsx";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +27,9 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <div>Home</div>,
+        element: (
+          <FormattedText>{`asd [My link](@e 8)\n !i(https://imminenceswe.com/cdn/shop/files/imm-dig-final-01.jpg?v=1708269484&width=1500 123 500*500)\n !v(SvggTtqySH8)`}</FormattedText>
+        ),
       },
       {
         path: "exercises",
