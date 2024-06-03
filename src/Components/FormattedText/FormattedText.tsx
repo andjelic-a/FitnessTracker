@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./FormattedText.scss";
 
 type FormattedTextProps = {
@@ -19,9 +20,9 @@ export default function FormattedText({ children }: FormattedTextProps) {
         *text* - text is bolded ✔
         /text/ - text is italicized ✔
         _text_ - text is underlined ✔
-        [text](url) - text is a link
-        [text](@e exerciseId) - text is a mention to an exercise
-        [text](@w workoutId) - text is a mention to a workout
+        [text](url) - text is a link ✔
+        [text](@e exerciseId) - text is a mention to an exercise ✔
+        [text](@w workoutId) - text is a mention to a workout ✔
   */
   return (
     <div>
@@ -89,6 +90,65 @@ function FormattedLine({ children }: { children: string }) {
             i = j + 1;
             t = j + 1;
             break;
+          }
+        }
+      }
+
+      //Handle links
+      if (text[i] === "[") {
+        let closing = 0;
+
+        //Find closing tag for text
+        for (let j = i + 1; j < text.length; j++) {
+          if (text[j] === "]") {
+            closing = j;
+            break;
+          }
+        }
+
+        if (!closing || closing + 1 >= text.length || text[closing + 1] !== "(")
+          continue;
+
+        nodes.push(text.slice(t, i));
+
+        if (text[closing + 2] === "@") {
+          //Mention to an exercise or a workout
+          closing += 3;
+          i += 3;
+          if (text[closing] === "e" || text[closing] === "w") {
+            //Find closing tag for exercise or workout id
+            for (let j = closing + 1; j < text.length; j++) {
+              if (text[j] === ")") {
+                nodes.push(
+                  <Link
+                    to={`/${
+                      text[closing] === "e" ? "exercises" : "workouts"
+                    }/${text.slice(closing + 2, j)}`} // + 2 because closing is index of 'e' or 'w' and after it is a space (' ')
+                    key={`${i} ${j}`}
+                  >{`${formatText(text.slice(i + 1, closing - 3))}`}</Link>
+                );
+                i = j + 1;
+                t = j + 1;
+                break;
+              }
+            }
+          }
+        } else {
+          //URL
+          //Find closing tag for url
+          for (let j = closing + 1; j < text.length; j++) {
+            if (text[j] === ")") {
+              nodes.push(
+                <a
+                  href={text.slice(closing + 2, j)} // + 2 because closing is index of ']' and after it is '('
+                  key={`${i} ${j}`}
+                  target="_blank"
+                >{`${formatText(text.slice(i + 1, closing))}`}</a>
+              );
+              i = j + 1;
+              t = j + 1;
+              break;
+            }
           }
         }
       }

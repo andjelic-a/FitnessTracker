@@ -28,7 +28,7 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: (
-          <FormattedText>{`Te*st*ing *_formatted_* */text/ a/s/d asd fg sd*`}</FormattedText>
+          <FormattedText>{`asd [My link](@e 8)`}</FormattedText>
         ),
       },
       {
