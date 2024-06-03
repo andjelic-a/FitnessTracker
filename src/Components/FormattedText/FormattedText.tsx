@@ -11,10 +11,10 @@ export default function FormattedText({ children }: FormattedTextProps) {
     examine each line separately and render it accordingly:
         if it starts with # it is a heading ✔
         if it starts with ## it is a smaller heading ✔
-        if it starts with - it is a list ???
-        if it starts with 1. it is a numbered list
-        if it starts with !i it is an image, !i Width*Height url
-        if it starts with !v it is a video, !v Width*Height url
+        // if it starts with - it is a list
+        // if it starts with 1. it is a numbered list
+        if it starts with !i it is an image, !i(url alt Width*Height) ✔
+        if it starts with !v it is a video, !v(youtubeVideoId Width*Height) ✔
 
     If ANY line contains:
         *text* - text is bolded ✔
@@ -149,6 +149,64 @@ function FormattedLine({ children }: { children: string }) {
               t = j + 1;
               break;
             }
+          }
+        }
+      }
+
+      //Handle images and videos
+      if (
+        text[i] === "!" &&
+        (text[i + 1] === "i" || text[i + 1] === "v") &&
+        text[i + 2] === "("
+      ) {
+        nodes.push(text.slice(t, i));
+        for (let j = i + 3; j < text.length; j++) {
+          if (text[j] === ")") {
+            const split = text.slice(i + 3, j).split(" ");
+
+            if (text[i + 1] === "i") {
+              const alt = split[1] ?? "Image not found";
+              const size = split[2] ? split[2].split("*") : [];
+
+              nodes.push(
+                <img
+                  src={split[0]}
+                  alt={alt}
+                  key={`${i} ${j}`}
+                  style={{
+                    maxWidth: !size[0]
+                      ? undefined
+                      : isNaN(parseInt(size[0][size[0].length - 1]))
+                      ? size[0]
+                      : `${size[0]}px`,
+                    maxHeight: !size[1]
+                      ? undefined
+                      : isNaN(parseInt(size[1][size[1].length - 1]))
+                      ? size[1]
+                      : `${size[1]}px`,
+                  }}
+                />
+              );
+            } else {
+              const size = split[1] ? split[1].split("*") : [];
+
+              nodes.push(
+                <iframe
+                  width={size[0] ?? 560}
+                  height={size[1] ?? 315}
+                  src={`https://www.youtube.com/embed/${split[0]}`}
+                  title="YouTube video player"
+                  allow="encrypted-media; picture-in-picture"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                  key={`${i} ${j}`}
+                ></iframe>
+              );
+            }
+
+            i = j + 1;
+            t = j + 1;
+            break;
           }
         }
       }
