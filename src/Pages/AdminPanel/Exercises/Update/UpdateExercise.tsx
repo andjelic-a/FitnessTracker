@@ -14,10 +14,13 @@ import EquipmentSelector from "../../Selectors/Equipment/EquipmentSelector";
 import Exercise from "../../../../Types/Models/Exercise";
 import { put } from "../../../../Data/Put";
 import { deleteEntity } from "../../../../Data/Delete";
+import { compressImage } from "../../../../Data/ImageCompression";
 
 export default function UpdateExercise() {
   const navigate = useNavigate();
   const data = useLoaderData() as ReturnType<typeof updateExerciseLoader>;
+
+  const imageRef = useRef<HTMLImageElement>(null);
 
   const selectedPrimaryMuscleGroups = useRef<number[]>([]);
   const selectedPrimaryMuscles = useRef<number[]>([]);
@@ -45,7 +48,19 @@ export default function UpdateExercise() {
         ]) => (
           <div className="update-exercise-container">
             <h1>{exercise.name}</h1>
-            <img src={exercise.image} alt="" />
+
+            <div className="update-exercise-image-container">
+              <h2>Current Image</h2>
+              <img ref={imageRef} src={exercise.image} alt="" />
+              <input
+                type="file"
+                onChange={async (e) => {
+                  if (!imageRef.current || !e.target.files) return;
+                  imageRef.current.src = await compressImage(e.target.files[0]);
+                }}
+              />
+            </div>
+
             <FormattedText children={exercise.description} />
 
             <div className="update-exercise-muscle-selection-container">
@@ -81,16 +96,13 @@ export default function UpdateExercise() {
             <button
               onClick={() => {
                 navigate("/admin/exercises");
-                save(
-                  exercise.id,
-                  exercise.name,
-                  exercise.image,
-                  exercise.description
-                );
+                save(exercise.id, exercise.name, exercise.description);
               }}
             >
               Save
             </button>
+
+            <button onClick={() => navigate("/admin/exercises")}>Cancel</button>
 
             <br />
             <br />
@@ -110,27 +122,11 @@ export default function UpdateExercise() {
     </Suspense>
   );
 
-  async function save(
-    id: number,
-    name: string,
-    image: string,
-    description: string
-  ) {
-    console.log(
-      "primary",
-      selectedPrimaryMuscleGroups.current,
-      selectedPrimaryMuscles.current
-    );
-    console.log(
-      "secondary",
-      selectedSecondaryMuscleGroups.current,
-      selectedSecondaryMuscles.current
-    );
-    console.log("equipment", selectedEquipment.current);
-
-    console.log("save");
+  async function save(id: number, name: string, description: string) {
+    const image = imageRef.current?.src;
 
     if (!name || !image || !description) return;
+    console.log(image);
 
     const primaryMuscleGroups = selectedPrimaryMuscleGroups.current;
     const primaryMuscles = selectedPrimaryMuscles.current;
