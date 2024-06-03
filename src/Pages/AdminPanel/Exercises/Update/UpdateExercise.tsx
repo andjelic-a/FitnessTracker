@@ -3,7 +3,6 @@ import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import { Immutable, Narrow } from "../../../../Types/Utility/Models";
 import { FullExercise } from "../../../../Types/Models/FullExercise";
 import { Suspense, useRef } from "react";
-import FormattedText from "../../../../Components/FormattedText/FormattedText";
 import MuscleGroup from "../../../../Types/Models/MuscleGroup";
 import Muscle from "../../../../Types/Models/Muscle";
 import Equipment from "../../../../Types/Models/Equipment";
@@ -14,10 +13,15 @@ import EquipmentSelector from "../../Selectors/Equipment/EquipmentSelector";
 import Exercise from "../../../../Types/Models/Exercise";
 import { put } from "../../../../Data/Put";
 import { deleteEntity } from "../../../../Data/Delete";
+import { compressImage } from "../../../../Data/ImageCompression";
 
 export default function UpdateExercise() {
   const navigate = useNavigate();
   const data = useLoaderData() as ReturnType<typeof updateExerciseLoader>;
+
+  const nameFieldRef = useRef<HTMLInputElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const descriptionFieldRef = useRef<HTMLTextAreaElement>(null);
 
   const selectedPrimaryMuscleGroups = useRef<number[]>([]);
   const selectedPrimaryMuscles = useRef<number[]>([]);
@@ -44,9 +48,30 @@ export default function UpdateExercise() {
           Immutable<Narrow<Equipment, ["id", "name"]>>[]
         ]) => (
           <div className="update-exercise-container">
-            <h1>{exercise.name}</h1>
-            <img src={exercise.image} alt="" />
-            <FormattedText children={exercise.description} />
+            <input
+              type="text"
+              placeholder="Name"
+              ref={nameFieldRef}
+              defaultValue={exercise.name}
+            />
+
+            <div className="update-exercise-image-container">
+              <h2>Current Image</h2>
+              <img ref={imageRef} src={exercise.image} alt="" />
+              <input
+                type="file"
+                onChange={async (e) => {
+                  if (!imageRef.current || !e.target.files) return;
+                  imageRef.current.src = await compressImage(e.target.files[0]);
+                }}
+              />
+            </div>
+
+            <textarea
+              placeholder="Description"
+              ref={descriptionFieldRef}
+              defaultValue={exercise.description}
+            />
 
             <div className="update-exercise-muscle-selection-container">
               <MuscleSelector
@@ -81,16 +106,13 @@ export default function UpdateExercise() {
             <button
               onClick={() => {
                 navigate("/admin/exercises");
-                save(
-                  exercise.id,
-                  exercise.name,
-                  exercise.image,
-                  exercise.description
-                );
+                save(exercise.id);
               }}
             >
               Save
             </button>
+
+            <button onClick={() => navigate("/admin/exercises")}>Cancel</button>
 
             <br />
             <br />
@@ -110,25 +132,10 @@ export default function UpdateExercise() {
     </Suspense>
   );
 
-  async function save(
-    id: number,
-    name: string,
-    image: string,
-    description: string
-  ) {
-    console.log(
-      "primary",
-      selectedPrimaryMuscleGroups.current,
-      selectedPrimaryMuscles.current
-    );
-    console.log(
-      "secondary",
-      selectedSecondaryMuscleGroups.current,
-      selectedSecondaryMuscles.current
-    );
-    console.log("equipment", selectedEquipment.current);
-
-    console.log("save");
+  async function save(id: number) {
+    const name = nameFieldRef.current?.value;
+    const image = imageRef.current?.src;
+    const description = descriptionFieldRef.current?.value;
 
     if (!name || !image || !description) return;
 
@@ -153,7 +160,6 @@ export default function UpdateExercise() {
       [] //TODO: add aliases
     );
 
-    console.log(exercise);
     await put("exercise", exercise);
   }
 }

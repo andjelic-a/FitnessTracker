@@ -7,7 +7,6 @@ import { Immutable } from "../../Types/Utility/Models";
 export default function Profile() {
   const navigate = useNavigate();
   useEffect(() => {
-    console.log("check");
     if (!getIsLoggedIn()) navigate("/authentication");
   }, [navigate]);
 
