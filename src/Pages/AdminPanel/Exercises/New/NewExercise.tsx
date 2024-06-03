@@ -89,20 +89,6 @@ export default function NewExercise() {
   );
 
   async function save() {
-    console.log(
-      "primary",
-      selectedPrimaryMuscleGroups.current,
-      selectedPrimaryMuscles.current
-    );
-    console.log(
-      "secondary",
-      selectedSecondaryMuscleGroups.current,
-      selectedSecondaryMuscles.current
-    );
-    console.log("equipment", selectedEquipment.current);
-
-    console.log("save");
-
     if (
       !nameFieldRef.current ||
       !nameFieldRef.current.value ||
@@ -138,7 +124,6 @@ export default function NewExercise() {
       [] //TODO: add aliases
     );
 
-    console.log(exercise);
     await post("exercise", exercise);
   }
 }

@@ -160,7 +160,6 @@ export default function UpdateExercise() {
       [] //TODO: add aliases
     );
 
-    console.log(exercise);
     await put("exercise", exercise);
   }
 }
