@@ -31,7 +31,11 @@ export default function InputField({
   }
 
   return (
-    <div ref={containerRef} className={`input-field` + (className ? ` ${className}` : "")} id={id}>
+    <div
+      ref={containerRef}
+      className={`input-field` + (className ? ` ${className}` : "")}
+      id={id}
+    >
       {renderIcon()}
 
       <div>

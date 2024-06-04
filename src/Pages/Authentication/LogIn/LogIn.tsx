@@ -24,36 +24,26 @@ export default function Login() {
     let emailValid: boolean = true;
     let passwordValid: boolean = true;
 
-    if (
-      !emailField.current ||
-      !emailField.current.value ||
-      !ValidateEmail({ email: emailField.current.value })
-    ) {
-      emailContainer.current!.style.border = "1px solid #f43f3f";
+    if (!ValidateEmail(emailField.current?.value)) {
+      emailContainer.current!.classList.add("invalid");
       emailValid = false;
     } else {
-      emailContainer.current!.style.border = "none";
+      emailContainer.current!.classList.remove("invalid");
     }
 
-    if (
-      !passwordField.current ||
-      !passwordField.current.value ||
-      !ValidatePassword({ password: passwordField.current.value })
-    ) {
-      passwordContainer.current!.style.border = "1px solid #f43f3f";
+    if (!ValidatePassword(passwordField.current?.value)) {
+      passwordContainer.current!.classList.add("invalid");
       passwordValid = false;
     } else {
-      passwordContainer.current!.style.border = "none";
+      passwordContainer.current!.classList.remove("invalid");
     }
 
     if (emailValid && passwordValid) {
-      if (
-        await login(emailField.current!.value, passwordField.current!.value)
-      ) {
-        navigate("/me");
-      } else {
-        console.log("Wrong email or password");
-      }
+      const success = await login(
+        emailField.current!.value,
+        passwordField.current!.value
+      );
+      if (success) navigate("/me");
     }
   };
 
