@@ -28,47 +28,36 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
     let emailValid: boolean = true;
     let passwordValid: boolean = true;
 
-    if (
-      !usernameField.current ||
-      !usernameField.current.value ||
-      !ValidateUsername({ username: usernameField.current.value })
-    ) {
-      usernameContainer.current!.style.border = "1px solid #ff0000";
+    if (!ValidateUsername(usernameField.current?.value)) {
+      usernameContainer.current!.classList.add("invalid");
       usernameValid = false;
     } else {
+      emailContainer.current!.classList.remove("invalid");
       usernameContainer.current!.style.border = "none";
     }
 
-    if (
-      !emailField.current ||
-      !emailField.current.value ||
-      !ValidateEmail({ email: emailField.current.value })
-    ) {
-      emailContainer.current!.style.border = "1px solid #ff0000";
+    if (!ValidateEmail(emailField.current?.value)) {
+      emailContainer.current!.classList.add("invalid");
       emailValid = false;
     } else {
-      emailContainer.current!.style.border = "none";
+      emailContainer.current!.classList.remove("invalid");
     }
 
-    if (
-      !passwordField.current ||
-      !passwordField.current.value ||
-      !ValidatePassword({ password: passwordField.current.value })
-    ) {
-      passwordContainer.current!.style.border = "1px solid #ff0000";
+    if (!ValidatePassword(passwordField.current?.value)) {
+      passwordContainer.current!.classList.add("invalid");
       passwordValid = false;
     } else {
-      passwordContainer.current!.style.border = "none";
+      passwordContainer.current!.classList.remove("invalid");
     }
-    if (emailValid && passwordValid) {
-      if (
-        await register(
-          usernameField.current!.value,
-          emailField.current!.value,
-          passwordField.current!.value
-        )
-      )
-        navigate("/me");
+
+    if (usernameValid && emailValid && passwordValid) {
+      const success = await register(
+        usernameField.current!.value,
+        emailField.current!.value,
+        passwordField.current!.value
+      );
+
+      if (success) navigate("/me");
     }
   };
 
@@ -85,7 +74,15 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
           placeholder="Username"
           className="input-field"
           iconName="user"
-          onEnter={(enteredText: any) => console.log(enteredText)}
+          onEnter={(enteredText) => {
+            console.log(usernameField.current);
+
+            if (ValidateUsername(enteredText)) {
+              usernameContainer.current!.classList.remove("invalid");
+              emailField.current?.focus();
+            } else usernameContainer.current!.classList.add("invalid");
+          }}
+          name="signup-username"
         />
 
         <InputField
@@ -94,7 +91,13 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
           placeholder="Email"
           className="input-field"
           iconName="envelope"
-          onEnter={(enteredText: any) => console.log(enteredText)}
+          onEnter={(enteredText) => {
+            if (ValidateEmail(enteredText)) {
+              emailContainer.current!.classList.remove("invalid");
+              passwordField.current?.focus();
+            } else emailContainer.current!.classList.add("invalid");
+          }}
+          name="signup-email"
         />
 
         <InputField
@@ -103,7 +106,9 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
           placeholder="Password"
           className="input-field"
           iconName="key"
-          onEnter={(enteredText: any) => console.log(enteredText)}
+          onEnter={handleSignup}
+          password
+          name="signup-password"
         />
       </section>
 

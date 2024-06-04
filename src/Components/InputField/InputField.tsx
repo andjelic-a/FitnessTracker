@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, RefObject, useState } from "react";
+import { InputHTMLAttributes, RefObject, useRef, useState } from "react";
 import "./InputField.scss";
 import Icon from "../Icon/Icon";
 
@@ -10,6 +10,7 @@ interface InputFieldProps {
   id?: string;
   inputRef?: RefObject<HTMLInputElement>;
   containerRef?: RefObject<HTMLDivElement>;
+  password?: boolean;
 }
 
 export default function InputField({
@@ -18,40 +19,60 @@ export default function InputField({
   placeholder,
   className,
   id,
-  onChange,
+  name,
   onKeyDown,
-  inputRef,
+  inputRef: inputRefProp,
   containerRef,
+  password,
   ...eventHandlers
 }: InputFieldProps & InputHTMLAttributes<HTMLInputElement>) {
-  const [enteredText, setEnteredText] = useState<string>("");
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [isHidden, setIsHidden] = useState(password);
 
   function renderIcon() {
     return iconName ? <Icon className="icon" name={iconName} /> : null;
   }
 
+  function renderPasswordIcon() {
+    return password ? (
+      <div className="password-icon-container">
+        <Icon
+          className="icon password-show-eye-icon"
+          name={isHidden ? "eye" : "eye-slash"}
+          onClick={() => setIsHidden(!isHidden)}
+        />
+      </div>
+    ) : null;
+  }
+
   return (
-    <div ref={containerRef} className={`input-field` + (className ? ` ${className}` : "")} id={id}>
+    <div
+      ref={containerRef}
+      className={`input-field` + (className ? ` ${className}` : "")}
+      id={id}
+    >
       {renderIcon()}
 
       <div>
         <input
-          name={id ?? "input-field" + Math.random().toString()}
-          type="text"
+          name={id ?? name ?? "input-field" + Math.random().toString()}
+          type={isHidden ? "password" : "text"}
           placeholder={placeholder}
-          onChange={(e) => {
-            setEnteredText(e.target.value);
-            onChange?.(e);
-          }}
-          ref={inputRef}
+          ref={inputRefProp ?? inputRef}
           onKeyDown={(e) => {
-            if (e.key === "Enter") onEnter?.(enteredText);
+            const input = inputRefProp
+              ? inputRefProp.current
+              : inputRef.current;
+            if (!input) return;
 
+            if (e.key === "Enter") onEnter?.(input.value);
             onKeyDown?.(e);
           }}
           {...eventHandlers}
         />
       </div>
+
+      {renderPasswordIcon()}
     </div>
   );
 }

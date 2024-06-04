@@ -1,14 +1,21 @@
-export function ValidateEmail({ email }: { email: string }): boolean {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
+export function ValidateEmail(email: string | undefined | null): boolean {
+  if (!email) return false;
+
+  const re =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email.trim());
 }
 
-export function ValidatePassword({ password }: { password: string }): boolean {
-    const re = /^(?=.*\d)(?=.*[a-z]).{8,}$/;
-    return re.test(password);
+export function ValidatePassword(password: string | undefined | null): boolean {
+  if (!password) return false;
+
+  const re = /^(?=.*\d)(?=.*[a-z]).{8,}$/;
+  return re.test(password);
 }
 
-export function ValidateUsername({ username }: { username: string }): boolean {
-    const re = /^[a-zA-Z0-9]{3,}$/;
-    return re.test(username);
+export function ValidateUsername(username: string | undefined | null): boolean {
+  if (!username) return false;
+
+  const re = /^[a-zA-Z0-9]{3,}$/;
+  return re.test(username.trim());
 }

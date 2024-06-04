@@ -35,9 +35,9 @@ export async function getAuthorizationHeader(): Promise<
     method: "GET",
     credentials: "include",
   })
-    .then((result) => result.text())
+    .then((result) => (!result.ok ? undefined : result.text()))
     .then((newToken) => {
-      if (newToken === "Invalid token") {
+      if (!newToken) {
         localStorage.removeItem("token");
         return null;
       }
@@ -46,7 +46,7 @@ export async function getAuthorizationHeader(): Promise<
       return `Bearer ${newToken}` as `Bearer ${string}`;
     })
     .catch((err) => {
-      console.error("err --->" + err);
+      console.error(err);
       localStorage.removeItem("token");
       return null;
     });
@@ -62,7 +62,10 @@ export async function getCurrentUserData() {
       Authorization: bearer,
     },
   })
-    .then((result) => result.json())
+    .then((result) => {
+      if (!result.ok) return null;
+      return result.json();
+    })
     .catch((err) => {
       console.error(err);
     });
@@ -75,11 +78,11 @@ export async function login(email: string, password: string): Promise<boolean> {
       "Content-Type": "application/json",
     },
     credentials: "include",
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email: email.trim(), password }),
   })
-    .then((result) => result.text())
+    .then((result) => (!result.ok ? undefined : result.text()))
     .then((newToken) => {
-      if (newToken === "Incorrect email or password") return false;
+      if (!newToken) return false;
 
       localStorage.setItem("token", newToken);
       return true;
@@ -104,14 +107,14 @@ export async function register(
     },
     credentials: "include",
     body: JSON.stringify({
-      name,
-      email,
+      name: name.trim(),
+      email: email.trim(),
       password,
     }),
   })
-    .then((result) => result.text())
+    .then((result) => (!result.ok ? undefined : result.text()))
     .then((newToken) => {
-      if (newToken === "User already exists") return false;
+      if (!newToken) return false;
 
       localStorage.setItem("token", newToken);
       return true;
