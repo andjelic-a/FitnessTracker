@@ -75,6 +75,7 @@ export default function Login() {
           className="input-field"
           iconName="key"
           onEnter={(enteredText) => console.log(enteredText)}
+          password
           name="login-password"
         />
       </section>
