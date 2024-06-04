@@ -75,6 +75,7 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
           className="input-field"
           iconName="user"
           onEnter={(enteredText: any) => console.log(enteredText)}
+          name="signup-username"
         />
 
         <InputField
@@ -84,6 +85,7 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
           className="input-field"
           iconName="envelope"
           onEnter={(enteredText: any) => console.log(enteredText)}
+          name="signup-email"
         />
 
         <InputField
@@ -93,6 +95,7 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
           className="input-field"
           iconName="key"
           onEnter={(enteredText: any) => console.log(enteredText)}
+          name="signup-password"
         />
       </section>
 

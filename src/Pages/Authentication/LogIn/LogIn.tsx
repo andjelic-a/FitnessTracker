@@ -65,6 +65,7 @@ export default function Login() {
           className="input-field"
           iconName="envelope"
           onEnter={(enteredText) => console.log(enteredText)}
+          name="login-email"
         />
 
         <InputField
@@ -74,6 +75,7 @@ export default function Login() {
           className="input-field"
           iconName="key"
           onEnter={(enteredText) => console.log(enteredText)}
+          name="login-password"
         />
       </section>
 

@@ -18,6 +18,7 @@ export default function InputField({
   placeholder,
   className,
   id,
+  name,
   onChange,
   onKeyDown,
   inputRef,
@@ -40,7 +41,7 @@ export default function InputField({
 
       <div>
         <input
-          name={id ?? "input-field" + Math.random().toString()}
+          name={id ?? name ?? "input-field" + Math.random().toString()}
           type="text"
           placeholder={placeholder}
           onChange={(e) => {
