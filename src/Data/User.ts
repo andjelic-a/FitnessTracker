@@ -78,7 +78,7 @@ export async function login(email: string, password: string): Promise<boolean> {
       "Content-Type": "application/json",
     },
     credentials: "include",
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email: email.trim(), password }),
   })
     .then((result) => (!result.ok ? undefined : result.text()))
     .then((newToken) => {
@@ -107,8 +107,8 @@ export async function register(
     },
     credentials: "include",
     body: JSON.stringify({
-      name,
-      email,
+      name: name.trim(),
+      email: email.trim(),
       password,
     }),
   })

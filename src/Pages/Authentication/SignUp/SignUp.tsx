@@ -74,7 +74,14 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
           placeholder="Username"
           className="input-field"
           iconName="user"
-          onEnter={(enteredText: any) => console.log(enteredText)}
+          onEnter={(enteredText) => {
+            console.log(usernameField.current);
+
+            if (ValidateUsername(enteredText)) {
+              usernameContainer.current!.classList.remove("invalid");
+              emailField.current?.focus();
+            } else usernameContainer.current!.classList.add("invalid");
+          }}
           name="signup-username"
         />
 
@@ -84,7 +91,12 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
           placeholder="Email"
           className="input-field"
           iconName="envelope"
-          onEnter={(enteredText: any) => console.log(enteredText)}
+          onEnter={(enteredText) => {
+            if (ValidateEmail(enteredText)) {
+              emailContainer.current!.classList.remove("invalid");
+              passwordField.current?.focus();
+            } else emailContainer.current!.classList.add("invalid");
+          }}
           name="signup-email"
         />
 
@@ -94,7 +106,8 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
           placeholder="Password"
           className="input-field"
           iconName="key"
-          onEnter={(enteredText: any) => console.log(enteredText)}
+          onEnter={handleSignup}
+          password
           name="signup-password"
         />
       </section>

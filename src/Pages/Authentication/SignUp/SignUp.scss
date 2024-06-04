@@ -44,7 +44,7 @@
       &.invalid {
         border-color: #f00;
 
-        i {
+        i:not(.password-show-eye-icon) {
           color: #f00;
         }
       }

@@ -43,7 +43,7 @@
       &.invalid {
         border-color: #f43f3f;
 
-        i {
+        i:not(.password-show-eye-icon) {
           color: #f43f3f;
         }
       }

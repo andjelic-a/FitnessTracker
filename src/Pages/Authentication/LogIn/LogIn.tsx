@@ -64,7 +64,12 @@ export default function Login() {
           placeholder="Email"
           className="input-field"
           iconName="envelope"
-          onEnter={(enteredText) => console.log(enteredText)}
+          onEnter={(enteredText) => {
+            if (ValidateEmail(enteredText)) {
+              emailContainer.current!.classList.remove("invalid");
+              passwordField.current?.focus();
+            } else emailContainer.current!.classList.add("invalid");
+          }}
           name="login-email"
         />
 
@@ -74,7 +79,7 @@ export default function Login() {
           placeholder="Password"
           className="input-field"
           iconName="key"
-          onEnter={(enteredText) => console.log(enteredText)}
+          onEnter={handleLogin}
           password
           name="login-password"
         />

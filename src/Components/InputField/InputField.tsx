@@ -37,7 +37,7 @@ export default function InputField({
     return password ? (
       <div className="password-icon-container">
         <Icon
-          className="icon"
+          className="icon password-show-eye-icon"
           name={isHidden ? "eye" : "eye-slash"}
           onClick={() => setIsHidden(!isHidden)}
         />
