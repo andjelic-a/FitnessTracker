@@ -16,9 +16,7 @@ export function isJWTExpired(jwt: string) {
   return exp * 1000 < Date.now();
 }
 
-export async function getAuthorizationHeader(): Promise<
-  `Bearer ${string}` | null
-> {
+export async function getBearerToken(): Promise<`Bearer ${string}` | null> {
   const jwt = localStorage.getItem("token");
   if (jwt === null) return null;
 
@@ -38,7 +36,7 @@ export async function getAuthorizationHeader(): Promise<
     .then((result) => (!result.ok ? undefined : result.text()))
     .then((newToken) => {
       if (!newToken) {
-        localStorage.removeItem("token");
+        logout();
         return null;
       }
 
@@ -47,13 +45,13 @@ export async function getAuthorizationHeader(): Promise<
     })
     .catch((err) => {
       console.error(err);
-      localStorage.removeItem("token");
+      logout();
       return null;
     });
 }
 
 export async function getCurrentUserData() {
-  const bearer = await getAuthorizationHeader();
+  const bearer = await getBearerToken();
   if (!bearer) return null;
 
   return fetch(`${baseAPIUrl}/user`, {
@@ -123,4 +121,18 @@ export async function register(
       console.error(err);
       return false;
     });
+}
+
+export async function logout(): Promise<void> {
+  const auth = await getBearerToken();
+  if (auth !== null)
+    fetch(`${baseAPIUrl}/user/logout`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        Authorization: auth,
+      },
+    }).catch((x) => console.error(x));
+
+  localStorage.removeItem("token");
 }
