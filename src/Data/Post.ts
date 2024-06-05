@@ -1,5 +1,5 @@
 import IModel from "../Types/Models/IModel";
-import { getAuthorizationHeader } from "./User";
+import { getBearerToken } from "./User";
 
 const baseAPIUrl = "http://localhost:5054/api";
 
@@ -8,7 +8,7 @@ export async function post<T extends IModel>(apiEndpoint: string, data: T) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: (await getAuthorizationHeader()) as string,
+      Authorization: (await getBearerToken()) as string,
     },
     body: JSON.stringify(data),
   }).catch((err) => console.error(err));

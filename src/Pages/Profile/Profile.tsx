@@ -1,15 +1,11 @@
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
 import { Await, useLoaderData, useNavigate } from "react-router-dom";
-import { getIsLoggedIn, logout } from "../../Data/User";
+import { logout } from "../../Data/User";
 import User from "../../Types/Models/User";
 import { Immutable } from "../../Types/Utility/Models";
 
 export default function Profile() {
   const navigate = useNavigate();
-  useEffect(() => {
-    if (!getIsLoggedIn()) navigate("/authentication");
-  }, [navigate]);
-
   const userData = useLoaderData() as Promise<unknown>;
 
   return (

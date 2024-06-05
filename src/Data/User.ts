@@ -16,9 +16,7 @@ export function isJWTExpired(jwt: string) {
   return exp * 1000 < Date.now();
 }
 
-export async function getAuthorizationHeader(): Promise<
-  `Bearer ${string}` | null
-> {
+export async function getBearerToken(): Promise<`Bearer ${string}` | null> {
   const jwt = localStorage.getItem("token");
   if (jwt === null) return null;
 
@@ -53,7 +51,7 @@ export async function getAuthorizationHeader(): Promise<
 }
 
 export async function getCurrentUserData() {
-  const bearer = await getAuthorizationHeader();
+  const bearer = await getBearerToken();
   if (!bearer) return null;
 
   return fetch(`${baseAPIUrl}/user`, {
@@ -126,7 +124,7 @@ export async function register(
 }
 
 export async function logout(): Promise<void> {
-  const auth = await getAuthorizationHeader();
+  const auth = await getBearerToken();
   if (auth !== null)
     await fetch(`${baseAPIUrl}/user/logout`, {
       method: "DELETE",
