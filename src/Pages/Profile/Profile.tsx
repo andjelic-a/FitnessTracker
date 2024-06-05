@@ -1,6 +1,6 @@
 import { Suspense, useEffect } from "react";
 import { Await, useLoaderData, useNavigate } from "react-router-dom";
-import { getIsLoggedIn } from "../../Data/User";
+import { getIsLoggedIn, logout } from "../../Data/User";
 import User from "../../Types/Models/User";
 import { Immutable } from "../../Types/Utility/Models";
 
@@ -29,7 +29,7 @@ export default function Profile() {
       </Suspense>
       <button
         onClick={() => {
-          localStorage.removeItem("token");
+          logout();
           navigate("/authentication");
         }}
       >

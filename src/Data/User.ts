@@ -38,7 +38,7 @@ export async function getAuthorizationHeader(): Promise<
     .then((result) => (!result.ok ? undefined : result.text()))
     .then((newToken) => {
       if (!newToken) {
-        localStorage.removeItem("token");
+        logout();
         return null;
       }
 
@@ -47,7 +47,7 @@ export async function getAuthorizationHeader(): Promise<
     })
     .catch((err) => {
       console.error(err);
-      localStorage.removeItem("token");
+      logout();
       return null;
     });
 }
@@ -123,4 +123,18 @@ export async function register(
       console.error(err);
       return false;
     });
+}
+
+export async function logout(): Promise<void> {
+  const auth = await getAuthorizationHeader();
+  if (auth !== null)
+    await fetch(`${baseAPIUrl}/user/logout`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        Authorization: auth,
+      },
+    }).catch((x) => console.error(x));
+
+  localStorage.removeItem("token");
 }
