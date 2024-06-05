@@ -23,12 +23,7 @@ export default function Profile() {
           }}
         </Await>
       </Suspense>
-      <button
-        onClick={() => {
-          logout();
-          navigate("/authentication");
-        }}
-      >
+      <button onClick={() => logout().then(() => navigate("/authentication"))}>
         Logout
       </button>
     </div>

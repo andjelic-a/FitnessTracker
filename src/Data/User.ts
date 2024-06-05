@@ -126,7 +126,7 @@ export async function register(
 export async function logout(): Promise<void> {
   const auth = await getBearerToken();
   if (auth !== null)
-    await fetch(`${baseAPIUrl}/user/logout`, {
+    fetch(`${baseAPIUrl}/user/logout`, {
       method: "DELETE",
       credentials: "include",
       headers: {
