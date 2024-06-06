@@ -19,6 +19,7 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
   const emailContainer = useRef<HTMLDivElement>(null);
   const passwordField = useRef<HTMLInputElement>(null);
   const passwordContainer = useRef<HTMLDivElement>(null);
+  const errorMessageRef = useRef<HTMLDivElement>(null);
 
   const class1 = "signup-container";
   const class2 = isActive ? "signup-active" : "signup-not-active";
@@ -32,8 +33,7 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
       usernameContainer.current!.classList.add("invalid");
       usernameValid = false;
     } else {
-      emailContainer.current!.classList.remove("invalid");
-      usernameContainer.current!.style.border = "none";
+      usernameContainer.current!.classList.remove("invalid");
     }
 
     if (!ValidateEmail(emailField.current?.value)) {
@@ -58,6 +58,7 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
       );
 
       if (success) navigate("/me");
+      else errorMessageRef.current!.style.opacity = "1";
     }
   };
 
@@ -75,8 +76,6 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
           className="input-field"
           iconName="user"
           onEnter={(enteredText) => {
-            console.log(usernameField.current);
-
             if (ValidateUsername(enteredText)) {
               usernameContainer.current!.classList.remove("invalid");
               emailField.current?.focus();
@@ -110,6 +109,10 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
           password
           name="signup-password"
         />
+
+        <div className="error-message" ref={errorMessageRef}>
+          User already exists
+        </div>
       </section>
 
       <section className="signup-buttons">
