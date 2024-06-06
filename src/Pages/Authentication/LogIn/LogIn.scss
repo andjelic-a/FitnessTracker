@@ -19,7 +19,7 @@
     font-weight: 700;
 
     & label {
-      margin: 6rem;
+      margin: 5rem;
       cursor: pointer;
       transition: 0.4s ease-in-out;
       transition-delay: 0.3s;
@@ -47,6 +47,15 @@
           color: #f43f3f;
         }
       }
+    }
+
+    & .error-message {
+      opacity: 0;
+      color: #f55;
+      font-weight: 100;
+      font-size: 1.5rem;
+      text-align: start;
+      width: 75%;
     }
   }
 

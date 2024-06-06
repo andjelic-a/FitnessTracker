@@ -1,0 +1,46 @@
+.error-page-container {
+  width: 100svw;
+  height: 100svh;
+  padding-top: 15svh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  font-size: 3rem;
+  text-align: center;
+
+  .route-error-container {
+    h2 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .primary-home-link {
+      text-decoration: none;
+      color: #ccf;
+
+      &::before {
+        content: "";
+        display: block;
+        width: 35%;
+        height: 0.2rem;
+        background-color: #fff;
+
+        transform: translate(0, 1.25em);
+        transition: 250ms;
+        transition-timing-function: ease-in-out;
+      }
+
+      &:hover::before {
+        width: 100%;
+      }
+    }
+
+    .secondary-home-link {
+      text-decoration: none;
+      color: #fff;
+    }
+  }
+}

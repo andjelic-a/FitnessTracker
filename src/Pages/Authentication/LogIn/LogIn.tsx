@@ -13,6 +13,7 @@ export default function Login() {
   const emailContainer = useRef<HTMLDivElement>(null);
   const passwordField = useRef<HTMLInputElement>(null);
   const passwordContainer = useRef<HTMLDivElement>(null);
+  const errorMessageRef = useRef<HTMLDivElement>(null);
 
   const [isLoginActive, setIsLoginActive] = useState(true);
 
@@ -44,6 +45,7 @@ export default function Login() {
         passwordField.current!.value
       );
       if (success) navigate("/me");
+      else errorMessageRef.current!.style.opacity = "1";
     }
   };
 
@@ -83,6 +85,10 @@ export default function Login() {
           password
           name="login-password"
         />
+
+        <div className="error-message" ref={errorMessageRef}>
+          <p>Invalid email or password</p>
+        </div>
       </section>
 
       <section className="login-buttons">
