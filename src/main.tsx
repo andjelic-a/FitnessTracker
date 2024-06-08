@@ -19,6 +19,7 @@ import updateExerciseLoader from "./Pages/AdminPanel/Exercises/Update/UpdateExer
 import FormattedText from "./Components/FormattedText/FormattedText.tsx";
 import profileLoader from "./Pages/Profile/ProfileLoader.ts";
 import authenticationLoader from "./Pages/Authentication/AuthenticationLoader.ts";
+import allExercisesLoader from "./Pages/AdminPanel/Exercises/AllExercisesLoader.ts";
 
 const router = createBrowserRouter([
   {
@@ -71,7 +72,7 @@ const router = createBrowserRouter([
           {
             path: "exercises",
             element: <AdminExercisePanel />,
-            loader: exerciseLoader,
+            loader: allExercisesLoader,
           },
           {
             path: "exercises/new",
