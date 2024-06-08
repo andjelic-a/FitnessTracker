@@ -1,5 +1,5 @@
 import "./Exercises.scss";
-import { Await, useLoaderData, useNavigate } from "react-router-dom";
+import { Await, Link, useLoaderData } from "react-router-dom";
 import { Suspense, useContext, useEffect, useRef, useState } from "react";
 import { Immutable, Narrow } from "../../Types/Utility/Models";
 import { FullExercise } from "../../Types/Models/FullExercise";
@@ -69,20 +69,18 @@ function InnerExercises({
 }: {
   exercises: Immutable<Narrow<FullExercise, ["id", "name", "image"]>>[];
 }) {
-  const navigate = useNavigate();
-
   return (
     <div className="exercises-page-container">
       {exercises.map((exercise) => {
         return (
-          <div
+          <Link
             className="exercise-card"
+            to={`/exercises/${exercise.id}`}
             key={exercise.id}
-            onClick={() => navigate(`/exercises/${exercise.id}`)}
           >
             <p>{exercise.name}</p>
             <img src={exercise.image} alt="" />
-          </div>
+          </Link>
         );
       })}
     </div>

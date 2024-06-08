@@ -3,7 +3,7 @@ import "./HamburgerNavigationMenu.scss";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Flip from "gsap/Flip";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 gsap.registerPlugin(Flip);
 
 type NavigationItem = {
@@ -34,7 +34,6 @@ export default function HamburgerNavigationMenu({
     useState<number>(0);
   const navigationContainerRef = useRef<HTMLDivElement>(null);
   const selectionIndicatorRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
 
   const ClickHandler = () => {
     if (
@@ -167,11 +166,10 @@ export default function HamburgerNavigationMenu({
     [hamburgerMenuRef.current, navigationContainerRef.current]
   );
 
-  function handleSelect(i: number, path: string) {
+  function handleSelect(i: number) {
     if (i === selectedNavigationItemIdx || isAnimationActive.current) return;
 
     playSelectAnimation(i);
-    navigate(path);
   }
 
   const playSelectAnimation = useCallback(
@@ -322,18 +320,17 @@ export default function HamburgerNavigationMenu({
         }}
       >
         {items.map((item, i) => (
-          <div
+          <Link
+            to={"path" in item ? item.path : item.defaultPath}
             key={i}
-            onClick={() =>
-              handleSelect(i, "path" in item ? item.path : item.defaultPath)
-            }
+            onClick={() => handleSelect(i)}
             className={`navigation-item`}
             style={{
               gridRow: i + 1,
             }}
           >
             {item.name}
-          </div>
+          </Link>
         ))}
         <div className="selection-indicator" ref={selectionIndicatorRef}>
           ●
