@@ -3,13 +3,13 @@ import { Await, Link, useLoaderData, useSearchParams } from "react-router-dom";
 import { Suspense, useContext, useEffect, useRef, useState } from "react";
 import { Immutable, Narrow } from "../../Types/Utility/Models";
 import { FullExercise } from "../../Types/Models/FullExercise";
-import exerciseLoader from "./ExerciseLoader";
+import exerciseLoader, { getExerciseQueryString } from "./ExerciseLoader";
 import { testContext } from "../../App";
 import get from "../../Data/Get";
 import InputField from "../../Components/InputField/InputField";
 
 export default function Exercises() {
-  const exercises = useLoaderData() as ReturnType<typeof exerciseLoader>;
+  const data = useLoaderData() as ReturnType<typeof exerciseLoader>;
   const scrollPositionContext = useContext(testContext);
   const [lazyLoadedExercises, setLazyLoadedExercises] = useState<
     Immutable<Narrow<FullExercise, ["id", "name", "image"]>>[]
@@ -19,8 +19,12 @@ export default function Exercises() {
   const lastRecordedScrollPosition = useRef(0);
   const isLoadingExercises = useRef(false);
 
-  let [, setSearchParams] = useSearchParams();
+  let [searchParams, setSearchParams] = useSearchParams();
   const searchBarRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setLazyLoadedExercises([]);
+  }, [data]);
 
   useEffect(() => {
     if (
@@ -32,7 +36,7 @@ export default function Exercises() {
       get<FullExercise>(
         "FullExercise",
         "none",
-        undefined,
+        getExerciseQueryString(searchParams),
         10,
         offset.current
       ).then((newExercises) => {
@@ -67,6 +71,7 @@ export default function Exercises() {
     <div>
       <div className="filters-container">
         <InputField
+          defaultValue={searchParams.get("name") ?? ""}
           placeholder="Search exercises..."
           iconName="search"
           inputRef={searchBarRef}
@@ -87,7 +92,7 @@ export default function Exercises() {
       </div>
 
       <Suspense fallback={<div>Loading...</div>}>
-        <Await resolve={"exercises" in exercises ? exercises.exercises : []}>
+        <Await resolve={"exercises" in data ? data.exercises : []}>
           {(
             initialExercises: Immutable<
               Narrow<FullExercise, ["id", "name", "image"]>

@@ -1,15 +1,16 @@
 import IModel from "../Types/Models/IModel";
-import { IncludeKeys, Query } from "../Types/Utility/Models";
+import { IncludeKeys } from "../Types/Utility/Models";
 
 const baseAPIUrl = "http://localhost:5054/api";
 
 export default async function get<T extends IModel>(
   apiEndpoint: string,
   include?: IncludeKeys<T> | IncludeKeys<T>[] | "none" | "all",
-  q?: Query<T> | Query<T>[] | string | string[],
+  q?: string | string[] | Promise<string | string[]>,
   limit: number = 10,
   offset: number = 0
 ): Promise<T[]> {
+  q = await q;
   const queryString = !q ? undefined : Array.isArray(q) ? q.join(";") : q;
   return fetch(
     `${baseAPIUrl}/${apiEndpoint}?include=${getIncludeString(include)}&${

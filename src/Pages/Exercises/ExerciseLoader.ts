@@ -12,30 +12,29 @@ const validSearchParams: string[] = [
   "equipment",
 ];
 
-export default async function exerciseLoader({ request }: any) {
-  const url = new URL(request.url);
-
+export async function getExerciseQueryString(
+  urlSearchParams: URLSearchParams
+): Promise<string[]> {
   const searchParams: {
     key: string;
     value: string | null;
   }[] = [];
 
-  const keysIterator = url.searchParams.keys();
+  const keysIterator = urlSearchParams.keys();
   for await (const element of keysIterator) {
-    console.log(element);
-    console.log(url.searchParams.get(element));
-    searchParams.push({ key: element, value: url.searchParams.get(element) });
+    searchParams.push({ key: element, value: urlSearchParams.get(element) });
   }
 
   searchParams.filter((x) => x.value && validSearchParams.includes(x.key));
+  const query = searchParams.map((x) => `${x.key}=${x.value}`);
+  return query;
+}
+
+export default async function exerciseLoader({ request }: any) {
+  const url = new URL(request.url).searchParams;
+  const query = await getExerciseQueryString(url);
 
   return defer({
-    exercises: get<FullExercise>(
-      "FullExercise",
-      "none",
-      searchParams.map((x) => `${x.key}=${x.value}`),
-      10,
-      0
-    ),
+    exercises: get<FullExercise>("FullExercise", "none", query, 10, 0),
   });
 }
