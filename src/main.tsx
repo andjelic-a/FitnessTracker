@@ -20,7 +20,6 @@ import FormattedText from "./Components/FormattedText/FormattedText.tsx";
 import profileLoader from "./Pages/Profile/ProfileLoader.ts";
 import authenticationLoader from "./Pages/Authentication/AuthenticationLoader.ts";
 import allExercisesLoader from "./Pages/AdminPanel/Exercises/AllExercisesLoader.ts";
-import FilteredExercises from "./Pages/Exercises/FilteredExercises/FilteredExercises.tsx";
 
 const router = createBrowserRouter([
   {
@@ -36,18 +35,8 @@ const router = createBrowserRouter([
       },
       {
         path: "exercises",
-        children: [
-          {
-            path: "",
-            element: <Exercises />,
-            loader: exerciseLoader,
-          },
-          {
-            path: "exercises/search",
-            element: <FilteredExercises />,
-            // loader: exerciseLoader,
-          },
-        ],
+        element: <Exercises />,
+        loader: exerciseLoader,
       },
       {
         path: "exercises/:exerciseId",

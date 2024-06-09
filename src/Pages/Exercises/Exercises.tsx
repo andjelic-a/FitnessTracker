@@ -1,6 +1,13 @@
 import "./Exercises.scss";
 import { Await, Link, useLoaderData, useSearchParams } from "react-router-dom";
-import { Suspense, useContext, useEffect, useRef, useState } from "react";
+import {
+  Suspense,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Immutable, Narrow } from "../../Types/Utility/Models";
 import { FullExercise } from "../../Types/Models/FullExercise";
 import exerciseLoader, { getExerciseQueryString } from "./ExerciseLoader";
@@ -22,6 +29,8 @@ export default function Exercises() {
   let [searchParams, setSearchParams] = useSearchParams();
   const searchBarRef = useRef<HTMLInputElement>(null);
 
+  const exercisesLimitPerLoad = useMemo(() => 10, []);
+
   useEffect(() => {
     setLazyLoadedExercises([]);
   }, [data]);
@@ -37,11 +46,11 @@ export default function Exercises() {
         "FullExercise",
         "none",
         getExerciseQueryString(searchParams),
-        10,
+        exercisesLimitPerLoad,
         offset.current
       ).then((newExercises) => {
         console.log(newExercises, offset.current);
-        if (newExercises.length === 0) return;
+        if (newExercises.length !== exercisesLimitPerLoad) return;
 
         isLoadingExercises.current = false;
         setLazyLoadedExercises([...lazyLoadedExercises, ...newExercises]);
@@ -66,6 +75,15 @@ export default function Exercises() {
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
   }, []); */
+  function handleSearch() {
+    setSearchParams((x) => {
+      searchBarRef.current?.value
+        ? x.set("name", searchBarRef.current.value)
+        : x.delete("name");
+
+      return x;
+    });
+  }
 
   return (
     <div>
@@ -75,20 +93,9 @@ export default function Exercises() {
           placeholder="Search exercises..."
           iconName="search"
           inputRef={searchBarRef}
+          onEnter={handleSearch}
         />
-        <button
-          onClick={() => {
-            setSearchParams((x) => {
-              searchBarRef.current?.value
-                ? x.set("name", searchBarRef.current.value)
-                : x.delete("name");
-
-              return x;
-            });
-          }}
-        >
-          Filter
-        </button>
+        <button onClick={handleSearch}>Filter</button>
       </div>
 
       <Suspense fallback={<div>Loading...</div>}>
