@@ -6,7 +6,9 @@ export type Include<T extends IModel> = {
 
 export type IncludeKeys<T extends IModel> = keyof Include<T>;
 
-export type Query<T extends IModel> = `${keyof Include<T>}=${string}`;
+export type Query<T extends IModel> = `${keyof Omit<T, "Id"> extends string
+  ? keyof Omit<T, "Id">
+  : never}=${string}`;
 
 export type Narrow<
   OriginalEntity extends IModel,
