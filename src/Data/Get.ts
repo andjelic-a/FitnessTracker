@@ -6,14 +6,14 @@ const baseAPIUrl = "http://localhost:5054/api";
 export default async function get<T extends IModel>(
   apiEndpoint: string,
   include?: IncludeKeys<T> | IncludeKeys<T>[] | "none" | "all",
-  q?: Query<T> | Query<T>[],
+  q?: Query<T> | Query<T>[] | string | string[],
   limit: number = 10,
   offset: number = 0
 ): Promise<T[]> {
   const queryString = !q ? undefined : Array.isArray(q) ? q.join(";") : q;
   return fetch(
     `${baseAPIUrl}/${apiEndpoint}?include=${getIncludeString(include)}&${
-      queryString ? queryString : ""
+      queryString ? `q=${queryString}` : ""
     }&limit=${limit}&offset=${offset}`,
     {
       method: "GET",
