@@ -4,7 +4,7 @@
   width: 100%;
   display: grid;
   grid-template-columns: 30% 70%;
-  grid-template-rows: 80svh;
+  grid-template-rows: 100svh;
 }
 
 .profile-container {
@@ -13,6 +13,7 @@
 }
 
 .profile-user-container {
+
   & .profile-header {
     width: 100%;
     height: 20rem;
@@ -44,12 +45,26 @@
       grid-template-rows: repeat(2, 1fr);
 
       & .profile-user-username {
-        width: 30rem;
+        width: 95%;
         display: flex;
         justify-content: flex-start;
         align-items: flex-end;
         padding-left: 5rem;
         font-size: 2.5rem;
+
+        & .profile-user-settings{
+            margin-top: 3rem;
+            font-size: 3rem;
+            margin-left:  auto;  
+            align-self: flex-start;
+            cursor: pointer;
+            transition: .5s;
+        }
+
+        & .profile-user-settings:hover{
+            font-size: 4rem;
+            transform: rotate(180deg);
+        }
       }
 
       & .profile-user-stats {
