@@ -32,9 +32,9 @@ export default function Profile() {
                         <p>{loadedUserData.name}</p>
                       </div>
                       <div className="profile-user-stats">
-                        <p>Workouts</p>
-                        <p>Followers</p>
-                        <p>Following</p>
+                        <div><div>Workouts</div><div>1</div></div>
+                        <div><div>Followers</div><div>1</div></div>
+                        <div><div>Following</div><div>1</div></div>
                       </div>
                     </>
                   );
@@ -43,6 +43,8 @@ export default function Profile() {
             </Suspense>
           </div>
         </div>
+        <button className="profile-edit-button">Edit Profile</button>
+        <br /><br /><br /><br /><br />
         <button
           onClick={() => logout().then(() => navigate("/authentication"))}
         >
