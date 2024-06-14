@@ -33,17 +33,17 @@ export default function Profile() {
                       <Icon className="profile-user-settings" id="solid" name="gear" />
                     </div>
                     <div className="profile-user-stats">
-                      <div>
-                        <div>Workouts</div>
-                        <div>1</div>
+                      <div className="profile-user-stats-stat">
+                        <div className="profile-user-stats-name">Workouts</div>
+                        <div className="profile-user-stats-num">1</div>
                       </div>
-                      <div>
-                        <div>Followers</div>
-                        <div>1</div>
+                      <div className="profile-user-stats-stat">
+                        <div className="profile-user-stats-name">Followers</div>
+                        <div className="profile-user-stats-num">1</div>
                       </div>
-                      <div>
-                        <div>Following</div>
-                        <div>1</div>
+                      <div className="profile-user-stats-stat">
+                        <div className="profile-user-stats-name">Following</div>
+                        <div className="profile-user-stats-num">1</div>
                       </div>
                     </div>
                   </div>

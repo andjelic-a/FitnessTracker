@@ -54,11 +54,12 @@
 
         & .profile-user-settings{
             margin-top: 3rem;
-            font-size: 3rem;
             margin-left:  auto;  
             align-self: flex-start;
             cursor: pointer;
             transition: .5s;
+            color: $primary-300;
+            font-size: 3rem;
         }
 
         & .profile-user-settings:hover{
@@ -75,11 +76,30 @@
         padding-left: 5rem;
         font-size: 1.6rem;
 
-        & div div{
+        & .profile-user-stats-stat{
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             cursor: pointer;
+
+            & .profile-user-stats-name {
+                color: $dark-600;
+                font-size: 1.4rem;
+            }
+
+            & .profile-user-stats-num {
+                font-size: 1.8rem;
+            }
+        }
+
+        & .profile-user-stats-stat:hover{
+            & .profile-user-stats-name {
+                color: $primary-600;
+            }
+            & .profile-user-stats-num {
+                color: $primary-600;
+            }
         }
       }
     }
@@ -90,7 +110,7 @@
     height: 3rem;
     border-radius: 0.5rem;
     border: none;
-    background-color: $dark-300;
+    background-color: $primary-300;
     color: white;
     cursor: pointer;
     font-size: 1.4rem;
