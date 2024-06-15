@@ -1,4 +1,4 @@
-const baseAPIUrl = "http://localhost:5054/api";
+import { baseAPIUrl } from "./BaseURLs";
 
 export function getIsLoggedIn() {
   return localStorage.getItem("token") !== null;

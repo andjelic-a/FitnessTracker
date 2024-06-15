@@ -1,7 +1,6 @@
 import IModel from "../Types/Models/IModel";
 import { IncludeKeys } from "../Types/Utility/Models";
-
-const baseAPIUrl = "http://localhost:5054/api";
+import { baseAPIUrl } from "./BaseURLs";
 
 export default async function get<T extends IModel>(
   apiEndpoint: string,

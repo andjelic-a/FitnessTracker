@@ -1,7 +1,6 @@
 import IModel from "../Types/Models/IModel";
+import { baseAPIUrl } from "./BaseURLs";
 import { getBearerToken } from "./User";
-
-const baseAPIUrl = "http://localhost:5054/api";
 
 export async function post<T extends IModel>(apiEndpoint: string, data: T) {
   return fetch(`${baseAPIUrl}/${apiEndpoint}`, {
