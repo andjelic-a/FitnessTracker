@@ -1,7 +1,6 @@
 import { Guid } from "../Types/Models/IModel";
+import { baseAPIUrl } from "./BaseURLs";
 import { getBearerToken } from "./User";
-
-const baseAPIUrl = "http://localhost:5054/api";
 
 export async function deleteEntity(apiEndpoint: string, id: number | Guid) {
   return fetch(`${baseAPIUrl}/${apiEndpoint}/${id}`, {

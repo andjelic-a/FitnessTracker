@@ -20,6 +20,8 @@ import FormattedText from "./Components/FormattedText/FormattedText.tsx";
 import profileLoader from "./Pages/Profile/ProfileLoader.ts";
 import authenticationLoader from "./Pages/Authentication/AuthenticationLoader.ts";
 import allExercisesLoader from "./Pages/AdminPanel/Exercises/AllExercisesLoader.ts";
+import EmailVerification from "./Pages/EmailVerification/EmailVerification.tsx";
+import emailVerificationLoader from "./Pages/EmailVerification/EmailVerificationLoader.ts";
 
 const router = createBrowserRouter([
   {
@@ -64,6 +66,11 @@ const router = createBrowserRouter([
       {
         path: "nutrition",
         element: <div>Nutrition</div>,
+      },
+      {
+        path: "email-verification/:code",
+        element: <EmailVerification />,
+        loader: emailVerificationLoader,
       },
       {
         path: "admin",
