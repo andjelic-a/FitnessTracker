@@ -4,16 +4,68 @@
   width: 100%;
   display: grid;
   grid-template-columns: 30% 70%;
-  grid-template-rows: 100svh;
+  grid-template-rows: 200svh;
 }
 
-.profile-container {
-    background-color: $dark-300;
-    margin-right: calc(100% * 4 / 20);
+.profile-workouts-container {
+  position: sticky;
+  top: 0;
+  padding: 5rem 3rem 0 3rem;
+  height: 100svh;
+  background-color: $dark-300;
+  margin-right: calc(100% * 4 / 20);
+}
+
+.profile-workouts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: auto;
+  margin-bottom: 1.2rem;
+
+  & h1 {
+    align-self: flex-end;
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+
+  & button {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 6rem;
+    height: 2.7rem;
+    border-radius: 0.5rem;
+    border: none;
+    background-color: $primary-300;
+    font-size: 1.4rem;
+    color: white;
+
+    & p {
+      font-size: 1.25rem;
+    }
+  }
+
+  & button:hover {
+    background-color: $primary-400;
+    cursor: pointer;
+  }
+}
+
+.profile-workouts-search {
+  width: 100%;
+  height: 3.3rem;
+  border: 2px solid $dark-200;
+  border-radius: 0.6rem;
+  background-color: $dark-400;
+
+  & ::placeholder {
+    color: $dark-200;
+    font-weight: 500;
+  }
 }
 
 .profile-user-container {
-
   & .profile-header {
     width: 100%;
     height: 20rem;
@@ -52,19 +104,19 @@
         padding-left: 5rem;
         font-size: 2.5rem;
 
-        & .profile-user-settings{
-            margin-top: 3rem;
-            margin-left:  auto;  
-            align-self: flex-start;
-            cursor: pointer;
-            transition: .5s ease;
-            color: $primary-300;
-            font-size: 3rem;
+        & .profile-user-settings {
+          margin-top: 3rem;
+          margin-left: auto;
+          align-self: flex-start;
+          cursor: pointer;
+          transition: 0.65s ease;
+          color: $primary-300;
+          font-size: 3rem;
         }
 
-        & .profile-user-settings:hover{
-            scale: 1.3;
-            transform: rotate(180deg);
+        & .profile-user-settings:hover {
+          scale: 1.3;
+          transform: rotate(180deg);
         }
       }
 
@@ -76,30 +128,30 @@
         padding-left: 5rem;
         font-size: 1.6rem;
 
-        & .profile-user-stats-stat{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
+        & .profile-user-stats-stat {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
 
-            & .profile-user-stats-name {
-                color: $dark-600;
-                font-size: 1.4rem;
-            }
+          & .profile-user-stats-name {
+            color: $dark-600;
+            font-size: 1.4rem;
+          }
 
-            & .profile-user-stats-num {
-                font-size: 1.8rem;
-            }
+          & .profile-user-stats-num {
+            font-size: 1.8rem;
+          }
         }
 
-        & .profile-user-stats-stat:hover{
-            & .profile-user-stats-name {
-                color: $primary-600;
-            }
-            & .profile-user-stats-num {
-                color: $primary-600;
-            }
+        & .profile-user-stats-stat:hover {
+          & .profile-user-stats-name {
+            color: $primary-600;
+          }
+          & .profile-user-stats-num {
+            color: $primary-600;
+          }
         }
       }
     }
