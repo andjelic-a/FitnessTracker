@@ -20,6 +20,6 @@ export default async function emailVerificationLoader({
       headers: {
         Authorization: (await getBearerToken()) as string,
       },
-    }).then((response) => response.text()),
+    }).then((response) => response.ok),
   });
 }

@@ -42,7 +42,7 @@ function App() {
               {
                 name: "Profile",
                 defaultPath: "/me",
-                alternatePaths: ["/authentication"],
+                alternatePaths: ["/authentication", "/email-verification"],
               },
               {
                 name: "Nutrition",
