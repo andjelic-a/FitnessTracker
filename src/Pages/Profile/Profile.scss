@@ -4,7 +4,7 @@
   width: 100%;
   display: grid;
   grid-template-columns: 30% 70%;
-  grid-template-rows: 200svh;
+  grid-template-rows: auto;
 }
 
 .profile-workouts-container {
@@ -16,6 +16,23 @@
   margin-right: calc(100% * 4 / 20);
   overflow-y: auto;
   overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $dark-200;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $dark-500;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: $dark-600;
+  }
 }
 
 .profile-workouts-header {
@@ -75,7 +92,7 @@
   max-height: 30rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 
   & div {
@@ -98,9 +115,25 @@
       margin-right: 1rem;
     }
   }
-
   & div:hover {
     background-color: $dark-400;
+  }
+
+  & .profile-workouts-show {
+    align-self: flex-start;
+    margin-top: 1rem;
+    width: fit-content;
+    padding: 0.8rem 1rem;
+    background-color: $primary-300;
+    border: none;
+    border-radius: 0.3rem;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $primary-400;
+    }
   }
 }
 
