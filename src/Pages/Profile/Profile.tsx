@@ -25,7 +25,7 @@ export default function Profile() {
               <>
                 <div className="profile-workouts-container">
                   <div className="profile-workouts-header">
-                    <h1>Favorite Workouts</h1>
+                    <h1>Workouts</h1>
                     <button>
                       <Icon className="icon" name="plus" />
                       <p>New</p>
@@ -33,12 +33,30 @@ export default function Profile() {
                   </div>
                   <div className="profile-workouts-body">
                   <InputFiled className="profile-workouts-search" placeholder="Search workouts"/>
+                  <div className="profile-workouts-items-container">
+                    <div>
+                      <img src="./././public/vite.svg" />
+                      <p>Workout 1</p>
+                    </div>
+                    <div>
+                      <img src="./././public/vite.svg" />
+                      <p>Workout 2</p>
+                    </div>
+                    <div>
+                      <img src="./././public/vite.svg" />
+                      <p>Workout 3</p>
+                    </div>
+                    <div>
+                      <img src="./././public/vite.svg" />
+                      <p>Workout 4</p>
+                    </div>
+                  </div>
                   </div>
                 </div>
                 <div className="profile-user-container">
                   <div className="profile-header">
                     <div className="profile-picture">
-                      <img src="" alt="Profile picture" />
+                      <img src="" />
                     </div>
                     <div className="profile-user-information">
                       <div className="profile-user-username">
