@@ -12,6 +12,24 @@
     border-radius: 5px;
     padding: 5px;
     overflow-x: auto;
+    overflow-y: hidden;
+
+    &::-webkit-scrollbar {
+        height: 8px;
+      }
+    
+      &::-webkit-scrollbar-track {
+        background: $dark-200;
+      }
+    
+      &::-webkit-scrollbar-thumb {
+        background: $dark-500;
+        border-radius: 10px;
+      }
+    
+      &::-webkit-scrollbar-thumb:hover {
+        background: $dark-600;
+      }
 }
 
 .activity-icon {
