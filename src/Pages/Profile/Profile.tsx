@@ -3,7 +3,7 @@ import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import { Immutable } from "../../Types/Utility/Models";
 //import { logout } from "../../Data/User";
 import User from "../../Types/Models/User";
-import Icon from "../../Components/Icon/Icon";
+import ProdileHeader from "../../Components/ProfileHeader/ProfileHeader";
 import WorkoutsContainer from "../../Components/WorkoutsContainer/WorkoutsContainer";
 import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
 import "./Profile.scss";
@@ -26,41 +26,7 @@ export default function Profile() {
               <>
                 <WorkoutsContainer />
                 <div className="profile-user-container">
-                  <div className="profile-header">
-                    <div className="profile-picture">
-                      <img src="" alt="Profile Picture" />
-                    </div>
-                    <div className="profile-user-information">
-                      <div className="profile-user-username">
-                        <p>{loadedUserData.name}</p>
-                        <Icon
-                          className="profile-user-settings"
-                          id="solid"
-                          name="gear"
-                        />
-                      </div>
-                      <div className="profile-user-stats">
-                        <div className="profile-user-stats-stat">
-                          <div className="profile-user-stats-name">
-                            Workouts
-                          </div>
-                          <div className="profile-user-stats-num">1</div>
-                        </div>
-                        <div className="profile-user-stats-stat">
-                          <div className="profile-user-stats-name">
-                            Followers
-                          </div>
-                          <div className="profile-user-stats-num">1</div>
-                        </div>
-                        <div className="profile-user-stats-stat">
-                          <div className="profile-user-stats-name">
-                            Following
-                          </div>
-                          <div className="profile-user-stats-num">1</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <ProdileHeader username={loadedUserData.name} />
                   <button className="profile-edit-button">Edit Profile</button>
                   <div className="profile-body">
                     <ActivityGrid />
