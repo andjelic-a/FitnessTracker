@@ -7,6 +7,7 @@ import { Immutable } from "../../Types/Utility/Models";
 import Icon from "../../Components/Icon/Icon";
 import InputFiled from "../../Components/InputField/InputField";
 import "./Profile.scss";
+import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
 
 interface Workout {
   id: number;
@@ -126,6 +127,9 @@ export default function Profile() {
                     </div>
                   </div>
                   <button className="profile-edit-button">Edit Profile</button>
+                  <div className="profile-body">
+                  <ActivityGrid />
+                  </div>
                 </div>
               </>
             );

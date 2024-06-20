@@ -1,0 +1,26 @@
+@import "../../Palette.scss";
+
+.activity-grid {
+    width: 85%;
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(18, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    border: 2px solid $dark-400;
+    border-radius: 5px;
+    padding: 5px;
+    overflow-x: auto;
+}
+
+.activity-icon {
+    width: 30px;
+    height: 30px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $dark-400;
+    border-radius: 5px;
+}

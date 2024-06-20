@@ -248,3 +248,18 @@
     box-shadow: 0.05rem 0.2rem 0.8rem black;
   }
 }
+
+.profile-body {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+
+  & .workout-contribution-graph {
+    width: 80%;
+    height: 10rem;
+    background-color: red;
+    margin: 2rem 0 0 0;
+  }
+}
