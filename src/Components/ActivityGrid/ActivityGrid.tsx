@@ -1,16 +1,38 @@
+import { useState } from "react";
 import Icon from "../Icon/Icon";
 import "./ActivityGrid.scss";
 
-function ActivityGrid() {
-    const activityIcons:JSX.Element[] = [];
-    for(let i = 0; i < 53; i++) {
-        activityIcons.push(<Icon name="dumbbell" className="activity-icon" key={i}/>);
-    }
+type Week = {
+  id: number;
+  workoutCount: number;
+};
 
-  return(
-  <div className="activity-grid">
-    {activityIcons}
-  </div>
+function ActivityGrid() {
+  const [hoveredWeek, setHoveredWeek] = useState<null | number>(null);
+
+  const activityData: Week[] = Array.from({ length: 53 }, (_, i) => ({
+    id: i + 1,
+    workoutCount: Math.floor(Math.random()* 10),//Temporarily generated number
+  }));
+
+  return (
+    <div className="activity-grid">
+      {activityData.map((week) => (
+        <div
+          className="activity-item"
+          onMouseEnter={() => setHoveredWeek(week.id)}
+          onMouseLeave={() => setHoveredWeek(null)}
+          key={week.id}
+        >
+          <Icon name="dumbbell" className="activity-icon" />
+          {hoveredWeek === week.id && (
+            <div className="popup">
+              Workouts: {week.workoutCount}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
   );
 }
 

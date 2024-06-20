@@ -1,7 +1,7 @@
 @import "../../Palette.scss";
 
 .activity-grid {
-    width: 85%;
+    width: auto;
     height: auto;
     display: grid;
     grid-template-columns: repeat(18, 1fr);
@@ -12,7 +12,6 @@
     border-radius: 5px;
     padding: 5px;
     overflow-x: auto;
-    overflow-y: hidden;
 
     &::-webkit-scrollbar {
         height: 8px;
@@ -32,13 +31,116 @@
       }
 }
 
-.activity-icon {
-    width: 30px;
-    height: 30px;
+.activity-item {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: $dark-400;
     border-radius: 5px;
+    width: 30px;
+    height: 30px;
+
+    &:nth-child(1):hover .popup {
+      top: 30px;
+      left: 180%;
+    }
+    &:nth-child(2):hover .popup {
+      top: 30px;
+      left: 50%;
+    }
+    &:nth-child(3):hover .popup {
+      top: 30px;
+      left: 50%;
+    }
+    &:nth-child(4):hover .popup {
+      top: 30px;
+      left: 50%;
+    }
+    &:nth-child(5):hover .popup {
+      top: 30px;
+      left: 50%;
+    }
+    &:nth-child(6):hover .popup {
+      top: 30px;
+      left: 50%;
+    }
+    &:nth-child(7):hover .popup {
+      top: 30px;
+      left: 50%;
+    }
+    &:nth-child(8):hover .popup {
+      top: 30px;
+      left: 50%;
+    }
+    &:nth-child(9):hover .popup {
+      top: 30px;
+      left: 50%;
+    }
+    &:nth-child(10):hover .popup {
+      top: 30px;
+      left: 50%;
+    }
+    &:nth-child(11):hover .popup {
+      top: 30px;
+      left: 50%;
+    }
+    &:nth-child(12):hover .popup {
+      top: 30px;
+      left: 50%;
+    }
+    &:nth-child(13):hover .popup {
+      top: 30px;
+      left: 50%;
+    }
+    &:nth-child(14):hover .popup {
+      top: 30px;
+      left: 50%;
+    }
+    &:nth-child(15):hover .popup {
+      top: 30px;
+      left: 50%;
+    }
+    &:nth-child(16):hover .popup {
+      top: 30px;
+      left: 50%;
+    }
+    &:nth-child(17):hover .popup {
+      top: 30px;
+      left: 50%;
+    }
+    &:nth-child(18):hover .popup {
+      top: 30px;
+      left: -80%;
+    }
+    &:nth-child(19):hover .popup {
+      top: -30px;
+      left: 180%;
+    }
+    &:nth-child(36):hover .popup {
+      top: -30px;
+      left: -80%;
+    }
+    &:nth-child(37):hover .popup {
+      top: -30px;
+      left: 180%;
+    }
+}
+
+.popup {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: $dark-200;
+    color: white;
+    padding: 5px;
+    border-radius: 3px;
+    white-space: nowrap;
+    z-index: 1;
+    font-size: 1.2rem;
+  }
+
+.activity-icon {
+    font-size: auto;
 }
