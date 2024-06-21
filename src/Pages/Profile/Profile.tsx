@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import { Immutable } from "../../Types/Utility/Models";
-//import { logout } from "../../Data/User";
+import { logout } from "../../Data/User";
 import User from "../../Types/Models/User";
 import ProdileHeader from "../../Components/ProfileHeader/ProfileHeader";
 import WorkoutsContainer from "../../Components/WorkoutsContainer/WorkoutsContainer";
@@ -37,9 +37,9 @@ export default function Profile() {
           }}
         </Await>
       </Suspense>
-      {/* <button onClick={() => logout().then(() => navigate("/authentication"))}>
+      {<button onClick={() => logout().then(() => navigate("/authentication"))}>
         Logout
-      </button>*/}
+      </button>}
     </div>
   );
 }

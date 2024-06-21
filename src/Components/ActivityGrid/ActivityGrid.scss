@@ -1,146 +1,166 @@
 @import "../../Palette.scss";
 
 .activity-grid {
-    width: auto;
-    height: auto;
-    display: grid;
-    grid-template-columns: repeat(18, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    grid-column-gap: 10px;
-    grid-row-gap: 10px;
-    border: 2px solid $dark-400;
-    border-radius: 5px;
-    padding: 5px;
-    overflow-x: auto;
+  width: auto;
+  height: auto;
+  display: grid;
+  grid-template-columns: repeat(18, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+  border: 2px solid $dark-400;
+  border-radius: 5px;
+  padding: 5px;
+  overflow-x: auto;
 
-    &::-webkit-scrollbar {
-        height: 8px;
-      }
-    
-      &::-webkit-scrollbar-track {
-        background: $dark-200;
-      }
-    
-      &::-webkit-scrollbar-thumb {
-        background: $dark-500;
-        border-radius: 10px;
-      }
-    
-      &::-webkit-scrollbar-thumb:hover {
-        background: $dark-600;
-      }
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $dark-200;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $dark-500;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: $dark-600;
+  }
 }
 
 .activity-item {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: $dark-400;
-    border-radius: 5px;
-    width: 30px;
-    height: 30px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $dark-400;
+  border-radius: 5px;
+  width: 30px;
+  height: 30px;
 
-    &:nth-child(1):hover .popup {
-      top: 30px;
-      left: 180%;
+  &:nth-child(1):hover .popup {
+    top: 30px;
+    left: 150%;
+  }
+  &:nth-child(2):hover .popup {
+    top: 30px;
+    left: 50%;
+  }
+  &:nth-child(3):hover .popup {
+    top: 30px;
+    left: 50%;
+  }
+  &:nth-child(4):hover .popup {
+    top: 30px;
+    left: 50%;
+  }
+  &:nth-child(5):hover .popup {
+    top: 30px;
+    left: 50%;
+  }
+  &:nth-child(6):hover .popup {
+    top: 30px;
+    left: 50%;
+  }
+  &:nth-child(7):hover .popup {
+    top: 30px;
+    left: 50%;
+  }
+  &:nth-child(8):hover .popup {
+    top: 30px;
+    left: 50%;
+  }
+  &:nth-child(9):hover .popup {
+    top: 30px;
+    left: 50%;
+  }
+  &:nth-child(10):hover .popup {
+    top: 30px;
+    left: 50%;
+  }
+  &:nth-child(11):hover .popup {
+    top: 30px;
+    left: 50%;
+  }
+  &:nth-child(12):hover .popup {
+    top: 30px;
+    left: 50%;
+  }
+  &:nth-child(13):hover .popup {
+    top: 30px;
+    left: 50%;
+  }
+  &:nth-child(14):hover .popup {
+    top: 30px;
+    left: 50%;
+  }
+  &:nth-child(15):hover .popup {
+    top: 30px;
+    left: 50%;
+  }
+  &:nth-child(16):hover .popup {
+    top: 30px;
+    left: 50%;
+  }
+  &:nth-child(17):hover .popup {
+    top: 30px;
+    left: 50%;
+  }
+  &:nth-child(18):hover .popup {
+    top: 30px;
+    left: -50%;
+  }
+  &:nth-child(19):hover .popup {
+    top: -30px;
+    left: 150%;
+  }
+  &:nth-child(36):hover .popup {
+    top: -30px;
+    left: -50%;
+  }
+  &:nth-child(37):hover .popup {
+    top: -30px;
+    left: 150%;
+  }
+
+  &.fill-0 {
+    background-color: $dark-200;
+  }
+
+  @for $i from 1 through 7 {
+    &.fill-#{$i} {
+      $percentage: (100% / 7) * $i;
+      background: linear-gradient(
+        to top,
+        $primary-200 $percentage,
+        $dark-200 $percentage
+      );
     }
-    &:nth-child(2):hover .popup {
-      top: 30px;
-      left: 50%;
-    }
-    &:nth-child(3):hover .popup {
-      top: 30px;
-      left: 50%;
-    }
-    &:nth-child(4):hover .popup {
-      top: 30px;
-      left: 50%;
-    }
-    &:nth-child(5):hover .popup {
-      top: 30px;
-      left: 50%;
-    }
-    &:nth-child(6):hover .popup {
-      top: 30px;
-      left: 50%;
-    }
-    &:nth-child(7):hover .popup {
-      top: 30px;
-      left: 50%;
-    }
-    &:nth-child(8):hover .popup {
-      top: 30px;
-      left: 50%;
-    }
-    &:nth-child(9):hover .popup {
-      top: 30px;
-      left: 50%;
-    }
-    &:nth-child(10):hover .popup {
-      top: 30px;
-      left: 50%;
-    }
-    &:nth-child(11):hover .popup {
-      top: 30px;
-      left: 50%;
-    }
-    &:nth-child(12):hover .popup {
-      top: 30px;
-      left: 50%;
-    }
-    &:nth-child(13):hover .popup {
-      top: 30px;
-      left: 50%;
-    }
-    &:nth-child(14):hover .popup {
-      top: 30px;
-      left: 50%;
-    }
-    &:nth-child(15):hover .popup {
-      top: 30px;
-      left: 50%;
-    }
-    &:nth-child(16):hover .popup {
-      top: 30px;
-      left: 50%;
-    }
-    &:nth-child(17):hover .popup {
-      top: 30px;
-      left: 50%;
-    }
-    &:nth-child(18):hover .popup {
-      top: 30px;
-      left: -80%;
-    }
-    &:nth-child(19):hover .popup {
-      top: -30px;
-      left: 180%;
-    }
-    &:nth-child(36):hover .popup {
-      top: -30px;
-      left: -80%;
-    }
-    &:nth-child(37):hover .popup {
-      top: -30px;
-      left: 180%;
-    }
+  }
+
+  &.fill-red {
+    background: linear-gradient(to top, orange, $primary-100, $primary-600);
+  }
 }
 
 .popup {
-    position: absolute;
-    top: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: $dark-200;
-    color: white;
-    padding: 5px;
-    border-radius: 3px;
-    white-space: nowrap;
-    z-index: 1;
-    font-size: 1.2rem;
-  }
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: $dark-200;
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+  white-space: nowrap;
+  z-index: 1;
+  font-size: 1.2rem;
+  transition: 0.01ms;
+}
 
 .activity-icon {
-    font-size: auto;
+  font-size: auto;
 }
