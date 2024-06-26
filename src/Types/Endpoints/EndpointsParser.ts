@@ -5,14 +5,14 @@ type Paths = MappedEndpoints["paths"];
 
 type Endpoints = keyof Paths;
 
-type Methods<T extends any[]> = T extends [infer First, ...infer Rest]
+type APIRequest<T extends any[]> = T extends [infer First, ...infer Rest]
   ? First extends keyof Paths
     ?
         | {
             endpoint: First;
             request: Request<First, Union2Tuple<keyof Paths[First]>>;
           }
-        | Methods<Rest>
+        | APIRequest<Rest>
     : never
   : never;
 
@@ -41,7 +41,7 @@ type Payload<
   Method extends keyof Paths[Path]
 > = "requestBody" extends keyof Paths[Path][Method] ? { payload: true } : {};
 
-export type Test = Methods<Union2Tuple<Endpoints>>;
+export type Test = APIRequest<Union2Tuple<Endpoints>>;
 
 export const t: Test = {
   endpoint: "/api/equipment",
@@ -51,3 +51,26 @@ export const t: Test = {
     parameters: true,
   },
 };
+
+type Components = MappedEndpoints["components"];
+type Schemas = Components["schemas"];
+type SchemaNames = keyof Schemas;
+
+type Schema<T extends SchemaNames> = Schemas[T];
+
+type ParseSchema<T extends Schema<SchemaNames>> = "type" extends keyof T
+  ? T["type"] extends "object"
+    ? ParseSchemaObject<T>
+    : never
+  : never;
+
+type ParseSchemaObject<T extends Schema<SchemaNames>> =
+  "properties" extends keyof T
+    ? {
+        [P in keyof T["properties"]]: ParseSchemaProperty<T["properties"][P]>;
+      }
+    : never;
+
+type ParseSchemaProperty<T> = "type" extends keyof T ? T["type"] : never;
+
+export type SchemaTest = ParseSchema<Schema<"CreateExerciseRequestDTO">>;
