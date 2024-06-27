@@ -1,12 +1,33 @@
+import { ParseSchemaProperty } from "./PropertyParser";
+
 export type ParseParameters<ParametersInfo> = ParametersInfo extends [
   infer First,
   ...infer Rest
 ]
-  ? {
-      [key in keyof First as key extends "name"
-        ? First[key] extends string
-          ? First[key]
-          : never
-        : never]: string;
-    } & ParseParameters<Rest>
+  ? (First extends {
+      required: infer Required;
+    }
+      ? Parameter<First, Required>
+      : Parameter<First, false>) &
+      ParseParameters<Rest>
   : {};
+
+type Parameter<Parameter, Required> = Required extends true
+  ? {
+      [key in keyof Parameter as key extends "name"
+        ? Parameter[key] extends string
+          ? Parameter[key]
+          : never
+        : never]: ParameterType<Parameter>;
+    }
+  : {
+      [key in keyof Parameter as key extends "name"
+        ? Parameter[key] extends string
+          ? Parameter[key]
+          : never
+        : never]?: ParameterType<Parameter>;
+    };
+
+type ParameterType<Parameter> = Parameter extends { schema: infer Schema }
+  ? ParseSchemaProperty<Schema>
+  : never;

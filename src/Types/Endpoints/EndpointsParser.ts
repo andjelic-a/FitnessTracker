@@ -36,7 +36,7 @@ type Parameters<
   Path extends keyof Paths,
   Method extends keyof Paths[Path]
 > = "parameters" extends keyof Paths[Path][Method]
-  ? Paths[Path][Method]["parameters"] extends [any]
+  ? Paths[Path][Method]["parameters"] extends any[]
     ? {
         parameters: ParseParameters<Paths[Path][Method]["parameters"]>;
       }
@@ -58,12 +58,12 @@ export type APIRequest<Endpoint extends Endpoints = Endpoints> = ParseEndpoints<
   Union2Tuple<Endpoint>
 >;
 
-export const t: APIRequest<"/api/exercise/{id}"> = {
-  endpoint: "/api/exercise/{id}",
+export const t: APIRequest<"/api/split/comment/{id}/like"> = {
+  endpoint: "/api/split/comment/{id}/like",
   request: {
-    method: "delete",
+    method: "post",
     parameters: {
-      id: "1",
+      id: "123",
     },
   },
 };
