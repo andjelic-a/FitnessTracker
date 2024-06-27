@@ -7,12 +7,12 @@ export type ParseParameters<ParametersInfo> = ParametersInfo extends [
   ? (First extends {
       required: infer Required;
     }
-      ? Parameter<First, Required>
-      : Parameter<First, false>) &
+      ? ParseParameter<First, Required>
+      : ParseParameter<First, false>) &
       ParseParameters<Rest>
   : {};
 
-type Parameter<Parameter, Required> = Required extends true
+type ParseParameter<Parameter, Required> = Required extends true
   ? {
       [key in keyof Parameter as key extends "name"
         ? Parameter[key] extends string

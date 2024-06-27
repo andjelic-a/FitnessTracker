@@ -28,8 +28,28 @@ export type MappedEndpoints = {
           };
         };
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -63,6 +83,32 @@ export type MappedEndpoints = {
         responses: {
           "200": {
             description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleMuscleGroupResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleMuscleGroupResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleMuscleGroupResponseDTO";
+                  };
+                };
+              };
+            };
           };
         };
       };
@@ -99,8 +145,28 @@ export type MappedEndpoints = {
           };
         };
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -128,8 +194,48 @@ export type MappedEndpoints = {
           };
         };
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -170,6 +276,23 @@ export type MappedEndpoints = {
         responses: {
           "200": {
             description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/SimpleExerciseResponseDTO";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/SimpleExerciseResponseDTO";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/SimpleExerciseResponseDTO";
+                };
+              };
+            };
           };
         };
       };
@@ -195,8 +318,48 @@ export type MappedEndpoints = {
           };
         };
         responses: {
-          "200": {
-            description: "OK";
+          "204": {
+            description: "No Content";
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "404": {
+            description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -218,6 +381,111 @@ export type MappedEndpoints = {
         responses: {
           "200": {
             description: "OK";
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "404": {
+            description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    "/api/exercise/{exerciseId}": {
+      get: {
+        tags: ["Exercise"];
+        parameters: [
+          {
+            name: "exerciseId";
+            in: "path";
+            required: true;
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "include";
+            in: "query";
+            schema: {
+              type: "string";
+            };
+          }
+        ];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedExerciseResponseDTO";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedExerciseResponseDTO";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedExerciseResponseDTO";
+                };
+              };
+            };
+          };
+          "404": {
+            description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -245,8 +513,28 @@ export type MappedEndpoints = {
           };
         };
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -280,6 +568,32 @@ export type MappedEndpoints = {
         responses: {
           "200": {
             description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleMuscleResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleMuscleResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleMuscleResponseDTO";
+                  };
+                };
+              };
+            };
           };
         };
       };
@@ -316,8 +630,28 @@ export type MappedEndpoints = {
           };
         };
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -345,8 +679,28 @@ export type MappedEndpoints = {
           };
         };
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -380,6 +734,32 @@ export type MappedEndpoints = {
         responses: {
           "200": {
             description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleMuscleGroupResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleMuscleGroupResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleMuscleGroupResponseDTO";
+                  };
+                };
+              };
+            };
           };
         };
       };
@@ -416,8 +796,28 @@ export type MappedEndpoints = {
           };
         };
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -445,8 +845,68 @@ export type MappedEndpoints = {
           };
         };
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "404": {
+            description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -485,8 +945,48 @@ export type MappedEndpoints = {
           };
         };
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -506,6 +1006,52 @@ export type MappedEndpoints = {
         responses: {
           "200": {
             description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitCommentResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitCommentResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitCommentResponseDTO";
+                  };
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -553,8 +1099,48 @@ export type MappedEndpoints = {
           };
         };
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -583,8 +1169,48 @@ export type MappedEndpoints = {
           }
         ];
         responses: {
-          "200": {
-            description: "OK";
+          "204": {
+            description: "No Content";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -604,8 +1230,48 @@ export type MappedEndpoints = {
           }
         ];
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -623,8 +1289,48 @@ export type MappedEndpoints = {
           }
         ];
         responses: {
-          "200": {
-            description: "OK";
+          "204": {
+            description: "No Content";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -644,8 +1350,48 @@ export type MappedEndpoints = {
           }
         ];
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -663,8 +1409,48 @@ export type MappedEndpoints = {
           }
         ];
         responses: {
-          "200": {
-            description: "OK";
+          "204": {
+            description: "No Content";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -684,8 +1470,48 @@ export type MappedEndpoints = {
           }
         ];
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -703,8 +1529,48 @@ export type MappedEndpoints = {
           }
         ];
         responses: {
-          "200": {
-            description: "OK";
+          "204": {
+            description: "No Content";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -715,6 +1581,32 @@ export type MappedEndpoints = {
         responses: {
           "200": {
             description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
+                  };
+                };
+              };
+            };
           };
         };
       };
@@ -725,6 +1617,52 @@ export type MappedEndpoints = {
         responses: {
           "200": {
             description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
+                  };
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -746,6 +1684,63 @@ export type MappedEndpoints = {
         responses: {
           "200": {
             description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedSplitResponseDTO";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedSplitResponseDTO";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedSplitResponseDTO";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "404": {
+            description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -776,6 +1771,52 @@ export type MappedEndpoints = {
         responses: {
           "200": {
             description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitCommentResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitCommentResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitCommentResponseDTO";
+                  };
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -803,8 +1844,45 @@ export type MappedEndpoints = {
           };
         };
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "string";
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "string";
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "string";
+                };
+              };
+            };
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "string";
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "string";
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "string";
+                };
+              };
+            };
           };
         };
       };
@@ -832,8 +1910,45 @@ export type MappedEndpoints = {
           };
         };
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "string";
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "string";
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "string";
+                };
+              };
+            };
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -842,8 +1957,65 @@ export type MappedEndpoints = {
       post: {
         tags: ["User"];
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "string";
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "string";
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "string";
+                };
+              };
+            };
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -852,8 +2024,28 @@ export type MappedEndpoints = {
       delete: {
         tags: ["User"];
         responses: {
-          "200": {
-            description: "OK";
+          "204": {
+            description: "No Content";
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -862,8 +2054,48 @@ export type MappedEndpoints = {
       post: {
         tags: ["User"];
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -883,8 +2115,48 @@ export type MappedEndpoints = {
           }
         ];
         responses: {
-          "200": {
-            description: "OK";
+          "204": {
+            description: "No Content";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -893,8 +2165,48 @@ export type MappedEndpoints = {
       post: {
         tags: ["User"];
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -933,8 +2245,48 @@ export type MappedEndpoints = {
           };
         };
         responses: {
-          "200": {
-            description: "OK";
+          "204": {
+            description: "No Content";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -943,18 +2295,48 @@ export type MappedEndpoints = {
       post: {
         tags: ["User"];
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
           };
-        };
-      };
-    };
-    "/api/user/unsafe/completedworkout": {
-      post: {
-        tags: ["User"];
-        responses: {
-          "200": {
-            description: "OK";
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -965,6 +2347,43 @@ export type MappedEndpoints = {
         responses: {
           "200": {
             description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedUserResponseDTO";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedUserResponseDTO";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedUserResponseDTO";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -985,6 +2404,52 @@ export type MappedEndpoints = {
         responses: {
           "200": {
             description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWeekOfCompletedWorkoutsResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWeekOfCompletedWorkoutsResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWeekOfCompletedWorkoutsResponseDTO";
+                  };
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -1006,6 +2471,43 @@ export type MappedEndpoints = {
         responses: {
           "200": {
             description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedWeekOfCompletedWorkoutsResponseDTO";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedWeekOfCompletedWorkoutsResponseDTO";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedWeekOfCompletedWorkoutsResponseDTO";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -1033,8 +2535,48 @@ export type MappedEndpoints = {
           };
         };
         responses: {
-          "200": {
-            description: "OK";
+          "204": {
+            description: "No Content";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -1062,8 +2604,48 @@ export type MappedEndpoints = {
           };
         };
         responses: {
-          "200": {
-            description: "OK";
+          "204": {
+            description: "No Content";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -1091,8 +2673,48 @@ export type MappedEndpoints = {
           };
         };
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -1131,8 +2753,48 @@ export type MappedEndpoints = {
           };
         };
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -1152,6 +2814,52 @@ export type MappedEndpoints = {
         responses: {
           "200": {
             description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutCommentResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutCommentResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutCommentResponseDTO";
+                  };
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -1199,8 +2907,48 @@ export type MappedEndpoints = {
           };
         };
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -1229,8 +2977,48 @@ export type MappedEndpoints = {
           }
         ];
         responses: {
-          "200": {
-            description: "OK";
+          "204": {
+            description: "No Content";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -1250,8 +3038,48 @@ export type MappedEndpoints = {
           }
         ];
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -1269,8 +3097,48 @@ export type MappedEndpoints = {
           }
         ];
         responses: {
-          "200": {
-            description: "OK";
+          "204": {
+            description: "No Content";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -1290,8 +3158,48 @@ export type MappedEndpoints = {
           }
         ];
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -1309,8 +3217,48 @@ export type MappedEndpoints = {
           }
         ];
         responses: {
-          "200": {
-            description: "OK";
+          "204": {
+            description: "No Content";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -1330,8 +3278,48 @@ export type MappedEndpoints = {
           }
         ];
         responses: {
-          "200": {
-            description: "OK";
+          "201": {
+            description: "Created";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -1349,8 +3337,48 @@ export type MappedEndpoints = {
           }
         ];
         responses: {
-          "200": {
-            description: "OK";
+          "204": {
+            description: "No Content";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -1361,6 +3389,32 @@ export type MappedEndpoints = {
         responses: {
           "200": {
             description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
+                  };
+                };
+              };
+            };
           };
         };
       };
@@ -1371,6 +3425,52 @@ export type MappedEndpoints = {
         responses: {
           "200": {
             description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
+                  };
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -1392,6 +3492,63 @@ export type MappedEndpoints = {
         responses: {
           "200": {
             description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedWorkoutResponseDTO";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedWorkoutResponseDTO";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedWorkoutResponseDTO";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "404": {
+            description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -1422,6 +3579,52 @@ export type MappedEndpoints = {
         responses: {
           "200": {
             description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutCommentResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutCommentResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutCommentResponseDTO";
+                  };
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
           };
         };
       };
@@ -1612,6 +3815,229 @@ export type MappedEndpoints = {
         type: "integer";
         format: "int32";
       };
+      DetailedExerciseResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "integer";
+            format: "int32";
+          };
+          name: {
+            type: "string";
+          };
+          image: {
+            type: "string";
+            nullable: true;
+          };
+          description: {
+            type: "string";
+          };
+          primaryMuscleGroups: {
+            type: "array";
+            items: {
+              $ref: "#/components/schemas/SimpleMuscleGroupResponseDTO";
+            };
+          };
+          primaryMuscles: {
+            type: "array";
+            items: {
+              $ref: "#/components/schemas/SimpleMuscleResponseDTO";
+            };
+          };
+          secondaryMuscleGroups: {
+            type: "array";
+            items: {
+              $ref: "#/components/schemas/SimpleMuscleGroupResponseDTO";
+            };
+          };
+          secondaryMuscles: {
+            type: "array";
+            items: {
+              $ref: "#/components/schemas/SimpleMuscleResponseDTO";
+            };
+          };
+          equipment: {
+            type: "array";
+            items: {
+              $ref: "#/components/schemas/SimpleEquipmentResponseDTO";
+            };
+          };
+        };
+        additionalProperties: false;
+      };
+      DetailedSetResponseDTO: {
+        type: "object";
+        properties: {
+          topRepRange: {
+            type: "integer";
+            format: "int32";
+          };
+          bottomRepRange: {
+            type: "integer";
+            format: "int32";
+          };
+          numberOfSets: {
+            type: "integer";
+            format: "int32";
+          };
+          exercise: {
+            $ref: "#/components/schemas/SimpleExerciseResponseDTO";
+          };
+        };
+        additionalProperties: false;
+      };
+      DetailedSplitResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "string";
+            format: "uuid";
+          };
+          name: {
+            type: "string";
+          };
+          creator: {
+            $ref: "#/components/schemas/SimpleUserResponseDTO";
+          };
+          isPublic: {
+            type: "boolean";
+          };
+          description: {
+            type: "string";
+          };
+          workouts: {
+            type: "array";
+            items: {
+              $ref: "#/components/schemas/SimpleSplitWorkoutResponseDTO";
+            };
+          };
+          likeCount: {
+            type: "integer";
+            format: "int32";
+          };
+          favoriteCount: {
+            type: "integer";
+            format: "int32";
+          };
+          commentCount: {
+            type: "integer";
+            format: "int32";
+          };
+          isLiked: {
+            type: "boolean";
+          };
+          isFavorited: {
+            type: "boolean";
+          };
+        };
+        additionalProperties: false;
+      };
+      DetailedUserResponseDTO: {
+        type: "object";
+        properties: {
+          name: {
+            type: "string";
+          };
+          image: {
+            type: "string";
+            nullable: true;
+          };
+          followers: {
+            type: "integer";
+            format: "int32";
+          };
+          following: {
+            type: "integer";
+            format: "int32";
+          };
+          completedWorkouts: {
+            type: "integer";
+            format: "int32";
+          };
+          currentSplit: {
+            $ref: "#/components/schemas/DetailedUserSplitResponseDTO";
+          };
+        };
+        additionalProperties: false;
+      };
+      DetailedUserSplitResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "string";
+            format: "uuid";
+          };
+          name: {
+            type: "string";
+          };
+          workouts: {
+            type: "array";
+            items: {
+              $ref: "#/components/schemas/SimpleSplitWorkoutResponseDTO";
+            };
+          };
+        };
+        additionalProperties: false;
+      };
+      DetailedWeekOfCompletedWorkoutsResponseDTO: {
+        type: "object";
+        properties: {
+          split: {
+            $ref: "#/components/schemas/DetailedUserSplitResponseDTO";
+          };
+          completedWorkouts: {
+            type: "array";
+            items: {
+              $ref: "#/components/schemas/DayOfWeek";
+            };
+          };
+        };
+        additionalProperties: false;
+      };
+      DetailedWorkoutResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "string";
+            format: "uuid";
+          };
+          name: {
+            type: "string";
+          };
+          creator: {
+            $ref: "#/components/schemas/SimpleUserResponseDTO";
+          };
+          sets: {
+            type: "array";
+            items: {
+              $ref: "#/components/schemas/DetailedSetResponseDTO";
+            };
+          };
+          description: {
+            type: "string";
+            nullable: true;
+          };
+          likeCount: {
+            type: "integer";
+            format: "int32";
+          };
+          favoriteCount: {
+            type: "integer";
+            format: "int32";
+          };
+          commentCount: {
+            type: "integer";
+            format: "int32";
+          };
+          isLiked: {
+            type: "boolean";
+          };
+          isFavorited: {
+            type: "boolean";
+          };
+        };
+        additionalProperties: false;
+      };
       LoginUserRequestDTO: {
         type: "object";
         properties: {
@@ -1623,6 +4049,33 @@ export type MappedEndpoints = {
           };
         };
         additionalProperties: false;
+      };
+      ProblemDetails: {
+        type: "object";
+        properties: {
+          type: {
+            type: "string";
+            nullable: true;
+          };
+          title: {
+            type: "string";
+            nullable: true;
+          };
+          status: {
+            type: "integer";
+            format: "int32";
+            nullable: true;
+          };
+          detail: {
+            type: "string";
+            nullable: true;
+          };
+          instance: {
+            type: "string";
+            nullable: true;
+          };
+        };
+        additionalProperties: {};
       };
       RegisterUserRequestDTO: {
         type: "object";
@@ -1644,6 +4097,202 @@ export type MappedEndpoints = {
         properties: {
           newPassword: {
             type: "string";
+          };
+        };
+        additionalProperties: false;
+      };
+      SimpleEquipmentResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "integer";
+            format: "int32";
+          };
+          name: {
+            type: "string";
+          };
+        };
+        additionalProperties: false;
+      };
+      SimpleExerciseResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "integer";
+            format: "int32";
+          };
+          name: {
+            type: "string";
+          };
+          image: {
+            type: "string";
+            nullable: true;
+          };
+        };
+        additionalProperties: false;
+      };
+      SimpleMuscleGroupResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "integer";
+            format: "int32";
+          };
+          name: {
+            type: "string";
+          };
+        };
+        additionalProperties: false;
+      };
+      SimpleMuscleResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "integer";
+            format: "int32";
+          };
+          name: {
+            type: "string";
+          };
+          muscleGroupId: {
+            type: "integer";
+            format: "int32";
+          };
+        };
+        additionalProperties: false;
+      };
+      SimpleSplitCommentResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "string";
+            format: "uuid";
+          };
+          text: {
+            type: "string";
+          };
+          creator: {
+            $ref: "#/components/schemas/SimpleUserResponseDTO";
+          };
+          createdAt: {
+            type: "string";
+            format: "date-time";
+          };
+          likeCount: {
+            type: "integer";
+            format: "int32";
+          };
+          isLiked: {
+            type: "boolean";
+          };
+        };
+        additionalProperties: false;
+      };
+      SimpleSplitResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "string";
+            format: "uuid";
+          };
+          name: {
+            type: "string";
+          };
+          creator: {
+            $ref: "#/components/schemas/SimpleUserResponseDTO";
+          };
+          isPublic: {
+            type: "boolean";
+          };
+        };
+        additionalProperties: false;
+      };
+      SimpleSplitWorkoutResponseDTO: {
+        type: "object";
+        properties: {
+          workout: {
+            $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
+          };
+          day: {
+            $ref: "#/components/schemas/DayOfWeek";
+          };
+        };
+        additionalProperties: false;
+      };
+      SimpleUserResponseDTO: {
+        type: "object";
+        properties: {
+          name: {
+            type: "string";
+          };
+          image: {
+            type: "string";
+            nullable: true;
+          };
+          id: {
+            type: "string";
+            format: "uuid";
+          };
+        };
+        additionalProperties: false;
+      };
+      SimpleWeekOfCompletedWorkoutsResponseDTO: {
+        type: "object";
+        properties: {
+          startDate: {
+            type: "string";
+            format: "date-time";
+          };
+          completedCount: {
+            type: "integer";
+            format: "int32";
+          };
+          totalCount: {
+            type: "integer";
+            format: "int32";
+          };
+        };
+        additionalProperties: false;
+      };
+      SimpleWorkoutCommentResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "string";
+            format: "uuid";
+          };
+          text: {
+            type: "string";
+          };
+          creator: {
+            $ref: "#/components/schemas/SimpleUserResponseDTO";
+          };
+          createdAt: {
+            type: "string";
+            format: "date-time";
+          };
+          likeCount: {
+            type: "integer";
+            format: "int32";
+          };
+          isLiked: {
+            type: "boolean";
+          };
+        };
+        additionalProperties: false;
+      };
+      SimpleWorkoutResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "string";
+            format: "uuid";
+          };
+          name: {
+            type: "string";
+          };
+          creator: {
+            $ref: "#/components/schemas/SimpleUserResponseDTO";
           };
         };
         additionalProperties: false;
