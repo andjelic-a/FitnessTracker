@@ -1,3 +1,8 @@
+import {
+  LastElement,
+  RemoveEmpty,
+  Split,
+} from "../Utility/StringLiteralsUtility";
 import { MappedEndpoints } from "./Endpoints";
 import { Union2Tuple } from "./Union2Tuple";
 
@@ -39,16 +44,34 @@ type Parameters<
 type Payload<
   Path extends keyof Paths,
   Method extends keyof Paths[Path]
-> = "requestBody" extends keyof Paths[Path][Method] ? { payload: true } : {};
+> = "requestBody" extends keyof Paths[Path][Method]
+  ? {
+      payload: LastElement<RemoveEmpty<
+        Split<GetSchemaForEndpoint<Paths[Path][Method]["requestBody"]>, "/">
+      >>;
+    }
+  : {};
+
+type GetSchemaForEndpoint<RequestBody> = "content" extends keyof RequestBody
+  ? "application/json" extends keyof RequestBody["content"]
+    ? "schema" extends keyof RequestBody["content"]["application/json"]
+      ? "$ref" extends keyof RequestBody["content"]["application/json"]["schema"]
+        ? RequestBody["content"]["application/json"]["schema"]["$ref"] extends string
+          ? RequestBody["content"]["application/json"]["schema"]["$ref"]
+          : ""
+        : ""
+      : ""
+    : ""
+  : "";
 
 export type Test = APIRequest<Union2Tuple<Endpoints>>;
 
 export const t: Test = {
   endpoint: "/api/equipment",
   request: {
-    method: "get",
+    method: "post",
     a: "tags",
-    parameters: true,
+    payload: "CreateEquipmentRequestDTO",
   },
 };
 
