@@ -1434,7 +1434,6 @@ export type MappedEndpoints = {
         properties: {
           name: {
             type: "string";
-            nullable: true;
           };
         };
         additionalProperties: false;
@@ -1444,11 +1443,9 @@ export type MappedEndpoints = {
         properties: {
           name: {
             type: "string";
-            nullable: true;
           };
           description: {
             type: "string";
-            nullable: true;
           };
           image: {
             type: "string";
@@ -1460,7 +1457,6 @@ export type MappedEndpoints = {
               type: "integer";
               format: "int32";
             };
-            nullable: true;
           };
           primaryMuscles: {
             type: "array";
@@ -1468,7 +1464,6 @@ export type MappedEndpoints = {
               type: "integer";
               format: "int32";
             };
-            nullable: true;
           };
           secondaryMuscleGroups: {
             type: "array";
@@ -1476,7 +1471,6 @@ export type MappedEndpoints = {
               type: "integer";
               format: "int32";
             };
-            nullable: true;
           };
           secondaryMuscles: {
             type: "array";
@@ -1484,7 +1478,6 @@ export type MappedEndpoints = {
               type: "integer";
               format: "int32";
             };
-            nullable: true;
           };
           equipment: {
             type: "array";
@@ -1492,7 +1485,6 @@ export type MappedEndpoints = {
               type: "integer";
               format: "int32";
             };
-            nullable: true;
           };
         };
         additionalProperties: false;
@@ -1502,7 +1494,6 @@ export type MappedEndpoints = {
         properties: {
           name: {
             type: "string";
-            nullable: true;
           };
         };
         additionalProperties: false;
@@ -1512,7 +1503,6 @@ export type MappedEndpoints = {
         properties: {
           name: {
             type: "string";
-            nullable: true;
           };
           muscleGroupId: {
             type: "integer";
@@ -1548,7 +1538,6 @@ export type MappedEndpoints = {
         properties: {
           comment: {
             type: "string";
-            nullable: true;
           };
         };
         additionalProperties: false;
@@ -1558,11 +1547,9 @@ export type MappedEndpoints = {
         properties: {
           name: {
             type: "string";
-            nullable: true;
           };
           description: {
             type: "string";
-            nullable: true;
           };
           isPublic: {
             type: "boolean";
@@ -1572,7 +1559,6 @@ export type MappedEndpoints = {
             items: {
               $ref: "#/components/schemas/CreateSplitWorkoutRequestDTO";
             };
-            nullable: true;
           };
         };
         additionalProperties: false;
@@ -1595,7 +1581,6 @@ export type MappedEndpoints = {
         properties: {
           comment: {
             type: "string";
-            nullable: true;
           };
         };
         additionalProperties: false;
@@ -1605,7 +1590,6 @@ export type MappedEndpoints = {
         properties: {
           name: {
             type: "string";
-            nullable: true;
           };
           description: {
             type: "string";
@@ -1619,7 +1603,6 @@ export type MappedEndpoints = {
             items: {
               $ref: "#/components/schemas/CreateSetRequestDTO";
             };
-            nullable: true;
           };
         };
         additionalProperties: false;
@@ -1634,11 +1617,9 @@ export type MappedEndpoints = {
         properties: {
           email: {
             type: "string";
-            nullable: true;
           };
           password: {
             type: "string";
-            nullable: true;
           };
         };
         additionalProperties: false;
@@ -1648,15 +1629,12 @@ export type MappedEndpoints = {
         properties: {
           name: {
             type: "string";
-            nullable: true;
           };
           email: {
             type: "string";
-            nullable: true;
           };
           password: {
             type: "string";
-            nullable: true;
           };
         };
         additionalProperties: false;
@@ -1666,7 +1644,6 @@ export type MappedEndpoints = {
         properties: {
           newPassword: {
             type: "string";
-            nullable: true;
           };
         };
         additionalProperties: false;
@@ -1676,11 +1653,9 @@ export type MappedEndpoints = {
         properties: {
           name: {
             type: "string";
-            nullable: true;
           };
           description: {
             type: "string";
-            nullable: true;
           };
           image: {
             type: "string";
@@ -1692,7 +1667,6 @@ export type MappedEndpoints = {
               type: "integer";
               format: "int32";
             };
-            nullable: true;
           };
           primaryMuscles: {
             type: "array";
@@ -1700,7 +1674,6 @@ export type MappedEndpoints = {
               type: "integer";
               format: "int32";
             };
-            nullable: true;
           };
           secondaryMuscleGroups: {
             type: "array";
@@ -1708,7 +1681,6 @@ export type MappedEndpoints = {
               type: "integer";
               format: "int32";
             };
-            nullable: true;
           };
           secondaryMuscles: {
             type: "array";
@@ -1716,7 +1688,6 @@ export type MappedEndpoints = {
               type: "integer";
               format: "int32";
             };
-            nullable: true;
           };
           equipment: {
             type: "array";
@@ -1724,7 +1695,6 @@ export type MappedEndpoints = {
               type: "integer";
               format: "int32";
             };
-            nullable: true;
           };
           id: {
             type: "integer";
@@ -1738,11 +1708,9 @@ export type MappedEndpoints = {
         properties: {
           oldPassword: {
             type: "string";
-            nullable: true;
           };
           newPassword: {
             type: "string";
-            nullable: true;
           };
         };
         additionalProperties: false;
