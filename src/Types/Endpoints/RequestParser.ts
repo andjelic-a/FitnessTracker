@@ -58,7 +58,7 @@ export type APIRequest<Endpoint extends Endpoints = Endpoints> = ParseEndpoints<
   Union2Tuple<Endpoint>
 >;
 
-export const t: APIRequest<"/api/split/comment/{id}/like"> = {
+/* export const t: APIRequest<"/api/split/comment/{id}/like"> = {
   endpoint: "/api/split/comment/{id}/like",
   request: {
     method: "post",
@@ -67,3 +67,4 @@ export const t: APIRequest<"/api/split/comment/{id}/like"> = {
     },
   },
 };
+ */

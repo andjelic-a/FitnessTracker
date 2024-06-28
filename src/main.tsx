@@ -16,12 +16,13 @@ import exerciseLoader from "./Pages/Exercises/ExerciseLoader.ts";
 import singleExerciseLoader from "./Components/FullExerciseDisplay/SingleExerciseLoader.ts";
 import UpdateExercise from "./Pages/AdminPanel/Exercises/Update/UpdateExercise.tsx";
 import updateExerciseLoader from "./Pages/AdminPanel/Exercises/Update/UpdateExerciseLoader.ts";
-import FormattedText from "./Components/FormattedText/FormattedText.tsx";
 import profileLoader from "./Pages/Profile/ProfileLoader.ts";
 import authenticationLoader from "./Pages/Authentication/AuthenticationLoader.ts";
 import allExercisesLoader from "./Pages/AdminPanel/Exercises/AllExercisesLoader.ts";
 import EmailVerification from "./Pages/EmailVerification/EmailVerification.tsx";
 import emailVerificationLoader from "./Pages/EmailVerification/EmailVerificationLoader.ts";
+import LandingPage from "./Pages/LandingPage/LandingPage.tsx";
+import landingPageLoader from "./Pages/LandingPage/LandingPageLoader.ts";
 
 const router = createBrowserRouter([
   {
@@ -31,9 +32,8 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: (
-          <FormattedText>{`asd [My link](@e 8)\n !i(https://imminenceswe.com/cdn/shop/files/imm-dig-final-01.jpg?v=1708269484&width=1500 123 500*500)\n !v(SvggTtqySH8)`}</FormattedText>
-        ),
+        element: <LandingPage />,
+        loader: landingPageLoader,
       },
       {
         path: "exercises",
