@@ -1,5 +1,7 @@
 import { MappedEndpoints } from "./Endpoints";
 import { APIRequest } from "./RequestParser";
+import { Union2Tuple } from "./Union2Tuple";
+import { ParseSchemaProperty } from "./PropertyParser";
 
 type Paths = MappedEndpoints["paths"];
 type Endpoints = keyof Paths;
@@ -21,15 +23,30 @@ type Response<
 > = Paths[Endpoint][Method] extends {
   responses: infer Responses;
 }
-  ? {
-      [Key in keyof Responses as Responses[Key] extends {
-        description: infer Description;
-      }
-        ? Description extends string
-          ? Description
-          : never
-        : never]: Key;
-    }
+  ? ParseAllResponses<Union2Tuple<Responses[keyof Responses]>>
   : never;
 
-export type Test = Response<"/api/muscle", "get">;
+type ParseAllResponses<Responses extends any[]> = Responses extends [
+  infer First,
+  ...infer Rest
+]
+  ?
+      | (First extends {
+          description: infer Description;
+          content: {
+            "application/json": {
+              schema: infer Schema;
+            };
+          };
+        }
+          ? {
+              code: Description;
+              content: ParseSchemaProperty<Schema>;
+            }
+          : First extends {
+              description: infer Description;
+            }
+          ? { code: Description }
+          : never)
+      | ParseAllResponses<Rest>
+  : never;

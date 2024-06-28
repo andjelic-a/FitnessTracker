@@ -1,28 +1,24 @@
 import type { GetSchemaName, Schema } from "./SchemaParser";
 
-export type ParseSchemaProperty<T> = "type" extends keyof T
-  ? T["type"] extends "integer"
+export type ParseSchemaProperty<T> = T extends { type: infer Type }
+  ? Type extends "integer"
     ? number
-    : T["type"] extends "string"
+    : Type extends "string"
     ? string
-    : T["type"] extends "boolean"
+    : Type extends "boolean"
     ? boolean
-    : T["type"] extends "array"
+    : Type extends "array"
     ? "items" extends keyof T
       ? (ParseSchemaProperty<T["items"]> | IsPropertyNullable<T["items"]>)[]
       : never
     : never
-  : "$ref" extends keyof T
-  ? T["$ref"] extends string
-    ? Schema<GetSchemaName<T["$ref"]>>
+  : T extends { $ref: infer Ref }
+  ? Ref extends string
+    ? Schema<GetSchemaName<Ref>>
     : never
   : never;
 
-export type IsPropertyNullable<T> = "nullable" extends keyof T
-  ? T["nullable"] extends true
-    ? null
-    : never
-  : never;
+export type IsPropertyNullable<T> = T extends { nullable: true } ? null : never;
 
 export type NullableToOptional<T> = {
   [K in keyof T as null extends T[K] ? K : never]?: T[K];
