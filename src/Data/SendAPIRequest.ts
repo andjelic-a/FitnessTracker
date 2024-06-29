@@ -5,7 +5,8 @@ import { getBearerToken } from "./User";
 const baseAPIUrl = "http://localhost:5054";
 
 export default async function sendAPIRequest<T extends APIRequest>(
-  request: T
+  request: T,
+  authorize: boolean = true
 ): Promise<APIResponse<T>> {
   const url = new URL(baseAPIUrl + request.endpoint);
 
@@ -39,16 +40,13 @@ export default async function sendAPIRequest<T extends APIRequest>(
     body,
     headers: {
       "Content-Type": "application/json",
-      Authorization: (await getBearerToken()) as string,
+      Authorization: authorize ? ((await getBearerToken()) as string) : "",
     },
   };
 
   const response = await fetch(url, requestInit);
   try {
     const responseBody = await response.json();
-
-    console.log(response.statusText);
-    console.log(responseBody);
 
     return {
       code: response.statusText,
@@ -61,16 +59,3 @@ export default async function sendAPIRequest<T extends APIRequest>(
     } as any;
   }
 }
-/* 
-const response = await sendAPIRequest({
-  endpoint: "/api/muscle",
-  request: {
-    method: "get",
-    parameters: {},
-  },
-});
-
-if (response.code === "OK") {
-  response.content.map((x) => console.log(x));
-}
- */
