@@ -6,18 +6,19 @@ import { ParseSchemaProperty } from "./PropertyParser";
 type Paths = MappedEndpoints["paths"];
 type Endpoints = keyof Paths;
 
-export type APIResponseFromRequest<Request extends APIRequest> = Request extends {
-  endpoint: infer Endpoint;
-  request: { method: infer Method };
-}
-  ? Endpoint extends Endpoints
-    ? Method extends keyof Paths[Endpoint]
-      ? Response<Endpoint, Method>
+export type APIResponseFromRequest<Request extends APIRequest> =
+  Request extends {
+    endpoint: infer Endpoint;
+    request: { method: infer Method };
+  }
+    ? Endpoint extends Endpoints
+      ? Method extends keyof Paths[Endpoint]
+        ? APIResponse<Endpoint, Method>
+        : never
       : never
-    : never
-  : never;
+    : never;
 
-type Response<
+export type APIResponse<
   Endpoint extends Endpoints,
   Method extends keyof Paths[Endpoint]
 > = Paths[Endpoint][Method] extends {

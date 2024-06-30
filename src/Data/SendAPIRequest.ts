@@ -1,12 +1,13 @@
 import { APIRequest } from "../Types/Endpoints/RequestParser";
 import { APIResponseFromRequest } from "../Types/Endpoints/ResponseParser";
-import { getBearerToken } from "./User";
+import { getJWT } from "./User";
 
 const baseAPIUrl = "http://localhost:5054";
 
 export default async function sendAPIRequest<T extends APIRequest>(
   request: T,
-  authorize: true | `Bearer ${string}` | null = true
+  authorize: true | string | null = true,
+  includeCredentials: boolean = false
 ): Promise<APIResponseFromRequest<T>> {
   const url = new URL(baseAPIUrl + request.endpoint);
 
@@ -46,12 +47,11 @@ export default async function sendAPIRequest<T extends APIRequest>(
         authorize === null
           ? ""
           : authorize === true
-          ? ((await getBearerToken()) as string)
-          : (authorize as string),
+          ? `Bearer ${(await getJWT()) ?? ""}`
+          : `Bearer ${authorize}`,
     },
+    credentials: includeCredentials ? "include" : "omit",
   };
-
-  console.log(requestInit);
 
   const response = await fetch(url, requestInit);
   try {

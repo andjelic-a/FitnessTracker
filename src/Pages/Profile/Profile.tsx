@@ -5,8 +5,7 @@ import User from "../../Types/Models/User";
 import { Immutable } from "../../Types/Utility/Models";
 import Icon from "../../Components/Icon/Icon";
 import "./Profile.scss";
-import { APIResponseFromRequest } from "../../Types/Endpoints/ResponseParser";
-import { APIRequest } from "../../Types/Endpoints/RequestParser";
+import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 
 export default function Profile() {
   // const navigate = useNavigate();
@@ -19,9 +18,7 @@ export default function Profile() {
       <div className="profile-container">Profile</div>
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={userData.user}>
-          {(
-            loadedUserData: APIResponseFromRequest<APIRequest<"/api/user/me/detailed">>
-          ) => {
+          {(loadedUserData: APIResponse<"/api/user/me/detailed", "get">) => {
             if (loadedUserData.code !== "OK") return null;
             console.log(loadedUserData);
 

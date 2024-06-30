@@ -1,8 +1,8 @@
 import { redirect } from "react-router-dom";
-import { getBearerToken } from "../../Data/User";
+import { getJWT } from "../../Data/User";
 
 export default async function authenticationLoader() {
-  if (await getBearerToken()) return redirect("/me");
+  if (await getJWT()) return redirect("/me");
 
   return null;
 }

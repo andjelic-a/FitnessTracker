@@ -5,7 +5,7 @@ import {
   defer,
 } from "react-router-dom";
 import { baseAPIUrl } from "../../Data/BaseURLs";
-import { getBearerToken } from "../../Data/User";
+import { getJWT } from "../../Data/User";
 
 interface emailVerificationLoaderArgs extends LoaderFunctionArgs {
   params: Params<ParamParseKey<":code">>;
@@ -18,7 +18,7 @@ export default async function emailVerificationLoader({
     message: fetch(`${baseAPIUrl}/user/confirm/${code}`, {
       method: "POST",
       headers: {
-        Authorization: (await getBearerToken()) as string,
+        Authorization: (await getJWT()) as string,
       },
     }).then((response) => response.ok),
   });
