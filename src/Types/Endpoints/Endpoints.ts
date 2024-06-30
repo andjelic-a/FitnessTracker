@@ -2289,17 +2289,17 @@ export type MappedEndpoints = {
             content: {
               "text/plain": {
                 schema: {
-                  type: "string";
+                  $ref: "#/components/schemas/SimpleJWTResponseDTO";
                 };
               };
               "application/json": {
                 schema: {
-                  type: "string";
+                  $ref: "#/components/schemas/SimpleJWTResponseDTO";
                 };
               };
               "text/json": {
                 schema: {
-                  type: "string";
+                  $ref: "#/components/schemas/SimpleJWTResponseDTO";
                 };
               };
             };
@@ -2309,17 +2309,17 @@ export type MappedEndpoints = {
             content: {
               "text/plain": {
                 schema: {
-                  type: "string";
+                  $ref: "#/components/schemas/ProblemDetails";
                 };
               };
               "application/json": {
                 schema: {
-                  type: "string";
+                  $ref: "#/components/schemas/ProblemDetails";
                 };
               };
               "text/json": {
                 schema: {
-                  type: "string";
+                  $ref: "#/components/schemas/ProblemDetails";
                 };
               };
             };
@@ -2355,17 +2355,17 @@ export type MappedEndpoints = {
             content: {
               "text/plain": {
                 schema: {
-                  type: "string";
+                  $ref: "#/components/schemas/SimpleJWTResponseDTO";
                 };
               };
               "application/json": {
                 schema: {
-                  type: "string";
+                  $ref: "#/components/schemas/SimpleJWTResponseDTO";
                 };
               };
               "text/json": {
                 schema: {
-                  type: "string";
+                  $ref: "#/components/schemas/SimpleJWTResponseDTO";
                 };
               };
             };
@@ -2402,17 +2402,17 @@ export type MappedEndpoints = {
             content: {
               "text/plain": {
                 schema: {
-                  type: "string";
+                  $ref: "#/components/schemas/SimpleJWTResponseDTO";
                 };
               };
               "application/json": {
                 schema: {
-                  type: "string";
+                  $ref: "#/components/schemas/SimpleJWTResponseDTO";
                 };
               };
               "text/json": {
                 schema: {
-                  type: "string";
+                  $ref: "#/components/schemas/SimpleJWTResponseDTO";
                 };
               };
             };
@@ -2439,26 +2439,6 @@ export type MappedEndpoints = {
           };
           "401": {
             description: "Unauthorized";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "403": {
-            description: "Forbidden";
             content: {
               "text/plain": {
                 schema: {
@@ -5027,6 +5007,15 @@ export type MappedEndpoints = {
           image: {
             type: "string";
             nullable: true;
+          };
+        };
+        additionalProperties: false;
+      };
+      SimpleJWTResponseDTO: {
+        type: "object";
+        properties: {
+          token: {
+            type: "string";
           };
         };
         additionalProperties: false;
