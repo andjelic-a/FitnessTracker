@@ -1,11 +1,10 @@
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
-import connectMuscleGroups from "./ConnectMuscleGroupsToMuscles";
 import "./MuscleSelector.scss";
 import { useEffect, useState } from "react";
 
 type MuscleSelectorProps = {
   selectedOnStart: number[];
-  muscleGroups: ReturnType<typeof connectMuscleGroups>;
+  muscleGroups: Schema<"DetailedMuscleGroupResponseDTO">[];
   onSelectionChanged: (
     selectedMuscleGroupIds: number[],
     selectedMuscleIds: number[]

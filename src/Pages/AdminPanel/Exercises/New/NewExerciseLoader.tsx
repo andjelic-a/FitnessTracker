@@ -4,16 +4,7 @@ import sendAPIRequest from "../../../../Data/SendAPIRequest";
 export async function newExerciseLoader() {
   return defer({
     muscleGroups: sendAPIRequest({
-      endpoint: "/api/musclegroup",
-      request: {
-        method: "get",
-        parameters: {
-          limit: -1,
-        },
-      },
-    }),
-    muscles: sendAPIRequest({
-      endpoint: "/api/muscle",
+      endpoint: "/api/musclegroup/detailed",
       request: {
         method: "get",
         parameters: {

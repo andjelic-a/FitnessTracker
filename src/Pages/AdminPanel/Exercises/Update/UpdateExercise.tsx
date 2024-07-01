@@ -6,14 +6,12 @@ import EquipmentSelector from "../../Selectors/Equipment/EquipmentSelector";
 import { APIResponse } from "../../../../Types/Endpoints/ResponseParser";
 import sendAPIRequest from "../../../../Data/SendAPIRequest";
 import compressImage from "../../../../Data/ImageCompression";
-import connectMuscleGroups from "../../Selectors/Muscle/ConnectMuscleGroupsToMuscles";
 
 export default function UpdateExercise() {
   const navigate = useNavigate();
   const data = useLoaderData() as {
     exercise: APIResponse<"/api/exercise/{id}/detailed", "get">;
-    muscleGroups: APIResponse<"/api/musclegroup", "get">;
-    muscles: APIResponse<"/api/muscle", "get">;
+    muscleGroups: APIResponse<"/api/musclegroup/detailed", "get">;
     equipment: APIResponse<"/api/equipment", "get">;
   };
 
@@ -35,21 +33,18 @@ export default function UpdateExercise() {
         resolve={Promise.all([
           data.exercise,
           data.muscleGroups,
-          data.muscles,
           data.equipment,
         ])}
       >
-        {([exercise, muscleGroups, muscles, equipment]: [
+        {([exercise, muscleGroups, equipment]: [
           Awaited<(typeof data)["exercise"]>,
           Awaited<(typeof data)["muscleGroups"]>,
-          Awaited<(typeof data)["muscles"]>,
           Awaited<(typeof data)["equipment"]>
         ]) => {
           if (
             exercise.code !== "OK" ||
-            equipment.code !== "OK" ||
             muscleGroups.code !== "OK" ||
-            muscles.code !== "OK"
+            equipment.code !== "OK"
           )
             return null;
 
@@ -92,10 +87,7 @@ export default function UpdateExercise() {
                     selectedPrimaryMuscleGroups.current = muscleGroups;
                     selectedPrimaryMuscles.current = muscles;
                   }}
-                  muscleGroups={connectMuscleGroups(
-                    muscleGroups.content,
-                    muscles.content
-                  )}
+                  muscleGroups={muscleGroups.content}
                 />
 
                 <MuscleSelector
@@ -107,10 +99,7 @@ export default function UpdateExercise() {
                     selectedSecondaryMuscleGroups.current = muscleGroups;
                     selectedSecondaryMuscles.current = muscles;
                   }}
-                  muscleGroups={connectMuscleGroups(
-                    muscleGroups.content,
-                    muscles.content
-                  )}
+                  muscleGroups={muscleGroups.content}
                 />
               </div>
 

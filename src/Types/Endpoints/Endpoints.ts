@@ -1124,13 +1124,6 @@ export type MappedEndpoints = {
               type: "integer";
               format: "int32";
             };
-          },
-          {
-            name: "include";
-            in: "query";
-            schema: {
-              type: "string";
-            };
           }
         ];
         responses: {
@@ -1257,6 +1250,80 @@ export type MappedEndpoints = {
               "text/json": {
                 schema: {
                   $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    "/api/musclegroup/detailed": {
+      get: {
+        tags: ["MuscleGroup"];
+        parameters: [
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          }
+        ];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/DetailedMuscleGroupResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/DetailedMuscleGroupResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/DetailedMuscleGroupResponseDTO";
+                  };
                 };
               };
             };
@@ -5902,6 +5969,25 @@ export type MappedEndpoints = {
             type: "array";
             items: {
               $ref: "#/components/schemas/SimpleEquipmentResponseDTO";
+            };
+          };
+        };
+        additionalProperties: false;
+      };
+      DetailedMuscleGroupResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "integer";
+            format: "int32";
+          };
+          name: {
+            type: "string";
+          };
+          muscles: {
+            type: "array";
+            items: {
+              $ref: "#/components/schemas/SimpleMuscleResponseDTO";
             };
           };
         };

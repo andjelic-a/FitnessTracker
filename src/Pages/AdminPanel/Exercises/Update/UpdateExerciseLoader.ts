@@ -26,16 +26,7 @@ export default async function updateExerciseLoader({
       },
     }),
     muscleGroups: sendAPIRequest({
-      endpoint: "/api/musclegroup",
-      request: {
-        method: "get",
-        parameters: {
-          limit: -1,
-        },
-      },
-    }),
-    muscles: sendAPIRequest({
-      endpoint: "/api/muscle",
+      endpoint: "/api/musclegroup/detailed",
       request: {
         method: "get",
         parameters: {

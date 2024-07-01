@@ -6,14 +6,12 @@ import compressImage from "../../../../Data/ImageCompression";
 import EquipmentSelector from "../../Selectors/Equipment/EquipmentSelector";
 import { APIResponse } from "../../../../Types/Endpoints/ResponseParser";
 import sendAPIRequest from "../../../../Data/SendAPIRequest";
-import connectMuscleGroups from "../../Selectors/Muscle/ConnectMuscleGroupsToMuscles";
 
 export default function NewExercise() {
   const navigate = useNavigate();
 
   const data = useLoaderData() as {
-    muscleGroups: APIResponse<"/api/musclegroup", "get">;
-    muscles: APIResponse<"/api/muscle", "get">;
+    muscleGroups: APIResponse<"/api/musclegroup/detailed", "get">;
     equipment: APIResponse<"/api/equipment", "get">;
   };
 
@@ -36,13 +34,9 @@ export default function NewExercise() {
       <textarea placeholder="Description" ref={descriptionFieldRef} />
 
       <Suspense fallback={<div>Loading...</div>}>
-        <Await resolve={Promise.all([data.muscleGroups, data.muscles])}>
-          {([muscleGroups, muscles]: [
-            Awaited<(typeof data)["muscleGroups"]>,
-            Awaited<(typeof data)["muscles"]>
-          ]) => {
-            if (muscleGroups.code !== "OK" || muscles.code !== "OK")
-              return null;
+        <Await resolve={data.muscleGroups}>
+          {(muscleGroups: Awaited<(typeof data)["muscleGroups"]>) => {
+            if (muscleGroups.code !== "OK") return null;
 
             return (
               <div className="new-exercise-muscle-selection-container">
@@ -53,10 +47,7 @@ export default function NewExercise() {
                     selectedPrimaryMuscleGroups.current = muscleGroups;
                     selectedPrimaryMuscles.current = muscles;
                   }}
-                  muscleGroups={connectMuscleGroups(
-                    muscleGroups.content,
-                    muscles.content
-                  )}
+                  muscleGroups={muscleGroups.content}
                 />
 
                 <MuscleSelector
@@ -66,10 +57,7 @@ export default function NewExercise() {
                     selectedSecondaryMuscleGroups.current = muscleGroups;
                     selectedSecondaryMuscles.current = muscles;
                   }}
-                  muscleGroups={connectMuscleGroups(
-                    muscleGroups.content,
-                    muscles.content
-                  )}
+                  muscleGroups={muscleGroups.content}
                 />
               </div>
             );
