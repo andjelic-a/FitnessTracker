@@ -4,9 +4,9 @@ import { Suspense, useRef } from "react";
 import MuscleSelector from "../../Selectors/Muscle/MuscleSelector";
 import compressImage from "../../../../Data/ImageCompression";
 import EquipmentSelector from "../../Selectors/Equipment/EquipmentSelector";
-import { connectMuscleGroups } from "../../../../Types/Models/FullMuscleGroup";
 import { APIResponse } from "../../../../Types/Endpoints/ResponseParser";
 import sendAPIRequest from "../../../../Data/SendAPIRequest";
+import connectMuscleGroups from "../../Selectors/Muscle/ConnectMuscleGroupsToMuscles";
 
 export default function NewExercise() {
   const navigate = useNavigate();

@@ -2,11 +2,11 @@ import "./UpdateExercise.scss";
 import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import { Suspense, useRef } from "react";
 import MuscleSelector from "../../Selectors/Muscle/MuscleSelector";
-import { connectMuscleGroups } from "../../../../Types/Models/FullMuscleGroup";
 import EquipmentSelector from "../../Selectors/Equipment/EquipmentSelector";
 import { APIResponse } from "../../../../Types/Endpoints/ResponseParser";
 import sendAPIRequest from "../../../../Data/SendAPIRequest";
 import compressImage from "../../../../Data/ImageCompression";
+import connectMuscleGroups from "../../Selectors/Muscle/ConnectMuscleGroupsToMuscles";
 
 export default function UpdateExercise() {
   const navigate = useNavigate();

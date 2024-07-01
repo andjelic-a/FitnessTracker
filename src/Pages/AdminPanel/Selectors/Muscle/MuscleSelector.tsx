@@ -1,11 +1,11 @@
+import { Schema } from "../../../../Types/Endpoints/SchemaParser";
+import connectMuscleGroups from "./ConnectMuscleGroupsToMuscles";
 import "./MuscleSelector.scss";
 import { useEffect, useState } from "react";
-import { FullMuscleGroup } from "../../Exercises/New/NewExercise";
-import Muscle from "../../../../Types/Models/Muscle";
 
 type MuscleSelectorProps = {
   selectedOnStart: number[];
-  muscleGroups: FullMuscleGroup[];
+  muscleGroups: ReturnType<typeof connectMuscleGroups>;
   onSelectionChanged: (
     selectedMuscleGroupIds: number[],
     selectedMuscleIds: number[]
@@ -19,13 +19,17 @@ export default function MuscleSelector({
   title,
   selectedOnStart,
 }: MuscleSelectorProps) {
-  const [selectedMuscles, setSelectedMuscles] = useState<Muscle[]>([]);
+  const [selectedMuscles, setSelectedMuscles] = useState<
+    Schema<"SimpleMuscleResponseDTO">[]
+  >([]);
 
   useEffect(() => {
     setSelectedMuscles(
       muscleGroups
         .flatMap((x) => x.muscles)
-        .filter((x) => selectedOnStart.includes(x.id)) as Muscle[]
+        .filter((x) =>
+          selectedOnStart.includes(x.id)
+        ) as Schema<"SimpleMuscleResponseDTO">[]
     );
   }, [selectedOnStart]);
 
@@ -38,7 +42,7 @@ export default function MuscleSelector({
     );
   }, [selectedMuscles]);
 
-  function selectMuscle(muscle: Muscle) {
+  function selectMuscle(muscle: Schema<"SimpleMuscleResponseDTO">) {
     setSelectedMuscles((muscles) => {
       if (muscles.some((x) => x.id === muscle.id)) {
         return muscles.filter((x) => x.id !== muscle.id);
@@ -63,7 +67,9 @@ export default function MuscleSelector({
                     ? "selected"
                     : ""
                 }`}
-                onClick={() => selectMuscle(muscle as Muscle)}
+                onClick={() =>
+                  selectMuscle(muscle as Schema<"SimpleMuscleResponseDTO">)
+                }
               >
                 <p>{muscle.name}</p>
               </div>

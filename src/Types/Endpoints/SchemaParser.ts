@@ -2,9 +2,12 @@ import { LastElement, Split } from "../Utility/StringLiteralsUtility";
 import { MappedEndpoints } from "./Endpoints";
 import { IsPropertyNullable, ParseSchemaProperty } from "./PropertyParser";
 
-export type Schema<SchemaName extends string> = SchemaName extends SchemaNames
-  ? ParseSchema<SchemaInfo<SchemaName>>
-  : never;
+export type Schema<SchemaName extends SchemaNames> = ParseSchema<
+  SchemaInfo<SchemaName>
+>;
+
+export type SchemaFromString<SchemaName extends string> =
+  SchemaName extends SchemaNames ? ParseSchema<SchemaInfo<SchemaName>> : never;
 
 type SchemaInfos = MappedEndpoints["components"]["schemas"];
 type SchemaNames = keyof SchemaInfos;
