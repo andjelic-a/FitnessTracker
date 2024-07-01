@@ -18,7 +18,6 @@ export async function getJWT(): Promise<string | null> {
 
   if (!isJWTExpired(jwt)) return jwt;
 
-  console.log("Refreshing token...");
   const response = await sendAPIRequest(
     {
       endpoint: "/api/user/refresh",
@@ -31,12 +30,11 @@ export async function getJWT(): Promise<string | null> {
   );
 
   if (response.code === "Created") {
-    console.log("Refreshed token");
     localStorage.setItem("token", response.content.token);
     return response.content.token;
   }
 
-  // if (response.code === "Unauthorized") localStorage.removeItem("token");
+  if (response.code === "Unauthorized") localStorage.removeItem("token");
   return null; //TODO: Handle errors
 }
 
@@ -87,7 +85,6 @@ export async function register(
 
   if (response.code !== "Created") return false;
 
-  console.log("Register successful");
   localStorage.setItem("token", response.content.token);
   return true;
 }

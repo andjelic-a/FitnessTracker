@@ -4,11 +4,7 @@ import {
   Params,
   defer,
 } from "react-router-dom";
-import { FullExercise } from "../../../../Types/Models/FullExercise";
-import get, { getOne } from "../../../../Data/Get";
-import MuscleGroup from "../../../../Types/Models/MuscleGroup";
-import Muscle from "../../../../Types/Models/Muscle";
-import Equipment from "../../../../Types/Models/Equipment";
+import sendAPIRequest from "../../../../Data/SendAPIRequest";
 
 interface UpdateExerciseLoaderArguments extends LoaderFunctionArgs {
   params: Params<ParamParseKey<":exerciseId">>;
@@ -20,9 +16,41 @@ export default async function updateExerciseLoader({
   if (!exerciseId) throw new Error("No exerciseId provided");
 
   return defer({
-    exercise: getOne<FullExercise>("FullExercise", exerciseId, "all"),
-    muscleGroups: get<MuscleGroup>("MuscleGroup", "none", undefined, -1, 0),
-    muscles: get<Muscle>("Muscle", "none", undefined, -1, 0),
-    equipment: get<Equipment>("Equipment", "none", undefined, -1, 0),
+    exercise: sendAPIRequest({
+      endpoint: "/api/exercise/{id}/detailed",
+      request: {
+        method: "get",
+        parameters: {
+          id: parseInt(exerciseId),
+        },
+      },
+    }),
+    muscleGroups: sendAPIRequest({
+      endpoint: "/api/musclegroup",
+      request: {
+        method: "get",
+        parameters: {
+          limit: -1,
+        },
+      },
+    }),
+    muscles: sendAPIRequest({
+      endpoint: "/api/muscle",
+      request: {
+        method: "get",
+        parameters: {
+          limit: -1,
+        },
+      },
+    }),
+    equipment: sendAPIRequest({
+      endpoint: "/api/equipment",
+      request: {
+        method: "get",
+        parameters: {
+          limit: -1,
+        },
+      },
+    }),
   });
 }

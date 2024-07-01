@@ -1,20 +1,21 @@
-import { Await, useLoaderData } from "react-router-dom";
-import { newExerciseLoader } from "./NewExerciseLoader";
+import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import "./NewExercise.scss";
 import { Suspense, useRef } from "react";
-import { Immutable, Narrow } from "../../../../Types/Utility/Models";
-import MuscleGroup from "../../../../Types/Models/MuscleGroup";
-import Muscle from "../../../../Types/Models/Muscle";
-import Equipment from "../../../../Types/Models/Equipment";
 import MuscleSelector from "../../Selectors/Muscle/MuscleSelector";
-import Exercise from "../../../../Types/Models/Exercise";
-import { compressImage } from "../../../../Data/ImageCompression";
-import { post } from "../../../../Data/Post";
+import compressImage from "../../../../Data/ImageCompression";
 import EquipmentSelector from "../../Selectors/Equipment/EquipmentSelector";
 import { connectMuscleGroups } from "../../../../Types/Models/FullMuscleGroup";
+import { APIResponse } from "../../../../Types/Endpoints/ResponseParser";
+import sendAPIRequest from "../../../../Data/SendAPIRequest";
 
 export default function NewExercise() {
-  const data = useLoaderData() as ReturnType<typeof newExerciseLoader>;
+  const navigate = useNavigate();
+
+  const data = useLoaderData() as {
+    muscleGroups: APIResponse<"/api/musclegroup", "get">;
+    muscles: APIResponse<"/api/muscle", "get">;
+    equipment: APIResponse<"/api/equipment", "get">;
+  };
 
   const nameFieldRef = useRef<HTMLInputElement>(null);
   const imageFieldRef = useRef<HTMLInputElement>(null);
@@ -35,52 +36,62 @@ export default function NewExercise() {
       <textarea placeholder="Description" ref={descriptionFieldRef} />
 
       <Suspense fallback={<div>Loading...</div>}>
-        <Await
-          resolve={Promise.all([
-            "muscleGroups" in data ? data.muscleGroups : [],
-            "muscles" in data ? data.muscles : [],
-          ])}
-        >
+        <Await resolve={Promise.all([data.muscleGroups, data.muscles])}>
           {([muscleGroups, muscles]: [
-            Immutable<Narrow<MuscleGroup, ["id", "name"]>>[],
-            Immutable<Narrow<Muscle, ["id", "name", "muscleGroupId"]>>[]
-          ]) => (
-            <div className="new-exercise-muscle-selection-container">
-              <MuscleSelector
-                selectedOnStart={[]}
-                title="Primary"
-                onSelectionChanged={(muscleGroups, muscles) => {
-                  selectedPrimaryMuscleGroups.current = muscleGroups;
-                  selectedPrimaryMuscles.current = muscles;
-                }}
-                muscleGroups={connectMuscleGroups(muscleGroups, muscles)}
-              />
+            Awaited<(typeof data)["muscleGroups"]>,
+            Awaited<(typeof data)["muscles"]>
+          ]) => {
+            if (muscleGroups.code !== "OK" || muscles.code !== "OK")
+              return null;
 
-              <MuscleSelector
-                selectedOnStart={[]}
-                title="Secondary"
-                onSelectionChanged={(muscleGroups, muscles) => {
-                  selectedSecondaryMuscleGroups.current = muscleGroups;
-                  selectedSecondaryMuscles.current = muscles;
-                }}
-                muscleGroups={connectMuscleGroups(muscleGroups, muscles)}
-              />
-            </div>
-          )}
+            return (
+              <div className="new-exercise-muscle-selection-container">
+                <MuscleSelector
+                  selectedOnStart={[]}
+                  title="Primary"
+                  onSelectionChanged={(muscleGroups, muscles) => {
+                    selectedPrimaryMuscleGroups.current = muscleGroups;
+                    selectedPrimaryMuscles.current = muscles;
+                  }}
+                  muscleGroups={connectMuscleGroups(
+                    muscleGroups.content,
+                    muscles.content
+                  )}
+                />
+
+                <MuscleSelector
+                  selectedOnStart={[]}
+                  title="Secondary"
+                  onSelectionChanged={(muscleGroups, muscles) => {
+                    selectedSecondaryMuscleGroups.current = muscleGroups;
+                    selectedSecondaryMuscles.current = muscles;
+                  }}
+                  muscleGroups={connectMuscleGroups(
+                    muscleGroups.content,
+                    muscles.content
+                  )}
+                />
+              </div>
+            );
+          }}
         </Await>
       </Suspense>
 
       <Suspense fallback={<div>Loading...</div>}>
-        <Await resolve={"equipment" in data ? data.equipment : []}>
-          {(equipment: Immutable<Narrow<Equipment, ["id", "name"]>>[]) => (
-            <EquipmentSelector
-              selectedOnStart={[]}
-              equipment={equipment}
-              onSelectionChanged={(equipment) => {
-                selectedEquipment.current = equipment;
-              }}
-            />
-          )}
+        <Await resolve={data.equipment}>
+          {(equipment: Awaited<(typeof data)["equipment"]>) => {
+            if (equipment.code !== "OK") return null;
+
+            return (
+              <EquipmentSelector
+                selectedOnStart={[]}
+                equipment={equipment.content}
+                onSelectionChanged={(equipment) => {
+                  selectedEquipment.current = equipment;
+                }}
+              />
+            );
+          }}
         </Await>
       </Suspense>
 
@@ -111,19 +122,23 @@ export default function NewExercise() {
 
     const equipment = selectedEquipment.current;
 
-    const exercise: Exercise = new Exercise(
-      0,
-      name,
-      description,
-      await compressImage(image),
-      equipment,
-      primaryMuscleGroups,
-      secondaryMuscleGroups,
-      primaryMuscles,
-      secondaryMuscles,
-      [] //TODO: add aliases
-    );
+    await sendAPIRequest({
+      endpoint: "/api/exercise",
+      request: {
+        method: "post",
+        payload: {
+          name,
+          description,
+          equipment,
+          image: await compressImage(image),
+          primaryMuscleGroups,
+          primaryMuscles,
+          secondaryMuscleGroups,
+          secondaryMuscles,
+        },
+      },
+    });
 
-    await post("exercise", exercise);
+    navigate("/admin/exercises");
   }
 }

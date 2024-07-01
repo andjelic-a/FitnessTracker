@@ -1,16 +1,12 @@
 import { Suspense } from "react";
 import { Await, useLoaderData } from "react-router-dom";
-//import { logout } from "../../Data/User";
-import User from "../../Types/Models/User";
-import { Immutable } from "../../Types/Utility/Models";
 import Icon from "../../Components/Icon/Icon";
 import "./Profile.scss";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 
 export default function Profile() {
-  // const navigate = useNavigate();
   const userData = useLoaderData() as {
-    user: Promise<Immutable<Omit<User, "id">> | null>;
+    user: Promise<APIResponse<"/api/user/me/detailed", "get">>;
   };
 
   return (
@@ -18,9 +14,8 @@ export default function Profile() {
       <div className="profile-container">Profile</div>
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={userData.user}>
-          {(loadedUserData: APIResponse<"/api/user/me/detailed", "get">) => {
+          {(loadedUserData: Awaited<typeof userData.user>) => {
             if (loadedUserData.code !== "OK") return null;
-            console.log(loadedUserData);
 
             return (
               <div className="profile-user-container">
