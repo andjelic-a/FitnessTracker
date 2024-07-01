@@ -4,8 +4,7 @@ import {
   Params,
   defer,
 } from "react-router-dom";
-import { baseAPIUrl } from "../../Data/BaseURLs";
-import { getJWT } from "../../Data/User";
+import sendAPIRequest from "../../Data/SendAPIRequest";
 
 interface emailVerificationLoaderArgs extends LoaderFunctionArgs {
   params: Params<ParamParseKey<":code">>;
@@ -15,11 +14,14 @@ export default async function emailVerificationLoader({
   params: { code },
 }: emailVerificationLoaderArgs) {
   return defer({
-    message: fetch(`${baseAPIUrl}/user/confirm/${code}`, {
-      method: "POST",
-      headers: {
-        Authorization: (await getJWT()) as string,
+    response: sendAPIRequest({
+      endpoint: "/api/user/me/confirmemail/{code}",
+      request: {
+        method: "patch",
+        parameters: {
+          code: code ?? "",
+        },
       },
-    }).then((response) => response.ok),
+    }),
   });
 }
