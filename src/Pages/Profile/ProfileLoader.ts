@@ -12,5 +12,11 @@ export default async function profileLoader() {
         method: "get",
       },
     }),
+    workouts: sendAPIRequest({
+      endpoint: "/api/workout/personal/simple",
+      request: {
+        method: "get",
+      },
+    }),
   });
 }
