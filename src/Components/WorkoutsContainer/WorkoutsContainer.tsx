@@ -6,7 +6,7 @@ import "./WorkoutsContainer.scss";
 interface Workout {
   id: string;
   name: string;
-  image: any;
+  image: string | null;
 }
 
 interface WorkoutsContainerProps {
@@ -40,7 +40,7 @@ const WorkoutsContainer: React.FC<WorkoutsContainerProps> = ({ workouts }) => {
           {displayedWorkouts.map((workout) => (
             <div key={workout.id}>
               {/* Replace with actual image path */}
-              <img src={workout.image} alt={workout.name} />
+              <img src={workout.image??"../../../public/DefaultProfilePicture.png"} alt={workout.name} />
               <p>{workout.name}</p>
             </div>
           ))}

@@ -3,13 +3,14 @@ import "./ProfileHeader.scss";
 
 type ProfileHeaderProps = {
     username: string;
+    image: string | null;
 };
 
-function ProfileHeader({username}: ProfileHeaderProps) {
+function ProfileHeader({username, image}: ProfileHeaderProps) {
   return (
     <div className="profile-header">
       <div className="profile-picture">
-        <img src="" alt="Profile Picture" />
+        <img src={image??"../../../public/DefaultProfilePicture.png"} alt="Profile Picture" />
       </div>
       <div className="profile-user-information">
         <div className="profile-user-username">

@@ -9,7 +9,7 @@ import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 interface Workout {
   id: string;
   name: string;
-  image: any;
+  image: string | null;
 }
 
 export default function Profile() {
@@ -45,7 +45,7 @@ export default function Profile() {
                   </Await>
                 </Suspense>
                 <div className="profile-user-container">
-                  <ProfileHeader username={loadedUserData.content.name} />
+                  <ProfileHeader username={loadedUserData.content.name} image={loadedUserData.content.image} />
                   <button className="profile-edit-button">Edit Profile</button>
                   <div className="profile-body">
                     <ActivityGrid />
