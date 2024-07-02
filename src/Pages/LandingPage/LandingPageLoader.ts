@@ -3,11 +3,11 @@ import sendAPIRequest from "../../Data/SendAPIRequest";
 
 export async function landingPageLoaderInner() {
   return sendAPIRequest({
-    endpoint: "/api/exercise/{exerciseId}",
+    endpoint: "/api/exercise/{id}/detailed",
     request: {
       method: "get",
       parameters: {
-        exerciseId: 1,
+        id: 1,
       },
     },
   });

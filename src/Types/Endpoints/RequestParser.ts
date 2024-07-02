@@ -1,6 +1,6 @@
 import { MappedEndpoints } from "./Endpoints";
 import { ParseParameters } from "./ParametersParser";
-import { GetSchemaNameFromRequestBody, Schema } from "./SchemaParser";
+import { GetSchemaNameFromRequestBody, SchemaFromString } from "./SchemaParser";
 import { Union2Tuple } from "./Union2Tuple";
 
 type Paths = MappedEndpoints["paths"];
@@ -48,7 +48,7 @@ type Payload<
   Method extends keyof Paths[Path]
 > = "requestBody" extends keyof Paths[Path][Method]
   ? {
-      payload: Schema<
+      payload: SchemaFromString<
         GetSchemaNameFromRequestBody<Paths[Path][Method]["requestBody"]>
       >;
     }

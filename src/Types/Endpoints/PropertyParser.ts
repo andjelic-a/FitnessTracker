@@ -1,4 +1,4 @@
-import type { GetSchemaName, Schema } from "./SchemaParser";
+import type { GetSchemaName, SchemaFromString } from "./SchemaParser";
 
 export type ParseSchemaProperty<T> = T extends { type: infer Type }
   ? Type extends "integer"
@@ -14,7 +14,7 @@ export type ParseSchemaProperty<T> = T extends { type: infer Type }
     : never
   : T extends { $ref: infer Ref }
   ? Ref extends string
-    ? Schema<GetSchemaName<Ref>>
+    ? SchemaFromString<GetSchemaName<Ref>>
     : never
   : never;
 

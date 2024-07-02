@@ -8,18 +8,19 @@ import {
   useRef,
   useState,
 } from "react";
-import { Immutable, Narrow } from "../../Types/Utility/Models";
-import { FullExercise } from "../../Types/Models/FullExercise";
-import exerciseLoader, { getExerciseQueryString } from "./ExerciseLoader";
-import { testContext } from "../../App";
-import get from "../../Data/Get";
+import { getExerciseQueryString } from "./ExerciseLoader";
+import { scrollPositionContext } from "../../App";
 import InputField from "../../Components/InputField/InputField";
+import { APIResponse } from "../../Types/Endpoints/ResponseParser";
+import sendAPIRequest from "../../Data/SendAPIRequest";
 
 export default function Exercises() {
-  const data = useLoaderData() as ReturnType<typeof exerciseLoader>;
-  const scrollPositionContext = useContext(testContext);
+  const data = useLoaderData() as {
+    exercises: APIResponse<"/api/exercise", "get">;
+  };
+  const scrollPositionContextConsumer = useContext(scrollPositionContext);
   const [lazyLoadedExercises, setLazyLoadedExercises] = useState<
-    Immutable<Narrow<FullExercise, ["id", "name", "image"]>>[]
+    APIResponse<"/api/exercise", "get">[]
   >([]);
 
   const offset = useRef(10);
@@ -37,30 +38,40 @@ export default function Exercises() {
 
   useEffect(() => {
     if (
-      scrollPositionContext > 0.7 &&
+      scrollPositionContextConsumer > 0.7 &&
       lastRecordedScrollPosition.current < 0.7 &&
       !isLoadingExercises.current
     ) {
       isLoadingExercises.current = true;
-      get<FullExercise>(
-        "FullExercise",
-        "none",
-        getExerciseQueryString(searchParams),
-        exercisesLimitPerLoad,
-        offset.current
-      ).then((newExercises) => {
-        console.log(newExercises, offset.current);
-        if (newExercises.length !== exercisesLimitPerLoad) return;
 
-        isLoadingExercises.current = false;
-        setLazyLoadedExercises([...lazyLoadedExercises, ...newExercises]);
+      sendAPIRequest({
+        endpoint: "/api/exercise",
+        request: {
+          method: "get",
+          parameters: {
+            q: getExerciseQueryString(searchParams).join(";"),
+            offset: offset.current,
+            limit: exercisesLimitPerLoad,
+          },
+        },
+      }).then((newExercises) => {
+        if (newExercises.code !== "OK") {
+          isLoadingExercises.current = false;
+          return;
+        }
+
+        console.log(newExercises, offset.current);
+        setLazyLoadedExercises([...lazyLoadedExercises, newExercises]);
+
+        if (newExercises.content.length === exercisesLimitPerLoad)
+          isLoadingExercises.current = false;
       });
 
       offset.current += 10;
     }
 
-    lastRecordedScrollPosition.current = scrollPositionContext;
-  }, [scrollPositionContext]);
+    lastRecordedScrollPosition.current = scrollPositionContextConsumer;
+  }, [scrollPositionContextConsumer]);
 
   //If back button doesn't work with search params use this
   /*   useEffect(() => {
@@ -99,15 +110,13 @@ export default function Exercises() {
       </div>
 
       <Suspense fallback={<div>Loading...</div>}>
-        <Await resolve={"exercises" in data ? data.exercises : []}>
-          {(
-            initialExercises: Immutable<
-              Narrow<FullExercise, ["id", "name", "image"]>
-            >[]
-          ) => {
+        <Await resolve={data.exercises}>
+          {(initialExercises: Awaited<typeof data.exercises>) => {
+            if (initialExercises.code !== "OK") return null;
+
             return (
               <InnerExercises
-                exercises={[...initialExercises, ...lazyLoadedExercises]}
+                exercises={[initialExercises, ...lazyLoadedExercises]}
               />
             );
           }}
@@ -120,22 +129,24 @@ export default function Exercises() {
 function InnerExercises({
   exercises,
 }: {
-  exercises: Immutable<Narrow<FullExercise, ["id", "name", "image"]>>[];
+  exercises: APIResponse<"/api/exercise", "get">[];
 }) {
   return (
     <div className="exercises-page-container">
-      {exercises.map((exercise) => {
-        return (
-          <Link
-            className="exercise-card"
-            to={`/exercises/${exercise.id}`}
-            key={exercise.id}
-          >
-            <p>{exercise.name}</p>
-            <img src={exercise.image} alt="" />
-          </Link>
-        );
-      })}
+      {exercises
+        .flatMap((x) => (x.code === "OK" ? x.content : []))
+        .map((exercise) => {
+          return (
+            <Link
+              className="exercise-card"
+              to={`/exercises/${exercise.id}`}
+              key={exercise.id}
+            >
+              <p>{exercise.name}</p>
+              <img src={exercise.image ?? ""} alt="" />
+            </Link>
+          );
+        })}
     </div>
   );
 }

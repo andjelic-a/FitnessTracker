@@ -1,25 +1,21 @@
 import { Suspense } from "react";
-import { Await, useLoaderData, useNavigate } from "react-router-dom";
-//import { logout } from "../../Data/User";
-import User from "../../Types/Models/User";
-import { Immutable } from "../../Types/Utility/Models";
+import { Await, useLoaderData } from "react-router-dom";
 import Icon from "../../Components/Icon/Icon";
 import "./Profile.scss";
+import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 
 export default function Profile() {
-  const navigate = useNavigate();
-  const userData = useLoaderData() as Promise<unknown>;
+  const userData = useLoaderData() as {
+    user: Promise<APIResponse<"/api/user/me/detailed", "get">>;
+  };
 
   return (
     <div className="profile">
       <div className="profile-container">Profile</div>
       <Suspense fallback={<div>Loading...</div>}>
-        <Await resolve={"user" in userData ? userData.user : null}>
-          {(loadedUserData: Immutable<Omit<User, "id">> | null) => {
-            if (!loadedUserData) {
-              navigate("/authentication");
-              return null;
-            }
+        <Await resolve={userData.user}>
+          {(loadedUserData: Awaited<typeof userData.user>) => {
+            if (loadedUserData.code !== "OK") return null;
 
             return (
               <div className="profile-user-container">
@@ -29,8 +25,12 @@ export default function Profile() {
                   </div>
                   <div className="profile-user-information">
                     <div className="profile-user-username">
-                      <p>{loadedUserData.name}</p>
-                      <Icon className="profile-user-settings" id="solid" name="gear" />
+                      <p>{loadedUserData.content.name}</p>
+                      <Icon
+                        className="profile-user-settings"
+                        id="solid"
+                        name="gear"
+                      />
                     </div>
                     <div className="profile-user-stats">
                       <div className="profile-user-stats-stat">
@@ -56,7 +56,7 @@ export default function Profile() {
       </Suspense>
       {/* <button onClick={() => logout().then(() => navigate("/authentication"))}>
         Logout
-      </button>*/} 
+      </button>*/}
     </div>
   );
 }

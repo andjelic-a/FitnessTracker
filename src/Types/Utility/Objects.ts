@@ -1,17 +1,9 @@
-import IModel from "../Models/IModel";
-
-export type Include<T extends IModel> = {
+/* export type Include<T extends {}> = {
   [P in keyof T as T[P] extends any[] ? P : never]: T[P];
 };
-
-export type IncludeKeys<T extends IModel> = keyof Include<T>;
-
-export type Query<T extends IModel> = `${keyof Omit<T, "Id"> extends string
-  ? keyof Omit<T, "Id">
-  : never}=${string}`;
-
+ */
 export type Narrow<
-  OriginalEntity extends IModel,
+  OriginalEntity extends {},
   KeysToNarrow extends
     | keyof OriginalEntity
     | (keyof OriginalEntity)[]

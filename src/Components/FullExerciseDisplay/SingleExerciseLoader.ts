@@ -4,8 +4,7 @@ import {
   Params,
   defer,
 } from "react-router-dom";
-import { getOne } from "../../Data/Get";
-import { FullExercise } from "../../Types/Models/FullExercise";
+import sendAPIRequest from "../../Data/SendAPIRequest";
 
 interface SingleExerciseLoaderArguments extends LoaderFunctionArgs {
   params: Params<ParamParseKey<":exerciseId">>;
@@ -17,6 +16,14 @@ export default async function singleExerciseLoader({
   if (!exerciseId) throw new Error("No exerciseId provided");
 
   return defer({
-    exercise: getOne<FullExercise>("FullExercise", exerciseId, "all"),
+    exercise: sendAPIRequest({
+      endpoint: "/api/exercise/{id}/detailed",
+      request: {
+        method: "get",
+        parameters: {
+          id: parseInt(exerciseId),
+        },
+      },
+    }),
   });
 }
