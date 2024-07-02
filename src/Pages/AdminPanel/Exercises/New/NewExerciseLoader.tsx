@@ -1,13 +1,25 @@
 import { defer } from "react-router-dom";
-import get from "../../../../Data/Get";
-import MuscleGroup from "../../../../Types/Models/MuscleGroup";
-import Muscle from "../../../../Types/Models/Muscle";
-import Equipment from "../../../../Types/Models/Equipment";
+import sendAPIRequest from "../../../../Data/SendAPIRequest";
 
 export async function newExerciseLoader() {
   return defer({
-    muscleGroups: get<MuscleGroup>("MuscleGroup", "none", undefined, -1, 0),
-    muscles: get<Muscle>("Muscle", "none", undefined, -1, 0),
-    equipment: get<Equipment>("Equipment", "none", undefined, -1, 0),
+    muscleGroups: sendAPIRequest({
+      endpoint: "/api/musclegroup/detailed",
+      request: {
+        method: "get",
+        parameters: {
+          limit: -1,
+        },
+      },
+    }),
+    equipment: sendAPIRequest({
+      endpoint: "/api/equipment",
+      request: {
+        method: "get",
+        parameters: {
+          limit: -1,
+        },
+      },
+    }),
   });
 }

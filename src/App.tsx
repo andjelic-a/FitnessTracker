@@ -4,7 +4,7 @@ import HamburgerNavigationMenu from "./Components/HamburgerNavigationMenu/Hambur
 import Icon from "./Components/Icon/Icon";
 import { createContext, useEffect, useState } from "react";
 
-export const testContext = createContext(0);
+export const scrollPositionContext = createContext(0);
 
 function App() {
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -54,11 +54,11 @@ function App() {
           <Icon id="logo" name="dumbbell" />
         </header>
 
-        <testContext.Provider value={scrollPosition}>
+        <scrollPositionContext.Provider value={scrollPosition}>
           <section id="page-content">
             <Outlet />
           </section>
-        </testContext.Provider>
+        </scrollPositionContext.Provider>
 
         <footer>
           <div id="media">

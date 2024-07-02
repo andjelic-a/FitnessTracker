@@ -1,13 +1,9 @@
-import { baseAPIUrl } from "./BaseURLs";
-
-export function getIsLoggedIn() {
-  return localStorage.getItem("token") !== null;
-}
+import sendAPIRequest from "./SendAPIRequest";
 
 export function isJWTExpired(jwt: string) {
   const parts = jwt.split(".");
   if (parts.length !== 3) {
-    localStorage.removeItem("token");
+    // localStorage.removeItem("token");
     return true;
   }
 
@@ -16,79 +12,52 @@ export function isJWTExpired(jwt: string) {
   return exp * 1000 < Date.now();
 }
 
-export async function getBearerToken(): Promise<`Bearer ${string}` | null> {
+export async function getJWT(): Promise<string | null> {
   const jwt = localStorage.getItem("token");
   if (jwt === null) return null;
 
-  if (jwt === "") {
-    localStorage.removeItem("token");
-    console.log("Something went really wrong..."); //TODO: Delete this entire if after testing and fixing if needed
-    return null;
+  if (!isJWTExpired(jwt)) return jwt;
+
+  const response = await sendAPIRequest(
+    {
+      endpoint: "/api/user/refresh",
+      request: {
+        method: "post",
+      },
+    },
+    jwt,
+    true
+  );
+
+  if (response.code === "Created") {
+    localStorage.setItem("token", response.content.token);
+    return response.content.token;
   }
 
-  if (!isJWTExpired(jwt)) return `Bearer ${jwt}`;
-
-  return await fetch(`${baseAPIUrl}/user/refresh`, {
-    headers: { Authorization: `Bearer ${jwt}` },
-    method: "GET",
-    credentials: "include",
-  })
-    .then((result) => (!result.ok ? undefined : result.text()))
-    .then((newToken) => {
-      if (!newToken) {
-        logout();
-        return null;
-      }
-
-      localStorage.setItem("token", newToken);
-      return `Bearer ${newToken}` as `Bearer ${string}`;
-    })
-    .catch((err) => {
-      console.error(err);
-      logout();
-      return null;
-    });
-}
-
-export async function getCurrentUserData() {
-  const bearer = await getBearerToken();
-  if (!bearer) return null;
-
-  return fetch(`${baseAPIUrl}/user`, {
-    method: "GET",
-    headers: {
-      Authorization: bearer,
-    },
-  })
-    .then((result) => {
-      if (!result.ok) return null;
-      return result.json();
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  if (response.code === "Unauthorized") localStorage.removeItem("token");
+  return null; //TODO: Handle errors
 }
 
 export async function login(email: string, password: string): Promise<boolean> {
-  return fetch(`${baseAPIUrl}/user/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const response = await sendAPIRequest(
+    {
+      endpoint: "/api/user/login",
+      request: {
+        method: "post",
+        payload: {
+          email: email.trim(),
+          password,
+        },
+      },
     },
-    credentials: "include",
-    body: JSON.stringify({ email: email.trim(), password }),
-  })
-    .then((result) => (!result.ok ? undefined : result.text()))
-    .then((newToken) => {
-      if (!newToken) return false;
+    null,
+    true
+  );
 
-      localStorage.setItem("token", newToken);
-      return true;
-    })
-    .catch((err) => {
-      console.error(err);
-      return false;
-    });
+  if (response.code !== "Created") return false;
+
+  localStorage.setItem("token", response.content.token);
+  return true;
 }
 
 export async function register(
@@ -98,41 +67,41 @@ export async function register(
 ): Promise<boolean> {
   if (password.length < 8 || email === "" || name === "") return false;
 
-  return fetch(`${baseAPIUrl}/user/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const response = await sendAPIRequest(
+    {
+      endpoint: "/api/user/register",
+      request: {
+        method: "post",
+        payload: {
+          name: name.trim(),
+          email: email.trim(),
+          password,
+        },
+      },
     },
-    credentials: "include",
-    body: JSON.stringify({
-      name: name.trim(),
-      email: email.trim(),
-      password,
-    }),
-  })
-    .then((result) => (!result.ok ? undefined : result.text()))
-    .then((newToken) => {
-      if (!newToken) return false;
+    null,
+    true
+  );
 
-      localStorage.setItem("token", newToken);
-      return true;
-    })
-    .catch((err) => {
-      console.error(err);
-      return false;
-    });
+  if (response.code !== "Created") return false;
+
+  localStorage.setItem("token", response.content.token);
+  return true;
 }
 
 export async function logout(): Promise<void> {
-  const auth = await getBearerToken();
-  if (auth !== null)
-    fetch(`${baseAPIUrl}/user/logout`, {
-      method: "DELETE",
-      credentials: "include",
-      headers: {
-        Authorization: auth,
+  const bearer = await getJWT();
+  if (bearer === null) return;
+  sendAPIRequest(
+    {
+      endpoint: "/api/user/logout",
+      request: {
+        method: "delete",
       },
-    }).catch((x) => console.error(x));
+    },
+    bearer,
+    true
+  );
 
   localStorage.removeItem("token");
 }

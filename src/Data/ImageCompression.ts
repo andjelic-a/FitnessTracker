@@ -1,12 +1,12 @@
 import Compressor from "compressorjs";
 
-export const compressImage = (
+export default function compressImage(
   image: File,
   quality: number = 0.6,
   maxWidth: number = 750,
   maxHeight: number = 750,
   debug: boolean = false
-) => {
+) {
   return new Promise<string>((resolve) => {
     if (debug)
       console.log(`${image.size / 1024 / 1024} MB (${performance.now()} ms)`);
@@ -25,7 +25,7 @@ export const compressImage = (
       },
     });
   });
-};
+}
 
 function blobToBase64(blob: Blob) {
   return new Promise<string>((resolve, _) => {

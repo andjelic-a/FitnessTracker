@@ -1,28 +1,27 @@
 import "./EquipmentSelector.scss";
 import { useEffect, useState } from "react";
-import Equipment from "../../../../Types/Models/Equipment";
-import { Immutable, Narrow } from "../../../../Types/Utility/Models";
+import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 
 type EquipmentSelectorProps = {
   selectedOnStart: number[];
-  equipment: Immutable<Narrow<Equipment, ["id", "name"]>>[];
+  equipment: Schema<"SimpleEquipmentResponseDTO">[];
   onSelectionChanged: (selectedEquipmentIds: number[]) => void;
 };
 
 export default function EquipmentSelector({
-  equipment: muscleGroups,
+  equipment,
   onSelectionChanged,
   selectedOnStart,
 }: EquipmentSelectorProps) {
   const [selectedEquipment, setSelectedEquipment] = useState<
-    Immutable<Narrow<Equipment, ["id", "name"]>>[]
+    Schema<"SimpleEquipmentResponseDTO">[]
   >([]);
 
   useEffect(() => {
     setSelectedEquipment(
-      muscleGroups.filter((x) => selectedOnStart.includes(x.id))
+      equipment.filter((x) => selectedOnStart.includes(x.id))
     );
-  }, [muscleGroups, selectedOnStart]);
+  }, [equipment, selectedOnStart]);
 
   useEffect(
     () => onSelectionChanged(selectedEquipment.map((x) => x.id)),
@@ -30,7 +29,7 @@ export default function EquipmentSelector({
   );
 
   function selectEquipment(
-    toggleEquipment: Immutable<Narrow<Equipment, ["id", "name"]>>
+    toggleEquipment: Schema<"SimpleEquipmentResponseDTO">
   ) {
     setSelectedEquipment((equipment) => {
       if (equipment.some((x) => x.id === toggleEquipment.id)) {
@@ -44,7 +43,7 @@ export default function EquipmentSelector({
   return (
     <div className="new-exercise-equipment-selection">
       <h1>Equipment</h1>
-      {muscleGroups.map((x) => (
+      {equipment.map((x) => (
         <div
           key={"equipment-" + x.id}
           className={

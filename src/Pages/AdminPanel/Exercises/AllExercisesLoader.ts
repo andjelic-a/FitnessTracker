@@ -1,9 +1,17 @@
 import { defer } from "react-router-dom";
-import get from "../../../Data/Get";
-import { FullExercise } from "../../../Types/Models/FullExercise";
+import sendAPIRequest from "../../../Data/SendAPIRequest";
 
 export default async function allExercisesLoader() {
   return defer({
-    exercises: get<FullExercise>("FullExercise", "none", undefined, -1, 0),
+    exercises: sendAPIRequest({
+      endpoint: "/api/exercise",
+      request: {
+        method: "get",
+        parameters: {
+          limit: -1,
+          offset: 0,
+        },
+      },
+    }),
   });
 }
