@@ -4,7 +4,7 @@ export type Methods<Endpoint extends Endpoints> = keyof Paths[Endpoint];
 export type AllSchemaInformation = MappedEndpoints["components"]["schemas"];
 export type SchemaNames = keyof AllSchemaInformation;
 
-export type MappedEndpoints = {
+type MappedEndpoints = {
   openapi: "3.0.1";
   info: {
     title: "FitnessTracker";

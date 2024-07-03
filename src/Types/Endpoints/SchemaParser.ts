@@ -31,36 +31,6 @@ type ParseSchemaObject<T extends SchemaInfo<SchemaNames>> =
       }
     : never;
 
-export type GetSchemaNameFromRequestBody<RequestBody> = LastElement<
-  Split<GetFullSchemaName<RequestBody>, "/">
+export type RefToSchemaName<Ref extends string> = LastElement<
+  Split<Ref, "/">
 >;
-
-export type GetSchemaName<FullSchemaName extends string> = LastElement<
-  Split<FullSchemaName, "/">
->;
-
-export type GetFullSchemaName<RequestBody> = "content" extends keyof RequestBody
-  ? "application/json" extends keyof RequestBody["content"]
-    ? "schema" extends keyof RequestBody["content"]["application/json"]
-      ? "$ref" extends keyof RequestBody["content"]["application/json"]["schema"]
-        ? RequestBody["content"]["application/json"]["schema"]["$ref"] extends string
-          ? RequestBody["content"]["application/json"]["schema"]["$ref"]
-          : ""
-        : ""
-      : ""
-    : ""
-  : "";
-
-/* export type GetFullSchemaName<RequestBody> = RequestBody extends {
-  content: {
-    "application/json": {
-      schema: {
-        $ref: infer SchemaName;
-      };
-    };
-  };
-}
-  ? SchemaName extends string
-    ? "SchemaName"
-    : ""
-  : ""; */

@@ -1,18 +1,7 @@
 import { Endpoints, Paths } from "./Endpoints";
 import { ParseParameters } from "./ParametersParser";
-import { GetSchemaName, SchemaFromString } from "./SchemaParser";
+import { RefToSchemaName, SchemaFromString } from "./SchemaParser";
 import { Union2Tuple } from "./Union2Tuple";
-
-// type ParseEndpoints<T extends any[]> = T extends [infer First, ...infer Rest]
-//   ? First extends keyof Paths
-//     ?
-//         | {
-//             endpoint: First;
-//             request: RequestHelper<First, Union2Tuple<keyof Paths[First]>>;
-//           }
-//         | ParseEndpoints<Rest>
-//     : never
-//   : never;
 
 export type Request<Endpoint extends Endpoints> = RequestHelper<
   Endpoint,
@@ -59,21 +48,6 @@ type Payload<
   };
 }
   ? SchemaName extends string
-    ? { payload: SchemaFromString<GetSchemaName<SchemaName>> }
+    ? { payload: SchemaFromString<RefToSchemaName<SchemaName>> }
     : {}
   : {};
-
-/* export type APIRequest<Endpoint extends Endpoints = Endpoints> = ParseEndpoints<
-  Union2Tuple<Endpoint>
->; */
-
-/* export const t: APIRequest<"/api/split/comment/{id}/like"> = {
-  endpoint: "/api/split/comment/{id}/like",
-  request: {
-    method: "post",
-    parameters: {
-      id: "123",
-    },
-  },
-};
- */
