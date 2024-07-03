@@ -5,6 +5,7 @@ import InputField from "../../../Components/InputField/InputField";
 import "./LogIn.scss";
 import SignUp from "../SignUp/SignUp.tsx";
 import { ValidateEmail, ValidatePassword } from "../Validate";
+import sendAPIRequest from "../../../Data/SendAPIRequest.ts";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -95,13 +96,12 @@ export default function Login() {
         <button onClick={handleLogin}>Log in</button>
         <a
           onClick={() => {
-            /*             sendAPIRequest({
-              endpoint: "/api/user/me/forgotpassword",
-              request: {
-                method: "post",
+            sendAPIRequest("/api/user/me/forgotpassword", {
+              method: "post",
+              payload: {
+                email: emailField.current?.value ?? "",
               },
             });
- */
           }}
         >
           Forgot password?

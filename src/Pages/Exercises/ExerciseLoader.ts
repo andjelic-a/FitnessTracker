@@ -34,15 +34,12 @@ export default async function exerciseLoader({ request }: any) {
   const query = getExerciseQueryString(url);
 
   return defer({
-    exercises: sendAPIRequest({
-      endpoint: "/api/exercise",
-      request: {
-        method: "get",
-        parameters: {
-          q: query.join(";"),
-          offset: 0,
-          limit: 10,
-        },
+    exercises: sendAPIRequest("/api/exercise", {
+      method: "get",
+      parameters: {
+        q: query.join(";"),
+        offset: 0,
+        limit: 10,
       },
     }),
   });

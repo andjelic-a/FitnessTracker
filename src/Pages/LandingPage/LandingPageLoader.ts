@@ -2,13 +2,10 @@ import { defer } from "react-router-dom";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 
 export async function landingPageLoaderInner() {
-  return sendAPIRequest({
-    endpoint: "/api/exercise/{id}/detailed",
-    request: {
-      method: "get",
-      parameters: {
-        id: 1,
-      },
+  return sendAPIRequest("/api/exercise/{id}/detailed", {
+    method: "get",
+    parameters: {
+      id: 1,
     },
   });
 }
