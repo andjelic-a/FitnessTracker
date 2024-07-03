@@ -54,15 +54,12 @@
     background-color: $primary-300;
     font-size: 1.4rem;
     color: white;
-
-    & p {
-      font-size: 1.25rem;
-    }
+    font-size: 1.25rem;
+    cursor: pointer;
   }
 
   & button:hover {
     background-color: $primary-400;
-    cursor: pointer;
   }
 }
 

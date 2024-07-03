@@ -20,17 +20,19 @@ export default function Profile() {
 
   const [isNewWindowOpen, setIsNewWindowOpen] = useState<boolean>(false);
 
-  const excludedDiv = useRef<HTMLDivElement | null>(null);
+  const excludedDivRef = useRef<HTMLDivElement | null>(null);
+  const routinTitleRef = useRef<HTMLInputElement | null>(null);
 
 
   const toggleNewWorkoutWindow = () => {
-    setIsNewWindowOpen((prevState) => !prevState);
+    setIsNewWindowOpen(true);
   };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (excludedDiv.current && !excludedDiv.current.contains(event.target as Node)) {
+      if (excludedDivRef.current && !excludedDivRef.current.contains(event.target as Node)) {
         setIsNewWindowOpen(false);
+        routinTitleRef.current!.value = "";
       }
     };
   
@@ -47,13 +49,13 @@ export default function Profile() {
   return (
     <div className="profile">
       <div
-        ref={excludedDiv}
+        ref={excludedDivRef}
         className={`profile-workouts-new ${
           isNewWindowOpen ? "new-window-open" : ""
         }`}
       >
         <div className="profile-workouts-new-header">
-          <input type="text" id="routine-title" placeholder="Routine title" />
+          <input ref={routinTitleRef} type="text" id="routine-title" placeholder="Routine title" maxLength={25} />
           <button className="profile-workouts-new-save">Save</button>
         </div>
       </div>

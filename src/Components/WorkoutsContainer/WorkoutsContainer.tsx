@@ -30,7 +30,7 @@ const WorkoutsContainer: React.FC<WorkoutsContainerProps> = ({ workouts, toggleN
         <h1>Workouts</h1>
         <button onClick={toggleNewWorkoutWindow}>
           <Icon className="icon" name="plus" />
-          <p>New</p>
+          New
         </button>
       </div>
       <div className="profile-workouts-body">
