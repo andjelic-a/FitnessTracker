@@ -4,9 +4,12 @@ import "./ProfileHeader.scss";
 type ProfileHeaderProps = {
     username: string;
     image: string | null;
+    workouts: number;
+    followers: number;
+    following: number;
 };
 
-function ProfileHeader({username, image}: ProfileHeaderProps) {
+function ProfileHeader({username, image, workouts, followers, following}: ProfileHeaderProps) {
   return (
     <div className="profile-header">
       <div className="profile-picture">
@@ -20,15 +23,15 @@ function ProfileHeader({username, image}: ProfileHeaderProps) {
         <div className="profile-user-stats">
           <div className="profile-user-stats-stat">
             <div className="profile-user-stats-name">Workouts</div>
-            <div className="profile-user-stats-num">1</div>
+            <div className="profile-user-stats-num">{workouts}</div>
           </div>
           <div className="profile-user-stats-stat">
             <div className="profile-user-stats-name">Followers</div>
-            <div className="profile-user-stats-num">1</div>
+            <div className="profile-user-stats-num">{followers}</div>
           </div>
           <div className="profile-user-stats-stat">
             <div className="profile-user-stats-name">Following</div>
-            <div className="profile-user-stats-num">1</div>
+            <div className="profile-user-stats-num">{following}</div>
           </div>
         </div>
       </div>

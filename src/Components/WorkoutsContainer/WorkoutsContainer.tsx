@@ -11,22 +11,24 @@ interface Workout {
 
 interface WorkoutsContainerProps {
   workouts: Workout[];
+  toggleNewWorkoutWindow: () => void;
 }
 
-const WorkoutsContainer: React.FC<WorkoutsContainerProps> = ({ workouts }) => {
+const WorkoutsContainer: React.FC<WorkoutsContainerProps> = ({ workouts, toggleNewWorkoutWindow }) => {
   const [showAll, setShowAll] = useState<boolean>(false);
+
 
   const displayedWorkouts = showAll ? workouts : workouts.slice(0, 8);
 
   const toggleShowAll = () => {
     setShowAll((prevState) => !prevState);
   };
-
+  
   return (
     <div className="profile-workouts-container">
       <div className="profile-workouts-header">
         <h1>Workouts</h1>
-        <button>
+        <button onClick={toggleNewWorkoutWindow}>
           <Icon className="icon" name="plus" />
           <p>New</p>
         </button>

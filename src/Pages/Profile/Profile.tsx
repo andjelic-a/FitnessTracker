@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
 import WorkoutsContainer from "../../Components/WorkoutsContainer/WorkoutsContainer";
 import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
@@ -18,8 +18,24 @@ export default function Profile() {
     workouts: Promise<APIResponse<"/api/workout/personal/simple", "get">>;
   };
 
+  const [isNewWindowOpen, setIsNewWindowOpen] = useState<boolean>(false);
+
+  const toggleNewWorkoutWindow = () => {
+    setIsNewWindowOpen((prevState) => !prevState);
+  };
+
   return (
     <div className="profile">
+      <div
+        className={`profile-workouts-new ${
+          isNewWindowOpen ? "new-window-open" : "new-window-closed"
+        }`}
+      >
+        <div className="profile-workouts-new-header">
+          <input type="text" id="routine-title" placeholder="Routine title" />
+          <button className="profile-workouts-new-save">Save</button>
+        </div>
+      </div>
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={userData.user}>
           {(loadedUserData: Awaited<typeof userData.user>) => {
@@ -32,20 +48,31 @@ export default function Profile() {
                     {(loadedWorkoutData: Awaited<typeof userData.workouts>) => {
                       if (loadedWorkoutData.code !== "OK") return null;
 
-                      const workouts: Workout[] = loadedWorkoutData.content.map(workout => ({
-                        id: workout.id,
-                        name: workout.name,
-                        image: workout.creator.image,
-                      }));
+                      const workouts: Workout[] = loadedWorkoutData.content.map(
+                        (workout) => ({
+                          id: workout.id,
+                          name: workout.name,
+                          image: workout.creator.image,
+                        })
+                      );
 
                       return (
-                        <WorkoutsContainer workouts={workouts} />
+                        <WorkoutsContainer
+                          workouts={workouts}
+                          toggleNewWorkoutWindow={toggleNewWorkoutWindow}
+                        />
                       );
                     }}
                   </Await>
                 </Suspense>
                 <div className="profile-user-container">
-                  <ProfileHeader username={loadedUserData.content.name} image={loadedUserData.content.image} />
+                  <ProfileHeader
+                    username={loadedUserData.content.name}
+                    image={loadedUserData.content.image}
+                    workouts={loadedUserData.content.completedWorkouts}
+                    followers={loadedUserData.content.followers}
+                    following={loadedUserData.content.following}
+                  />
                   <button className="profile-edit-button">Edit Profile</button>
                   <div className="profile-body">
                     <ActivityGrid />
