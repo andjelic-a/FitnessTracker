@@ -1,7 +1,8 @@
-import { Suspense, useState, useRef, useEffect } from "react";
+import { useState, Suspense } from "react";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
 import WorkoutsContainer from "../../Components/WorkoutsContainer/WorkoutsContainer";
 import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
+import CreateRoutine from "../../Components/CreateRoutine";
 import { Await, useLoaderData } from "react-router-dom";
 import "./Profile.scss";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";
@@ -20,45 +21,13 @@ export default function Profile() {
 
   const [isNewWindowOpen, setIsNewWindowOpen] = useState<boolean>(false);
 
-  const excludedDivRef = useRef<HTMLDivElement | null>(null);
-  const routinTitleRef = useRef<HTMLInputElement | null>(null);
-
-
   const toggleNewWorkoutWindow = () => {
-    setIsNewWindowOpen(true);
+    setIsNewWindowOpen((prev) => !prev);
   };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (excludedDivRef.current && !excludedDivRef.current.contains(event.target as Node)) {
-        setIsNewWindowOpen(false);
-        routinTitleRef.current!.value = "";
-      }
-    };
-  
-    document.addEventListener('mousedown', handleClickOutside);
-  
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-  
-  
-  
 
   return (
     <div className="profile">
-      <div
-        ref={excludedDivRef}
-        className={`profile-workouts-new ${
-          isNewWindowOpen ? "new-window-open" : ""
-        }`}
-      >
-        <div className="profile-workouts-new-header">
-          <input ref={routinTitleRef} type="text" id="routine-title" placeholder="Routine title" maxLength={25} />
-          <button className="profile-workouts-new-save">Save</button>
-        </div>
-      </div>
+      <CreateRoutine isNewWindowOpen={isNewWindowOpen} setIsNewWindowOpen={setIsNewWindowOpen} />
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={userData.user}>
           {(loadedUserData: Awaited<typeof userData.user>) => {
