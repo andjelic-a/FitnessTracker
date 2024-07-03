@@ -1,4 +1,4 @@
-import { Suspense, useState } from "react";
+import { Suspense, useState, useRef, useEffect } from "react";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
 import WorkoutsContainer from "../../Components/WorkoutsContainer/WorkoutsContainer";
 import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
@@ -20,15 +20,36 @@ export default function Profile() {
 
   const [isNewWindowOpen, setIsNewWindowOpen] = useState<boolean>(false);
 
+  const excludedDiv = useRef<HTMLDivElement | null>(null);
+
+
   const toggleNewWorkoutWindow = () => {
     setIsNewWindowOpen((prevState) => !prevState);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (excludedDiv.current && !excludedDiv.current.contains(event.target as Node)) {
+        setIsNewWindowOpen(false);
+      }
+    };
+  
+    document.addEventListener('mousedown', handleClickOutside);
+  
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+  
+  
+  
+
   return (
     <div className="profile">
       <div
+        ref={excludedDiv}
         className={`profile-workouts-new ${
-          isNewWindowOpen ? "new-window-open" : "new-window-closed"
+          isNewWindowOpen ? "new-window-open" : ""
         }`}
       >
         <div className="profile-workouts-new-header">

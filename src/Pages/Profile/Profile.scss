@@ -47,11 +47,16 @@
   height: 50rem;
   background-color: $dark-200;
   border-radius: 0.5rem;
-  padding: 1rem 2rem 1rem 2rem;
+  padding: 1rem 2rem 1rem 2rem;  
+  display: none;
 }
 
-.new-window-closed {
-  display: none;
+.new-window-open {
+  display: block;
+
+  ~ * {
+    filter: blur(6px);
+  }
 }
 
 .profile-workouts-new-header {
@@ -98,5 +103,9 @@
     font-size: 1.6rem;
     font-weight: 550;
     transition: 0.2s ease-in;
+
+    &:hover {
+      background-color: $primary-400;
+    }
   }
 }
