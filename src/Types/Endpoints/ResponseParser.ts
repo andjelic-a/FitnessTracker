@@ -1,26 +1,22 @@
-import { MappedEndpoints } from "./Endpoints";
-import { APIRequest } from "./RequestParser";
+import { Endpoints, Methods, Paths } from "./Endpoints";
 import { Union2Tuple } from "./Union2Tuple";
 import { ParseSchemaProperty } from "./PropertyParser";
 
-type Paths = MappedEndpoints["paths"];
-type Endpoints = keyof Paths;
-
-export type APIResponseFromRequest<Request extends APIRequest> =
-  Request extends {
-    endpoint: infer Endpoint;
-    request: { method: infer Method };
-  }
-    ? Endpoint extends Endpoints
-      ? Method extends keyof Paths[Endpoint]
-        ? APIResponse<Endpoint, Method>
-        : never
-      : never
-    : never;
+// export type APIResponseFromRequest<Request extends APIRequest> =
+//   Request extends {
+//     endpoint: infer Endpoint;
+//     request: { method: infer Method };
+//   }
+//     ? Endpoint extends Endpoints
+//       ? Method extends keyof Paths[Endpoint]
+//         ? APIResponse<Endpoint, Method>
+//         : never
+//       : never
+//     : never;
 
 export type APIResponse<
   Endpoint extends Endpoints,
-  Method extends keyof Paths[Endpoint]
+  Method extends Methods<Endpoint>
 > = Paths[Endpoint][Method] extends {
   responses: infer Responses;
 }

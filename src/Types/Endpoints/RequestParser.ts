@@ -1,34 +1,35 @@
-import { MappedEndpoints } from "./Endpoints";
+import { Endpoints, Paths } from "./Endpoints";
 import { ParseParameters } from "./ParametersParser";
-import { GetSchemaNameFromRequestBody, SchemaFromString } from "./SchemaParser";
+import { GetSchemaName, SchemaFromString } from "./SchemaParser";
 import { Union2Tuple } from "./Union2Tuple";
 
-type Paths = MappedEndpoints["paths"];
+// type ParseEndpoints<T extends any[]> = T extends [infer First, ...infer Rest]
+//   ? First extends keyof Paths
+//     ?
+//         | {
+//             endpoint: First;
+//             request: RequestHelper<First, Union2Tuple<keyof Paths[First]>>;
+//           }
+//         | ParseEndpoints<Rest>
+//     : never
+//   : never;
 
-type Endpoints = keyof Paths;
+export type Request<Endpoint extends Endpoints> = RequestHelper<
+  Endpoint,
+  Union2Tuple<keyof Paths[Endpoint]>
+>;
 
-type ParseEndpoints<T extends any[]> = T extends [infer First, ...infer Rest]
-  ? First extends keyof Paths
-    ?
-        | {
-            endpoint: First;
-            request: Request<First, Union2Tuple<keyof Paths[First]>>;
-          }
-        | ParseEndpoints<Rest>
-    : never
-  : never;
-
-type Request<Path extends keyof Paths, T extends any[]> = T extends [
-  infer First,
-  ...infer Rest
-]
+export type RequestHelper<
+  Path extends keyof Paths,
+  T extends any[]
+> = T extends [infer First, ...infer Rest]
   ? First extends keyof Paths[Path]
     ?
         | ({
             method: First;
           } & Parameters<Path, First> &
             Payload<Path, First>)
-        | Request<Path, Rest>
+        | RequestHelper<Path, Rest>
     : never
   : never;
 
@@ -46,17 +47,25 @@ type Parameters<
 type Payload<
   Path extends keyof Paths,
   Method extends keyof Paths[Path]
-> = "requestBody" extends keyof Paths[Path][Method]
-  ? {
-      payload: SchemaFromString<
-        GetSchemaNameFromRequestBody<Paths[Path][Method]["requestBody"]>
-      >;
-    }
+> = Paths[Path][Method] extends {
+  requestBody: {
+    content: {
+      "application/json": {
+        schema: {
+          $ref: infer SchemaName;
+        };
+      };
+    };
+  };
+}
+  ? SchemaName extends string
+    ? { payload: SchemaFromString<GetSchemaName<SchemaName>> }
+    : {}
   : {};
 
-export type APIRequest<Endpoint extends Endpoints = Endpoints> = ParseEndpoints<
+/* export type APIRequest<Endpoint extends Endpoints = Endpoints> = ParseEndpoints<
   Union2Tuple<Endpoint>
->;
+>; */
 
 /* export const t: APIRequest<"/api/split/comment/{id}/like"> = {
   endpoint: "/api/split/comment/{id}/like",

@@ -93,6 +93,19 @@ export default function Login() {
 
       <section className="login-buttons">
         <button onClick={handleLogin}>Log in</button>
+        <a
+          onClick={() => {
+            /*             sendAPIRequest({
+              endpoint: "/api/user/me/forgotpassword",
+              request: {
+                method: "post",
+              },
+            });
+ */
+          }}
+        >
+          Forgot password?
+        </a>
       </section>
 
       <SignUp isActive={!isLoginActive} onToggle={handleLabelClick} />
