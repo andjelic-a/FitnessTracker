@@ -44,15 +44,12 @@ export default function Exercises() {
     ) {
       isLoadingExercises.current = true;
 
-      sendAPIRequest({
-        endpoint: "/api/exercise",
-        request: {
-          method: "get",
-          parameters: {
-            q: getExerciseQueryString(searchParams).join(";"),
-            offset: offset.current,
-            limit: exercisesLimitPerLoad,
-          },
+      sendAPIRequest("/api/exercise", {
+        method: "get",
+        parameters: {
+          q: getExerciseQueryString(searchParams).join(";"),
+          offset: offset.current,
+          limit: exercisesLimitPerLoad,
         },
       }).then((newExercises) => {
         if (newExercises.code !== "OK") {

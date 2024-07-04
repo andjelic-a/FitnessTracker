@@ -3,14 +3,11 @@ import sendAPIRequest from "../../../Data/SendAPIRequest";
 
 export default async function allExercisesLoader() {
   return defer({
-    exercises: sendAPIRequest({
-      endpoint: "/api/exercise",
-      request: {
-        method: "get",
-        parameters: {
-          limit: -1,
-          offset: 0,
-        },
+    exercises: sendAPIRequest("/api/exercise", {
+      method: "get",
+      parameters: {
+        limit: -1,
+        offset: 0,
       },
     }),
   });

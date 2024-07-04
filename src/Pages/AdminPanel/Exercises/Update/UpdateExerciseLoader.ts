@@ -16,31 +16,22 @@ export default async function updateExerciseLoader({
   if (!exerciseId) throw new Error("No exerciseId provided");
 
   return defer({
-    exercise: sendAPIRequest({
-      endpoint: "/api/exercise/{id}/detailed",
-      request: {
-        method: "get",
-        parameters: {
-          id: parseInt(exerciseId),
-        },
+    exercise: sendAPIRequest("/api/exercise/{id}/detailed", {
+      method: "get",
+      parameters: {
+        id: parseInt(exerciseId),
       },
     }),
-    muscleGroups: sendAPIRequest({
-      endpoint: "/api/musclegroup/detailed",
-      request: {
-        method: "get",
-        parameters: {
-          limit: -1,
-        },
+    muscleGroups: sendAPIRequest("/api/musclegroup/detailed", {
+      method: "get",
+      parameters: {
+        limit: -1,
       },
     }),
-    equipment: sendAPIRequest({
-      endpoint: "/api/equipment",
-      request: {
-        method: "get",
-        parameters: {
-          limit: -1,
-        },
+    equipment: sendAPIRequest("/api/equipment", {
+      method: "get",
+      parameters: {
+        limit: -1,
       },
     }),
   });

@@ -19,11 +19,9 @@ export async function getJWT(): Promise<string | null> {
   if (!isJWTExpired(jwt)) return jwt;
 
   const response = await sendAPIRequest(
+    "/api/user/refresh",
     {
-      endpoint: "/api/user/refresh",
-      request: {
-        method: "post",
-      },
+      method: "post",
     },
     jwt,
     true
@@ -40,14 +38,12 @@ export async function getJWT(): Promise<string | null> {
 
 export async function login(email: string, password: string): Promise<boolean> {
   const response = await sendAPIRequest(
+    "/api/user/login",
     {
-      endpoint: "/api/user/login",
-      request: {
-        method: "post",
-        payload: {
-          email: email.trim(),
-          password,
-        },
+      method: "post",
+      payload: {
+        email: email.trim(),
+        password,
       },
     },
     null,
@@ -68,15 +64,13 @@ export async function register(
   if (password.length < 8 || email === "" || name === "") return false;
 
   const response = await sendAPIRequest(
+    "/api/user/register",
     {
-      endpoint: "/api/user/register",
-      request: {
-        method: "post",
-        payload: {
-          name: name.trim(),
-          email: email.trim(),
-          password,
-        },
+      method: "post",
+      payload: {
+        name: name.trim(),
+        email: email.trim(),
+        password,
       },
     },
     null,
@@ -93,11 +87,9 @@ export async function logout(): Promise<void> {
   const bearer = await getJWT();
   if (bearer === null) return;
   sendAPIRequest(
+    "/api/user/logout",
     {
-      endpoint: "/api/user/logout",
-      request: {
-        method: "delete",
-      },
+      method: "delete",
     },
     bearer,
     true

@@ -1,45 +1,55 @@
-import { APIRequest } from "../Types/Endpoints/RequestParser";
-import { APIResponseFromRequest } from "../Types/Endpoints/ResponseParser";
+import { Endpoints, Methods } from "../Types/Endpoints/Endpoints";
+import { Request } from "../Types/Endpoints/RequestParser";
+import { APIResponse } from "../Types/Endpoints/ResponseParser";
 import { getJWT } from "./User";
 
 const baseAPIUrl = "http://localhost:5054";
 
-export default async function sendAPIRequest<T extends APIRequest>(
+type Response<
+  Endpoint extends Endpoints,
+  T extends Request<Endpoint>
+> = T extends {
+  method: infer Method;
+}
+  ? Method extends Methods<Endpoint>
+    ? APIResponse<Endpoint, Method>
+    : never
+  : never;
+
+export default async function sendAPIRequest<
+  T extends Request<Endpoint>,
+  Endpoint extends Endpoints
+>(
+  endpoint: Endpoint,
   request: T,
   authorize: true | string | null = true,
   includeCredentials: boolean = false
-): Promise<APIResponseFromRequest<T>> {
-  const url = new URL(baseAPIUrl + request.endpoint);
+): Promise<Response<Endpoint, T>> {
+  const url = new URL(baseAPIUrl + endpoint);
 
-  if ("parameters" in request.request) {
-    Object.keys(request.request.parameters).forEach((key) => {
-      if (
-        !("parameters" in request.request) ||
-        typeof request.request.parameters !== "object"
-      )
+  if ("parameters" in request) {
+    Object.keys(request.parameters).forEach((key) => {
+      if (!("parameters" in request) || typeof request.parameters !== "object")
         return;
       if (!url.href.includes("%7B" + key + "%7D")) return;
 
       url.href = url.href.replace(
         "%7B" + key + "%7D",
-        (request.request.parameters as Record<string, string>)[key]
+        (request.parameters as Record<string, string>)[key]
       );
 
-      delete (request.request.parameters as Record<string, string>)[key];
+      delete (request.parameters as Record<string, string>)[key];
     });
 
     url.search = new URLSearchParams(
-      request.request.parameters as Record<string, string>
+      request.parameters as Record<string, string>
     ).toString();
   }
 
-  const body =
-    "payload" in request.request
-      ? JSON.stringify(request.request.payload)
-      : null;
+  const body = "payload" in request ? JSON.stringify(request.payload) : null;
 
   let requestInit: RequestInit = {
-    method: request.request.method,
+    method: request.method as string,
     body: body,
     headers: {
       "Content-Type": "application/json",

@@ -5,6 +5,7 @@ import InputField from "../../../Components/InputField/InputField";
 import "./LogIn.scss";
 import SignUp from "../SignUp/SignUp.tsx";
 import { ValidateEmail, ValidatePassword } from "../Validate";
+import sendAPIRequest from "../../../Data/SendAPIRequest.ts";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -93,6 +94,18 @@ export default function Login() {
 
       <section className="login-buttons">
         <button onClick={handleLogin}>Log in</button>
+        <a
+          onClick={() => {
+            sendAPIRequest("/api/user/me/forgotpassword", {
+              method: "post",
+              payload: {
+                email: emailField.current?.value ?? "",
+              },
+            });
+          }}
+        >
+          Forgot password?
+        </a>
       </section>
 
       <SignUp isActive={!isLoginActive} onToggle={handleLabelClick} />

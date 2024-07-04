@@ -23,6 +23,7 @@ import EmailVerification from "./Pages/EmailVerification/EmailVerification.tsx";
 import emailVerificationLoader from "./Pages/EmailVerification/EmailVerificationLoader.ts";
 import LandingPage from "./Pages/LandingPage/LandingPage.tsx";
 import landingPageLoader from "./Pages/LandingPage/LandingPageLoader.ts";
+import ForgotPassword from "./Pages/ForgotPasswordPage/ForgotPassword.tsx";
 
 const router = createBrowserRouter([
   {
@@ -71,6 +72,10 @@ const router = createBrowserRouter([
         path: "email-verification/:code",
         element: <EmailVerification />,
         loader: emailVerificationLoader,
+      },
+      {
+        path: "reset-password/:code",
+        element: <ForgotPassword />,
       },
       {
         path: "admin",

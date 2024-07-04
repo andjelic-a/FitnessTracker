@@ -14,13 +14,10 @@ export default async function emailVerificationLoader({
   params: { code },
 }: emailVerificationLoaderArgs) {
   return defer({
-    response: sendAPIRequest({
-      endpoint: "/api/user/me/confirmemail/{code}",
-      request: {
-        method: "patch",
-        parameters: {
-          code: code ?? "",
-        },
+    response: sendAPIRequest("/api/user/me/confirmemail/{code}", {
+      method: "patch",
+      parameters: {
+        code: code ?? "",
       },
     }),
   });
