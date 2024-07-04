@@ -1,0 +1,133 @@
+@import "../../../Palette.scss";
+
+.create-routine-window {
+  position: absolute;
+  z-index: -5;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -45%) scale(0.8);
+  width: 80rem;
+  height: 50rem;
+  background-color: $dark-200;
+  border-radius: 0.5rem;
+  padding: 1rem 2rem 1rem 2rem;
+  display: block;
+  opacity: 0;
+  transition: transform 0.4s, opacity 0.2s;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $dark-200;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $dark-500;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: $dark-600;
+  }
+}
+
+.create-routine-window-open {
+  z-index: 10;
+  transform: translate(-50%, -45%) scale(1);
+  opacity: 1;
+
+  ~ * {
+    transition: 0.4s;
+    filter: blur(6px);
+    pointer-events: none;
+  }
+}
+
+.create-routine-header {
+  width: 100%;
+  height: 5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  & #routine-title {
+    width: 30rem;
+    height: 5rem;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: white;
+    cursor: pointer;
+    font-size: 1.6rem;
+    font-weight: 550;
+    transition: 0.2s ease-in;
+    border-bottom: 3px solid $dark-600;
+
+    &:focus {
+      border-bottom: 3px solid rgb(199, 199, 199);
+    }
+
+    &::placeholder {
+      font-size: 1.8rem;
+      transition: 0.2s ease-in;
+    }
+    &:focus::placeholder {
+      color: rgb(199, 199, 199);
+    }
+  }
+
+  & .create-routine-save {
+    width: 5.5rem;
+    height: 3.75rem;
+    border: none;
+    border-radius: 0.5rem;
+    outline: none;
+    background-color: $primary-300;
+    color: white;
+    cursor: pointer;
+    font-size: 1.6rem;
+    font-weight: 550;
+    transition: 0.2s ease-in;
+
+    &:hover {
+      background-color: $primary-400;
+    }
+  }
+}
+
+.create-routine-body {
+  width: 100%;
+  min-height: calc(100% - 8rem);
+  height: auto;
+  margin-top: 2rem;
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: 19rem;
+  
+  & > * {
+    display: flex;
+  }
+}
+
+.create-routine-add-exercise {
+  justify-self: center;
+  align-self: flex-start;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60%;
+  height: 3rem;
+  border-radius: 0.2rem;
+  border: none;
+  color: white;
+  background-color: $primary-300;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: $primary-400;
+  }
+}

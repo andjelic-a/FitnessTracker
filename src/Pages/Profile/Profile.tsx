@@ -2,7 +2,7 @@ import { useState, Suspense } from "react";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
 import WorkoutsContainer from "../../Components/WorkoutsContainer/WorkoutsContainer";
 import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
-import CreateRoutine from "../../Components/CreateRoutine";
+import CreateRoutine from "../../Components/WorkoutsContainer/CreateRoutine/CreateRoutine";
 import { Await, useLoaderData } from "react-router-dom";
 import "./Profile.scss";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";

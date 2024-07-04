@@ -23,15 +23,15 @@ function ProfileHeader({username, image, workouts, followers, following}: Profil
         <div className="profile-user-stats">
           <div className="profile-user-stats-stat">
             <div className="profile-user-stats-name">Workouts</div>
-            <div className="profile-user-stats-num">{workouts}</div>
+            <div className="profile-user-stats-num">{workouts !== undefined ? workouts : 0}</div>
           </div>
           <div className="profile-user-stats-stat">
             <div className="profile-user-stats-name">Followers</div>
-            <div className="profile-user-stats-num">{followers}</div>
+            <div className="profile-user-stats-num">{followers !== undefined ? followers : 0}</div>
           </div>
           <div className="profile-user-stats-stat">
             <div className="profile-user-stats-name">Following</div>
-            <div className="profile-user-stats-num">{following}</div>
+            <div className="profile-user-stats-num">{following !== undefined ? following : 0}</div>
           </div>
         </div>
       </div>
