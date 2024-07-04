@@ -90,7 +90,6 @@
     cursor: pointer;
     font-size: 1.6rem;
     font-weight: 550;
-    transition: 0.2s ease-in;
 
     &:hover {
       background-color: $primary-400;
@@ -106,7 +105,7 @@
   display: grid;
   gap: 2rem;
   grid-template-columns: repeat(2, 1fr);
-  grid-auto-rows: 19rem;
+  align-content: start;
   
   & > * {
     display: flex;
@@ -125,6 +124,7 @@
   border: none;
   color: white;
   background-color: $primary-300;
+  font-size: 1.6rem;
   cursor: pointer;
   
   &:hover {
