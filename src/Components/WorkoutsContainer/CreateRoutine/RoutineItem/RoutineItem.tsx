@@ -8,6 +8,7 @@ export default function RoutineItem() {
       <div className="routine-item-header">
         <img src="../../../public/DefaultProfilePicture.png" alt="" />
         <p>Name of excersice</p>
+        <Icon className="routine-settings-icon" name="ellipsis-vertical" />
       </div>
       <div className="routine-item-body">
         <ExcersiceSet />
@@ -30,12 +31,9 @@ function ExcersiceSet() {
         <p>{set}</p>
         <p>53</p>
         <p>8-10</p>
-      </div>
-      <div className="excersice-set-item">dsada</div>
-      <div className="excersice-set-item">dsada</div>
-      <div className="excersice-set-item">dsada</div>
+      </div> 
       <div className="icon-wrapper">
-        <Icon onClick={() => setSet(prevState => prevState + 1)} className="icon" name="plus" />
+        <Icon onClick={() => setSet(prevState => prevState + 1)} className="add-excersice-icon" name="plus" />
       </div>
     </div>
   );
