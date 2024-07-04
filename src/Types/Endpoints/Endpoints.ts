@@ -4102,46 +4102,6 @@ type MappedEndpoints = {
               };
             };
           };
-          "401": {
-            description: "Unauthorized";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "403": {
-            description: "Forbidden";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "429": {
             description: "Too Many Requests";
             content: {
