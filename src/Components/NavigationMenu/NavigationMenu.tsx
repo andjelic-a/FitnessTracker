@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import "./HamburgerNavigationMenu.scss";
+import "./NavigationMenu.scss";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Flip from "gsap/Flip";
@@ -23,10 +23,7 @@ type NavigationProps = {
   id?: string;
 };
 
-export default function HamburgerNavigationMenu({
-  items,
-  id,
-}: NavigationProps) {
+export default function NavigationMenu({ items, id }: NavigationProps) {
   const hamburgerMenuRef = useRef<HTMLDivElement>(null);
   const { contextSafe } = useGSAP();
   const isAnimationActive = useRef<boolean>(false);
@@ -34,8 +31,44 @@ export default function HamburgerNavigationMenu({
     useState<number>(0);
   const navigationContainerRef = useRef<HTMLDivElement>(null);
   const selectionIndicatorRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const ClickHandler = () => {
+  useEffect(() => {
+    function closeMenu(e: MouseEvent | KeyboardEvent) {
+      if (
+        !navigationContainerRef.current ||
+        !hamburgerMenuRef.current ||
+        !hamburgerMenuRef.current.classList.contains("active") ||
+        isAnimationActive.current
+      )
+        return;
+
+      if (
+        (isKeyboardEvent(e) && e.key !== "Escape") ||
+        containerRef.current?.contains(e.target as Node)
+      )
+        return;
+
+      isAnimationActive.current = true;
+      playDisappearAnimation();
+    }
+
+    const isKeyboardEvent = (
+      e: MouseEvent | KeyboardEvent
+    ): e is KeyboardEvent => {
+      return e instanceof KeyboardEvent;
+    };
+
+    document.addEventListener("click", closeMenu);
+    document.addEventListener("keydown", closeMenu);
+
+    return () => {
+      document.removeEventListener("click", closeMenu);
+      document.addEventListener("keydown", closeMenu);
+    };
+  });
+
+  const clickHandler = () => {
     if (
       !navigationContainerRef.current ||
       !hamburgerMenuRef.current ||
@@ -299,12 +332,12 @@ export default function HamburgerNavigationMenu({
   }, [items]);
 
   return (
-    <div id={id}>
+    <div id={id} ref={containerRef}>
       <div className="hamburger-menu-wrapper">
         <div
           className="hamburger-menu"
           ref={hamburgerMenuRef}
-          onClick={ClickHandler}
+          onClick={clickHandler}
         >
           <span></span>
           <span></span>

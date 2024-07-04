@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import "./App.scss";
-import HamburgerNavigationMenu from "./Components/HamburgerNavigationMenu/HamburgerNavigationMenu";
+import NavigationMenu from "./Components/NavigationMenu/NavigationMenu";
 import Icon from "./Components/Icon/Icon";
 import { createContext, useEffect, useState } from "react";
 
@@ -24,7 +24,7 @@ function App() {
     <>
       <section id="page">
         <header>
-          <HamburgerNavigationMenu
+          <NavigationMenu
             id="navigation"
             items={[
               {
