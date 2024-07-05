@@ -1,0 +1,17 @@
+@import "../../Palette.scss";
+
+.info-icon {
+  vertical-align: top;
+  font-size: 0.75em;
+  cursor: help;
+}
+
+.info-card-container {
+  position: absolute;
+  font-size: 1rem;
+
+  background-color: $dark-300;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0.2rem 0.2rem 0.5rem 1px $dark-mixed-500;
+}

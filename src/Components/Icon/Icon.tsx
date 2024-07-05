@@ -1,4 +1,4 @@
-import { DOMAttributes, HTMLAttributes } from "react";
+import { DOMAttributes, forwardRef, HTMLAttributes } from "react";
 
 interface IconProps
   extends DOMAttributes<HTMLElement>,
@@ -8,6 +8,12 @@ interface IconProps
   name: string;
 }
 
-export default function Icon({ name, className, ...attributes }: IconProps) {
-  return <i className={`fa fa-${name} ${className}`} {...attributes}></i>;
-}
+const Icon = forwardRef<HTMLElement, IconProps>(
+  ({ name, className, ...attributes }, ref) => {
+    return (
+      <i className={`fa fa-${name} ${className}`} ref={ref} {...attributes}></i>
+    );
+  }
+);
+
+export default Icon;
