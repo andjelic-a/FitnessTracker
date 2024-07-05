@@ -35,22 +35,36 @@
     position: absolute;
     top: 0;
     right: 0;
-    width: 15rem;
+    width: 14rem;
     height: 4rem;
     transform: translate(-5px, 5px);
     background-color: $dark-200;
-    border-radius: 0.2rem;
+    border-radius: 1rem;
     box-shadow: 4px 8px 10px rgba(0, 0, 0, 0.1);
     opacity: 1;
     visibility: visible;
 
     & p {
+      height: 2rem;
       margin-left: 0;
-      font-size: 1.6rem;
+      font-size: 1.4rem;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+
+      &:hover {
+        background-color: $dark-300;
+        color: white;
+      }
+    }
+
+    & :first-child {
+      border-radius: 1rem 1rem 0 0;
+    }
+
+    & :last-child {
+      border-radius: 0 0 1rem 1rem;
     }
   }
   

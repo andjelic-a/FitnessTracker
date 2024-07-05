@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import RoutineItem from "./RoutineItem/RoutineItem";
 import "./CreateRoutine.scss";
+import { v4 as uuidv4 } from 'uuid';
 
 interface CreateRoutineProps {
   isNewWindowOpen: boolean;
@@ -11,8 +12,7 @@ export default function CreateRoutine({
   isNewWindowOpen,
   setIsNewWindowOpen,
 }: CreateRoutineProps) {
-  const [numOfExercises, setNumOfExercises] = useState<number>(0);
-  const [routineItems, setRoutineItems] = useState<JSX.Element[]>([]);
+  const [routineItems, setRoutineItems] = useState<{ id: string, element: JSX.Element }[]>([]);
   const [routineTitle, setRoutineTitle] = useState<string>("");
 
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
@@ -38,14 +38,23 @@ export default function CreateRoutine({
     };
   }, [setIsNewWindowOpen]);
 
+  const handleDeleteExercise = (id: string) => {
+    setRoutineItems((prevState) =>
+      prevState.filter((item) => item.id !== id)
+    );
+  };
+
   const handleAddNewExerciseClick = () => {
-    setRoutineItems((prevState) => [...prevState, <RoutineItem key={numOfExercises} />]);
-    setNumOfExercises((prevState) => prevState + 1);
+    const id = uuidv4();
+    const newItem = {
+      id,
+      element: <RoutineItem key={id} onDelete={() => handleDeleteExercise(id)} />
+    };
+    setRoutineItems((prevState) => [...prevState, newItem]);
   };
 
   const handleSaveClick = () => {
     setRoutineItems([]);
-    setNumOfExercises(0);
     setRoutineTitle("");
     setIsNewWindowOpen(false);
   };
@@ -76,7 +85,7 @@ export default function CreateRoutine({
         </button>
       </div>
       <div className="create-routine-body">
-        {routineItems}
+        {routineItems.map((item) => item.element)}
         <button
           onClick={handleAddNewExerciseClick}
           className="create-routine-add-exercise"

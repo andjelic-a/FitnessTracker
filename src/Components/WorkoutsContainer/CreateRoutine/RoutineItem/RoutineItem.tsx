@@ -8,7 +8,11 @@ interface Set {
   repRange: string;
 }
 
-export default function RoutineItem() {
+interface RoutineItemProps {
+  onDelete: () => void;
+}
+
+export default function RoutineItem({ onDelete }: RoutineItemProps) {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
@@ -46,19 +50,19 @@ export default function RoutineItem() {
         />
         {isSettingsOpen && (
           <div ref={excludedDivRef} className="routine-settings-popup">
-            <p>Settings Content</p>
-            <p>Settings Content</p>
+            <p onClick={onDelete}>Delete exercise</p>
+            <p>Delete set</p>
           </div>
         )}
       </div>
       <div className="routine-item-body">
-        <ExcersiceSet />
+        <ExerciseSet />
       </div>
     </div>
   );
 }
 
-function ExcersiceSet() {
+function ExerciseSet() {
   const [sets, setSets] = useState<Set[]>([{ id: 1, kg: 0, repRange: "0" }]);
 
   const addSet = () => {
