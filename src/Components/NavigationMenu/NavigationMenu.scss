@@ -135,9 +135,10 @@
   .navigation-item {
     cursor: pointer;
     grid-column-start: 1;
-    grid-column-end: 3;
     color: #fff;
     text-decoration: none;
+    text-wrap: nowrap;
+    transform: translate(0, 0);
 
     &::before {
       content: "";

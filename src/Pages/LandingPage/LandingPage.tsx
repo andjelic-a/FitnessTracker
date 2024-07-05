@@ -10,10 +10,11 @@ function LandingPage() {
           textAlign: "center",
         }}
       >
-        Landing Page <InfoCard>##Hello</InfoCard>
+        Landing Page <InfoCard>{`##Hello\nThis is a landing /*page*/`}</InfoCard>
       </h1>
     </>
   );
 }
 
 export default LandingPage;
+ 

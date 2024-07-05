@@ -12,6 +12,7 @@ type InfoCardProps = {
 export default function InfoCard({ children }: InfoCardProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const iconRef = useRef<HTMLElement>(null);
+  const isVisibleRef = useRef(false);
 
   const { contextSafe } = useGSAP(
     () => {
@@ -36,6 +37,7 @@ export default function InfoCard({ children }: InfoCardProps) {
   const reveal = useCallback(
     contextSafe(() => {
       if (!containerRef.current) return;
+      isVisibleRef.current = true;
 
       gsap.to(containerRef.current, {
         alpha: 1,
@@ -49,6 +51,7 @@ export default function InfoCard({ children }: InfoCardProps) {
   const hide = useCallback(
     contextSafe(() => {
       if (!containerRef.current) return;
+      isVisibleRef.current = false;
 
       gsap.to(containerRef.current, {
         alpha: 0,
@@ -59,20 +62,29 @@ export default function InfoCard({ children }: InfoCardProps) {
     [containerRef.current, contextSafe]
   );
 
+  const toggle = isVisibleRef.current ? hide : reveal;
+
   useEffect(() => {
-    iconRef.current?.addEventListener("mouseenter", reveal);
-    iconRef.current?.addEventListener("mouseleave", hide);
+    if (!iconRef.current) return;
+
+    iconRef.current.addEventListener("mouseenter", reveal);
+    iconRef.current.addEventListener("mouseleave", hide);
+    iconRef.current.addEventListener("click", toggle);
 
     return () => {
-      iconRef.current?.removeEventListener("mouseenter", reveal);
-      iconRef.current?.removeEventListener("mouseleave", hide);
+      if (!iconRef.current) return;
+
+      iconRef.current.removeEventListener("mouseenter", reveal);
+      iconRef.current.removeEventListener("mouseleave", hide);
+      iconRef.current.removeEventListener("click", toggle);
     };
   }, [iconRef.current, reveal]);
 
   return (
     <>
-      <Icon name="info-circle" className="info-icon" ref={iconRef} />
+      <Icon name="question-circle" className="info-icon" ref={iconRef} />
       <div className="info-card-container" ref={containerRef}>
+        <Icon name="info-circle"></Icon>
         <FormattedText>{children}</FormattedText>
       </div>
     </>

@@ -66,7 +66,7 @@ export default function NavigationMenu({ items, id }: NavigationProps) {
       document.removeEventListener("click", closeMenu);
       document.addEventListener("keydown", closeMenu);
     };
-  });
+  }, []);
 
   const clickHandler = () => {
     if (
