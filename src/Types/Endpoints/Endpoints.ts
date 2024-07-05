@@ -389,10 +389,33 @@ type MappedEndpoints = {
         tags: ["Exercise"];
         parameters: [
           {
-            name: "q";
+            name: "muscleGroupId";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "equipmentId";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "name";
             in: "query";
             schema: {
               type: "string";
+            };
+          },
+          {
+            name: "favoriteOnly";
+            in: "query";
+            schema: {
+              type: "boolean";
             };
           },
           {
@@ -409,13 +432,6 @@ type MappedEndpoints = {
             schema: {
               type: "integer";
               format: "int32";
-            };
-          },
-          {
-            name: "include";
-            in: "query";
-            schema: {
-              type: "string";
             };
           }
         ];
@@ -639,6 +655,166 @@ type MappedEndpoints = {
           };
           "404": {
             description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    "/api/exercise/{id}/favorite": {
+      post: {
+        tags: ["Exercise"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          }
+        ];
+        responses: {
+          "201": {
+            description: "Created";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+      delete: {
+        tags: ["Exercise"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          }
+        ];
+        responses: {
+          "204": {
+            description: "No Content";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
             content: {
               "text/plain": {
                 schema: {
@@ -4125,9 +4301,28 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/user/me/split/today/markascomplete": {
+    "/api/user/me/split/today/completeworkout": {
       post: {
         tags: ["User"];
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/CreateCompletedWorkoutRequestDTO";
+              };
+            };
+            "text/json": {
+              schema: {
+                $ref: "#/components/schemas/CreateCompletedWorkoutRequestDTO";
+              };
+            };
+            "application/*+json": {
+              schema: {
+                $ref: "#/components/schemas/CreateCompletedWorkoutRequestDTO";
+              };
+            };
+          };
+        };
         responses: {
           "201": {
             description: "Created";
@@ -5945,6 +6140,22 @@ type MappedEndpoints = {
             schema: {
               type: "string";
             };
+          },
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
           }
         ];
         responses: {
@@ -6019,6 +6230,22 @@ type MappedEndpoints = {
             schema: {
               type: "string";
             };
+          },
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
           }
         ];
         responses: {
@@ -6084,6 +6311,22 @@ type MappedEndpoints = {
             schema: {
               type: "string";
             };
+          },
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
           }
         ];
         responses: {
@@ -6138,6 +6381,107 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    "/api/workout/favorite/simple": {
+      get: {
+        tags: ["Workout"];
+        parameters: [
+          {
+            name: "name";
+            in: "query";
+            schema: {
+              type: "string";
+            };
+          },
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          }
+        ];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
+                  };
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
             content: {
               "text/plain": {
                 schema: {
@@ -6953,6 +7297,36 @@ type MappedEndpoints = {
   };
   components: {
     schemas: {
+      CreateCompletedSetRequestDTO: {
+        type: "object";
+        properties: {
+          weightUsed: {
+            type: "number";
+            format: "float";
+          };
+          repsCompleted: {
+            type: "integer";
+            format: "int32";
+          };
+          setId: {
+            type: "string";
+            format: "uuid";
+          };
+        };
+        additionalProperties: false;
+      };
+      CreateCompletedWorkoutRequestDTO: {
+        type: "object";
+        properties: {
+          completedSets: {
+            type: "array";
+            items: {
+              $ref: "#/components/schemas/CreateCompletedSetRequestDTO";
+            };
+          };
+        };
+        additionalProperties: false;
+      };
       CreateEquipmentRequestDTO: {
         type: "object";
         properties: {
@@ -7050,9 +7424,12 @@ type MappedEndpoints = {
             type: "integer";
             format: "int32";
           };
-          numberOfSets: {
-            type: "integer";
-            format: "int32";
+          intensity: {
+            type: "number";
+            format: "float";
+          };
+          type: {
+            $ref: "#/components/schemas/SetType";
           };
         };
         additionalProperties: false;
@@ -7153,6 +7530,13 @@ type MappedEndpoints = {
           description: {
             type: "string";
           };
+          isFavorite: {
+            type: "boolean";
+          };
+          favorites: {
+            type: "integer";
+            format: "int32";
+          };
           primaryMuscleGroups: {
             type: "array";
             items: {
@@ -7220,12 +7604,20 @@ type MappedEndpoints = {
             type: "integer";
             format: "int32";
           };
-          numberOfSets: {
+          exerciseId: {
             type: "integer";
             format: "int32";
           };
-          exercise: {
-            $ref: "#/components/schemas/SimpleExerciseResponseDTO";
+          type: {
+            $ref: "#/components/schemas/SetType";
+          };
+          weightUsedLastTime: {
+            type: "number";
+            format: "float";
+          };
+          repsCompletedLastTime: {
+            type: "integer";
+            format: "int32";
           };
         };
         additionalProperties: false;
@@ -7370,6 +7762,12 @@ type MappedEndpoints = {
               $ref: "#/components/schemas/DetailedSetResponseDTO";
             };
           };
+          exercises: {
+            type: "array";
+            items: {
+              $ref: "#/components/schemas/SimpleExerciseResponseDTO";
+            };
+          };
           description: {
             type: "string";
             nullable: true;
@@ -7390,6 +7788,9 @@ type MappedEndpoints = {
             type: "boolean";
           };
           isFavorited: {
+            type: "boolean";
+          };
+          alreadyAttempted: {
             type: "boolean";
           };
         };
@@ -7469,6 +7870,11 @@ type MappedEndpoints = {
           };
         };
         additionalProperties: false;
+      };
+      SetType: {
+        enum: [0, 1, 2, 3];
+        type: "integer";
+        format: "int32";
       };
       SimpleEquipmentResponseDTO: {
         type: "object";
@@ -7760,9 +8166,9 @@ type MappedEndpoints = {
             type: "integer";
             format: "int32";
           };
-          numberOfSets: {
-            type: "integer";
-            format: "int32";
+          intensity: {
+            type: "number";
+            format: "float";
           };
         };
         additionalProperties: false;
