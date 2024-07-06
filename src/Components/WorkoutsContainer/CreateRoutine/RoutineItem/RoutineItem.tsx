@@ -1,13 +1,8 @@
-import {
-  useState,
-  useEffect,
-  useRef,
-  DetailedHTMLProps,
-  HTMLAttributes,
-} from "react";
+import { useState, useEffect, useRef } from "react";
 import Icon from "../../../Icon/Icon.tsx";
 import "./RoutineItem.scss";
 import { v4 as uuidv4 } from "uuid";
+import Observer from "gsap/Observer";
 
 interface Set {
   id: string;
@@ -19,14 +14,20 @@ interface Set {
 interface RoutineItemProps {
   onDelete: () => void;
   id: string;
+  onDragStart?: (ref: HTMLDivElement) => void;
+  onDragEnd?: (ref: HTMLDivElement) => void;
+  onDrag?: (xDelta: number, yDelta: number) => void;
+  onMouseOver?: (ref: HTMLDivElement) => void;
 }
 
 export default function RoutineItem({
   onDelete,
   id,
-  ...attr
-}: RoutineItemProps &
-  DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) {
+  onDrag,
+  onDragEnd,
+  onDragStart,
+  onMouseOver,
+}: RoutineItemProps) {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
@@ -52,8 +53,37 @@ export default function RoutineItem({
     };
   }, [isSettingsOpen]);
 
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = Observer.create({
+      target: wrapperRef.current,
+      type: "touch,pointer",
+      onDragStart: () => {
+        if (!wrapperRef.current) return;
+
+        onDragStart?.(wrapperRef.current);
+      },
+      onDragEnd: () => {
+        if (!wrapperRef.current) return;
+
+        onDragEnd?.(wrapperRef.current);
+      },
+      onDrag: (x) => {
+        onDrag?.(x.deltaX, x.deltaY);
+      },
+    });
+
+    return () => observer.kill();
+  }, [wrapperRef]);
+
   return (
-    <div className="routine-item" id={`routine-item-${id}`} {...attr} draggable>
+    <div
+      className="routine-item"
+      id={`routine-item-${id}`}
+      ref={wrapperRef}
+      onMouseOver={(e) => onMouseOver?.(e.target as HTMLDivElement)}
+    >
       <div className="routine-item-header">
         <img src="../../../DefaultProfilePicture.png" alt="" />
         <p>Name of exercise</p>
@@ -96,14 +126,14 @@ function ExerciseSet() {
   };
 
   return (
-    <div className="excersice-set">
-      <div className="excersice-set-placeholder">
+    <div className="exercise-set">
+      <div className="exercise-set-placeholder">
         <p>SET</p>
         <p>KG</p>
         <p>REP RANGE</p>
       </div>
       {sets.map((set) => (
-        <div key={set.id} className="excersice-set-item">
+        <div key={set.id} className="exercise-set-item">
           <div className="set-button">
             <p>{set.set}</p>
           </div>

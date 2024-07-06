@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import RoutineItem from "./RoutineItem/RoutineItem";
 import "./CreateRoutine.scss";
 import { v4 as uuidv4 } from "uuid";
@@ -6,6 +6,7 @@ import gsap from "gsap";
 import Flip from "gsap/Flip";
 import Observer from "gsap/Observer";
 import reorderArray from "./ReorderArray";
+import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(Flip);
 gsap.registerPlugin(Observer);
@@ -25,15 +26,15 @@ export default function CreateRoutine({
   const routineTitleRef = useRef<HTMLInputElement | null>(null);
 
   const dragging = useRef<{ element: HTMLElement; id: string } | null>(null);
-  const preDragState = useRef<Flip.FlipState | null>(null);
+  const currentFlipState = useRef<Flip.FlipState | null>(null);
+  const movableRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    if (!preDragState.current) return;
+    if (!currentFlipState.current) return;
 
-    Flip.from(preDragState.current, {
-      onStart: () => {},
+    Flip.from(currentFlipState.current, {
       onComplete: () => {
-        preDragState.current = null;
+        currentFlipState.current = null;
       },
     });
   }, [routineItems]);
@@ -59,7 +60,6 @@ export default function CreateRoutine({
   }, [setIsNewWindowOpen]);
 
   const handleDeleteExercise = (id: string) => {
-    console.log("handleDeleteExercise");
     setRoutineItems((prevState) => prevState.filter((item) => item !== id));
   };
 
@@ -69,54 +69,94 @@ export default function CreateRoutine({
     setRoutineItems((prevState) => [...prevState, newItem]);
   };
 
-  function onDragOver(target: HTMLElement) {
-    {
-      console.log(
-        "onDragOver",
-        dragging.current !== null ? "dragging" : "not dragging",
-        preDragState.current === null
-      );
-
-      if (
-        !dragging.current ||
-        dragging.current?.element.contains(target as Node) ||
-        preDragState.current
-      )
-        return;
-      let element: HTMLElement | null = target as HTMLElement;
-      while (element && !element.classList.contains("routine-item")) {
-        element = element.parentNode as HTMLElement;
-      }
-
-      if (!element) return;
-
-      const hoverId = element.id.replace("routine-item-", "");
-      const hoverIdx = routineItems.findIndex((x) => x === hoverId);
-
-      const draggingId = dragging.current!.id;
-      const draggingIdx = routineItems.findIndex((x) => x === draggingId);
-
-      console.log(element);
-      console.log(dragging.current);
-
-      console.log(hoverId, hoverIdx);
-      console.log(draggingId, draggingIdx);
-
-      console.log(routineItems);
-
-      if (hoverIdx === draggingIdx) return;
-
-      console.log("should reorder");
-      preDragState.current = Flip.getState(".routine-item");
-      setRoutineItems(reorderArray(routineItems, draggingIdx, hoverIdx));
+  function onHoverOver(target: HTMLElement) {
+    if (
+      !dragging.current ||
+      dragging.current?.element.contains(target as Node) ||
+      currentFlipState.current
+    )
+      return;
+    let element: HTMLElement | null = target as HTMLElement;
+    while (element && !element.classList.contains("routine-item")) {
+      element = element.parentNode as HTMLElement;
     }
+
+    if (!element) return;
+
+    const hoverId = element.id.replace("routine-item-", "");
+    const hoverIdx = routineItems.findIndex((x) => x === hoverId);
+
+    const draggingId = dragging.current!.id;
+    const draggingIdx = routineItems.findIndex((x) => x === draggingId);
+
+    if (hoverIdx === draggingIdx) return;
+
+    currentFlipState.current = Flip.getState(".routine-item:not(.temporary)");
+    setRoutineItems(reorderArray(routineItems, draggingIdx, hoverIdx));
   }
 
   const handleSaveClick = () => {
-    console.log("handleSaveClick");
     setRoutineItems([]);
     setIsNewWindowOpen(false);
   };
+
+  const { contextSafe } = useGSAP();
+
+  const setTranslation = useCallback(
+    contextSafe((x: number, y: number) => {
+      if (!movableRef.current) return;
+
+      gsap.set(movableRef.current, {
+        x: `+=${x}`,
+        y: `+=${y}`,
+      });
+    }),
+    [contextSafe, movableRef.current]
+  );
+
+  const beginDragging = contextSafe((rect: DOMRect) => {
+    if (!movableRef.current) return;
+
+    // setIsDraggingAvailable(false);
+    gsap.set(dragging.current!.element, {
+      alpha: 0,
+      pointerEvents: "none",
+    });
+
+    movableRef.current.classList.add("temporary");
+    gsap.set(movableRef.current, {
+      position: "absolute",
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height,
+      pointerEvents: "none",
+      zIndex: 1000,
+      opacity: 1,
+    });
+  });
+
+  const endDragging = contextSafe((rect: DOMRect) => {
+    if (!movableRef.current) return;
+
+    gsap.to(movableRef.current, {
+      x: rect.x,
+      y: rect.y,
+      left: 0,
+      top: 0,
+      duration: 0.25,
+      onComplete: () => {
+        gsap.set(dragging.current!.element, {
+          alpha: 1,
+          pointerEvents: "auto",
+        });
+
+        movableRef.current!.remove();
+        movableRef.current = null;
+        dragging.current = null;
+      },
+    });
+  });
 
   return (
     <div
@@ -140,32 +180,24 @@ export default function CreateRoutine({
       <div className="create-routine-body">
         {routineItems.map((x) => (
           <RoutineItem
-            onDrag={() => {
-              // console.log("onDrag");
-              // console.log(x);
-              // setTranslation({ x: xDelta, y: yDelta });
-            }}
-            onDragStart={(e) => {
-              console.log("onDragStart");
-              const element = e.target as HTMLElement;
-              console.log(e.target);
+            onDrag={setTranslation}
+            onDragStart={(element) => {
+              if (dragging.current) return;
+
               dragging.current = {
                 element,
                 id: element.id.replace("routine-item-", ""),
               };
-              gsap.set(element, {
-                opacity: 0,
-              });
+
+              movableRef.current = element.cloneNode(true) as HTMLElement;
+              document.body.appendChild(movableRef.current);
+
+              beginDragging(element.getBoundingClientRect());
             }}
-            onDragEnd={(e) => {
-              console.log("onDragEnd");
-              const element = e.target as HTMLElement;
-              dragging.current = null;
-              gsap.set(element, {
-                opacity: 1,
-              });
+            onDragEnd={(element) => {
+              endDragging(element.getBoundingClientRect());
             }}
-            onDragOver={(e) => onDragOver(e.target as HTMLElement)}
+            onMouseOver={(element) => onHoverOver(element)}
             key={x}
             id={x}
             onDelete={() => handleDeleteExercise(x)}
