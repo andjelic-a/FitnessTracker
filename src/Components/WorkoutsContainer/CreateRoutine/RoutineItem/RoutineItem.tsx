@@ -136,22 +136,36 @@ function ExerciseSet() {
     });
   };
 
-  const changeSetIcon = (id: string, icon: string) => {
-    setSets((prevSets) =>
-      prevSets.map((set) =>
-        set.id === id
-          ? icon === "1"
-            ? {
-                ...set,
-                selectedIcon: null,
-                set: prevSets.length + 1,
-                isDropdownOpen: false,
-              }
-            : { ...set, selectedIcon: icon, isDropdownOpen: false }
-          : set
-      )
-    );
+  const findPositionOfelement = (id: string) => {
+    return sets.findIndex((set) => set.id === id);
   };
+
+  const changeSetIcon = (id: string, icon: string) => {
+    setSets((prevSets) => {
+      return prevSets.map((set) => {
+        if (set.id === id) {
+          if (icon === "1") {
+            console.log("here");
+            return {
+              ...set,
+              selectedIcon: null,
+              set: findPositionOfelement(id) + 1,
+              isDropdownOpen: false,
+            };
+          } else {
+            return {
+              ...set,
+              selectedIcon: icon,
+              isDropdownOpen: false,
+            };
+          }
+        } else {
+          return set;
+        }
+      });
+    });
+  };
+  
 
   return (
     <div className="excersice-set">
