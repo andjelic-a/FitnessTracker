@@ -130,13 +130,10 @@ export default function UpdateExercise() {
 
               <button
                 onClick={() => {
-                  sendAPIRequest({
-                    endpoint: "/api/exercise/{id}",
-                    request: {
-                      method: "delete",
-                      parameters: {
-                        id: exercise.content.id,
-                      },
+                  sendAPIRequest("/api/exercise/{id}", {
+                    method: "delete",
+                    parameters: {
+                      id: exercise.content.id,
                     },
                   });
                   navigate("/admin/exercises");
@@ -166,21 +163,18 @@ export default function UpdateExercise() {
 
     const equipment = selectedEquipment.current;
 
-    await sendAPIRequest({
-      endpoint: "/api/exercise",
-      request: {
-        method: "put",
-        payload: {
-          id,
-          name,
-          description,
-          image,
-          equipment,
-          primaryMuscleGroups,
-          secondaryMuscleGroups,
-          primaryMuscles,
-          secondaryMuscles,
-        },
+    await sendAPIRequest("/api/exercise", {
+      method: "put",
+      payload: {
+        id,
+        name,
+        description,
+        image,
+        equipment,
+        primaryMuscleGroups,
+        secondaryMuscleGroups,
+        primaryMuscles,
+        secondaryMuscles,
       },
     });
   }

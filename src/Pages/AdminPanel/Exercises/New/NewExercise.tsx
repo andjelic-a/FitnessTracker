@@ -110,20 +110,17 @@ export default function NewExercise() {
 
     const equipment = selectedEquipment.current;
 
-    await sendAPIRequest({
-      endpoint: "/api/exercise",
-      request: {
-        method: "post",
-        payload: {
-          name,
-          description,
-          equipment,
-          image: await compressImage(image),
-          primaryMuscleGroups,
-          primaryMuscles,
-          secondaryMuscleGroups,
-          secondaryMuscles,
-        },
+    await sendAPIRequest("/api/exercise", {
+      method: "post",
+      payload: {
+        name,
+        description,
+        equipment,
+        image: await compressImage(image),
+        primaryMuscleGroups,
+        primaryMuscles,
+        secondaryMuscleGroups,
+        secondaryMuscles,
       },
     });
 

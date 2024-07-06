@@ -22,6 +22,45 @@ export default function FullExerciseDisplay() {
                 <h1>{exercise.content.name}</h1>
                 <FormattedText children={exercise.content.description} />
 
+                <h2>Primary Muscles</h2>
+                <ul>
+                  {exercise.content.primaryMuscleGroups.map((muscleGroup) => (
+                    <li key={muscleGroup.id}>
+                      <h3>{muscleGroup.name}</h3>
+                      {exercise.content.primaryMuscles
+                        .filter(
+                          (muscle) => muscle.muscleGroupId === muscleGroup.id
+                        )
+                        .map((muscle) => (
+                          <p key={muscle.id}>{muscle.name}</p>
+                        ))}
+                    </li>
+                  ))}
+                </ul>
+
+                {exercise.content.secondaryMuscleGroups.length > 0 && (
+                  <>
+                    <h2>Secondary Muscles</h2>
+                    <ul>
+                      {exercise.content.secondaryMuscleGroups.map(
+                        (muscleGroup) => (
+                          <li key={muscleGroup.id}>
+                            <h3>{muscleGroup.name}</h3>
+                            {exercise.content.secondaryMuscles
+                              .filter(
+                                (muscle) =>
+                                  muscle.muscleGroupId === muscleGroup.id
+                              )
+                              .map((muscle) => (
+                                <p key={muscle.id}>{muscle.name}</p>
+                              ))}
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  </>
+                )}
+
                 <h2>Equipment</h2>
                 <ul>
                   {exercise.content.equipment.map((equipment) => (

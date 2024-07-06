@@ -16,13 +16,10 @@ export default async function singleExerciseLoader({
   if (!exerciseId) throw new Error("No exerciseId provided");
 
   return defer({
-    exercise: sendAPIRequest({
-      endpoint: "/api/exercise/{id}/detailed",
-      request: {
-        method: "get",
-        parameters: {
-          id: parseInt(exerciseId),
-        },
+    exercise: sendAPIRequest("/api/exercise/{id}/detailed", {
+      method: "get",
+      parameters: {
+        id: parseInt(exerciseId),
       },
     }),
   });

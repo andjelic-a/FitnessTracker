@@ -1,0 +1,29 @@
+@import "../../Palette.scss";
+
+.info-icon {
+  vertical-align: top;
+  font-size: 0.75em;
+  cursor: help;
+}
+
+.info-card-container {
+  position: absolute;
+  font-size: 1rem;
+
+  background-color: $dark-300;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0.2rem 0.2rem 0.5rem 1px $dark-mixed-500;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+
+  i {
+    font-size: 2rem;
+    background-color: #fff;
+    color: rgb(0, 174, 255);
+    border-radius: 100%;
+  }
+}
