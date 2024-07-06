@@ -178,9 +178,13 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 2rem;
+        width: 3rem;
         height: 4rem;
+        font-size: 2rem;
+        font-weight: 600;
         cursor: pointer;
+        margin: 0;
+        padding: 0;
       }
     }
 
@@ -194,6 +198,9 @@
       color: white;
 
       & input {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         height: 100%;
         width: 3rem;
         text-align: center;
@@ -202,6 +209,16 @@
         background-color: initial;
         outline: none;
         cursor: pointer;
+        font-size: 2rem;
+        margin: 0;
+        padding: 0;
+      }
+
+      & .set-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.8rem;
       }
     }
   }

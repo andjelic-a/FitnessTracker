@@ -9,6 +9,7 @@ interface Set {
   kg: number;
   repRange: string;
   isDropdownOpen: boolean;
+  selectedIcon: string | null;
 }
 
 interface RoutineItemProps {
@@ -58,8 +59,7 @@ export default function RoutineItem({ onDelete }: RoutineItemProps) {
           }`}
         >
           <p onClick={onDelete}>Delete exercise</p>
-          <p>Switch sets</p>
-          {/*Andrej*/}
+          <p>Replace excersice</p>
         </div>
       </div>
       <div className="routine-item-body">
@@ -71,7 +71,14 @@ export default function RoutineItem({ onDelete }: RoutineItemProps) {
 
 function ExerciseSet() {
   const [sets, setSets] = useState<Set[]>([
-    { id: uuidv4(), set: 1, kg: 0, repRange: "0", isDropdownOpen: false },
+    {
+      id: uuidv4(),
+      set: 1,
+      kg: 0,
+      repRange: "0",
+      isDropdownOpen: false,
+      selectedIcon: null,
+    },
   ]);
 
   const excludedDivRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -83,6 +90,7 @@ function ExerciseSet() {
       kg: 0,
       repRange: "0",
       isDropdownOpen: false,
+      selectedIcon: null,
     };
     setSets([...sets, newSet]);
   };
@@ -123,9 +131,26 @@ function ExerciseSet() {
 
       return updatedSets.map((set, index) => ({
         ...set,
-        set: index + 1
+        set: index + 1,
       }));
     });
+  };
+
+  const changeSetIcon = (id: string, icon: string) => {
+    setSets((prevSets) =>
+      prevSets.map((set) =>
+        set.id === id
+          ? icon === "1"
+            ? {
+                ...set,
+                selectedIcon: null,
+                set: prevSets.length + 1,
+                isDropdownOpen: false,
+              }
+            : { ...set, selectedIcon: icon, isDropdownOpen: false }
+          : set
+      )
+    );
   };
 
   return (
@@ -138,7 +163,13 @@ function ExerciseSet() {
       {sets.map((set, index) => (
         <div key={set.id} className="excersice-set-item">
           <div className="set-button">
-            <p onClick={() => handleSetClick(set.id)}>{set.set}</p>
+            <p onClick={() => handleSetClick(set.id)}>
+              {set.selectedIcon ? (
+                <Icon className="set-icon" name={set.selectedIcon} />
+              ) : (
+                set.set
+              )}
+            </p>
             <div
               ref={(element) => (excludedDivRef.current[index] = element)}
               className={`set-dropdown-menu ${
@@ -146,19 +177,39 @@ function ExerciseSet() {
               }`}
             >
               <p>
-                <Icon className="set-icon" name="1" />
+                <Icon
+                  onClick={() => changeSetIcon(set.id, "1")}
+                  className="set-icon"
+                  name="1"
+                />
               </p>
               <p>
-                <Icon className="set-icon" name="w" />
+                <Icon
+                  onClick={() => changeSetIcon(set.id, "w")}
+                  className="set-icon"
+                  name="w"
+                />
               </p>
               <p>
-                <Icon className="set-icon" name="d" />
+                <Icon
+                  onClick={() => changeSetIcon(set.id, "d")}
+                  className="set-icon"
+                  name="d"
+                />
               </p>
               <p>
-                <Icon className="set-icon" name="f" />
+                <Icon
+                  onClick={() => changeSetIcon(set.id, "f")}
+                  className="set-icon"
+                  name="f"
+                />
               </p>
               <p>
-                <Icon onClick={() => deleteSet(set.id)} className="set-icon x" name="xmark" />
+                <Icon
+                  onClick={() => deleteSet(set.id)}
+                  className="set-icon x"
+                  name="xmark"
+                />
               </p>
             </div>
           </div>
