@@ -3,8 +3,6 @@ export default function reorderArray<T>(
   from: number,
   to: number
 ): T[] {
-  console.log(array);
-
   const newArray: T[] = [];
 
   if (from < to) {
