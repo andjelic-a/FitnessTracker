@@ -61,7 +61,7 @@ export default function Profile() {
                   <ProfileHeader
                     username={loadedUserData.content.name}
                     image={loadedUserData.content.image}
-                    workouts={loadedUserData.content.completedWorkouts}
+                    workouts={loadedUserData.content.totalCompletedWorkouts}
                     followers={loadedUserData.content.followers}
                     following={loadedUserData.content.following}
                   />

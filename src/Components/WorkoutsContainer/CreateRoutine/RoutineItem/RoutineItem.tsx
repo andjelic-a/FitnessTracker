@@ -1,7 +1,13 @@
-import { useState, useEffect, useRef } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  DetailedHTMLProps,
+  HTMLAttributes,
+} from "react";
 import Icon from "../../../Icon/Icon.tsx";
 import "./RoutineItem.scss";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 interface Set {
   id: string;
@@ -12,9 +18,15 @@ interface Set {
 
 interface RoutineItemProps {
   onDelete: () => void;
+  id: string;
 }
 
-export default function RoutineItem({ onDelete }: RoutineItemProps) {
+export default function RoutineItem({
+  onDelete,
+  id,
+  ...attr
+}: RoutineItemProps &
+  DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>) {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
@@ -41,9 +53,9 @@ export default function RoutineItem({ onDelete }: RoutineItemProps) {
   }, [isSettingsOpen]);
 
   return (
-    <div className="routine-item">
+    <div className="routine-item" id={`routine-item-${id}`} {...attr} draggable>
       <div className="routine-item-header">
-        <img src="../../../public/DefaultProfilePicture.png" alt="" />
+        <img src="../../../DefaultProfilePicture.png" alt="" />
         <p>Name of exercise</p>
         <Icon
           onClick={handleSettingsClick}
@@ -57,7 +69,8 @@ export default function RoutineItem({ onDelete }: RoutineItemProps) {
           }`}
         >
           <p onClick={onDelete}>Delete exercise</p>
-          <p>Switch sets</p>{/*Andrej*/}
+          <p>Switch sets</p>
+          {/*Andrej*/}
         </div>
       </div>
       <div className="routine-item-body">
@@ -68,7 +81,9 @@ export default function RoutineItem({ onDelete }: RoutineItemProps) {
 }
 
 function ExerciseSet() {
-  const [sets, setSets] = useState<Set[]>([{ id: uuidv4(), set: 1, kg: 0, repRange: "0" }]);
+  const [sets, setSets] = useState<Set[]>([
+    { id: uuidv4(), set: 1, kg: 0, repRange: "0" },
+  ]);
 
   const addSet = () => {
     const newSet = {

@@ -1,6 +1,10 @@
 @import "../../../Palette.scss";
 
 .create-routine-window {
+  &, *{
+    user-select: none;
+  }
+  
   position: absolute;
   z-index: -5;
   top: 50%;
