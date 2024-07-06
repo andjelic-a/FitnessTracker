@@ -31,17 +31,31 @@ export default function CreateRoutine({
   const isDraggingAvailable = useRef(true);
   const isDragging = useRef(false);
   const { contextSafe } = useGSAP();
+  const preAnimationRect = useRef<DOMRect | undefined>(undefined);
+  const routineItemContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!currentFlipState.current) return;
 
-    Flip.from(currentFlipState.current, {
-      duration: 0.3,
-      onComplete: () => {
-        currentFlipState.current = null;
-      },
-    });
+    preAnimationRect.current = dragging.current?.getBoundingClientRect();
+    playReorderAnimation();
   }, [routineItems]);
+
+  const playReorderAnimation = contextSafe(() => {
+    if (currentFlipState.current)
+      Flip.from(currentFlipState.current, {
+        duration: 0.3,
+        onComplete: () => {
+          currentFlipState.current = null;
+        },
+      });
+
+    if (movableRef.current)
+      gsap.to(movableRef.current, {
+        height: preAnimationRect.current?.height,
+        duration: 0.3,
+      });
+  });
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -119,9 +133,7 @@ export default function CreateRoutine({
 
   const beginDragging = contextSafe((element: HTMLElement) => {
     if (!isDraggingAvailable) return;
-
     isDraggingAvailable.current = false;
-    isDragging.current = true;
 
     movableRef.current = element.cloneNode(true) as HTMLElement;
     document.body.appendChild(movableRef.current);
@@ -138,22 +150,16 @@ export default function CreateRoutine({
       zIndex: 1000,
     });
 
-    gsap.set(element, {
-      alpha: 0,
-      pointerEvents: "none",
-    });
-
+    element.classList.add("dragging");
     dragging.current = element;
+    isDragging.current = true;
   });
-
-  //TODO: Handle different sizes
-  //TODO: Save the position of element being dragged BEFORE doing Flip.from() and if end drag move to that position
 
   const endDragging = contextSafe((element: HTMLElement) => {
     if (isDraggingAvailable.current || !isDragging.current) return;
 
     isDragging.current = false;
-    const rect = element.getBoundingClientRect();
+    const rect = preAnimationRect.current ?? element.getBoundingClientRect();
 
     gsap.to(movableRef.current, {
       x: rect.x,
@@ -162,15 +168,22 @@ export default function CreateRoutine({
       top: 0,
       duration: 0.25,
       onComplete: () => {
-        gsap.set(".routine-item", {
-          alpha: 1,
-          pointerEvents: "auto",
-        });
-
-        movableRef.current!.remove();
         movableRef.current = null;
         isDraggingAvailable.current = true;
         dragging.current = null;
+        preAnimationRect.current = undefined;
+
+        routineItemContainerRef.current!.childNodes.forEach((x) => {
+          const routineItem = x as HTMLElement;
+          if (routineItem.classList.contains("dragging"))
+            routineItem.classList.remove("dragging");
+        });
+
+        document.body
+          .querySelectorAll(".routine-item.temporary")
+          .forEach((x) => {
+            x.remove();
+          });
       },
     });
   });
@@ -194,7 +207,7 @@ export default function CreateRoutine({
           Save
         </button>
       </div>
-      <div className="create-routine-body">
+      <div className="create-routine-body" ref={routineItemContainerRef}>
         {routineItems.map((x) => (
           <RoutineItem
             onDrag={setTranslation}

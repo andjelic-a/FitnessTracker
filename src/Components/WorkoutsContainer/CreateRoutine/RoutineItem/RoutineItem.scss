@@ -6,6 +6,12 @@
   border-radius: 1.5rem;
   min-height: 19rem;
   height: auto;
+
+  &.dragging {
+    opacity: 0.25;
+    pointer-events: none;
+    transition: opacity 0.1ms;
+  }
 }
 
 .routine-item-header {
@@ -68,7 +74,7 @@
       border-radius: 0 0 1rem 1rem;
     }
   }
-  
+
   & .hidden {
     font-size: 0px;
     width: 7rem;
