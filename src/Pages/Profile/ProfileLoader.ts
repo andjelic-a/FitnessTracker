@@ -9,11 +9,9 @@ export default async function profileLoader() {
     user: sendAPIRequest("/api/user/me/detailed", {
       method: "get",
     }),
-    workouts: sendAPIRequest({
-      endpoint: "/api/workout/personal/simple",
-      request: {
-        method: "get",
-      },
+    workouts: sendAPIRequest("/api/workout/personal/simple", {
+      method: "get",
+      parameters: {},
     }),
   });
 }
