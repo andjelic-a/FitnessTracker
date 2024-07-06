@@ -74,6 +74,8 @@ function ExerciseSet() {
     { id: uuidv4(), set: 1, kg: 0, repRange: "0", isDropdownOpen: false },
   ]);
 
+  const excludedDivRef = useRef<(HTMLDivElement | null)[]>([]);
+
   const addSet = () => {
     const newSet = {
       id: uuidv4(),
@@ -95,6 +97,37 @@ function ExerciseSet() {
     );
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      excludedDivRef.current.forEach((ref, index) => {
+        if (ref && !ref.contains(event.target as Node)) {
+          setSets((prevSets) =>
+            prevSets.map((set, i) =>
+              i === index ? { ...set, isDropdownOpen: false } : set
+            )
+          );
+        }
+      });
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const deleteSet = (id: string) => {
+    setSets((prevSets) => {
+      const updatedSets = prevSets.filter((set) => set.id !== id);
+
+      return updatedSets.map((set, index) => ({
+        ...set,
+        set: index + 1
+      }));
+    });
+  };
+
   return (
     <div className="excersice-set">
       <div className="excersice-set-placeholder">
@@ -102,14 +135,19 @@ function ExerciseSet() {
         <p>INTENSITY</p>
         <p>VOLUME</p>
       </div>
-      {sets.map((set) => (
+      {sets.map((set, index) => (
         <div key={set.id} className="excersice-set-item">
           <div className="set-button">
             <p onClick={() => handleSetClick(set.id)}>{set.set}</p>
             <div
-               className={`set-dropdown-menu ${!set.isDropdownOpen ? "hidden" : ""}`}
+              ref={(element) => (excludedDivRef.current[index] = element)}
+              className={`set-dropdown-menu ${
+                !set.isDropdownOpen ? "hidden" : ""
+              }`}
             >
-              <p><Icon className="set-icon" name="1" /></p>
+              <p>
+                <Icon className="set-icon" name="1" />
+              </p>
               <p>
                 <Icon className="set-icon" name="w" />
               </p>
@@ -120,7 +158,7 @@ function ExerciseSet() {
                 <Icon className="set-icon" name="f" />
               </p>
               <p>
-                <Icon className="set-icon x" name="xmark" />
+                <Icon onClick={() => deleteSet(set.id)} className="set-icon x" name="xmark" />
               </p>
             </div>
           </div>
