@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import Icon from "../../../Icon/Icon.tsx";
 import "./RoutineItem.scss";
+import { v4 as uuidv4 } from 'uuid';
 
 interface Set {
-  id: number;
+  id: string;
+  set: number | JSX.Element;
   kg: number;
   repRange: string;
 }
@@ -48,12 +50,15 @@ export default function RoutineItem({ onDelete }: RoutineItemProps) {
           className="routine-settings-icon"
           name="ellipsis-vertical"
         />
-        {isSettingsOpen && (
-          <div ref={excludedDivRef} className="routine-settings-popup">
-            <p onClick={onDelete}>Delete exercise</p>
-            <p>Delete set</p>
-          </div>
-        )}
+        <div
+          ref={excludedDivRef}
+          className={`routine-settings-popup ${
+            !isSettingsOpen ? "hidden" : ""
+          }`}
+        >
+          <p onClick={onDelete}>Delete exercise</p>
+          <p>Switch sets</p>{/*Andrej*/}
+        </div>
       </div>
       <div className="routine-item-body">
         <ExerciseSet />
@@ -63,11 +68,12 @@ export default function RoutineItem({ onDelete }: RoutineItemProps) {
 }
 
 function ExerciseSet() {
-  const [sets, setSets] = useState<Set[]>([{ id: 1, kg: 0, repRange: "0" }]);
+  const [sets, setSets] = useState<Set[]>([{ id: uuidv4(), set: 1, kg: 0, repRange: "0" }]);
 
   const addSet = () => {
     const newSet = {
-      id: sets.length + 1,
+      id: uuidv4(),
+      set: sets.length + 1,
       kg: 0,
       repRange: "0",
     };
@@ -84,7 +90,7 @@ function ExerciseSet() {
       {sets.map((set) => (
         <div key={set.id} className="excersice-set-item">
           <div className="set-button">
-            <p>{set.id}</p>
+            <p>{set.set}</p>
           </div>
           <div>
             <input type="text" placeholder={set.kg.toString()} maxLength={4} />

@@ -43,6 +43,7 @@
     box-shadow: 4px 8px 10px rgba(0, 0, 0, 0.1);
     opacity: 1;
     visibility: visible;
+    transition: 0.2s;
 
     & p {
       height: 2rem;
@@ -68,8 +69,9 @@
     }
   }
   
-  & .routine-settings-popup .hidden {
-    width: 2rem;
+  & .hidden {
+    font-size: 0px;
+    width: 7rem;
     height: 2rem;
     opacity: 0;
     visibility: hidden;
