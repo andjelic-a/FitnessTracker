@@ -1,13 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import Icon from "../../../Icon/Icon.tsx";
 import "./RoutineItem.scss";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 interface Set {
   id: string;
   set: number | JSX.Element;
   kg: number;
   repRange: string;
+  isDropdownOpen: boolean;
 }
 
 interface RoutineItemProps {
@@ -57,7 +58,8 @@ export default function RoutineItem({ onDelete }: RoutineItemProps) {
           }`}
         >
           <p onClick={onDelete}>Delete exercise</p>
-          <p>Switch sets</p>{/*Andrej*/}
+          <p>Switch sets</p>
+          {/*Andrej*/}
         </div>
       </div>
       <div className="routine-item-body">
@@ -68,7 +70,9 @@ export default function RoutineItem({ onDelete }: RoutineItemProps) {
 }
 
 function ExerciseSet() {
-  const [sets, setSets] = useState<Set[]>([{ id: uuidv4(), set: 1, kg: 0, repRange: "0" }]);
+  const [sets, setSets] = useState<Set[]>([
+    { id: uuidv4(), set: 1, kg: 0, repRange: "0", isDropdownOpen: false },
+  ]);
 
   const addSet = () => {
     const newSet = {
@@ -76,21 +80,49 @@ function ExerciseSet() {
       set: sets.length + 1,
       kg: 0,
       repRange: "0",
+      isDropdownOpen: false,
     };
     setSets([...sets, newSet]);
+  };
+
+  const handleSetClick = (id: string) => {
+    setSets((prevSets) =>
+      prevSets.map((set) =>
+        set.id === id
+          ? { ...set, isDropdownOpen: !set.isDropdownOpen }
+          : { ...set, isDropdownOpen: false }
+      )
+    );
   };
 
   return (
     <div className="excersice-set">
       <div className="excersice-set-placeholder">
         <p>SET</p>
-        <p>KG</p>
-        <p>REP RANGE</p>
+        <p>INTENSITY</p>
+        <p>VOLUME</p>
       </div>
       {sets.map((set) => (
         <div key={set.id} className="excersice-set-item">
           <div className="set-button">
-            <p>{set.set}</p>
+            <p onClick={() => handleSetClick(set.id)}>{set.set}</p>
+            <div
+               className={`set-dropdown-menu ${!set.isDropdownOpen ? "hidden" : ""}`}
+            >
+              <p><Icon className="set-icon" name="1" /></p>
+              <p>
+                <Icon className="set-icon" name="w" />
+              </p>
+              <p>
+                <Icon className="set-icon" name="d" />
+              </p>
+              <p>
+                <Icon className="set-icon" name="f" />
+              </p>
+              <p>
+                <Icon className="set-icon x" name="xmark" />
+              </p>
+            </div>
           </div>
           <div>
             <input type="text" placeholder={set.kg.toString()} maxLength={4} />
