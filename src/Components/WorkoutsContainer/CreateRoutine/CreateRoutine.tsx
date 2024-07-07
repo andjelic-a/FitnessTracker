@@ -15,12 +15,26 @@ gsap.registerPlugin(Observer);
 interface CreateRoutineProps {
   isNewWindowOpen: boolean;
   setIsNewWindowOpen: (isOpen: boolean) => void;
+  animationLength?: number;
+  safeGuard?: number;
 }
 
+/**
+ * Renders a create routine component.
+ *
+ * @param {CreateRoutineProps} props - The component props.
+ * @param {boolean} props.isNewWindowOpen - Indicates if the new window is open.
+ * @param {Function} props.setIsNewWindowOpen - Function to set the isNewWindowOpen state.
+ * @param {number} [props.animationLength] - Length of each animation triggered when dragging a routine item.
+ * @param {number} [props.safeGuard] - Duration of a safe guard which gets activated when a user begins dragging, this prevents routine items from teleporting.
+ * @return {JSX.Element} The rendered create routine component.
+ */
 export default function CreateRoutine({
   isNewWindowOpen,
   setIsNewWindowOpen,
-}: CreateRoutineProps) {
+  animationLength,
+  safeGuard,
+}: CreateRoutineProps): JSX.Element {
   const [routineItems, setRoutineItems] = useState<string[]>([]);
 
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
@@ -72,7 +86,7 @@ export default function CreateRoutine({
   const playReorderAnimation = contextSafe(() => {
     if (!currentFlipState.current) return;
     isMoveAvailable.current = false;
-    setTimeout(() => void (isMoveAvailable.current = true), 150);
+    setTimeout(() => void (isMoveAvailable.current = true), safeGuard ?? 150);
 
     gsap.set(routineItemContainerRef.current!.childNodes, {
       x: 0,
@@ -80,7 +94,7 @@ export default function CreateRoutine({
     });
 
     currentFlipTimeline.current = Flip.from(currentFlipState.current, {
-      duration: 0.3,
+      duration: animationLength ?? 0.3,
       onComplete: () => {
         currentFlipState.current = null;
         currentFlipTimeline.current = null;
@@ -90,12 +104,12 @@ export default function CreateRoutine({
     if (movableRef.current)
       gsap.to(movableRef.current, {
         height: preAnimationRect.current?.height,
-        duration: 0.3,
+        duration: animationLength ?? 0.3,
       });
 
     return;
   });
-  
+
   const handleAddNewExerciseClick = () => {
     const id = uuidv4();
     const newItem = id;

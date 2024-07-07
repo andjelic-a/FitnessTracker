@@ -149,11 +149,11 @@ type ExerciseSetProps = {
  * Renders an exercise set component with a list of sets and options to add, delete, and reorder sets.
  *
  * @param {Object} props - The component props.
- * @param {Function} props.onStartDraggingSet - Optional callback function to be called when the set is being dragged.
- * @param {Function} props.onEndDraggingSet - Optional callback function to be called when the set dragging ends.
- * @param {number} props.safeGuard - Optional number representing the safe guard duration which gets activated when a user begins dragging, this prevents a sets from teleporting.
- * @param {number} props.animationLength - Optional number representing the length of each animation triggered when dragging sets.
- * @return {JSX.Element} The exercise set component.
+ * @param {Function} props.onStartDraggingSet - Callback function to be called when the set is being dragged.
+ * @param {Function} props.onEndDraggingSet - Callback function to be called when the set dragging ends.
+ * @param {number} props.safeGuard - Represents duration of a safe guard which gets activated when a user begins dragging, this prevents sets from teleporting.
+ * @param {number} props.animationLength - Represents length of each animation triggered when dragging a set.
+ * @return {JSX.Element} Exercise set component.
  */
 function ExerciseSet({
   onStartDraggingSet,
