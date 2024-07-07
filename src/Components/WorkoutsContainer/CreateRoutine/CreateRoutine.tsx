@@ -34,6 +34,28 @@ export default function CreateRoutine({
   const preAnimationRect = useRef<DOMRect | undefined>(undefined);
   const routineItemContainerRef = useRef<HTMLDivElement>(null);
 
+  const handleTouchMove = useCallback(
+    (e: TouchEvent) => {
+      const touch = e.touches[0];
+      let element = document.elementFromPoint(touch.clientX, touch.clientY);
+
+      while (element && !element.classList.contains("routine-item"))
+        element = element.parentElement;
+
+      if (!element) return;
+
+      handleHoverOverItem(element as HTMLElement);
+    },
+    [handleHoverOverItem]
+  );
+
+  useEffect(() => {
+    document.addEventListener("touchmove", handleTouchMove);
+    return () => {
+      document.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, [handleTouchMove]);
+
   useEffect(() => {
     if (!currentFlipState.current) return;
 
@@ -42,6 +64,8 @@ export default function CreateRoutine({
   }, [routineItems]);
 
   const playReorderAnimation = contextSafe(() => {
+    console.log("reordering");
+
     if (currentFlipState.current)
       Flip.from(currentFlipState.current, {
         duration: 0.3,
@@ -78,6 +102,7 @@ export default function CreateRoutine({
   }, [setIsNewWindowOpen]);
 
   const handleDeleteExercise = (id: string) => {
+    console.log("handleDeleteExercise", id);
     setRoutineItems((prevState) => prevState.filter((item) => item !== id));
   };
 
@@ -93,6 +118,13 @@ export default function CreateRoutine({
   };
 
   function handleHoverOverItem(target: HTMLElement) {
+    console.log(
+      !isDragging.current,
+      !dragging.current,
+      !!dragging.current?.contains(target),
+      !!currentFlipState.current
+    );
+
     if (
       !isDragging.current ||
       !dragging.current ||
@@ -101,11 +133,13 @@ export default function CreateRoutine({
     )
       return;
 
+    console.log("1");
     let element: HTMLElement | null = target;
     while (element && !element.classList.contains("routine-item")) {
       element = element.parentNode as HTMLElement;
     }
     if (!element) return;
+    console.log("2");
 
     const hoverId = element.id.replace("routine-item-", "");
     const hoverIdx = routineItems.findIndex((x) => x === hoverId);
@@ -113,15 +147,26 @@ export default function CreateRoutine({
     const draggingId = dragging.current!.id.replace("routine-item-", "");
     const draggingIdx = routineItems.findIndex((x) => x === draggingId);
 
-    if (hoverIdx === draggingIdx) return;
+    console.log("Hover id", hoverId, hoverIdx);
+    console.log("Dragging id", draggingId, draggingIdx);
+    console.log("Routine items", routineItems);
+
+    if (
+      hoverIdx === undefined ||
+      draggingIdx === undefined ||
+      hoverIdx === draggingIdx
+    )
+      return;
+    console.log("3");
 
     currentFlipState.current = Flip.getState(".routine-item:not(.temporary)");
     setRoutineItems(reorderArray(routineItems, draggingIdx, hoverIdx));
   }
 
-  const setTranslation = useCallback(
+  const updateMovablePosition = useCallback(
     contextSafe((x: number, y: number) => {
       if (!movableRef.current) return;
+      console.log("updateMovablePosition", x, y);
 
       gsap.set(movableRef.current, {
         x: `+=${x}`,
@@ -133,6 +178,7 @@ export default function CreateRoutine({
 
   const beginDragging = contextSafe((element: HTMLElement) => {
     if (!isDraggingAvailable) return;
+    console.log("beginDragging");
     isDraggingAvailable.current = false;
 
     movableRef.current = element.cloneNode(true) as HTMLElement;
@@ -141,13 +187,10 @@ export default function CreateRoutine({
 
     const rect = element.getBoundingClientRect();
     gsap.set(movableRef.current, {
-      position: "absolute",
-      left: rect.left,
-      top: rect.top,
+      x: rect.x,
+      y: rect.y,
       width: rect.width,
       height: rect.height,
-      pointerEvents: "none",
-      zIndex: 1000,
     });
 
     element.classList.add("dragging");
@@ -157,6 +200,7 @@ export default function CreateRoutine({
 
   const endDragging = contextSafe((element: HTMLElement) => {
     if (isDraggingAvailable.current || !isDragging.current) return;
+    console.log("endDragging");
 
     isDragging.current = false;
     const rect = preAnimationRect.current ?? element.getBoundingClientRect();
@@ -210,7 +254,7 @@ export default function CreateRoutine({
       <div className="create-routine-body" ref={routineItemContainerRef}>
         {routineItems.map((x) => (
           <RoutineItem
-            onDrag={setTranslation}
+            onDrag={updateMovablePosition}
             onDragStart={beginDragging}
             onDragEnd={endDragging}
             onMouseOver={handleHoverOverItem}

@@ -12,6 +12,14 @@
     pointer-events: none;
     transition: opacity 0.1ms;
   }
+
+  &.temporary {
+    position: absolute;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    z-index: 1000;
+  }
 }
 
 .routine-item-header {

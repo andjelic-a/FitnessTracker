@@ -55,22 +55,39 @@ export default function RoutineItem({
 
   const wrapperRef = useRef<HTMLDivElement>(null);
 
+  const onMouseOverRef = useRef<((ref: HTMLDivElement) => void) | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    onMouseOverRef.current = onMouseOver;
+  }, [onMouseOver]);
+
   useEffect(() => {
     const observer = Observer.create({
       target: wrapperRef.current,
       type: "touch,pointer",
+      preventDefault: true,
+      dragMinimum: 15,
       onDragStart: () => {
-        if (!wrapperRef.current) return;
+        console.log("drag start");
 
-        onDragStart?.(wrapperRef.current);
+        if (wrapperRef.current) onDragStart?.(wrapperRef.current);
       },
       onDragEnd: () => {
-        if (!wrapperRef.current) return;
+        console.log("drag end");
 
-        onDragEnd?.(wrapperRef.current);
+        if (wrapperRef.current) onDragEnd?.(wrapperRef.current);
       },
       onDrag: (x) => {
+        console.log("drag");
+
         onDrag?.(x.deltaX, x.deltaY);
+      },
+      onHover: (x) => {
+        console.log("hover");
+
+        onMouseOverRef.current?.(x.target as HTMLDivElement);
       },
     });
 
@@ -78,12 +95,7 @@ export default function RoutineItem({
   }, [wrapperRef]);
 
   return (
-    <div
-      className="routine-item"
-      id={`routine-item-${id}`}
-      ref={wrapperRef}
-      onMouseOver={(e) => onMouseOver?.(e.target as HTMLDivElement)}
-    >
+    <div className="routine-item" id={`routine-item-${id}`} ref={wrapperRef}>
       <div className="routine-item-header">
         <img src="../../../DefaultProfilePicture.png" alt="" />
         <p>Name of exercise</p>
