@@ -26,13 +26,13 @@ export default function CreateRoutine({
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
   const routineTitleRef = useRef<HTMLInputElement | null>(null);
 
+  const { contextSafe } = useGSAP();
   const dragging = useRef<HTMLElement | null>(null);
   const currentFlipState = useRef<Flip.FlipState | null>(null);
   const currentFlipTimeline = useRef<gsap.core.Timeline | null>(null);
   const movableRef = useRef<HTMLElement | null>(null);
   const isDraggingAvailable = useRef(true);
   const isDragging = useRef(false);
-  const { contextSafe } = useGSAP();
   const preAnimationRect = useRef<DOMRect | undefined>(undefined);
   const routineItemContainerRef = useRef<HTMLDivElement>(null);
   const isMoveAvailable = useRef(true);
@@ -64,6 +64,11 @@ export default function CreateRoutine({
     playReorderAnimation();
   }, [routineItems]);
 
+  useOutsideClick(excludedDivRef, () => {
+    setIsNewWindowOpen(false);
+    if (routineTitleRef.current) routineTitleRef.current.value = "";
+  });
+
   const playReorderAnimation = contextSafe(() => {
     if (!currentFlipState.current) return;
     isMoveAvailable.current = false;
@@ -90,20 +95,15 @@ export default function CreateRoutine({
 
     return;
   });
-
-  useOutsideClick(excludedDivRef, () => {
-    setIsNewWindowOpen(false);
-    if (routineTitleRef.current) routineTitleRef.current.value = "";
-  });
-
-  const handleDeleteExercise = (id: string) => {
-    setRoutineItems((prevState) => prevState.filter((item) => item !== id));
-  };
-
+  
   const handleAddNewExerciseClick = () => {
     const id = uuidv4();
     const newItem = id;
     setRoutineItems((prevState) => [...prevState, newItem]);
+  };
+
+  const handleDeleteExercise = (id: string) => {
+    setRoutineItems((prevState) => prevState.filter((item) => item !== id));
   };
 
   const handleSaveClick = () => {
