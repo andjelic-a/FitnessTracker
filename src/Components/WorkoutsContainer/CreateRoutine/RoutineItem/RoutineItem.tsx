@@ -165,7 +165,6 @@ function ExerciseSet() {
       });
     });
   };
-  
 
   return (
     <div className="excersice-set">
@@ -198,25 +197,13 @@ function ExerciseSet() {
                 />
               </p>
               <p>
-                <Icon
-                  onClick={() => changeSetIcon(set.id, "w")}
-                  className="set-icon"
-                  name="w"
-                />
+                <div onClick={() => changeSetIcon(set.id, "w")}>Warmup</div>
               </p>
               <p>
-                <Icon
-                  onClick={() => changeSetIcon(set.id, "d")}
-                  className="set-icon"
-                  name="d"
-                />
+                <div onClick={() => changeSetIcon(set.id, "d")}>Drop set</div>
               </p>
               <p>
-                <Icon
-                  onClick={() => changeSetIcon(set.id, "f")}
-                  className="set-icon"
-                  name="f"
-                />
+                <div onClick={() => changeSetIcon(set.id, "f")}>Failure</div>
               </p>
               <p>
                 <Icon
@@ -231,7 +218,7 @@ function ExerciseSet() {
             <input type="text" placeholder={set.kg.toString()} maxLength={4} />
           </div>
           <div>
-            <input type="text" placeholder={set.repRange} maxLength={4} />
+            <input type="text" placeholder={set.repRange} maxLength={5} />
           </div>
         </div>
       ))}
