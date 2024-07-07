@@ -4,6 +4,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Flip from "gsap/Flip";
 import { Link } from "react-router-dom";
+import useOutsideClick from "../../Hooks/UseOutsideClick";
 gsap.registerPlugin(Flip);
 
 type NavigationItem = {
@@ -33,6 +34,11 @@ export default function NavigationMenu({ items, id }: NavigationProps) {
   const selectionIndicatorRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  useOutsideClick(containerRef, () => {
+    isAnimationActive.current = true;
+    playDisappearAnimation();
+  });
+
   useEffect(() => {
     function closeMenu(e: MouseEvent | KeyboardEvent) {
       if (
@@ -59,11 +65,9 @@ export default function NavigationMenu({ items, id }: NavigationProps) {
       return e instanceof KeyboardEvent;
     };
 
-    document.addEventListener("click", closeMenu);
     document.addEventListener("keydown", closeMenu);
 
     return () => {
-      document.removeEventListener("click", closeMenu);
       document.addEventListener("keydown", closeMenu);
     };
   }, []);

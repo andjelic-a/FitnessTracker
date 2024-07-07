@@ -3,6 +3,7 @@ import Icon from "../../../Icon/Icon.tsx";
 import "./RoutineItem.scss";
 import { v4 as uuidv4 } from "uuid";
 import Observer from "gsap/Observer";
+import useOutsideClick from "../../../../Hooks/UseOutsideClick.ts";
 
 interface Set {
   id: string;
@@ -38,22 +39,9 @@ export default function RoutineItem({
     setIsSettingsOpen(!isSettingsOpen);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        excludedDivRef.current &&
-        !excludedDivRef.current.contains(event.target as Node)
-      ) {
-        setIsSettingsOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isSettingsOpen]);
+  useOutsideClick(excludedDivRef, () => {
+    if (isSettingsOpen) setIsSettingsOpen(false);
+  });
 
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -151,25 +139,11 @@ function ExerciseSet() {
     );
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      excludedDivRef.current.forEach((ref, index) => {
-        if (ref && !ref.contains(event.target as Node)) {
-          setSets((prevSets) =>
-            prevSets.map((set, i) =>
-              i === index ? { ...set, isDropdownOpen: false } : set
-            )
-          );
-        }
-      });
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  useOutsideClick(excludedDivRef, () => {
+    setSets((prevSets) =>
+      prevSets.map((set) => ({ ...set, isDropdownOpen: false }))
+    );
+  });
 
   const deleteSet = (id: string) => {
     setSets((prevSets) => {

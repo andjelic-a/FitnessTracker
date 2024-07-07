@@ -7,6 +7,7 @@ import Flip from "gsap/Flip";
 import Observer from "gsap/Observer";
 import reorderArray from "./ReorderArray";
 import { useGSAP } from "@gsap/react";
+import useOutsideClick from "../../../Hooks/UseOutsideClick";
 
 gsap.registerPlugin(Flip);
 gsap.registerPlugin(Observer);
@@ -79,25 +80,10 @@ export default function CreateRoutine({
       });
   });
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        excludedDivRef.current &&
-        !excludedDivRef.current.contains(event.target as Node)
-      ) {
-        setIsNewWindowOpen(false);
-        if (routineTitleRef.current) {
-          routineTitleRef.current.value = "";
-        }
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [setIsNewWindowOpen]);
+  useOutsideClick(excludedDivRef, () => {
+    setIsNewWindowOpen(false);
+    if (routineTitleRef.current) routineTitleRef.current.value = "";
+  });
 
   const handleDeleteExercise = (id: string) => {
     setRoutineItems((prevState) => prevState.filter((item) => item !== id));
