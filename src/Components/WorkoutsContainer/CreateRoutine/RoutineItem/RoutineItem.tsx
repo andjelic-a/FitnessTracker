@@ -30,19 +30,31 @@ interface RoutineItemProps {
   onDelete: () => void;
   id: string;
   onDragStart?: (ref: HTMLDivElement) => void;
-  onDragEnd?: (ref: HTMLDivElement) => void;
   onDrag?: (xDelta: number, yDelta: number) => void;
+  onDragEnd?: (ref: HTMLDivElement) => void;
   onMouseOver?: (ref: HTMLDivElement) => void;
 }
 
+/**
+ * Renders a RoutineItem component.
+ *
+ * @param {Object} props - The props object containing the following properties:
+ *   - onDelete: A function to be called when the delete button is clicked.
+ *   - id: A unique identifier for the RoutineItem.
+ *   - onDragStart: A function to be called when the dragging of the RoutineItem starts.
+ *   - onDrag: A function to be called when the RoutineItem is dragged.
+ *   - onDragEnd: A function to be called when the dragging of the RoutineItem ends.
+ *   - onMouseOver: A function to be called when the RoutineItem is hovered.
+ * @return {JSX.Element} The rendered RoutineItem component.
+ */
 export default function RoutineItem({
   onDelete,
   id,
+  onDragStart,
   onDrag,
   onDragEnd,
-  onDragStart,
   onMouseOver,
-}: RoutineItemProps) {
+}: RoutineItemProps): JSX.Element {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
   const routineItemWrapperRef = useRef<HTMLDivElement>(null);
@@ -115,6 +127,8 @@ export default function RoutineItem({
         <ExerciseSet
           onStartDraggingSet={() => observer.current?.disable()}
           onEndDraggingSet={() => observer.current?.enable()}
+          animationLength={0.2}
+          safeGuard={20}
         />
       </div>
     </div>
@@ -127,12 +141,26 @@ export default function RoutineItem({
 type ExerciseSetProps = {
   onStartDraggingSet?: () => void;
   onEndDraggingSet?: () => void;
+  safeGuard?: number;
+  animationLength?: number;
 };
 
+/**
+ * Renders an exercise set component with a list of sets and options to add, delete, and reorder sets.
+ *
+ * @param {Object} props - The component props.
+ * @param {Function} props.onStartDraggingSet - Optional callback function to be called when the set is being dragged.
+ * @param {Function} props.onEndDraggingSet - Optional callback function to be called when the set dragging ends.
+ * @param {number} props.safeGuard - Optional number representing the safe guard duration which gets activated when a user begins dragging, this prevents a sets from teleporting.
+ * @param {number} props.animationLength - Optional number representing the length of each animation triggered when dragging sets.
+ * @return {JSX.Element} The exercise set component.
+ */
 function ExerciseSet({
   onStartDraggingSet,
   onEndDraggingSet,
-}: ExerciseSetProps) {
+  animationLength,
+  safeGuard,
+}: ExerciseSetProps): JSX.Element {
   const [sets, setSets] = useState<Set[]>([
     {
       id: uuidv4(),
@@ -241,7 +269,7 @@ function ExerciseSet({
   const playReorderAnimation = contextSafe(() => {
     if (!currentFlipState.current) return;
     isMoveAvailable.current = false;
-    setTimeout(() => void (isMoveAvailable.current = true), 20);
+    setTimeout(() => void (isMoveAvailable.current = true), safeGuard ?? 20);
 
     gsap.set(setContainerRef.current!.childNodes, {
       x: 0,
@@ -249,7 +277,7 @@ function ExerciseSet({
     });
 
     currentFlipTimeline.current = Flip.from(currentFlipState.current, {
-      duration: 0.2,
+      duration: animationLength ?? 0.2,
       onComplete: () => {
         currentFlipState.current = null;
         currentFlipTimeline.current = null;
@@ -332,7 +360,7 @@ function ExerciseSet({
           onSetClick={handleSetClick}
           onDeleteSet={deleteSet}
           onChangeSetIcon={changeSetIcon}
-          excludedDivRef={excludedDivRef}
+          dropDownMenuWrapper={excludedDivRef}
           onDragStart={beginDragging}
           onDragEnd={endDragging}
           onMouseOver={handleHoverOverItem}
@@ -351,29 +379,41 @@ function ExerciseSet({
 type SingleExerciseSetProps = {
   set: Set;
   index: number;
+  dropDownMenuWrapper?: MutableRefObject<(HTMLDivElement | null)[]>;
   onSetClick?: (id: string) => void;
   onDeleteSet?: (id: string) => void;
   onChangeSetIcon?: (id: string, icon: string) => void;
-  excludedDivRef?: MutableRefObject<(HTMLDivElement | null)[]>;
-
   onDragStart?: (ref: HTMLDivElement) => void;
   onDragEnd?: (ref: HTMLDivElement) => void;
-  onDrag?: (xDelta: number, yDelta: number) => void;
   onMouseOver?: (ref: HTMLDivElement) => void;
 };
 
+/**
+ * Renders a single exercise set component with options to click, delete, and change the set icon.
+ *
+ * @param {Object} props - The component props.
+ * @param {Object} props.set - The exercise set object containing the set data.
+ * @param {number} props.index - The index of the set in the list of sets.
+ * @param {MutableRefObject<(HTMLDivElement | null)[]>} props.dropDownMenuWrapper - Optional reference to the react RefObject of HTMLDivElement[] which represents the dropdown menus of all sets.
+ * @param {Function} props.onSetClick - Optional callback function to be called when the set is clicked.
+ * @param {Function} props.onDeleteSet - Optional callback function to be called when the set is deleted.
+ * @param {Function} props.onChangeSetIcon - Optional callback function to be called when the set icon is changed.
+ * @param {Function} props.onDragEnd - Optional callback function to be called when the set dragging ends.
+ * @param {Function} props.onDragStart - Optional callback function to be called when the set is dragging starts.
+ * @param {Function} props.onMouseOver - Optional callback function to be called when the mouse hovers over the set.
+ * @return {JSX.Element} The single exercise set component.
+ */
 function SingleExerciseSet({
   set,
   index,
+  dropDownMenuWrapper,
   onSetClick,
   onDeleteSet,
   onChangeSetIcon,
-  excludedDivRef,
-
   onDragEnd,
   onDragStart,
   onMouseOver,
-}: SingleExerciseSetProps) {
+}: SingleExerciseSetProps): JSX.Element {
   const setWrapperRef = useRef<HTMLDivElement>(null);
 
   const onMouseOverCallbackRef = useRef<
@@ -421,8 +461,8 @@ function SingleExerciseSet({
         </p>
         <div
           ref={(element) =>
-            excludedDivRef
-              ? (excludedDivRef.current[index] = element)
+            dropDownMenuWrapper
+              ? (dropDownMenuWrapper.current[index] = element)
               : void element
           }
           className={`set-dropdown-menu ${!set.isDropdownOpen ? "hidden" : ""}`}
