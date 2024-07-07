@@ -15,25 +15,41 @@ gsap.registerPlugin(Observer);
 interface CreateRoutineProps {
   isNewWindowOpen: boolean;
   setIsNewWindowOpen: (isOpen: boolean) => void;
+  animationLength?: number;
+  safeGuard?: number;
 }
 
+/**
+ * Renders a create routine component.
+ *
+ * @param {CreateRoutineProps} props - The component props.
+ * @param {boolean} props.isNewWindowOpen - Indicates if the new window is open.
+ * @param {Function} props.setIsNewWindowOpen - Function to set the isNewWindowOpen state.
+ * @param {number} [props.animationLength] - Length of each animation triggered when dragging a routine item.
+ * @param {number} [props.safeGuard] - Duration of a safe guard which gets activated when a user begins dragging, this prevents routine items from teleporting.
+ * @return {JSX.Element} The rendered create routine component.
+ */
 export default function CreateRoutine({
   isNewWindowOpen,
   setIsNewWindowOpen,
-}: CreateRoutineProps) {
+  animationLength,
+  safeGuard,
+}: CreateRoutineProps): JSX.Element {
   const [routineItems, setRoutineItems] = useState<string[]>([]);
 
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
   const routineTitleRef = useRef<HTMLInputElement | null>(null);
 
+  const { contextSafe } = useGSAP();
   const dragging = useRef<HTMLElement | null>(null);
   const currentFlipState = useRef<Flip.FlipState | null>(null);
+  const currentFlipTimeline = useRef<gsap.core.Timeline | null>(null);
   const movableRef = useRef<HTMLElement | null>(null);
   const isDraggingAvailable = useRef(true);
   const isDragging = useRef(false);
-  const { contextSafe } = useGSAP();
   const preAnimationRect = useRef<DOMRect | undefined>(undefined);
   const routineItemContainerRef = useRef<HTMLDivElement>(null);
+  const isMoveAvailable = useRef(true);
 
   const handleTouchMove = useCallback(
     (e: TouchEvent) => {
@@ -58,41 +74,50 @@ export default function CreateRoutine({
   }, [handleTouchMove]);
 
   useEffect(() => {
-    if (!currentFlipState.current) return;
-
     preAnimationRect.current = dragging.current?.getBoundingClientRect();
     playReorderAnimation();
   }, [routineItems]);
-
-  const playReorderAnimation = contextSafe(() => {
-    if (currentFlipState.current)
-      Flip.from(currentFlipState.current, {
-        duration: 0.3,
-        onComplete: () => {
-          currentFlipState.current = null;
-        },
-      });
-
-    if (movableRef.current)
-      gsap.to(movableRef.current, {
-        height: preAnimationRect.current?.height,
-        duration: 0.3,
-      });
-  });
 
   useOutsideClick(excludedDivRef, () => {
     setIsNewWindowOpen(false);
     if (routineTitleRef.current) routineTitleRef.current.value = "";
   });
 
-  const handleDeleteExercise = (id: string) => {
-    setRoutineItems((prevState) => prevState.filter((item) => item !== id));
-  };
+  const playReorderAnimation = contextSafe(() => {
+    if (!currentFlipState.current) return;
+    isMoveAvailable.current = false;
+    setTimeout(() => void (isMoveAvailable.current = true), safeGuard ?? 150);
+
+    gsap.set(routineItemContainerRef.current!.childNodes, {
+      x: 0,
+      y: 0,
+    });
+
+    currentFlipTimeline.current = Flip.from(currentFlipState.current, {
+      duration: animationLength ?? 0.3,
+      onComplete: () => {
+        currentFlipState.current = null;
+        currentFlipTimeline.current = null;
+      },
+    });
+
+    if (movableRef.current)
+      gsap.to(movableRef.current, {
+        height: preAnimationRect.current?.height,
+        duration: animationLength ?? 0.3,
+      });
+
+    return;
+  });
 
   const handleAddNewExerciseClick = () => {
     const id = uuidv4();
     const newItem = id;
     setRoutineItems((prevState) => [...prevState, newItem]);
+  };
+
+  const handleDeleteExercise = (id: string) => {
+    setRoutineItems((prevState) => prevState.filter((item) => item !== id));
   };
 
   const handleSaveClick = () => {
@@ -105,7 +130,7 @@ export default function CreateRoutine({
       !isDragging.current ||
       !dragging.current ||
       dragging.current.contains(target) ||
-      currentFlipState.current
+      !isMoveAvailable.current
     )
       return;
 
@@ -128,7 +153,12 @@ export default function CreateRoutine({
     )
       return;
 
+    if (currentFlipTimeline.current) {
+      currentFlipTimeline.current.kill();
+      currentFlipTimeline.current = null;
+    }
     currentFlipState.current = Flip.getState(".routine-item:not(.temporary)");
+
     setRoutineItems(reorderArray(routineItems, draggingIdx, hoverIdx));
   }
 

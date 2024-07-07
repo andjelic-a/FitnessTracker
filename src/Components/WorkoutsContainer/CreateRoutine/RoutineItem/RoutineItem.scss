@@ -176,6 +176,13 @@
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    transition: opacity 150ms;
+    transition: background-color 150ms;
+
+    &.dragging {
+      opacity: 0.5;
+      background-color: $dark-mixed-600;
+    }
 
     & *:nth-child(even) {
       background-color: initial;
@@ -262,9 +269,11 @@
         width: 1.5rem;
         height: 1.5rem;
         font-size: 1.5rem;
+        z-index: 100000;
 
         & .set-icon {
           position: relative;
+          z-index: 1000000;
           display: flex;
           justify-content: center;
           align-items: center;
