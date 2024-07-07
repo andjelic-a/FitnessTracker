@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, MutableRefObject } from "react";
 import Icon from "../../../Icon/Icon.tsx";
 import "./RoutineItem.scss";
 import { v4 as uuidv4 } from "uuid";
@@ -14,6 +14,8 @@ interface Set {
   selectedIcon: string | null;
 }
 
+//**********************************************************RoutineItem***************************************************************************\\
+//#region RoutineItem
 interface RoutineItemProps {
   onDelete: () => void;
   id: string;
@@ -35,49 +37,54 @@ export default function RoutineItem({
 
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
 
-  const handleSettingsClick = () => {
-    setIsSettingsOpen(!isSettingsOpen);
-  };
+  const handleSettingsClick = () => void setIsSettingsOpen(!isSettingsOpen);
 
   useOutsideClick(excludedDivRef, () => {
     if (isSettingsOpen) setIsSettingsOpen(false);
   });
 
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  const routineItemsWrapperRef = useRef<HTMLDivElement>(null);
 
-  const onMouseOverRef = useRef<((ref: HTMLDivElement) => void) | undefined>(
-    undefined
+  const onMouseOverCallbackRef = useRef<
+    ((ref: HTMLDivElement) => void) | undefined
+  >(undefined);
+
+  useEffect(
+    () => void (onMouseOverCallbackRef.current = onMouseOver),
+    [onMouseOver]
   );
 
   useEffect(() => {
-    onMouseOverRef.current = onMouseOver;
-  }, [onMouseOver]);
-
-  useEffect(() => {
     const observer = Observer.create({
-      target: wrapperRef.current,
+      target: routineItemsWrapperRef.current,
       type: "touch,pointer",
       preventDefault: true,
       dragMinimum: 15,
       onDragStart: () => {
-        if (wrapperRef.current) onDragStart?.(wrapperRef.current);
+        if (routineItemsWrapperRef.current)
+          onDragStart?.(routineItemsWrapperRef.current);
       },
       onDragEnd: () => {
-        if (wrapperRef.current) onDragEnd?.(wrapperRef.current);
+        if (routineItemsWrapperRef.current)
+          onDragEnd?.(routineItemsWrapperRef.current);
       },
       onDrag: (x) => {
         onDrag?.(x.deltaX, x.deltaY);
       },
       onHover: (x) => {
-        onMouseOverRef.current?.(x.target as HTMLDivElement);
+        onMouseOverCallbackRef.current?.(x.target as HTMLDivElement);
       },
     });
 
     return () => observer.kill();
-  }, [wrapperRef]);
+  }, [routineItemsWrapperRef]);
 
   return (
-    <div className="routine-item" id={`routine-item-${id}`} ref={wrapperRef}>
+    <div
+      className="routine-item"
+      id={`routine-item-${id}`}
+      ref={routineItemsWrapperRef}
+    >
       <div className="routine-item-header">
         <img src="../../../DefaultProfilePicture.png" alt="" />
         <p>Name of exercise</p>
@@ -102,7 +109,10 @@ export default function RoutineItem({
     </div>
   );
 }
+//#endregion
 
+//**********************************************************ExerciseSet***************************************************************************\\
+//#region ExerciseSet
 function ExerciseSet() {
   const [sets, setSets] = useState<Set[]>([
     {
@@ -181,65 +191,15 @@ function ExerciseSet() {
         <p>VOLUME</p>
       </div>
       {sets.map((set, index) => (
-        <div key={set.id} className="exercise-set-item">
-          <div className="set-button">
-            <p onClick={() => handleSetClick(set.id)}>
-              {set.selectedIcon ? (
-                <Icon className="set-icon" name={set.selectedIcon} />
-              ) : (
-                set.set
-              )}
-            </p>
-            <div
-              ref={(element) => (excludedDivRef.current[index] = element)}
-              className={`set-dropdown-menu ${
-                !set.isDropdownOpen ? "hidden" : ""
-              }`}
-            >
-              <p>
-                <Icon
-                  onClick={() => changeSetIcon(set.id, "1")}
-                  className="set-icon"
-                  name="1"
-                />
-              </p>
-              <p>
-                <Icon
-                  onClick={() => changeSetIcon(set.id, "w")}
-                  className="set-icon"
-                  name="w"
-                />
-              </p>
-              <p>
-                <Icon
-                  onClick={() => changeSetIcon(set.id, "d")}
-                  className="set-icon"
-                  name="d"
-                />
-              </p>
-              <p>
-                <Icon
-                  onClick={() => changeSetIcon(set.id, "f")}
-                  className="set-icon"
-                  name="f"
-                />
-              </p>
-              <p>
-                <Icon
-                  onClick={() => deleteSet(set.id)}
-                  className="set-icon x"
-                  name="xmark"
-                />
-              </p>
-            </div>
-          </div>
-          <div>
-            <input type="text" placeholder={set.kg.toString()} maxLength={4} />
-          </div>
-          <div>
-            <input type="text" placeholder={set.repRange} maxLength={4} />
-          </div>
-        </div>
+        <SingleExerciseSet
+          key={set.id}
+          set={set}
+          index={index}
+          onSetClick={handleSetClick}
+          onDeleteSet={deleteSet}
+          onChangeSetIcon={changeSetIcon}
+          excludedDivRef={excludedDivRef}
+        />
       ))}
       <div className="icon-wrapper">
         <Icon onClick={addSet} className="add-set-icon" name="plus" />
@@ -247,3 +207,89 @@ function ExerciseSet() {
     </div>
   );
 }
+//#endregion
+
+//**********************************************************SingleExerciseSet*********************************************************************\\
+//#region SingleExerciseSet
+type SingleExerciseSetProps = {
+  set: Set;
+  index: number;
+  onSetClick?: (id: string) => void;
+  onDeleteSet?: (id: string) => void;
+  onChangeSetIcon?: (id: string, icon: string) => void;
+  excludedDivRef?: MutableRefObject<(HTMLDivElement | null)[]>;
+};
+
+function SingleExerciseSet({
+  set,
+  index,
+  onSetClick,
+  onDeleteSet,
+  onChangeSetIcon,
+  excludedDivRef,
+}: SingleExerciseSetProps) {
+  return (
+    <div className="exercise-set-item">
+      <div className="set-button">
+        <p onClick={() => onSetClick?.(set.id)}>
+          {set.selectedIcon ? (
+            <Icon className="set-icon" name={set.selectedIcon} />
+          ) : (
+            set.set
+          )}
+        </p>
+        <div
+          ref={(element) =>
+            excludedDivRef
+              ? (excludedDivRef.current[index] = element)
+              : void element
+          }
+          className={`set-dropdown-menu ${!set.isDropdownOpen ? "hidden" : ""}`}
+        >
+          <p>
+            <Icon
+              onClick={() => onChangeSetIcon?.(set.id, "1")}
+              className="set-icon"
+              name="1"
+            />
+          </p>
+          <p>
+            <Icon
+              onClick={() => onChangeSetIcon?.(set.id, "w")}
+              className="set-icon"
+              name="w"
+            />
+          </p>
+          <p>
+            <Icon
+              onClick={() => onChangeSetIcon?.(set.id, "d")}
+              className="set-icon"
+              name="d"
+            />
+          </p>
+          <p>
+            <Icon
+              onClick={() => onChangeSetIcon?.(set.id, "f")}
+              className="set-icon"
+              name="f"
+            />
+          </p>
+          <p>
+            <Icon
+              onClick={() => onDeleteSet?.(set.id)}
+              className="set-icon x"
+              name="xmark"
+            />
+          </p>
+        </div>
+      </div>
+      <div>
+        <input type="text" placeholder={set.kg.toString()} maxLength={4} />
+      </div>
+      <div>
+        <input type="text" placeholder={set.repRange} maxLength={4} />
+      </div>
+    </div>
+  );
+}
+//#endregion
