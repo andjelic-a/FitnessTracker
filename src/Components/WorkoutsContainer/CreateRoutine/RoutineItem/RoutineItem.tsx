@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Icon from "../../../Icon/Icon.tsx";
 import "./RoutineItem.scss";
 import { v4 as uuidv4 } from "uuid";
+import Observer from "gsap/Observer";
 
 interface Set {
   id: string;
@@ -14,9 +15,21 @@ interface Set {
 
 interface RoutineItemProps {
   onDelete: () => void;
+  id: string;
+  onDragStart?: (ref: HTMLDivElement) => void;
+  onDragEnd?: (ref: HTMLDivElement) => void;
+  onDrag?: (xDelta: number, yDelta: number) => void;
+  onMouseOver?: (ref: HTMLDivElement) => void;
 }
 
-export default function RoutineItem({ onDelete }: RoutineItemProps) {
+export default function RoutineItem({
+  onDelete,
+  id,
+  onDrag,
+  onDragEnd,
+  onDragStart,
+  onMouseOver,
+}: RoutineItemProps) {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
@@ -42,10 +55,43 @@ export default function RoutineItem({ onDelete }: RoutineItemProps) {
     };
   }, [isSettingsOpen]);
 
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const onMouseOverRef = useRef<((ref: HTMLDivElement) => void) | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    onMouseOverRef.current = onMouseOver;
+  }, [onMouseOver]);
+
+  useEffect(() => {
+    const observer = Observer.create({
+      target: wrapperRef.current,
+      type: "touch,pointer",
+      preventDefault: true,
+      dragMinimum: 15,
+      onDragStart: () => {
+        if (wrapperRef.current) onDragStart?.(wrapperRef.current);
+      },
+      onDragEnd: () => {
+        if (wrapperRef.current) onDragEnd?.(wrapperRef.current);
+      },
+      onDrag: (x) => {
+        onDrag?.(x.deltaX, x.deltaY);
+      },
+      onHover: (x) => {
+        onMouseOverRef.current?.(x.target as HTMLDivElement);
+      },
+    });
+
+    return () => observer.kill();
+  }, [wrapperRef]);
+
   return (
-    <div className="routine-item">
+    <div className="routine-item" id={`routine-item-${id}`} ref={wrapperRef}>
       <div className="routine-item-header">
-        <img src="../../../public/DefaultProfilePicture.png" alt="" />
+        <img src="../../../DefaultProfilePicture.png" alt="" />
         <p>Name of exercise</p>
         <Icon
           onClick={handleSettingsClick}
@@ -59,7 +105,7 @@ export default function RoutineItem({ onDelete }: RoutineItemProps) {
           }`}
         >
           <p onClick={onDelete}>Delete exercise</p>
-          <p>Replace excersice</p>
+          <p>Replace exercise</p>
         </div>
       </div>
       <div className="routine-item-body">
@@ -154,14 +200,14 @@ function ExerciseSet() {
   };
 
   return (
-    <div className="excersice-set">
-      <div className="excersice-set-placeholder">
+    <div className="exercise-set">
+      <div className="exercise-set-placeholder">
         <p>SET</p>
         <p>INTENSITY</p>
         <p>VOLUME</p>
       </div>
       {sets.map((set, index) => (
-        <div key={set.id} className="excersice-set-item">
+        <div key={set.id} className="exercise-set-item">
           <div className="set-button">
             <p onClick={() => handleSetClick(set.id)}>
               {set.selectedIcon ? (

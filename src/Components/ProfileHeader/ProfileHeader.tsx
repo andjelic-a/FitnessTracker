@@ -13,7 +13,7 @@ function ProfileHeader({username, image, workouts, followers, following}: Profil
   return (
     <div className="profile-header">
       <div className="profile-picture">
-        <img src={image??"../../../public/DefaultProfilePicture.png"} alt="Profile Picture" />
+        <img src={image??"../../../DefaultProfilePicture.png"} alt="Profile Picture" />
       </div>
       <div className="profile-user-information">
         <div className="profile-user-username">
