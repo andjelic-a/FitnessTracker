@@ -192,9 +192,13 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 2rem;
+        width: 3rem;
         height: 4rem;
+        font-size: 2rem;
+        font-weight: 600;
         cursor: pointer;
+        margin: 0;
+        padding: 0;
       }
     }
 
@@ -208,6 +212,9 @@
       color: white;
 
       & input {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         height: 100%;
         width: 3rem;
         text-align: center;
@@ -216,7 +223,71 @@
         background-color: initial;
         outline: none;
         cursor: pointer;
+        font-size: 2rem;
+        margin: 0;
+        padding: 0;
       }
+
+      & .set-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.8rem;
+      }
+    }
+  }
+
+  & .set-button {
+    position: relative;
+
+    & .set-dropdown-menu {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      position: absolute;
+      z-index: 10000;
+      top: 0.5rem;
+      background-color: $dark-400;
+      box-shadow: 4px 8px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 0.5rem;
+      width: 4rem;
+      height: 15rem;
+      transition: 0.2s;
+
+      & p {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 1.5rem;
+        height: 1.5rem;
+        font-size: 1.5rem;
+
+        & .set-icon {
+          position: relative;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+
+        & .x {
+          font-size: 2.5rem;
+          color: rgb(255, 0, 0);
+
+          &:hover {
+            color: rgb(255, 75, 75);
+          }
+        }
+      }
+    }
+
+    & .hidden {
+      height: 5rem;
+      visibility: 0;
+      opacity: 0;
+      z-index: -100;
     }
   }
 }

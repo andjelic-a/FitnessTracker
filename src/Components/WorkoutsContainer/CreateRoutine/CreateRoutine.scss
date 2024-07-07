@@ -19,6 +19,7 @@
   opacity: 0;
   transition: transform 0.4s, opacity 0.2s;
   overflow-y: auto;
+  overflow-x: hidden;
 
   &::-webkit-scrollbar {
     width: 8px;
