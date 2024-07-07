@@ -64,8 +64,6 @@ export default function CreateRoutine({
   }, [routineItems]);
 
   const playReorderAnimation = contextSafe(() => {
-    console.log("reordering");
-
     if (currentFlipState.current)
       Flip.from(currentFlipState.current, {
         duration: 0.3,
@@ -102,7 +100,6 @@ export default function CreateRoutine({
   }, [setIsNewWindowOpen]);
 
   const handleDeleteExercise = (id: string) => {
-    console.log("handleDeleteExercise", id);
     setRoutineItems((prevState) => prevState.filter((item) => item !== id));
   };
 
@@ -118,13 +115,6 @@ export default function CreateRoutine({
   };
 
   function handleHoverOverItem(target: HTMLElement) {
-    console.log(
-      !isDragging.current,
-      !dragging.current,
-      !!dragging.current?.contains(target),
-      !!currentFlipState.current
-    );
-
     if (
       !isDragging.current ||
       !dragging.current ||
@@ -133,13 +123,11 @@ export default function CreateRoutine({
     )
       return;
 
-    console.log("1");
     let element: HTMLElement | null = target;
     while (element && !element.classList.contains("routine-item")) {
       element = element.parentNode as HTMLElement;
     }
     if (!element) return;
-    console.log("2");
 
     const hoverId = element.id.replace("routine-item-", "");
     const hoverIdx = routineItems.findIndex((x) => x === hoverId);
@@ -147,17 +135,12 @@ export default function CreateRoutine({
     const draggingId = dragging.current!.id.replace("routine-item-", "");
     const draggingIdx = routineItems.findIndex((x) => x === draggingId);
 
-    console.log("Hover id", hoverId, hoverIdx);
-    console.log("Dragging id", draggingId, draggingIdx);
-    console.log("Routine items", routineItems);
-
     if (
       hoverIdx === undefined ||
       draggingIdx === undefined ||
       hoverIdx === draggingIdx
     )
       return;
-    console.log("3");
 
     currentFlipState.current = Flip.getState(".routine-item:not(.temporary)");
     setRoutineItems(reorderArray(routineItems, draggingIdx, hoverIdx));
@@ -166,7 +149,6 @@ export default function CreateRoutine({
   const updateMovablePosition = useCallback(
     contextSafe((x: number, y: number) => {
       if (!movableRef.current) return;
-      console.log("updateMovablePosition", x, y);
 
       gsap.set(movableRef.current, {
         x: `+=${x}`,
@@ -178,7 +160,6 @@ export default function CreateRoutine({
 
   const beginDragging = contextSafe((element: HTMLElement) => {
     if (!isDraggingAvailable) return;
-    console.log("beginDragging");
     isDraggingAvailable.current = false;
 
     movableRef.current = element.cloneNode(true) as HTMLElement;
@@ -200,7 +181,6 @@ export default function CreateRoutine({
 
   const endDragging = contextSafe((element: HTMLElement) => {
     if (isDraggingAvailable.current || !isDragging.current) return;
-    console.log("endDragging");
 
     isDragging.current = false;
     const rect = preAnimationRect.current ?? element.getBoundingClientRect();

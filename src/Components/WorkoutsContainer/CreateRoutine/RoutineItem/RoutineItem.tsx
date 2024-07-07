@@ -70,23 +70,15 @@ export default function RoutineItem({
       preventDefault: true,
       dragMinimum: 15,
       onDragStart: () => {
-        console.log("drag start");
-
         if (wrapperRef.current) onDragStart?.(wrapperRef.current);
       },
       onDragEnd: () => {
-        console.log("drag end");
-
         if (wrapperRef.current) onDragEnd?.(wrapperRef.current);
       },
       onDrag: (x) => {
-        console.log("drag");
-
         onDrag?.(x.deltaX, x.deltaY);
       },
       onHover: (x) => {
-        console.log("hover");
-
         onMouseOverRef.current?.(x.target as HTMLDivElement);
       },
     });
