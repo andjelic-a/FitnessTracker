@@ -28,12 +28,14 @@ export default function CreateRoutine({
 
   const dragging = useRef<HTMLElement | null>(null);
   const currentFlipState = useRef<Flip.FlipState | null>(null);
+  const currentFlipTimeline = useRef<gsap.core.Timeline | null>(null);
   const movableRef = useRef<HTMLElement | null>(null);
   const isDraggingAvailable = useRef(true);
   const isDragging = useRef(false);
   const { contextSafe } = useGSAP();
   const preAnimationRect = useRef<DOMRect | undefined>(undefined);
   const routineItemContainerRef = useRef<HTMLDivElement>(null);
+  const isMoveAvailable = useRef(true);
 
   const handleTouchMove = useCallback(
     (e: TouchEvent) => {
@@ -58,26 +60,35 @@ export default function CreateRoutine({
   }, [handleTouchMove]);
 
   useEffect(() => {
-    if (!currentFlipState.current) return;
-
     preAnimationRect.current = dragging.current?.getBoundingClientRect();
     playReorderAnimation();
   }, [routineItems]);
 
   const playReorderAnimation = contextSafe(() => {
-    if (currentFlipState.current)
-      Flip.from(currentFlipState.current, {
-        duration: 0.3,
-        onComplete: () => {
-          currentFlipState.current = null;
-        },
-      });
+    if (!currentFlipState.current) return;
+    isMoveAvailable.current = false;
+    setTimeout(() => void (isMoveAvailable.current = true), 150);
+
+    gsap.set(routineItemContainerRef.current!.childNodes, {
+      x: 0,
+      y: 0,
+    });
+
+    currentFlipTimeline.current = Flip.from(currentFlipState.current, {
+      duration: 0.3,
+      onComplete: () => {
+        currentFlipState.current = null;
+        currentFlipTimeline.current = null;
+      },
+    });
 
     if (movableRef.current)
       gsap.to(movableRef.current, {
         height: preAnimationRect.current?.height,
         duration: 0.3,
       });
+
+    return;
   });
 
   useOutsideClick(excludedDivRef, () => {
@@ -105,7 +116,7 @@ export default function CreateRoutine({
       !isDragging.current ||
       !dragging.current ||
       dragging.current.contains(target) ||
-      currentFlipState.current
+      !isMoveAvailable.current
     )
       return;
 
@@ -128,7 +139,12 @@ export default function CreateRoutine({
     )
       return;
 
+    if (currentFlipTimeline.current) {
+      currentFlipTimeline.current.kill();
+      currentFlipTimeline.current = null;
+    }
     currentFlipState.current = Flip.getState(".routine-item:not(.temporary)");
+
     setRoutineItems(reorderArray(routineItems, draggingIdx, hoverIdx));
   }
 
