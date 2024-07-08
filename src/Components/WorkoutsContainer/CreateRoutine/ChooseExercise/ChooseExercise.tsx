@@ -5,11 +5,13 @@ import "./ChooseExercise.scss";
 interface ChooseExerciseProps {
   onClose: () => void;
   onAddExercise: (exercises: string[]) => void;
+  isReplaceMode: boolean;
 }
 
 export default function ChooseExercise({
   onClose,
   onAddExercise,
+  isReplaceMode,
 }: ChooseExerciseProps) {
   const [selectedExercises, setSelectedExercises] = useState<string[]>([]);
 
@@ -22,10 +24,14 @@ export default function ChooseExercise({
 
   const handleSelectExercise = (exercise: string) => {
     setSelectedExercises((prevSelectedExercises) => {
-      if (prevSelectedExercises.includes(exercise)) {
-        return prevSelectedExercises.filter((e) => e !== exercise);
+      if (isReplaceMode) {
+        return [exercise];
       } else {
-        return [...prevSelectedExercises, exercise];
+        if (prevSelectedExercises.includes(exercise)) {
+          return prevSelectedExercises.filter((e) => e !== exercise);
+        } else {
+          return [...prevSelectedExercises, exercise];
+        }
       }
     });
   };
@@ -68,7 +74,7 @@ export default function ChooseExercise({
         />
       </div>
       <div className="choose-exercise-footer">
-        <button className="choose-exercise-button" onClick={handleConfirm}>Add</button>
+        <button className="choose-exercise-button" onClick={handleConfirm}>{isReplaceMode ? "Replace" : "Add"}</button>
         <button className="choose-exercise-button" onClick={onClose}>Cancel</button>
       </div>
     </div>

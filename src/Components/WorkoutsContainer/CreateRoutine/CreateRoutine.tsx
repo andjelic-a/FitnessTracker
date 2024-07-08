@@ -14,11 +14,14 @@ export default function CreateRoutine({
   setIsNewWindowOpen,
 }: CreateRoutineProps) {
   const [routineItems, setRoutineItems] = useState<
-    { id: string; element: JSX.Element }[]
+    { id: string; element: JSX.Element; exercise: string }[]
   >([]);
   const [routineTitle, setRoutineTitle] = useState<string>("");
   const [isChooseExerciseOpen, setIsChooseExerciseOpen] =
     useState<boolean>(false);
+  const [replacingExerciseId, setReplacingExerciseId] = useState<string | null>(
+    null
+  );
 
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
   const routineTitleRef = useRef<HTMLInputElement | null>(null);
@@ -50,30 +53,65 @@ export default function CreateRoutine({
 
   const handleAddNewExerciseClick = () => {
     setIsChooseExerciseOpen(true);
-  
+
     if (excludedDivRef.current) {
       excludedDivRef.current.scrollTo({
         top: 0,
       });
     }
   };
-  
 
   const handleAddExercise = (exercises: string[]) => {
     const newItems = exercises.map((exercise) => {
       const id = uuidv4();
       return {
         id,
+        exercise,
         element: (
           <RoutineItem
             key={id}
             exercise={exercise}
             onDelete={() => handleDeleteExercise(id)}
+            onReplace={() => handleReplaceExercise(id)}
+            id={id}
           />
         ),
       };
     });
     setRoutineItems((prevState) => [...prevState, ...newItems]);
+  };
+
+  const handleReplaceExercise = (id: string) => {
+    setIsChooseExerciseOpen(true);
+    setReplacingExerciseId(id);
+  };
+
+  const handleExerciseChosen = (exercises: string[]) => {
+    if (replacingExerciseId) {
+      const updatedItems = routineItems.map((item) => {
+        if (item.id === replacingExerciseId) {
+          return {
+            ...item,
+            exercise: exercises[0],
+            element: (
+              <RoutineItem
+                key={item.id}
+                exercise={exercises[0]}
+                onDelete={() => handleDeleteExercise(item.id)}
+                onReplace={() => handleReplaceExercise(item.id)}
+                id={item.id}
+              />
+            ),
+          };
+        }
+        return item;
+      });
+      setRoutineItems(updatedItems);
+      setReplacingExerciseId(null);
+      setIsChooseExerciseOpen(false);
+    } else {
+      handleAddExercise(exercises);
+    }
   };
 
   const handleSaveClick = () => {
@@ -97,7 +135,8 @@ export default function CreateRoutine({
       {isChooseExerciseOpen && (
         <ChooseExercise
           onClose={() => setIsChooseExerciseOpen(false)}
-          onAddExercise={handleAddExercise}
+          onAddExercise={handleExerciseChosen}
+          isReplaceMode={!!replacingExerciseId}
         />
       )}
       <div className="create-routine-header" ref={topRef}>

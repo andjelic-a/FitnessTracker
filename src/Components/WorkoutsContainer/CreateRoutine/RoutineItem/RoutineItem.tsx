@@ -13,17 +13,24 @@ interface Set {
 }
 
 interface RoutineItemProps {
+  id: string;
   exercise: string;
   onDelete: () => void;
+  onReplace: (id: string) => void;
 }
 
-export default function RoutineItem({ exercise,onDelete }: RoutineItemProps) {
+export default function RoutineItem({ id, exercise,onDelete, onReplace }: RoutineItemProps) {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
 
   const handleSettingsClick = () => {
     setIsSettingsOpen(!isSettingsOpen);
+  };
+
+  const handleReplaceExerciseClick = () => {
+    setIsSettingsOpen(false);
+    onReplace(id);
   };
 
   useEffect(() => {
@@ -60,7 +67,7 @@ export default function RoutineItem({ exercise,onDelete }: RoutineItemProps) {
           }`}
         >
           <p onClick={onDelete}>Delete exercise</p>
-          <p>Replace excersice</p>
+          <p onClick={handleReplaceExerciseClick}>Replace excersice</p>
         </div>
       </div>
       <div className="routine-item-body">
