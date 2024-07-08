@@ -130,14 +130,16 @@
     background-color: $dark-200;
   }
 
-  @for $i from 1 through 7 {
-    &.fill-#{$i} {
-      $percentage: (100% / 7) * $i;
-      background: linear-gradient(
-        to top,
-        $primary-300 $percentage,
-        $dark-200 $percentage
-      );
+  @for $total from 1 through 7 {
+    @for $completed from 1 through $total {
+      &.fill-#{$completed}-of-#{$total} {
+        $percentage: (100 / $total) * $completed * 1%;
+        background: linear-gradient(
+          to top,
+          $primary-300 $percentage,
+          $dark-200 $percentage
+        );
+      }
     }
   }
 

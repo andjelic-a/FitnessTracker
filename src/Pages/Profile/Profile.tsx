@@ -27,7 +27,12 @@ export default function Profile() {
 
   return (
     <div className="profile">
-      <CreateRoutine isNewWindowOpen={isNewWindowOpen} setIsNewWindowOpen={setIsNewWindowOpen} />
+      <CreateRoutine
+        isNewWindowOpen={isNewWindowOpen}
+        setIsNewWindowOpen={setIsNewWindowOpen}
+        animationLength={0.2}
+        safeGuard={100}
+      />
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={userData.user}>
           {(loadedUserData: Awaited<typeof userData.user>) => {
@@ -67,7 +72,7 @@ export default function Profile() {
                   />
                   <button className="profile-edit-button">Edit Profile</button>
                   <div className="profile-body">
-                    <ActivityGrid />
+                    <ActivityGrid activity={loadedUserData.content.streak} />
                   </div>
                 </div>
               </>
