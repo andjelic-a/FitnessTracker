@@ -197,29 +197,29 @@ function ExerciseSet() {
                 !set.isDropdownOpen ? "hidden" : ""
               }`}
             >
-              <p>
+              <span>
                 <Icon
                   onClick={() => changeSetIcon(set.id, "1")}
                   className="set-icon"
                   name="1"
                 />
-              </p>
-              <p>
+              </span>
+              <span>
                 <div onClick={() => changeSetIcon(set.id, "w")}>Warmup</div>
-              </p>
-              <p>
+              </span>
+              <span>
                 <div onClick={() => changeSetIcon(set.id, "d")}>Drop set</div>
-              </p>
-              <p>
+              </span>
+              <span>
                 <div onClick={() => changeSetIcon(set.id, "f")}>Failure</div>
-              </p>
-              <p>
+              </span>
+              <span>
                 <Icon
                   onClick={() => deleteSet(set.id)}
                   className="set-icon x"
                   name="xmark"
                 />
-              </p>
+              </span>
             </div>
           </div>
           <div>
