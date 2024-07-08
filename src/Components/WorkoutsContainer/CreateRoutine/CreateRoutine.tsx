@@ -9,6 +9,7 @@ import reorderArray from "./ReorderArray";
 import { useGSAP } from "@gsap/react";
 import useOutsideClick from "../../../Hooks/UseOutsideClick";
 import ChooseExercise from "./ChooseExercise/ChooseExercise";
+import { APIResponse } from "../../../Types/Endpoints/ResponseParser";
 
 gsap.registerPlugin(Flip);
 gsap.registerPlugin(Observer);
@@ -50,6 +51,8 @@ export default function CreateRoutine({
   const [replacingExerciseId, setReplacingExerciseId] = useState<string | null>(
     null
   );
+  const [previouslyLoadedExercises, setPreviouslyLoadedExercises] =
+    useState<APIResponse<"/api/exercise", "get"> | null>(null);
 
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
   const routineTitleRef = useRef<HTMLInputElement | null>(null);
@@ -297,6 +300,12 @@ export default function CreateRoutine({
     });
   });
 
+  function handleExercisesLoaded(
+    exercises: APIResponse<"/api/exercise", "get">
+  ): void {
+    setPreviouslyLoadedExercises(exercises);
+  }
+
   return (
     <div
       ref={excludedDivRef}
@@ -309,6 +318,8 @@ export default function CreateRoutine({
           onClose={() => setIsChooseExerciseOpen(false)}
           onAddExercise={handleExerciseChosen}
           isReplaceMode={!!replacingExerciseId}
+          preLoadedExercises={previouslyLoadedExercises}
+          onLoadExercises={handleExercisesLoaded}
         />
       )}
       <div className="create-routine-header">

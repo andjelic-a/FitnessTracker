@@ -1,17 +1,25 @@
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Icon from "../../../Icon/Icon";
 import "./ChooseExercise.scss";
+import { Await } from "react-router-dom";
+import sendAPIRequest from "../../../../Data/SendAPIRequest";
+import { APIResponse } from "../../../../Types/Endpoints/ResponseParser";
 
-interface ChooseExerciseProps {
+type ChooseExerciseProps = {
   onClose: () => void;
   onAddExercise: (exercises: string[]) => void;
   isReplaceMode: boolean;
-}
+
+  preLoadedExercises: APIResponse<"/api/exercise", "get"> | null;
+  onLoadExercises: (exercises: APIResponse<"/api/exercise", "get">) => void;
+};
 
 export default function ChooseExercise({
   onClose,
   onAddExercise,
   isReplaceMode,
+  onLoadExercises,
+  preLoadedExercises,
 }: ChooseExerciseProps) {
   const [selectedExercises, setSelectedExercises] = useState<string[]>([]);
 
@@ -36,46 +44,58 @@ export default function ChooseExercise({
     });
   };
 
+  async function getExercises(): Promise<APIResponse<"/api/exercise", "get">> {
+    let exercises: APIResponse<"/api/exercise", "get"> | null =
+      preLoadedExercises;
+
+    if (exercises) return exercises;
+    console.log("loading");
+
+    exercises = await sendAPIRequest("/api/exercise", {
+      method: "get",
+      parameters: { limit: 10 },
+    });
+
+    onLoadExercises(exercises);
+    return exercises;
+  }
+
   return (
     <div className="choose-exercise">
       <div className="choose-exercise-header">
         <h3>Choose Exercise</h3>
       </div>
       <div className="choose-exercise-body">
-        <ExerciseOption
-          exercise="Exercise 1"
-          onSelectExercise={handleSelectExercise}
-          isSelected={selectedExercises.includes("Exercise 1")}
-        />
-        <ExerciseOption
-          exercise="Exercise 2"
-          onSelectExercise={handleSelectExercise}
-          isSelected={selectedExercises.includes("Exercise 2")}
-        />
-        <ExerciseOption
-          exercise="Exercise 3"
-          onSelectExercise={handleSelectExercise}
-          isSelected={selectedExercises.includes("Exercise 3")}
-        />
-        <ExerciseOption
-          exercise="Exercise 4"
-          onSelectExercise={handleSelectExercise}
-          isSelected={selectedExercises.includes("Exercise 4")}
-        />
-        <ExerciseOption
-          exercise="Exercise 5"
-          onSelectExercise={handleSelectExercise}
-          isSelected={selectedExercises.includes("Exercise 5")}
-        />
-        <ExerciseOption
-          exercise="Exercise 6"
-          onSelectExercise={handleSelectExercise}
-          isSelected={selectedExercises.includes("Exercise 6")}
-        />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Await resolve={getExercises()}>
+            {(exercises: APIResponse<"/api/exercise", "get">) => {
+              {
+                if (exercises.code !== "OK") return null;
+                return (
+                  <>
+                    {exercises.content.map((exercise) => (
+                      <ExerciseOption
+                        key={exercise.id}
+                        exercise={exercise.name}
+                        onSelectExercise={handleSelectExercise}
+                        isSelected={selectedExercises.includes(exercise.name)}
+                        image={exercise.image}
+                      />
+                    ))}
+                  </>
+                );
+              }
+            }}
+          </Await>
+        </Suspense>
       </div>
       <div className="choose-exercise-footer">
-        <button className="choose-exercise-button" onClick={handleConfirm}>{isReplaceMode ? "Replace" : "Add"}</button>
-        <button className="choose-exercise-button" onClick={onClose}>Cancel</button>
+        <button className="choose-exercise-button" onClick={handleConfirm}>
+          {isReplaceMode ? "Replace" : "Add"}
+        </button>
+        <button className="choose-exercise-button" onClick={onClose}>
+          Cancel
+        </button>
       </div>
     </div>
   );
@@ -85,12 +105,14 @@ interface ExerciseOptionProps {
   exercise: string;
   onSelectExercise: (exercise: string) => void;
   isSelected: boolean;
+  image: string | null;
 }
 
 function ExerciseOption({
   exercise,
   onSelectExercise,
   isSelected,
+  image,
 }: ExerciseOptionProps) {
   const handleClick = () => {
     onSelectExercise(exercise);
@@ -106,7 +128,7 @@ function ExerciseOption({
           {isSelected && <Icon className="select-circle-check" name="check" />}
         </div>
       </div>
-      <img src="../../../public/DefaultProfilePicture.png" alt="Exercise" />
+      <img src={image ?? "/DefaultProfilePicture.png"} alt="Exercise" />
       <h3>{exercise}</h3>
     </div>
   );
