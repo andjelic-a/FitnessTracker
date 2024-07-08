@@ -51,6 +51,21 @@ export default function ChooseExercise({
           onSelectExercise={handleSelectExercise}
           isSelected={selectedExercises.includes("Exercise 3")}
         />
+        <ExerciseOption
+          exercise="Exercise 4"
+          onSelectExercise={handleSelectExercise}
+          isSelected={selectedExercises.includes("Exercise 4")}
+        />
+        <ExerciseOption
+          exercise="Exercise 5"
+          onSelectExercise={handleSelectExercise}
+          isSelected={selectedExercises.includes("Exercise 5")}
+        />
+        <ExerciseOption
+          exercise="Exercise 6"
+          onSelectExercise={handleSelectExercise}
+          isSelected={selectedExercises.includes("Exercise 6")}
+        />
       </div>
       <div className="choose-exercise-footer">
         <button className="choose-exercise-button" onClick={handleConfirm}>Add</button>

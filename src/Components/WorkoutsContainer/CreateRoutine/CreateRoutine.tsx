@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import RoutineItem from "./RoutineItem/RoutineItem";
 import ChooseExercise from "./ChooseExercise/ChooseExercise";
 import "./CreateRoutine.scss";
@@ -22,6 +22,7 @@ export default function CreateRoutine({
 
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
   const routineTitleRef = useRef<HTMLInputElement | null>(null);
+  const topRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -49,7 +50,14 @@ export default function CreateRoutine({
 
   const handleAddNewExerciseClick = () => {
     setIsChooseExerciseOpen(true);
+  
+    if (excludedDivRef.current) {
+      excludedDivRef.current.scrollTo({
+        top: 0,
+      });
+    }
   };
+  
 
   const handleAddExercise = (exercises: string[]) => {
     const newItems = exercises.map((exercise) => {
@@ -67,7 +75,7 @@ export default function CreateRoutine({
     });
     setRoutineItems((prevState) => [...prevState, ...newItems]);
   };
-  
+
   const handleSaveClick = () => {
     setRoutineItems([]);
     setRoutineTitle("");
@@ -84,7 +92,7 @@ export default function CreateRoutine({
       ref={excludedDivRef}
       className={`create-routine-window ${
         isNewWindowOpen ? "create-routine-window-open" : ""
-      }`}
+      } ${isChooseExerciseOpen ? "no-scroll" : ""}`}
     >
       {isChooseExerciseOpen && (
         <ChooseExercise
@@ -92,7 +100,7 @@ export default function CreateRoutine({
           onAddExercise={handleAddExercise}
         />
       )}
-      <div className="create-routine-header">
+      <div className="create-routine-header" ref={topRef}>
         <input
           ref={routineTitleRef}
           type="text"

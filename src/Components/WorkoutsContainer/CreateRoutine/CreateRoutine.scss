@@ -35,6 +35,10 @@
   }
 }
 
+.no-scroll {
+  overflow: hidden;
+}
+
 .create-routine-window-open {
   z-index: 10;
   transform: translate(-50%, -45%) scale(1);
