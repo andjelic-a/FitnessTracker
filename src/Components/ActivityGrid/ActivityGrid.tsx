@@ -10,10 +10,10 @@ type ActivityGrid = {
 function ActivityGrid({ activity }: ActivityGrid) {
   const [hoveredWeek, setHoveredWeek] = useState<string | null>(null);
 
-  const getFillClass = (count: number) => {
-    if (count > 7) return "fill-red";
-    return `fill-${count}`;
-  };
+  function getFillClass(completed: number, total: number) {
+    if (completed >= total) return "fill-red";
+    return `fill-${completed}-of-${total}`;
+  }
 
   function addDays(date: Date, days: number) {
     const newDate = new Date(date.valueOf());
@@ -29,7 +29,8 @@ function ActivityGrid({ activity }: ActivityGrid) {
         return (
           <div
             className={`activity-item ${getFillClass(
-              weekOfActivity.completedCount
+              weekOfActivity.completedCount,
+              weekOfActivity.totalCount
             )}`}
             onMouseEnter={() => setHoveredWeek(weekOfActivity.startDate)}
             onMouseLeave={() => setHoveredWeek(null)}
