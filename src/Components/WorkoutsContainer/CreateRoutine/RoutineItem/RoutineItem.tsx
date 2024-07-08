@@ -13,10 +13,11 @@ interface Set {
 }
 
 interface RoutineItemProps {
+  exercise: string;
   onDelete: () => void;
 }
 
-export default function RoutineItem({ onDelete }: RoutineItemProps) {
+export default function RoutineItem({ exercise,onDelete }: RoutineItemProps) {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
@@ -46,7 +47,7 @@ export default function RoutineItem({ onDelete }: RoutineItemProps) {
     <div className="routine-item">
       <div className="routine-item-header">
         <img src="../../../public/DefaultProfilePicture.png" alt="" />
-        <p>Name of exercise</p>
+        <p>{exercise}</p>
         <Icon
           onClick={handleSettingsClick}
           className="routine-settings-icon"

@@ -1,7 +1,8 @@
 import { useRef, useEffect, useState } from "react";
 import RoutineItem from "./RoutineItem/RoutineItem";
+import ChooseExercise from "./ChooseExercise/ChooseExercise";
 import "./CreateRoutine.scss";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 interface CreateRoutineProps {
   isNewWindowOpen: boolean;
@@ -12,8 +13,12 @@ export default function CreateRoutine({
   isNewWindowOpen,
   setIsNewWindowOpen,
 }: CreateRoutineProps) {
-  const [routineItems, setRoutineItems] = useState<{ id: string, element: JSX.Element }[]>([]);
+  const [routineItems, setRoutineItems] = useState<
+    { id: string; element: JSX.Element }[]
+  >([]);
   const [routineTitle, setRoutineTitle] = useState<string>("");
+  const [isChooseExerciseOpen, setIsChooseExerciseOpen] =
+    useState<boolean>(false);
 
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
   const routineTitleRef = useRef<HTMLInputElement | null>(null);
@@ -39,24 +44,35 @@ export default function CreateRoutine({
   }, [setIsNewWindowOpen]);
 
   const handleDeleteExercise = (id: string) => {
-    setRoutineItems((prevState) =>
-      prevState.filter((item) => item.id !== id)
-    );
+    setRoutineItems((prevState) => prevState.filter((item) => item.id !== id));
   };
 
   const handleAddNewExerciseClick = () => {
-    const id = uuidv4();
-    const newItem = {
-      id,
-      element: <RoutineItem key={id} onDelete={() => handleDeleteExercise(id)} />
-    };
-    setRoutineItems((prevState) => [...prevState, newItem]);
+    setIsChooseExerciseOpen(true);
   };
 
+  const handleAddExercise = (exercises: string[]) => {
+    const newItems = exercises.map((exercise) => {
+      const id = uuidv4();
+      return {
+        id,
+        element: (
+          <RoutineItem
+            key={id}
+            exercise={exercise}
+            onDelete={() => handleDeleteExercise(id)}
+          />
+        ),
+      };
+    });
+    setRoutineItems((prevState) => [...prevState, ...newItems]);
+  };
+  
   const handleSaveClick = () => {
     setRoutineItems([]);
     setRoutineTitle("");
     setIsNewWindowOpen(false);
+    setIsChooseExerciseOpen(false);
   };
 
   const handleChangeTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,6 +86,12 @@ export default function CreateRoutine({
         isNewWindowOpen ? "create-routine-window-open" : ""
       }`}
     >
+      {isChooseExerciseOpen && (
+        <ChooseExercise
+          onClose={() => setIsChooseExerciseOpen(false)}
+          onAddExercise={handleAddExercise}
+        />
+      )}
       <div className="create-routine-header">
         <input
           ref={routineTitleRef}
