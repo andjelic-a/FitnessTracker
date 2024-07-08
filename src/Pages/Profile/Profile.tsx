@@ -72,7 +72,7 @@ export default function Profile() {
                   />
                   <button className="profile-edit-button">Edit Profile</button>
                   <div className="profile-body">
-                    <ActivityGrid />
+                    <ActivityGrid activity={loadedUserData.content.streak} />
                   </div>
                 </div>
               </>

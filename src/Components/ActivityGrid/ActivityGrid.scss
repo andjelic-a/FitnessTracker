@@ -132,7 +132,7 @@
 
   @for $i from 1 through 7 {
     &.fill-#{$i} {
-      $percentage: (100% / 7) * $i;
+      $percentage: (100 / 7) * $i * 1%;
       background: linear-gradient(
         to top,
         $primary-300 $percentage,
