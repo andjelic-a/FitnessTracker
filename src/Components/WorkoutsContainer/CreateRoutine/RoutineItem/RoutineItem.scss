@@ -5,7 +5,8 @@
   background-color: $dark-400;
   border-radius: 1.5rem;
   min-height: 19rem;
-  height: auto;
+  height: fit-content;
+  max-height: fit-content;
 
   &.dragging {
     opacity: 0.25;

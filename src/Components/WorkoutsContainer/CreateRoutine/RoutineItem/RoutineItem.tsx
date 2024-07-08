@@ -59,6 +59,7 @@ export default function RoutineItem({
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
   const routineItemWrapperRef = useRef<HTMLDivElement>(null);
   const observer = useRef<Observer | null>(null);
+  const isBeingDragged = useRef(false);
   const onMouseOverCallbackRef = useRef<
     ((ref: HTMLDivElement) => void) | undefined
   >(undefined);
@@ -70,10 +71,14 @@ export default function RoutineItem({
       preventDefault: true,
       dragMinimum: 20,
       onDragStart: () => {
+        isBeingDragged.current = true;
+
         if (routineItemWrapperRef.current)
           onDragStart?.(routineItemWrapperRef.current);
       },
       onDragEnd: () => {
+        isBeingDragged.current = false;
+
         if (routineItemWrapperRef.current)
           onDragEnd?.(routineItemWrapperRef.current);
       },
