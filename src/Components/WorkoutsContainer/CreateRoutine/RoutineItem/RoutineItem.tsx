@@ -27,8 +27,10 @@ interface Set {
 //**********************************************************RoutineItem***************************************************************************\\
 //#region RoutineItem
 interface RoutineItemProps {
-  onDelete: () => void;
   id: string;
+  exercise: string;
+  onDelete: () => void;
+  onReplace: (id: string) => void;
   onDragStart?: (ref: HTMLDivElement) => void;
   onDrag?: (xDelta: number, yDelta: number) => void;
   onDragEnd?: (ref: HTMLDivElement) => void;
@@ -54,7 +56,18 @@ export default function RoutineItem({
   onDrag,
   onDragEnd,
   onMouseOver,
-}: RoutineItemProps): JSX.Element {
+}: RoutineItemProps): JSX.Element;
+
+export default function RoutineItem({
+  id,
+  exercise,
+  onDelete,
+  onReplace,
+  onDrag,
+  onDragEnd,
+  onDragStart,
+  onMouseOver,
+}: RoutineItemProps) {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
   const routineItemWrapperRef = useRef<HTMLDivElement>(null);
@@ -63,6 +76,11 @@ export default function RoutineItem({
   const onMouseOverCallbackRef = useRef<
     ((ref: HTMLDivElement) => void) | undefined
   >(undefined);
+
+  const handleReplaceExerciseClick = () => {
+    setIsSettingsOpen(false);
+    onReplace(id);
+  };
 
   useEffect(() => {
     observer.current = Observer.create({
@@ -111,8 +129,8 @@ export default function RoutineItem({
       ref={routineItemWrapperRef}
     >
       <div className="routine-item-header">
-        <img src="../../../DefaultProfilePicture.png" alt="" />
-        <p>Name of exercise</p>
+        <img src="/DefaultProfilePicture.png" alt="" />
+        <p>{exercise}</p>
         <Icon
           onClick={handleSettingsClick}
           className="routine-settings-icon"
@@ -124,8 +142,8 @@ export default function RoutineItem({
             !isSettingsOpen ? "hidden" : ""
           }`}
         >
+          <p onClick={handleReplaceExerciseClick}>Replace exercise</p>
           <p onClick={onDelete}>Delete exercise</p>
-          <p>Replace exercise</p>
         </div>
       </div>
       <div className="routine-item-body">
@@ -206,21 +224,54 @@ function ExerciseSet({
     );
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      excludedDivRef.current.forEach((ref, index) => {
+        if (ref && !ref.contains(event.target as Node)) {
+          setSets((prevSets) =>
+            prevSets.map((set, i) =>
+              i === index ? { ...set, isDropdownOpen: false } : set
+            )
+          );
+        }
+      });
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const findPositionOfElement = (id: string) => {
+    return sets.findIndex((set) => set.id === id);
+  };
+
   const changeSetIcon = (id: string, icon: string) => {
-    setSets((prevSets) =>
-      prevSets.map((set) =>
-        set.id === id
-          ? icon === "1"
-            ? {
-                ...set,
-                selectedIcon: null,
-                set: prevSets.length + 1,
-                isDropdownOpen: false,
-              }
-            : { ...set, selectedIcon: icon, isDropdownOpen: false }
-          : set
-      )
-    );
+    setSets((prevSets) => {
+      return prevSets.map((set) => {
+        if (set.id === id) {
+          if (icon === "1") {
+            console.log("here");
+            return {
+              ...set,
+              selectedIcon: null,
+              set: findPositionOfElement(id) + 1,
+              isDropdownOpen: false,
+            };
+          } else {
+            return {
+              ...set,
+              selectedIcon: icon,
+              isDropdownOpen: false,
+            };
+          }
+        } else {
+          return set;
+        }
+      });
+    });
   };
 
   const deleteSet = (id: string) => {
@@ -472,41 +523,29 @@ function SingleExerciseSet({
           }
           className={`set-dropdown-menu ${!set.isDropdownOpen ? "hidden" : ""}`}
         >
-          <p>
+          <span>
             <Icon
               onClick={() => onChangeSetIcon?.(set.id, "1")}
               className="set-icon"
               name="1"
             />
-          </p>
-          <p>
-            <Icon
-              onClick={() => onChangeSetIcon?.(set.id, "w")}
-              className="set-icon"
-              name="w"
-            />
-          </p>
-          <p>
-            <Icon
-              onClick={() => onChangeSetIcon?.(set.id, "d")}
-              className="set-icon"
-              name="d"
-            />
-          </p>
-          <p>
-            <Icon
-              onClick={() => onChangeSetIcon?.(set.id, "f")}
-              className="set-icon"
-              name="f"
-            />
-          </p>
-          <p>
+          </span>
+          <span>
+            <div onClick={() => onChangeSetIcon?.(set.id, "w")}>Warmup</div>
+          </span>
+          <span>
+            <div onClick={() => onChangeSetIcon?.(set.id, "d")}>Drop set</div>
+          </span>
+          <span>
+            <div onClick={() => onChangeSetIcon?.(set.id, "f")}>Failure</div>
+          </span>
+          <span>
             <Icon
               onClick={() => onDeleteSet?.(set.id)}
               className="set-icon x"
               name="xmark"
             />
-          </p>
+          </span>
         </div>
       </div>
       <div>

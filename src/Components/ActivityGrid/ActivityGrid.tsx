@@ -1,40 +1,59 @@
 import { useState } from "react";
 import Icon from "../Icon/Icon";
 import "./ActivityGrid.scss";
+import { Schema } from "../../Types/Endpoints/SchemaParser";
 
-type Week = {
-  id: number;
-  workoutCount: number;
+type ActivityGrid = {
+  activity: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[];
 };
 
-function ActivityGrid() {
-  const [hoveredWeek, setHoveredWeek] = useState<null | number>(null);
+function ActivityGrid({ activity }: ActivityGrid) {
+  const [hoveredWeek, setHoveredWeek] = useState<string | null>(null);
 
-  const activityData: Week[] = Array.from({ length: 53 }, (_, i) => ({
-    id: i + 1,
-    workoutCount: Math.floor(Math.random() * 10), // Temporarily generated number
-  }));
+  function getFillClass(completed: number, total: number) {
+    if (completed >= total) return "fill-red";
+    return `fill-${completed}-of-${total}`;
+  }
 
-  const getFillClass = (count: number) => {
-    if (count > 7) return "fill-red";
-    return `fill-${count}`;
-  };
+  function addDays(date: Date, days: number) {
+    const newDate = new Date(date.valueOf());
+    newDate.setDate(date.getDate() + days);
+    return newDate;
+  }
 
   return (
     <div className="activity-grid">
-      {activityData.map((week) => (
-        <div
-          className={`activity-item ${getFillClass(week.workoutCount)}`}
-          onMouseEnter={() => setHoveredWeek(week.id)}
-          onMouseLeave={() => setHoveredWeek(null)}
-          key={week.id}
-        >
-          <Icon name="dumbbell" className="activity-icon" />
-          {hoveredWeek === week.id && (
-            <div className="popup">Workouts: {week.workoutCount}</div>
-          )}
-        </div>
-      ))}
+      {activity.map((weekOfActivity) => {
+        const startOfWeek = new Date(weekOfActivity.startDate);
+
+        return (
+          <div
+            className={`activity-item ${getFillClass(
+              weekOfActivity.completedCount,
+              weekOfActivity.totalCount
+            )}`}
+            onMouseEnter={() => setHoveredWeek(weekOfActivity.startDate)}
+            onMouseLeave={() => setHoveredWeek(null)}
+            key={weekOfActivity.startDate}
+          >
+            <Icon name="dumbbell" className="activity-icon" />
+            {hoveredWeek === weekOfActivity.startDate && (
+              <div className="popup">
+                Completed {weekOfActivity.completedCount} workouts between&nbsp;
+                {startOfWeek.toLocaleDateString("default", {
+                  month: "long",
+                  day: "numeric",
+                })}
+                &nbsp;and&nbsp;
+                {addDays(startOfWeek, 6).toLocaleDateString("default", {
+                  month: "long",
+                  day: "numeric",
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }

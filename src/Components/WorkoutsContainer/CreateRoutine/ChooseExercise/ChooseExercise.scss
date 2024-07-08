@@ -1,0 +1,132 @@
+@import "../../../../Palette.scss";
+
+.choose-exercise {
+  position: absolute;
+  z-index: 1;
+  background-color: $dark-200;
+  width: 80rem;
+  height: 50rem;
+  transform: translate(-2rem, -1rem);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $dark-200;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $dark-500;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: $dark-600;
+  }
+}
+
+.choose-exercise-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  min-height: 8rem;
+  border-bottom: 5px solid $dark-500;
+  margin-bottom: 2rem;
+}
+
+.choose-exercise-body {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.exercise-option {
+  width: 80%;
+  height: 7rem;
+  display: flex;
+  background-color: $dark-300;
+  margin-bottom: 2rem;
+  padding: 0.5rem 0 0.5rem 0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+
+  & .select-circle-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 6rem;
+    height: 100%;
+    border-right: 2px solid $dark-500;
+    margin-right: 2rem;
+
+    & div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      border: 2px solid $dark-500;
+
+      & .select-circle-check {
+        font-size: 2.2rem;
+      }
+    }
+  }
+
+  & img {
+    margin-right: 2rem;
+    align-self: center;
+    width: 6rem;
+    height: 6rem;
+  }
+
+  & h3 {
+    font-size: 2rem;
+  }
+
+  &:hover {
+    background-color: $dark-400;
+  }
+}
+
+.selected {
+  background-color: $dark-400;
+}
+
+.choose-exercise-footer {
+  min-height: 8rem;
+  width: 90%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  border-top: 5px solid $dark-500;
+}
+
+.choose-exercise-button {
+  justify-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20rem;
+  height: 3rem;
+  border-radius: 0.2rem;
+  border: none;
+  color: white;
+  background-color: $primary-300;
+  font-size: 1.6rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $primary-400;
+  }
+}

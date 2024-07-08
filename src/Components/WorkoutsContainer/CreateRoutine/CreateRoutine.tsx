@@ -8,6 +8,7 @@ import Observer from "gsap/Observer";
 import reorderArray from "./ReorderArray";
 import { useGSAP } from "@gsap/react";
 import useOutsideClick from "../../../Hooks/UseOutsideClick";
+import ChooseExercise from "./ChooseExercise/ChooseExercise";
 
 gsap.registerPlugin(Flip);
 gsap.registerPlugin(Observer);
@@ -18,6 +19,8 @@ interface CreateRoutineProps {
   animationLength?: number;
   safeGuard?: number;
 }
+
+type Exercise = string;
 
 /**
  * Renders a create routine component.
@@ -35,7 +38,18 @@ export default function CreateRoutine({
   animationLength,
   safeGuard,
 }: CreateRoutineProps): JSX.Element {
-  const [routineItems, setRoutineItems] = useState<string[]>([]);
+  const [routineItems, setRoutineItems] = useState<
+    {
+      id: string;
+      exercise: Exercise;
+    }[]
+  >([]);
+
+  const [isChooseExerciseOpen, setIsChooseExerciseOpen] =
+    useState<boolean>(false);
+  const [replacingExerciseId, setReplacingExerciseId] = useState<string | null>(
+    null
+  );
 
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
   const routineTitleRef = useRef<HTMLInputElement | null>(null);
@@ -101,18 +115,82 @@ export default function CreateRoutine({
   });
 
   const handleAddNewExerciseClick = () => {
-    const id = uuidv4();
-    const newItem = id;
-    setRoutineItems((prevState) => [...prevState, newItem]);
+    setIsChooseExerciseOpen(true);
+
+    if (excludedDivRef.current) {
+      excludedDivRef.current.scrollTo({
+        top: 0,
+      });
+    }
+  };
+
+  const handleAddExercise = (exercises: string[]) => {
+    const newItems = exercises.map((exercise) => {
+      const id = uuidv4();
+      return {
+        id,
+        exercise,
+        element: (
+          <RoutineItem
+            key={id}
+            exercise={exercise}
+            onDelete={() => handleDeleteExercise(id)}
+            onReplace={() => handleReplaceExercise(id)}
+            id={id}
+          />
+        ),
+      };
+    });
+    setRoutineItems((prevState) => [...prevState, ...newItems]);
+  };
+
+  const handleReplaceExercise = (id: string) => {
+    setIsChooseExerciseOpen(true);
+    setReplacingExerciseId(id);
+
+    if (excludedDivRef.current) {
+      excludedDivRef.current.scrollTo({
+        top: 0,
+      });
+    }
+  };
+
+  const handleExerciseChosen = (exercises: string[]) => {
+    if (replacingExerciseId) {
+      const updatedItems = routineItems.map((item) => {
+        if (item.id === replacingExerciseId) {
+          return {
+            ...item,
+            exercise: exercises[0],
+            element: (
+              <RoutineItem
+                key={item.id}
+                exercise={exercises[0]}
+                onDelete={() => handleDeleteExercise(item.id)}
+                onReplace={() => handleReplaceExercise(item.id)}
+                id={item.id}
+              />
+            ),
+          };
+        }
+        return item;
+      });
+      setRoutineItems(updatedItems);
+      setReplacingExerciseId(null);
+      setIsChooseExerciseOpen(false);
+    } else {
+      handleAddExercise(exercises);
+    }
   };
 
   const handleDeleteExercise = (id: string) => {
-    setRoutineItems((prevState) => prevState.filter((item) => item !== id));
+    setRoutineItems((prevState) => prevState.filter((item) => item.id !== id));
   };
 
   const handleSaveClick = () => {
     setRoutineItems([]);
     setIsNewWindowOpen(false);
+    setIsChooseExerciseOpen(false);
   };
 
   function handleHoverOverItem(target: HTMLElement) {
@@ -131,10 +209,10 @@ export default function CreateRoutine({
     if (!element) return;
 
     const hoverId = element.id.replace("routine-item-", "");
-    const hoverIdx = routineItems.findIndex((x) => x === hoverId);
+    const hoverIdx = routineItems.findIndex((x) => x.id === hoverId);
 
     const draggingId = dragging.current!.id.replace("routine-item-", "");
-    const draggingIdx = routineItems.findIndex((x) => x === draggingId);
+    const draggingIdx = routineItems.findIndex((x) => x.id === draggingId);
 
     if (
       hoverIdx === undefined ||
@@ -224,8 +302,15 @@ export default function CreateRoutine({
       ref={excludedDivRef}
       className={`create-routine-window ${
         isNewWindowOpen ? "create-routine-window-open" : ""
-      }`}
+      } ${isChooseExerciseOpen ? "no-scroll" : ""}`}
     >
+      {isChooseExerciseOpen && (
+        <ChooseExercise
+          onClose={() => setIsChooseExerciseOpen(false)}
+          onAddExercise={handleExerciseChosen}
+          isReplaceMode={!!replacingExerciseId}
+        />
+      )}
       <div className="create-routine-header">
         <input
           ref={routineTitleRef}
@@ -245,9 +330,11 @@ export default function CreateRoutine({
             onDragStart={beginDragging}
             onDragEnd={endDragging}
             onMouseOver={handleHoverOverItem}
-            key={x}
-            id={x}
-            onDelete={() => handleDeleteExercise(x)}
+            key={x.id}
+            id={x.id}
+            onDelete={() => handleDeleteExercise(x.id)}
+            exercise={x.exercise}
+            onReplace={handleReplaceExercise}
           />
         ))}
         <button
