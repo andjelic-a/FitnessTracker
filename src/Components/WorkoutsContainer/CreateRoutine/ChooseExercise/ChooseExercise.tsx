@@ -5,7 +5,7 @@ import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 
 type ChooseExerciseProps = {
   onClose: () => void;
-  onAddExercise: (exercises: string[]) => void;
+  onAddExercise: (exercises: Schema<"SimpleExerciseResponseDTO">[]) => void;
   isReplaceMode: boolean;
   preLoadedExercises: Schema<"SimpleExerciseResponseDTO">[];
 };
@@ -16,7 +16,9 @@ export default function ChooseExercise({
   isReplaceMode,
   preLoadedExercises,
 }: ChooseExerciseProps) {
-  const [selectedExercises, setSelectedExercises] = useState<string[]>([]);
+  const [selectedExercises, setSelectedExercises] = useState<
+    Schema<"SimpleExerciseResponseDTO">[]
+  >([]);
 
   const handleConfirm = () => {
     if (selectedExercises.length > 0) {
@@ -25,7 +27,9 @@ export default function ChooseExercise({
     }
   };
 
-  const handleSelectExercise = (exercise: string) => {
+  const handleSelectExercise = (
+    exercise: Schema<"SimpleExerciseResponseDTO">
+  ) => {
     setSelectedExercises((prevSelectedExercises) => {
       if (isReplaceMode) {
         return [exercise];
@@ -48,10 +52,9 @@ export default function ChooseExercise({
         {preLoadedExercises.map((exercise) => (
           <ExerciseOption
             key={exercise.id}
-            exercise={exercise.name}
+            exercise={exercise}
             onSelectExercise={handleSelectExercise}
-            isSelected={selectedExercises.includes(exercise.name)}
-            image={exercise.image}
+            isSelected={selectedExercises.includes(exercise)}
           />
         ))}
       </div>
@@ -68,18 +71,16 @@ export default function ChooseExercise({
 }
 
 interface ExerciseOptionProps {
-  exercise: string;
-  onSelectExercise: (exercise: string) => void;
+  exercise: Schema<"SimpleExerciseResponseDTO">;
+  onSelectExercise: (exercise: Schema<"SimpleExerciseResponseDTO">) => void;
   isSelected: boolean;
-  image: string | null;
 }
 
+//TODO: On hover over image (hold click on mobile) enlarge it for better UX
 function ExerciseOption({
   exercise,
   onSelectExercise,
   isSelected,
-  //TODO: On hover over image (hold click on mobile) enlarge it for better UX
-  image,
 }: ExerciseOptionProps) {
   const handleClick = () => {
     onSelectExercise(exercise);
@@ -95,8 +96,11 @@ function ExerciseOption({
           {isSelected && <Icon className="select-circle-check" name="check" />}
         </div>
       </div>
-      <img src={image ?? "/DefaultProfilePicture.png"} alt="Exercise" />
-      <h3>{exercise}</h3>
+      <img
+        src={exercise.image ?? "/DefaultProfilePicture.png"}
+        alt="Exercise"
+      />
+      <h3>{exercise.name}</h3>
     </div>
   );
 }

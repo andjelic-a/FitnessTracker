@@ -14,6 +14,7 @@ import gsap from "gsap";
 import Flip from "gsap/Flip";
 import Observer from "gsap/Observer";
 import reorderArray from "../ReorderArray.ts";
+import { Schema } from "../../../../Types/Endpoints/SchemaParser.ts";
 
 interface Set {
   id: string;
@@ -27,10 +28,10 @@ interface Set {
 //**********************************************************RoutineItem***************************************************************************\\
 //#region RoutineItem
 interface RoutineItemProps {
-  id: string;
-  exercise: string;
+  id: number;
+  exercise: Schema<"SimpleExerciseResponseDTO">;
   onDelete: () => void;
-  onReplace: (id: string) => void;
+  onReplace: (id: number) => void;
   onDragStart?: (ref: HTMLDivElement) => void;
   onDrag?: (xDelta: number, yDelta: number) => void;
   onDragEnd?: (ref: HTMLDivElement) => void;
@@ -129,8 +130,8 @@ export default function RoutineItem({
       ref={routineItemWrapperRef}
     >
       <div className="routine-item-header">
-        <img src="/DefaultProfilePicture.png" alt="" />
-        <p>{exercise}</p>
+        <img src={exercise.image ?? "/DefaultProfilePicture.png"} alt="" />
+        <p>{exercise.name}</p>
         <Icon
           onClick={handleSettingsClick}
           className="routine-settings-icon"
