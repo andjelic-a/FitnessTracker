@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useState, useCallback, Suspense } from "react";
 import RoutineItem from "./RoutineItem/RoutineItem";
 import "./CreateRoutine.scss";
 import { v4 as uuidv4 } from "uuid";
@@ -10,6 +10,8 @@ import { useGSAP } from "@gsap/react";
 import useOutsideClick from "../../../Hooks/UseOutsideClick";
 import ChooseExercise from "./ChooseExercise/ChooseExercise";
 import { APIResponse } from "../../../Types/Endpoints/ResponseParser";
+import sendAPIRequest from "../../../Data/SendAPIRequest";
+import { Await } from "react-router-dom";
 
 gsap.registerPlugin(Flip);
 gsap.registerPlugin(Observer);
@@ -300,10 +302,20 @@ export default function CreateRoutine({
     });
   });
 
-  function handleExercisesLoaded(
-    exercises: APIResponse<"/api/exercise", "get">
-  ): void {
+  async function getExercises(): Promise<APIResponse<"/api/exercise", "get">> {
+    let exercises: APIResponse<"/api/exercise", "get"> | null =
+      previouslyLoadedExercises;
+
+    if (exercises) return exercises;
+    console.log("loading");
+
+    exercises = await sendAPIRequest("/api/exercise", {
+      method: "get",
+      parameters: { limit: 10 },
+    });
+
     setPreviouslyLoadedExercises(exercises);
+    return exercises;
   }
 
   return (
@@ -314,13 +326,22 @@ export default function CreateRoutine({
       } ${isChooseExerciseOpen ? "no-scroll" : ""}`}
     >
       {isChooseExerciseOpen && (
-        <ChooseExercise
-          onClose={() => setIsChooseExerciseOpen(false)}
-          onAddExercise={handleExerciseChosen}
-          isReplaceMode={!!replacingExerciseId}
-          preLoadedExercises={previouslyLoadedExercises}
-          onLoadExercises={handleExercisesLoaded}
-        />
+        <Suspense fallback={null}>
+          <Await resolve={getExercises()}>
+            {(exercises: APIResponse<"/api/exercise", "get">) => {
+              if (exercises.code !== "OK") return null;
+
+              return (
+                <ChooseExercise
+                  onClose={() => setIsChooseExerciseOpen(false)}
+                  onAddExercise={handleExerciseChosen}
+                  isReplaceMode={!!replacingExerciseId}
+                  preLoadedExercises={exercises.content}
+                />
+              );
+            }}
+          </Await>
+        </Suspense>
       )}
       <div className="create-routine-header">
         <input

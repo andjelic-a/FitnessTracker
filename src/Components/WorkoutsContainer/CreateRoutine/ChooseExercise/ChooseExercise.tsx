@@ -1,24 +1,19 @@
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import Icon from "../../../Icon/Icon";
 import "./ChooseExercise.scss";
-import { Await } from "react-router-dom";
-import sendAPIRequest from "../../../../Data/SendAPIRequest";
-import { APIResponse } from "../../../../Types/Endpoints/ResponseParser";
+import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 
 type ChooseExerciseProps = {
   onClose: () => void;
   onAddExercise: (exercises: string[]) => void;
   isReplaceMode: boolean;
-
-  preLoadedExercises: APIResponse<"/api/exercise", "get"> | null;
-  onLoadExercises: (exercises: APIResponse<"/api/exercise", "get">) => void;
+  preLoadedExercises: Schema<"SimpleExerciseResponseDTO">[];
 };
 
 export default function ChooseExercise({
   onClose,
   onAddExercise,
   isReplaceMode,
-  onLoadExercises,
   preLoadedExercises,
 }: ChooseExerciseProps) {
   const [selectedExercises, setSelectedExercises] = useState<string[]>([]);
@@ -44,50 +39,21 @@ export default function ChooseExercise({
     });
   };
 
-  async function getExercises(): Promise<APIResponse<"/api/exercise", "get">> {
-    let exercises: APIResponse<"/api/exercise", "get"> | null =
-      preLoadedExercises;
-
-    if (exercises) return exercises;
-    console.log("loading");
-
-    exercises = await sendAPIRequest("/api/exercise", {
-      method: "get",
-      parameters: { limit: 10 },
-    });
-
-    onLoadExercises(exercises);
-    return exercises;
-  }
-
   return (
     <div className="choose-exercise">
       <div className="choose-exercise-header">
         <h3>Choose Exercise</h3>
       </div>
       <div className="choose-exercise-body">
-        <Suspense fallback={<div>Loading...</div>}>
-          <Await resolve={getExercises()}>
-            {(exercises: APIResponse<"/api/exercise", "get">) => {
-              {
-                if (exercises.code !== "OK") return null;
-                return (
-                  <>
-                    {exercises.content.map((exercise) => (
-                      <ExerciseOption
-                        key={exercise.id}
-                        exercise={exercise.name}
-                        onSelectExercise={handleSelectExercise}
-                        isSelected={selectedExercises.includes(exercise.name)}
-                        image={exercise.image}
-                      />
-                    ))}
-                  </>
-                );
-              }
-            }}
-          </Await>
-        </Suspense>
+        {preLoadedExercises.map((exercise) => (
+          <ExerciseOption
+            key={exercise.id}
+            exercise={exercise.name}
+            onSelectExercise={handleSelectExercise}
+            isSelected={selectedExercises.includes(exercise.name)}
+            image={exercise.image}
+          />
+        ))}
       </div>
       <div className="choose-exercise-footer">
         <button className="choose-exercise-button" onClick={handleConfirm}>
@@ -112,6 +78,7 @@ function ExerciseOption({
   exercise,
   onSelectExercise,
   isSelected,
+  //TODO: On hover over image (hold click on mobile) enlarge it for better UX
   image,
 }: ExerciseOptionProps) {
   const handleClick = () => {
