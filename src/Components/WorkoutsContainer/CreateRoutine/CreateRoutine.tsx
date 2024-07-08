@@ -25,7 +25,6 @@ export default function CreateRoutine({
 
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
   const routineTitleRef = useRef<HTMLInputElement | null>(null);
-  const topRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -84,6 +83,12 @@ export default function CreateRoutine({
   const handleReplaceExercise = (id: string) => {
     setIsChooseExerciseOpen(true);
     setReplacingExerciseId(id);
+
+    if (excludedDivRef.current) {
+      excludedDivRef.current.scrollTo({
+        top: 0,
+      });
+    }
   };
 
   const handleExerciseChosen = (exercises: string[]) => {
@@ -139,7 +144,7 @@ export default function CreateRoutine({
           isReplaceMode={!!replacingExerciseId}
         />
       )}
-      <div className="create-routine-header" ref={topRef}>
+      <div className="create-routine-header">
         <input
           ref={routineTitleRef}
           type="text"
