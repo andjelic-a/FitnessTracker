@@ -19,7 +19,7 @@ import { Schema } from "../../../../Types/Endpoints/SchemaParser.ts";
 interface Set {
   id: string;
   set: number | JSX.Element;
-  kg: number;
+  rir: number;
   repRange: string;
   isDropdownOpen: boolean;
   selectedIcon: string | null;
@@ -27,15 +27,22 @@ interface Set {
 
 //**********************************************************RoutineItem***************************************************************************\\
 //#region RoutineItem
+export type RoutineItemData = {
+  exercise: Schema<"SimpleExerciseResponseDTO">;
+  sets: Set[];
+  id: string;
+};
+
 interface RoutineItemProps {
-  id: number;
+  id: string;
   exercise: Schema<"SimpleExerciseResponseDTO">;
   onDelete: () => void;
-  onReplace: (id: number) => void;
+  onReplace: (id: string) => void;
   onDragStart?: (ref: HTMLDivElement) => void;
   onDrag?: (xDelta: number, yDelta: number) => void;
   onDragEnd?: (ref: HTMLDivElement) => void;
   onMouseOver?: (ref: HTMLDivElement) => void;
+  onChange?: (routineItem: RoutineItemData) => void;
 }
 
 /**
@@ -68,6 +75,7 @@ export default function RoutineItem({
   onDragEnd,
   onDragStart,
   onMouseOver,
+  onChange,
 }: RoutineItemProps) {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
@@ -132,6 +140,14 @@ export default function RoutineItem({
   const handleImageScaleToggle = (image: HTMLImageElement) =>
     void image.classList.toggle("big");
 
+  const handleSetsChanged = (newSets: Set[]) => {
+    onChange?.({
+      id,
+      exercise,
+      sets: newSets,
+    });
+  };
+
   return (
     <div
       className="routine-item"
@@ -168,6 +184,7 @@ export default function RoutineItem({
         <ExerciseSet
           onStartDraggingSet={() => observer.current?.disable()}
           onEndDraggingSet={() => observer.current?.enable()}
+          onExerciseSetChanged={handleSetsChanged}
           animationLength={0.2}
           safeGuard={20}
         />
@@ -182,6 +199,7 @@ export default function RoutineItem({
 type ExerciseSetProps = {
   onStartDraggingSet?: () => void;
   onEndDraggingSet?: () => void;
+  onExerciseSetChanged?: (sets: Set[]) => void;
   safeGuard?: number;
   animationLength?: number;
 };
@@ -199,6 +217,7 @@ type ExerciseSetProps = {
 function ExerciseSet({
   onStartDraggingSet,
   onEndDraggingSet,
+  onExerciseSetChanged,
   animationLength,
   safeGuard,
 }: ExerciseSetProps): JSX.Element {
@@ -206,7 +225,7 @@ function ExerciseSet({
     {
       id: uuidv4(),
       set: 1,
-      kg: 0,
+      rir: 0,
       repRange: "0",
       isDropdownOpen: false,
       selectedIcon: null,
@@ -221,14 +240,15 @@ function ExerciseSet({
   });
 
   const addSet = () => {
-    const newSet = {
+    const newSet: Set = {
       id: uuidv4(),
       set: sets.length + 1,
-      kg: 0,
+      rir: 0,
       repRange: "0",
       isDropdownOpen: false,
       selectedIcon: null,
     };
+
     setSets([...sets, newSet]);
   };
 
@@ -338,10 +358,12 @@ function ExerciseSet({
   useEffect(() => {
     preAnimationRect.current = dragging.current?.getBoundingClientRect();
     playReorderAnimation();
+    onExerciseSetChanged?.(sets);
   }, [sets]);
 
   const playReorderAnimation = contextSafe(() => {
     if (!currentFlipState.current) return;
+
     isMoveAvailable.current = false;
     setTimeout(() => void (isMoveAvailable.current = true), safeGuard ?? 20);
 
@@ -360,6 +382,12 @@ function ExerciseSet({
 
     return;
   });
+
+  function handleSetChanged(set: Set) {
+    setSets((prevSets) =>
+      prevSets.map((prevSet) => (prevSet.id === set.id ? set : prevSet))
+    );
+  }
 
   function handleHoverOverItem(target: HTMLElement) {
     if (
@@ -423,13 +451,14 @@ function ExerciseSet({
     <div className="exercise-set" ref={setContainerRef}>
       <div className="exercise-set-placeholder">
         <p>SET</p>
-        <p>INTENSITY</p>
+        <p>RiR</p>
         <p>VOLUME</p>
       </div>
       {sets.map((set, index) => (
         <SingleExerciseSet
           key={set.id}
           set={set}
+          onSetChanged={handleSetChanged}
           index={index}
           onSetClick={handleSetClick}
           onDeleteSet={deleteSet}
@@ -452,6 +481,7 @@ function ExerciseSet({
 //#region SingleExerciseSet
 type SingleExerciseSetProps = {
   set: Set;
+  onSetChanged: (newSet: Set) => void;
   index: number;
   dropDownMenuWrapper?: MutableRefObject<(HTMLDivElement | null)[]>;
   onSetClick?: (id: string) => void;
@@ -487,6 +517,7 @@ function SingleExerciseSet({
   onDragEnd,
   onDragStart,
   onMouseOver,
+  onSetChanged,
 }: SingleExerciseSetProps): JSX.Element {
   const setWrapperRef = useRef<HTMLDivElement>(null);
 
@@ -567,10 +598,20 @@ function SingleExerciseSet({
         </div>
       </div>
       <div>
-        <input type="text" placeholder={set.kg.toString()} maxLength={4} />
+        <input
+          type="text"
+          placeholder={set.rir.toString()}
+          maxLength={4}
+          onChange={(e) => onSetChanged?.({ ...set, rir: +e.target.value })}
+        />
       </div>
       <div>
-        <input type="text" placeholder={set.repRange} maxLength={4} />
+        <input
+          type="text"
+          placeholder={set.repRange}
+          maxLength={4}
+          onChange={(e) => onSetChanged?.({ ...set, repRange: e.target.value })}
+        />
       </div>
     </div>
   );

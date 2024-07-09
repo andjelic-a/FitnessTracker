@@ -1,17 +1,18 @@
 import "./CreateRoutine.scss";
 import { useRef, useEffect, useState, useCallback, Suspense } from "react";
-import RoutineItem from "./RoutineItem/RoutineItem";
+import RoutineItem, { RoutineItemData } from "./RoutineItem/RoutineItem";
 import gsap from "gsap";
 import Flip from "gsap/Flip";
 import Observer from "gsap/Observer";
 import reorderArray from "./ReorderArray";
 import { useGSAP } from "@gsap/react";
 import useOutsideClick from "../../../Hooks/UseOutsideClick";
-import ChooseExercise from "./ChooseExercise/ChooseExercise";
+import ChooseExercise, {
+  ChooseExerciseType,
+} from "./ChooseExercise/ChooseExercise";
 import { APIResponse } from "../../../Types/Endpoints/ResponseParser";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import { Await } from "react-router-dom";
-import { Schema } from "../../../Types/Endpoints/SchemaParser";
 
 gsap.registerPlugin(Flip);
 gsap.registerPlugin(Observer);
@@ -23,29 +24,19 @@ interface CreateRoutineProps {
   safeGuard?: number;
 }
 
-/**
- * Renders a create routine component.
- *
- * @param {CreateRoutineProps} props - The component props.
- * @param {boolean} props.isNewWindowOpen - Indicates if the new window is open.
- * @param {Function} props.setIsNewWindowOpen - Function to set the isNewWindowOpen state.
- * @param {number} [props.animationLength] - Length of each animation triggered when dragging a routine item.
- * @param {number} [props.safeGuard] - Duration of a safe guard which gets activated when a user begins dragging, this prevents routine items from teleporting.
- * @return {JSX.Element} The rendered create routine component.
- */
 export default function CreateRoutine({
   isNewWindowOpen,
   setIsNewWindowOpen,
   animationLength,
   safeGuard,
 }: CreateRoutineProps): JSX.Element {
-  const [routineItems, setRoutineItems] = useState<
-    Schema<"SimpleExerciseResponseDTO">[]
-  >([]);
+  const [routineItems, setRoutineItems] = useState<ChooseExerciseType[]>([]);
+
+  const createdRoutineItemsRef = useRef<RoutineItemData[]>([]);
 
   const [isChooseExerciseOpen, setIsChooseExerciseOpen] =
     useState<boolean>(false);
-  const [replacingExerciseId, setReplacingExerciseId] = useState<number | null>(
+  const [replacingExerciseId, setReplacingExerciseId] = useState<string | null>(
     null
   );
   const [previouslyLoadedExercises, setPreviouslyLoadedExercises] = useState<
@@ -96,6 +87,23 @@ export default function CreateRoutine({
 
   useEffect(() => {
     playReorderAnimation();
+
+    const idToIndexMap = new Map<string, number>();
+    routineItems.forEach((item, index) => {
+      idToIndexMap.set(item.id, index);
+    });
+
+    createdRoutineItemsRef.current.sort((a, b) => {
+      const indexA = idToIndexMap.get(a.id);
+      const indexB = idToIndexMap.get(b.id);
+
+      if (indexA !== undefined && indexB !== undefined) {
+        return indexA - indexB;
+      }
+
+      return 0;
+    });
+    console.log(createdRoutineItemsRef.current);
   }, [routineItems]);
 
   useOutsideClick(excludedDivRef, () => {
@@ -132,13 +140,20 @@ export default function CreateRoutine({
     }
   };
 
-  const handleAddExercise = (
-    exercises: Schema<"SimpleExerciseResponseDTO">[]
-  ) => {
+  const handleAddExercise = (exercises: ChooseExerciseType[]) => {
     setRoutineItems((prevState) => [...prevState, ...exercises]);
   };
 
-  const handleReplaceExercise = (id: number) => {
+  function handleRoutineItemChanged(routineItem: RoutineItemData) {
+    const index = createdRoutineItemsRef.current.findIndex(
+      (x) => x.id === routineItem.id
+    );
+
+    if (index < 0) createdRoutineItemsRef.current.push(routineItem);
+    else createdRoutineItemsRef.current[index] = routineItem;
+  }
+
+  const handleReplaceExercise = (id: string) => {
     setIsChooseExerciseOpen(true);
     setReplacingExerciseId(id);
 
@@ -149,9 +164,7 @@ export default function CreateRoutine({
     }
   };
 
-  const handleExerciseChosen = (
-    exercises: Schema<"SimpleExerciseResponseDTO">[]
-  ) => {
+  const handleExerciseChosen = (exercises: ChooseExerciseType[]) => {
     if (replacingExerciseId) {
       const updatedItems = routineItems.slice();
       updatedItems.forEach((x, i) => {
@@ -166,11 +179,20 @@ export default function CreateRoutine({
     }
   };
 
-  const handleDeleteExercise = (id: number) => {
+  const handleDeleteExercise = (id: string) => {
     setRoutineItems((prevState) => prevState.filter((item) => item.id !== id));
   };
 
   const handleSaveClick = () => {
+    if (!routineTitleRef.current?.value) return;
+
+    /*     const a: Schema<"CreateWorkoutRequestDTO"> = {
+      isPublic: true,
+      name: routineTitleRef.current?.value,
+      description: "",
+      sets: [],
+    };
+ */
     setRoutineItems([]);
     setIsNewWindowOpen(false);
     setIsChooseExerciseOpen(false);
@@ -191,10 +213,10 @@ export default function CreateRoutine({
     }
     if (!element) return;
 
-    const hoverId = +element.id.replace("routine-item-", "");
+    const hoverId = element.id.replace("routine-item-", "");
     const hoverIdx = routineItems.findIndex((x) => x.id === hoverId);
 
-    const draggingId = +dragging.current!.id.replace("routine-item-", "");
+    const draggingId = dragging.current!.id.replace("routine-item-", "");
     const draggingIdx = routineItems.findIndex((x) => x.id === draggingId);
 
     if (
@@ -381,10 +403,11 @@ export default function CreateRoutine({
             onDragStart={beginDragging}
             onDragEnd={endDragging}
             onMouseOver={handleHoverOverItem}
+            onChange={handleRoutineItemChanged}
             key={x.id}
             id={x.id}
             onDelete={() => handleDeleteExercise(x.id)}
-            exercise={x}
+            exercise={x.exercise}
             onReplace={handleReplaceExercise}
           />
         ))}
