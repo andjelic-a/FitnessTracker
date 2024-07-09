@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Icon from "../../../Icon/Icon";
 import "./ChooseExercise.scss";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
-import useLazyLoading from "../../../../Hooks/UseLazyLoading";
 
 type ChooseExerciseProps = {
   onClose: () => void;
@@ -52,12 +51,16 @@ export default function ChooseExercise({
     Schema<"SimpleExerciseResponseDTO">[]
   >([]);
 
-  useLazyLoading("#choose-exercise", 0.7, async () => {
+  // useLazyLoading("#choose-exercise", 0.7, requireLazyLoad);
+
+  async function requireLazyLoad() {
     if (!onRequireLazyLoad) return;
 
     const newExercises = await onRequireLazyLoad();
     setLazyLoaded([...lazyLoaded, ...(newExercises ?? [])]);
-  });
+  }
+
+  const requireLazyLoadBtnRef = useRef<HTMLButtonElement>(null);
 
   return (
     <div className="choose-exercise" id="choose-exercise">
@@ -77,6 +80,17 @@ export default function ChooseExercise({
       <div className="choose-exercise-footer">
         <button className="choose-exercise-button" onClick={handleConfirm}>
           {isReplaceMode ? "Replace" : "Add"}
+        </button>
+        <button
+          className={"choose-exercise-button"}
+          ref={requireLazyLoadBtnRef}
+          onClick={requireLazyLoad}
+          disabled={
+            lazyLoaded.length + preLoadedExercises.length > 0 &&
+            (lazyLoaded.length + preLoadedExercises.length) % 10 !== 0
+          }
+        >
+          More
         </button>
         <button className="choose-exercise-button" onClick={onClose}>
           Cancel
