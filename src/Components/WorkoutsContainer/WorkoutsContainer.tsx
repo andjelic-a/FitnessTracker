@@ -2,15 +2,10 @@ import { useState } from "react";
 import Icon from "../../Components/Icon/Icon";
 import InputField from "../../Components/InputField/InputField";
 import "./WorkoutsContainer.scss";
-
-type Workout = {
-  id: string;
-  name: string;
-  image: string | null;
-};
+import { Schema } from "../../Types/Endpoints/SchemaParser";
 
 type WorkoutsContainerProps = {
-  workouts: Workout[];
+  workouts: Schema<"SimpleWorkoutResponseDTO">[];
   toggleNewWorkoutWindow: () => void;
 };
 
@@ -40,7 +35,7 @@ function WorkoutsContainer({
           {(showAll ? workouts : workouts.slice(0, 8)).map((workout) => (
             <div key={workout.id}>
               <img
-                src={workout.image ?? "/DefaultProfilePicture.png"}
+                src={workout.creator.image ?? "/DefaultProfilePicture.png"}
                 alt={"Profile picture of the creator of " + workout.name}
               />
               <p>{workout.name}</p>

@@ -20,14 +20,14 @@ gsap.registerPlugin(Observer);
 
 interface CreateRoutineProps {
   isNewWindowOpen: boolean;
-  setIsNewWindowOpen: (isOpen: boolean) => void;
+  closeNewRoutineWindow: () => void;
   animationLength?: number;
   safeGuard?: number;
 }
 
 export default function CreateRoutine({
   isNewWindowOpen,
-  setIsNewWindowOpen,
+  closeNewRoutineWindow,
   animationLength,
   safeGuard,
 }: CreateRoutineProps): JSX.Element {
@@ -104,11 +104,10 @@ export default function CreateRoutine({
 
       return 0;
     });
-    console.log(createdRoutineItemsRef.current);
   }, [routineItems]);
 
   useOutsideClick(excludedDivRef, () => {
-    setIsNewWindowOpen(false);
+    closeNewRoutineWindow();
     if (routineTitleRef.current) routineTitleRef.current.value = "";
   });
 
@@ -232,7 +231,7 @@ export default function CreateRoutine({
     });
 
     setRoutineItems([]);
-    setIsNewWindowOpen(false);
+    closeNewRoutineWindow();
     setIsChooseExerciseOpen(false);
   };
 
@@ -363,8 +362,6 @@ export default function CreateRoutine({
       previouslyLoadedExercises.filter((x) => x.code === "OK").length +
       lazyLoadedExercises.current.length;
 
-    console.log(okResultCount * 10);
-
     loadingExercises.current ??= sendAPIRequest("/api/exercise", {
       method: "get",
       parameters: {
@@ -410,7 +407,6 @@ export default function CreateRoutine({
                     .filter((x) => x.code === "OK")
                     .flatMap((x) => x.content)}
                   onRequireLazyLoad={async () => {
-                    console.log("lazy load");
                     const newExercises = getMoreExercises(true).then((x) =>
                       x?.code === "OK" ? x?.content ?? [] : []
                     );

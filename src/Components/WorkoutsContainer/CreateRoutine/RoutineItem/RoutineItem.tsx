@@ -295,7 +295,6 @@ function ExerciseSet({
       return prevSets.map((set) => {
         if (set.id === id) {
           if (icon === "1") {
-            console.log("here");
             return {
               ...set,
               selectedIcon: null,
