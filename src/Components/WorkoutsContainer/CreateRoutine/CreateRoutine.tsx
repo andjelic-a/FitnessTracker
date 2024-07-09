@@ -48,8 +48,16 @@ export default function CreateRoutine({
   const [replacingExerciseId, setReplacingExerciseId] = useState<number | null>(
     null
   );
-  const [previouslyLoadedExercises, setPreviouslyLoadedExercises] =
-    useState<APIResponse<"/api/exercise", "get"> | null>(null);
+  const [previouslyLoadedExercises, setPreviouslyLoadedExercises] = useState<
+    APIResponse<"/api/exercise", "get">[]
+  >([]);
+
+  const loadingExercises = useRef<Promise<
+    APIResponse<"/api/exercise", "get">
+  > | null>(null);
+
+  const reachedEnd = useRef(false);
+  const lazyLoadedExercises = useRef<APIResponse<"/api/exercise", "get">[]>([]);
 
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
   const routineTitleRef = useRef<HTMLInputElement | null>(null);
@@ -272,20 +280,46 @@ export default function CreateRoutine({
     });
   });
 
-  async function getExercises(): Promise<APIResponse<"/api/exercise", "get">> {
-    let exercises: APIResponse<"/api/exercise", "get"> | null =
-      previouslyLoadedExercises;
+  async function getExercises(): Promise<
+    APIResponse<"/api/exercise", "get">[]
+  > {
+    if (previouslyLoadedExercises.length > 0) return previouslyLoadedExercises;
 
-    if (exercises) return exercises;
-    console.log("loading");
+    if (loadingExercises.current) return [await loadingExercises.current];
 
-    exercises = await sendAPIRequest("/api/exercise", {
+    const newExercises = await getMoreExercises(false);
+    if (!newExercises) return [];
+
+    setPreviouslyLoadedExercises([newExercises]);
+    return [newExercises];
+  }
+
+  async function getMoreExercises(
+    lazyLoading: boolean
+  ): Promise<APIResponse<"/api/exercise", "get"> | null> {
+    if (reachedEnd.current) return null;
+
+    const okResultCount =
+      previouslyLoadedExercises.filter((x) => x.code === "OK").length +
+      lazyLoadedExercises.current.length;
+
+    console.log(okResultCount * 10);
+
+    loadingExercises.current ??= sendAPIRequest("/api/exercise", {
       method: "get",
-      parameters: { limit: 10 },
+      parameters: {
+        limit: 10,
+        offset: okResultCount * 10,
+      },
+    }).then((x) => {
+      loadingExercises.current = null;
+      if (x.code === "OK" && x.content.length < 10) reachedEnd.current = true;
+      if (lazyLoading && x.code === "OK") lazyLoadedExercises.current.push(x);
+
+      return x;
     });
 
-    setPreviouslyLoadedExercises(exercises);
-    return exercises;
+    return loadingExercises.current;
   }
 
   return (
@@ -298,15 +332,30 @@ export default function CreateRoutine({
       {isChooseExerciseOpen && (
         <Suspense fallback={null}>
           <Await resolve={getExercises()}>
-            {(exercises: APIResponse<"/api/exercise", "get">) => {
-              if (exercises.code !== "OK") return null;
-
+            {(exercises: APIResponse<"/api/exercise", "get">[]) => {
               return (
                 <ChooseExercise
-                  onClose={() => setIsChooseExerciseOpen(false)}
+                  onClose={() => {
+                    setIsChooseExerciseOpen(false);
+                    setPreviouslyLoadedExercises([
+                      ...previouslyLoadedExercises,
+                      ...lazyLoadedExercises.current,
+                    ]);
+
+                    lazyLoadedExercises.current = [];
+                  }}
                   onAddExercise={handleExerciseChosen}
                   isReplaceMode={!!replacingExerciseId}
-                  preLoadedExercises={exercises.content}
+                  exercises={exercises
+                    .filter((x) => x.code === "OK")
+                    .flatMap((x) => x.content)}
+                  onRequireLazyLoad={async () => {
+                    console.log("lazy load");
+                    const newExercises = getMoreExercises(true).then((x) =>
+                      x?.code === "OK" ? x?.content ?? [] : []
+                    );
+                    return newExercises;
+                  }}
                 />
               );
             }}

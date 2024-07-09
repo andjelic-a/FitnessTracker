@@ -2,19 +2,24 @@ import { useState } from "react";
 import Icon from "../../../Icon/Icon";
 import "./ChooseExercise.scss";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
+import useLazyLoading from "../../../../Hooks/UseLazyLoading";
 
 type ChooseExerciseProps = {
   onClose: () => void;
   onAddExercise: (exercises: Schema<"SimpleExerciseResponseDTO">[]) => void;
   isReplaceMode: boolean;
-  preLoadedExercises: Schema<"SimpleExerciseResponseDTO">[];
+  exercises: Schema<"SimpleExerciseResponseDTO">[];
+  onRequireLazyLoad?: () => Promise<
+    Schema<"SimpleExerciseResponseDTO">[] | null
+  >;
 };
 
 export default function ChooseExercise({
   onClose,
   onAddExercise,
   isReplaceMode,
-  preLoadedExercises,
+  exercises: preLoadedExercises,
+  onRequireLazyLoad,
 }: ChooseExerciseProps) {
   const [selectedExercises, setSelectedExercises] = useState<
     Schema<"SimpleExerciseResponseDTO">[]
@@ -43,13 +48,24 @@ export default function ChooseExercise({
     });
   };
 
+  const [lazyLoaded, setLazyLoaded] = useState<
+    Schema<"SimpleExerciseResponseDTO">[]
+  >([]);
+
+  useLazyLoading("#choose-exercise", 0.7, async () => {
+    if (!onRequireLazyLoad) return;
+
+    const newExercises = await onRequireLazyLoad();
+    setLazyLoaded([...lazyLoaded, ...(newExercises ?? [])]);
+  });
+
   return (
-    <div className="choose-exercise">
+    <div className="choose-exercise" id="choose-exercise">
       <div className="choose-exercise-header">
         <h3>Choose Exercise</h3>
       </div>
       <div className="choose-exercise-body">
-        {preLoadedExercises.map((exercise) => (
+        {[...preLoadedExercises, ...lazyLoaded].map((exercise) => (
           <ExerciseOption
             key={exercise.id}
             exercise={exercise}

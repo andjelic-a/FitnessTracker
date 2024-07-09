@@ -6,8 +6,7 @@ export default function useScrollPosition(target: string) {
 
   useEffect(() => {
     const element = document.querySelector(target);
-    console.log(element);
-    
+
     if (!element) return;
     elementRect.current = element.getBoundingClientRect();
 
@@ -24,12 +23,6 @@ export default function useScrollPosition(target: string) {
       element.scrollTop / (element.scrollHeight - element.clientHeight);
 
     setScrollPosition(scrollPercentage);
-    
-    console.log(
-      element.scrollTop,
-      element.scrollHeight - element.clientHeight,
-      scrollPercentage
-    );
   }
 
   return scrollPosition;
