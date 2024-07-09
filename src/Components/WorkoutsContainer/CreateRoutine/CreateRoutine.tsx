@@ -1,6 +1,6 @@
+import "./CreateRoutine.scss";
 import { useRef, useEffect, useState, useCallback, Suspense } from "react";
 import RoutineItem from "./RoutineItem/RoutineItem";
-import "./CreateRoutine.scss";
 import gsap from "gsap";
 import Flip from "gsap/Flip";
 import Observer from "gsap/Observer";

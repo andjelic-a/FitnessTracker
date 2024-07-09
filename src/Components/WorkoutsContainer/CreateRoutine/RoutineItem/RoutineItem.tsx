@@ -123,6 +123,15 @@ export default function RoutineItem({
 
   const handleSettingsClick = () => void setIsSettingsOpen(!isSettingsOpen);
 
+  const handleImageScaleUp = (image: HTMLImageElement) =>
+    void image.classList.add("big");
+
+  const handleImageScaleDown = (image: HTMLImageElement) =>
+    void image.classList.remove("big");
+
+  const handleImageScaleToggle = (image: HTMLImageElement) =>
+    void image.classList.toggle("big");
+
   return (
     <div
       className="routine-item"
@@ -130,7 +139,15 @@ export default function RoutineItem({
       ref={routineItemWrapperRef}
     >
       <div className="routine-item-header">
-        <img src={exercise.image ?? "/DefaultProfilePicture.png"} alt="" />
+        <img
+          src={exercise.image}
+          alt="Exercise"
+          onMouseOver={(e) => handleImageScaleUp(e.target as HTMLImageElement)}
+          onMouseLeave={(e) =>
+            handleImageScaleDown(e.target as HTMLImageElement)
+          }
+          onClick={(e) => handleImageScaleToggle(e.target as HTMLImageElement)}
+        />
         <p>{exercise.name}</p>
         <Icon
           onClick={handleSettingsClick}

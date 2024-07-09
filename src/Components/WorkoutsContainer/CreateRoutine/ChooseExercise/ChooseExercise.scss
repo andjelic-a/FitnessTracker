@@ -86,8 +86,14 @@
   & img {
     margin-right: 2rem;
     align-self: center;
-    width: 6rem;
-    height: 6rem;
+    max-height: 6rem;
+    aspect-ratio: auto;
+    transition: scale 0.2s;
+
+    &.big {
+      scale: 2.5;
+      z-index: 2;
+    }
   }
 
   & h3 {

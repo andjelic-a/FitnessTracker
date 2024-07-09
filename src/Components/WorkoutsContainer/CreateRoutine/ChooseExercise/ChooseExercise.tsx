@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
-import Icon from "../../../Icon/Icon";
 import "./ChooseExercise.scss";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
+import { ExerciseOption } from "./ExerciseOption";
 
 type ChooseExerciseProps = {
   onClose: () => void;
@@ -96,41 +96,6 @@ export default function ChooseExercise({
           Cancel
         </button>
       </div>
-    </div>
-  );
-}
-
-interface ExerciseOptionProps {
-  exercise: Schema<"SimpleExerciseResponseDTO">;
-  onSelectExercise: (exercise: Schema<"SimpleExerciseResponseDTO">) => void;
-  isSelected: boolean;
-}
-
-//TODO: On hover over image (hold click on mobile) enlarge it for better UX
-function ExerciseOption({
-  exercise,
-  onSelectExercise,
-  isSelected,
-}: ExerciseOptionProps) {
-  const handleClick = () => {
-    onSelectExercise(exercise);
-  };
-
-  return (
-    <div
-      className={"exercise-option " + (isSelected ? "selected" : "")}
-      onClick={handleClick}
-    >
-      <div className="select-circle-container">
-        <div>
-          {isSelected && <Icon className="select-circle-check" name="check" />}
-        </div>
-      </div>
-      <img
-        src={exercise.image ?? "/DefaultProfilePicture.png"}
-        alt="Exercise"
-      />
-      <h3>{exercise.name}</h3>
     </div>
   );
 }
