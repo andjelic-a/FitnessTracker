@@ -29,4 +29,16 @@
       background-color: $primary-400;
     }
   }
+
+  i {
+    margin-left: 0.5rem;
+    font-size: 0.85em;
+    color: $primary-500;
+    cursor: pointer;
+    transition: all 0.2s ease-in;
+
+    &:hover {
+      color: $primary-200;
+    }
+  }
 }

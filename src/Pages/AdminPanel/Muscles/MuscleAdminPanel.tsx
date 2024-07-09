@@ -4,6 +4,7 @@ import InputField from "../../../Components/InputField/InputField";
 import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import { APIResponse } from "../../../Types/Endpoints/ResponseParser";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
+import Icon from "../../../Components/Icon/Icon";
 
 export default function MuscleAdminPanel() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -18,18 +19,33 @@ export default function MuscleAdminPanel() {
         method: "post",
         payload: {
           muscleGroupId: muscleGroupId,
-          name: inputRef.current?.value ?? "You didn't type anything",
+          name: inputRef.current?.value
+            ? inputRef.current.value
+            : "You didn't type anything",
         },
-      });
+      }).then(() => void navigate(0));
     } else if (type === "muscle-group") {
       sendAPIRequest("/api/musclegroup", {
         method: "post",
         payload: {
-          name: inputRef.current?.value ?? "You didn't type anything",
+          name: inputRef.current?.value
+            ? inputRef.current.value
+            : "You didn't type anything",
         },
-      });
+      }).then(() => void navigate(0));
     }
-    navigate(0);
+  }
+
+  function handleDelete(type: "muscle" | "muscle-group", id: number) {
+    sendAPIRequest(
+      type === "muscle" ? "/api/muscle/{id}" : "/api/musclegroup/{id}",
+      {
+        method: "delete",
+        parameters: {
+          id,
+        },
+      }
+    ).then(() => void navigate(0));
   }
 
   return (
@@ -52,10 +68,26 @@ export default function MuscleAdminPanel() {
                 <ul>
                   {muscles.content.map((muscleGroup) => (
                     <li key={"muscle-group" + muscleGroup.id}>
-                      <h1>{muscleGroup.name}</h1>
+                      <h1>
+                        {muscleGroup.name}{" "}
+                        <Icon
+                          name="trash"
+                          onClick={() =>
+                            handleDelete("muscle-group", muscleGroup.id)
+                          }
+                        />
+                      </h1>
                       <ul>
                         {muscleGroup.muscles.map((muscle) => (
-                          <li key={"muscle" + muscle.id}>{muscle.name}</li>
+                          <li key={"muscle" + muscle.id}>
+                            {muscle.name}{" "}
+                            <Icon
+                              name="trash"
+                              onClick={() =>
+                                handleDelete("muscle-group", muscleGroup.id)
+                              }
+                            />
+                          </li>
                         ))}
                         <button onClick={() => add("muscle", muscleGroup.id)}>
                           Add muscle to {muscleGroup.name}
