@@ -16,6 +16,8 @@ import Observer from "gsap/Observer";
 import reorderArray from "../ReorderArray.ts";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser.ts";
 
+//TODO: Make rir field disappear when not needed, when warmup or failure is selected
+//TODO:? Make rir field or the entire routine item change color or tint based on type of set
 interface Set {
   id: string;
   set: number | JSX.Element;

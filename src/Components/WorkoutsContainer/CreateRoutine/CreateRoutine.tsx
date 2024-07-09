@@ -226,6 +226,11 @@ export default function CreateRoutine({
         }),
     };
 
+    sendAPIRequest("/api/workout", {
+      method: "post",
+      payload: newWorkout,
+    });
+
     setRoutineItems([]);
     setIsNewWindowOpen(false);
     setIsChooseExerciseOpen(false);
