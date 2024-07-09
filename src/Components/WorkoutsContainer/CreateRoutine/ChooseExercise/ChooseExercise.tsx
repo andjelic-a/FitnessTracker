@@ -1,19 +1,28 @@
-import { useState } from "react";
-import Icon from "../../../Icon/Icon";
+import { useRef, useState } from "react";
 import "./ChooseExercise.scss";
+import { Schema } from "../../../../Types/Endpoints/SchemaParser";
+import { ExerciseOption } from "./ExerciseOption";
 
-interface ChooseExerciseProps {
+type ChooseExerciseProps = {
   onClose: () => void;
-  onAddExercise: (exercises: string[]) => void;
+  onAddExercise: (exercises: Schema<"SimpleExerciseResponseDTO">[]) => void;
   isReplaceMode: boolean;
-}
+  exercises: Schema<"SimpleExerciseResponseDTO">[];
+  onRequireLazyLoad?: () => Promise<
+    Schema<"SimpleExerciseResponseDTO">[] | null
+  >;
+};
 
 export default function ChooseExercise({
   onClose,
   onAddExercise,
   isReplaceMode,
+  exercises: preLoadedExercises,
+  onRequireLazyLoad,
 }: ChooseExerciseProps) {
-  const [selectedExercises, setSelectedExercises] = useState<string[]>([]);
+  const [selectedExercises, setSelectedExercises] = useState<
+    Schema<"SimpleExerciseResponseDTO">[]
+  >([]);
 
   const handleConfirm = () => {
     if (selectedExercises.length > 0) {
@@ -22,7 +31,9 @@ export default function ChooseExercise({
     }
   };
 
-  const handleSelectExercise = (exercise: string) => {
+  const handleSelectExercise = (
+    exercise: Schema<"SimpleExerciseResponseDTO">
+  ) => {
     setSelectedExercises((prevSelectedExercises) => {
       if (isReplaceMode) {
         return [exercise];
@@ -36,78 +47,55 @@ export default function ChooseExercise({
     });
   };
 
+  const [lazyLoaded, setLazyLoaded] = useState<
+    Schema<"SimpleExerciseResponseDTO">[]
+  >([]);
+
+  // useLazyLoading("#choose-exercise", 0.7, requireLazyLoad);
+
+  async function requireLazyLoad() {
+    if (!onRequireLazyLoad) return;
+
+    const newExercises = await onRequireLazyLoad();
+    setLazyLoaded([...lazyLoaded, ...(newExercises ?? [])]);
+  }
+
+  const requireLazyLoadBtnRef = useRef<HTMLButtonElement>(null);
+
   return (
-    <div className="choose-exercise">
+    <div className="choose-exercise" id="choose-exercise">
       <div className="choose-exercise-header">
         <h3>Choose Exercise</h3>
       </div>
       <div className="choose-exercise-body">
-        <ExerciseOption
-          exercise="Exercise 1"
-          onSelectExercise={handleSelectExercise}
-          isSelected={selectedExercises.includes("Exercise 1")}
-        />
-        <ExerciseOption
-          exercise="Exercise 2"
-          onSelectExercise={handleSelectExercise}
-          isSelected={selectedExercises.includes("Exercise 2")}
-        />
-        <ExerciseOption
-          exercise="Exercise 3"
-          onSelectExercise={handleSelectExercise}
-          isSelected={selectedExercises.includes("Exercise 3")}
-        />
-        <ExerciseOption
-          exercise="Exercise 4"
-          onSelectExercise={handleSelectExercise}
-          isSelected={selectedExercises.includes("Exercise 4")}
-        />
-        <ExerciseOption
-          exercise="Exercise 5"
-          onSelectExercise={handleSelectExercise}
-          isSelected={selectedExercises.includes("Exercise 5")}
-        />
-        <ExerciseOption
-          exercise="Exercise 6"
-          onSelectExercise={handleSelectExercise}
-          isSelected={selectedExercises.includes("Exercise 6")}
-        />
+        {[...preLoadedExercises, ...lazyLoaded].map((exercise) => (
+          <ExerciseOption
+            key={exercise.id}
+            exercise={exercise}
+            onSelectExercise={handleSelectExercise}
+            isSelected={selectedExercises.includes(exercise)}
+          />
+        ))}
       </div>
       <div className="choose-exercise-footer">
-        <button className="choose-exercise-button" onClick={handleConfirm}>{isReplaceMode ? "Replace" : "Add"}</button>
-        <button className="choose-exercise-button" onClick={onClose}>Cancel</button>
+        <button className="choose-exercise-button" onClick={handleConfirm}>
+          {isReplaceMode ? "Replace" : "Add"}
+        </button>
+        <button
+          className={"choose-exercise-button"}
+          ref={requireLazyLoadBtnRef}
+          onClick={requireLazyLoad}
+          disabled={
+            lazyLoaded.length + preLoadedExercises.length > 0 &&
+            (lazyLoaded.length + preLoadedExercises.length) % 10 !== 0
+          }
+        >
+          More
+        </button>
+        <button className="choose-exercise-button" onClick={onClose}>
+          Cancel
+        </button>
       </div>
-    </div>
-  );
-}
-
-interface ExerciseOptionProps {
-  exercise: string;
-  onSelectExercise: (exercise: string) => void;
-  isSelected: boolean;
-}
-
-function ExerciseOption({
-  exercise,
-  onSelectExercise,
-  isSelected,
-}: ExerciseOptionProps) {
-  const handleClick = () => {
-    onSelectExercise(exercise);
-  };
-
-  return (
-    <div
-      className={"exercise-option " + (isSelected ? "selected" : "")}
-      onClick={handleClick}
-    >
-      <div className="select-circle-container">
-        <div>
-          {isSelected && <Icon className="select-circle-check" name="check" />}
-        </div>
-      </div>
-      <img src="../../../public/DefaultProfilePicture.png" alt="Exercise" />
-      <h3>{exercise}</h3>
     </div>
   );
 }

@@ -1,7 +1,6 @@
-import { useRef, useEffect, useState, useCallback } from "react";
-import RoutineItem from "./RoutineItem/RoutineItem";
 import "./CreateRoutine.scss";
-import { v4 as uuidv4 } from "uuid";
+import { useRef, useEffect, useState, useCallback, Suspense } from "react";
+import RoutineItem from "./RoutineItem/RoutineItem";
 import gsap from "gsap";
 import Flip from "gsap/Flip";
 import Observer from "gsap/Observer";
@@ -9,6 +8,10 @@ import reorderArray from "./ReorderArray";
 import { useGSAP } from "@gsap/react";
 import useOutsideClick from "../../../Hooks/UseOutsideClick";
 import ChooseExercise from "./ChooseExercise/ChooseExercise";
+import { APIResponse } from "../../../Types/Endpoints/ResponseParser";
+import sendAPIRequest from "../../../Data/SendAPIRequest";
+import { Await } from "react-router-dom";
+import { Schema } from "../../../Types/Endpoints/SchemaParser";
 
 gsap.registerPlugin(Flip);
 gsap.registerPlugin(Observer);
@@ -19,8 +22,6 @@ interface CreateRoutineProps {
   animationLength?: number;
   safeGuard?: number;
 }
-
-type Exercise = string;
 
 /**
  * Renders a create routine component.
@@ -39,17 +40,24 @@ export default function CreateRoutine({
   safeGuard,
 }: CreateRoutineProps): JSX.Element {
   const [routineItems, setRoutineItems] = useState<
-    {
-      id: string;
-      exercise: Exercise;
-    }[]
+    Schema<"SimpleExerciseResponseDTO">[]
   >([]);
 
   const [isChooseExerciseOpen, setIsChooseExerciseOpen] =
     useState<boolean>(false);
-  const [replacingExerciseId, setReplacingExerciseId] = useState<string | null>(
+  const [replacingExerciseId, setReplacingExerciseId] = useState<number | null>(
     null
   );
+  const [previouslyLoadedExercises, setPreviouslyLoadedExercises] = useState<
+    APIResponse<"/api/exercise", "get">[]
+  >([]);
+
+  const loadingExercises = useRef<Promise<
+    APIResponse<"/api/exercise", "get">
+  > | null>(null);
+
+  const reachedEnd = useRef(false);
+  const lazyLoadedExercises = useRef<APIResponse<"/api/exercise", "get">[]>([]);
 
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
   const routineTitleRef = useRef<HTMLInputElement | null>(null);
@@ -124,27 +132,13 @@ export default function CreateRoutine({
     }
   };
 
-  const handleAddExercise = (exercises: string[]) => {
-    const newItems = exercises.map((exercise) => {
-      const id = uuidv4();
-      return {
-        id,
-        exercise,
-        element: (
-          <RoutineItem
-            key={id}
-            exercise={exercise}
-            onDelete={() => handleDeleteExercise(id)}
-            onReplace={() => handleReplaceExercise(id)}
-            id={id}
-          />
-        ),
-      };
-    });
-    setRoutineItems((prevState) => [...prevState, ...newItems]);
+  const handleAddExercise = (
+    exercises: Schema<"SimpleExerciseResponseDTO">[]
+  ) => {
+    setRoutineItems((prevState) => [...prevState, ...exercises]);
   };
 
-  const handleReplaceExercise = (id: string) => {
+  const handleReplaceExercise = (id: number) => {
     setIsChooseExerciseOpen(true);
     setReplacingExerciseId(id);
 
@@ -155,26 +149,15 @@ export default function CreateRoutine({
     }
   };
 
-  const handleExerciseChosen = (exercises: string[]) => {
+  const handleExerciseChosen = (
+    exercises: Schema<"SimpleExerciseResponseDTO">[]
+  ) => {
     if (replacingExerciseId) {
-      const updatedItems = routineItems.map((item) => {
-        if (item.id === replacingExerciseId) {
-          return {
-            ...item,
-            exercise: exercises[0],
-            element: (
-              <RoutineItem
-                key={item.id}
-                exercise={exercises[0]}
-                onDelete={() => handleDeleteExercise(item.id)}
-                onReplace={() => handleReplaceExercise(item.id)}
-                id={item.id}
-              />
-            ),
-          };
-        }
-        return item;
+      const updatedItems = routineItems.slice();
+      updatedItems.forEach((x, i) => {
+        if (x.id === replacingExerciseId) updatedItems[i] = exercises[0];
       });
+
       setRoutineItems(updatedItems);
       setReplacingExerciseId(null);
       setIsChooseExerciseOpen(false);
@@ -183,7 +166,7 @@ export default function CreateRoutine({
     }
   };
 
-  const handleDeleteExercise = (id: string) => {
+  const handleDeleteExercise = (id: number) => {
     setRoutineItems((prevState) => prevState.filter((item) => item.id !== id));
   };
 
@@ -208,10 +191,10 @@ export default function CreateRoutine({
     }
     if (!element) return;
 
-    const hoverId = element.id.replace("routine-item-", "");
+    const hoverId = +element.id.replace("routine-item-", "");
     const hoverIdx = routineItems.findIndex((x) => x.id === hoverId);
 
-    const draggingId = dragging.current!.id.replace("routine-item-", "");
+    const draggingId = +dragging.current!.id.replace("routine-item-", "");
     const draggingIdx = routineItems.findIndex((x) => x.id === draggingId);
 
     if (
@@ -297,6 +280,48 @@ export default function CreateRoutine({
     });
   });
 
+  async function getExercises(): Promise<
+    APIResponse<"/api/exercise", "get">[]
+  > {
+    if (previouslyLoadedExercises.length > 0) return previouslyLoadedExercises;
+
+    if (loadingExercises.current) return [await loadingExercises.current];
+
+    const newExercises = await getMoreExercises(false);
+    if (!newExercises) return [];
+
+    setPreviouslyLoadedExercises([newExercises]);
+    return [newExercises];
+  }
+
+  async function getMoreExercises(
+    lazyLoading: boolean
+  ): Promise<APIResponse<"/api/exercise", "get"> | null> {
+    if (reachedEnd.current) return null;
+
+    const okResultCount =
+      previouslyLoadedExercises.filter((x) => x.code === "OK").length +
+      lazyLoadedExercises.current.length;
+
+    console.log(okResultCount * 10);
+
+    loadingExercises.current ??= sendAPIRequest("/api/exercise", {
+      method: "get",
+      parameters: {
+        limit: 10,
+        offset: okResultCount * 10,
+      },
+    }).then((x) => {
+      loadingExercises.current = null;
+      if (x.code === "OK" && x.content.length < 10) reachedEnd.current = true;
+      if (lazyLoading && x.code === "OK") lazyLoadedExercises.current.push(x);
+
+      return x;
+    });
+
+    return loadingExercises.current;
+  }
+
   return (
     <div
       ref={excludedDivRef}
@@ -305,11 +330,37 @@ export default function CreateRoutine({
       } ${isChooseExerciseOpen ? "no-scroll" : ""}`}
     >
       {isChooseExerciseOpen && (
-        <ChooseExercise
-          onClose={() => setIsChooseExerciseOpen(false)}
-          onAddExercise={handleExerciseChosen}
-          isReplaceMode={!!replacingExerciseId}
-        />
+        <Suspense fallback={null}>
+          <Await resolve={getExercises()}>
+            {(exercises: APIResponse<"/api/exercise", "get">[]) => {
+              return (
+                <ChooseExercise
+                  onClose={() => {
+                    setIsChooseExerciseOpen(false);
+                    setPreviouslyLoadedExercises([
+                      ...previouslyLoadedExercises,
+                      ...lazyLoadedExercises.current,
+                    ]);
+
+                    lazyLoadedExercises.current = [];
+                  }}
+                  onAddExercise={handleExerciseChosen}
+                  isReplaceMode={!!replacingExerciseId}
+                  exercises={exercises
+                    .filter((x) => x.code === "OK")
+                    .flatMap((x) => x.content)}
+                  onRequireLazyLoad={async () => {
+                    console.log("lazy load");
+                    const newExercises = getMoreExercises(true).then((x) =>
+                      x?.code === "OK" ? x?.content ?? [] : []
+                    );
+                    return newExercises;
+                  }}
+                />
+              );
+            }}
+          </Await>
+        </Suspense>
       )}
       <div className="create-routine-header">
         <input
@@ -333,7 +384,7 @@ export default function CreateRoutine({
             key={x.id}
             id={x.id}
             onDelete={() => handleDeleteExercise(x.id)}
-            exercise={x.exercise}
+            exercise={x}
             onReplace={handleReplaceExercise}
           />
         ))}

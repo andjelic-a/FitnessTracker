@@ -7525,7 +7525,6 @@ type MappedEndpoints = {
           };
           image: {
             type: "string";
-            nullable: true;
           };
           description: {
             type: "string";
@@ -7901,7 +7900,6 @@ type MappedEndpoints = {
           };
           image: {
             type: "string";
-            nullable: true;
           };
         };
         additionalProperties: false;
