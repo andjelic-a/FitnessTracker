@@ -39,12 +39,12 @@ function ActivityGrid({ activity }: ActivityGrid) {
             <Icon name="dumbbell" className="activity-icon" />
             {hoveredWeek === weekOfActivity.startDate && (
               <div className="popup">
-                Completed {weekOfActivity.completedCount} workouts between&nbsp;
+                Completed {weekOfActivity.completedCount} workouts from&nbsp;
                 {startOfWeek.toLocaleDateString("default", {
                   month: "long",
                   day: "numeric",
                 })}
-                &nbsp;and&nbsp;
+                &nbsp;to&nbsp;
                 {addDays(startOfWeek, 6).toLocaleDateString("default", {
                   month: "long",
                   day: "numeric",
