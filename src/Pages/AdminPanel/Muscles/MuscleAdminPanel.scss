@@ -1,0 +1,32 @@
+@import "../../../Palette.scss";
+
+#muscle-admin-panel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  button {
+    justify-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20rem;
+    height: 3rem;
+    border-radius: 0.2rem;
+    border: none;
+    color: white;
+    background-color: $primary-300;
+    font-size: 1.6rem;
+    cursor: pointer;
+
+    &:disabled {
+      cursor: not-allowed;
+      background-color: $primary-200;
+    }
+
+    &:not(:disabled):hover {
+      background-color: $primary-400;
+    }
+  }
+}
