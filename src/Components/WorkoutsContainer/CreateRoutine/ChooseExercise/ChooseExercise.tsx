@@ -2,10 +2,16 @@ import { useRef, useState } from "react";
 import "./ChooseExercise.scss";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 import { ExerciseOption } from "./ExerciseOption";
+import { v4 as uuidv4 } from "uuid";
+
+export type ChooseExerciseType = {
+  id: string;
+  exercise: Schema<"SimpleExerciseResponseDTO">;
+};
 
 type ChooseExerciseProps = {
   onClose: () => void;
-  onAddExercise: (exercises: Schema<"SimpleExerciseResponseDTO">[]) => void;
+  onAddExercise: (exercise: ChooseExerciseType[]) => void;
   isReplaceMode: boolean;
   exercises: Schema<"SimpleExerciseResponseDTO">[];
   onRequireLazyLoad?: () => Promise<
@@ -26,7 +32,12 @@ export default function ChooseExercise({
 
   const handleConfirm = () => {
     if (selectedExercises.length > 0) {
-      onAddExercise(selectedExercises);
+      onAddExercise(
+        selectedExercises.map((x) => ({
+          exercise: x,
+          id: uuidv4(),
+        }))
+      );
       onClose();
     }
   };
