@@ -13,6 +13,7 @@ import ChooseExercise, {
 import { APIResponse } from "../../../Types/Endpoints/ResponseParser";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import { Await } from "react-router-dom";
+import { Schema } from "../../../Types/Endpoints/SchemaParser";
 
 gsap.registerPlugin(Flip);
 gsap.registerPlugin(Observer);
@@ -186,13 +187,45 @@ export default function CreateRoutine({
   const handleSaveClick = () => {
     if (!routineTitleRef.current?.value) return;
 
-    /*     const a: Schema<"CreateWorkoutRequestDTO"> = {
+    const newWorkout: Schema<"CreateWorkoutRequestDTO"> = {
       isPublic: true,
       name: routineTitleRef.current?.value,
       description: "",
-      sets: [],
+      sets: createdRoutineItemsRef.current
+        .flatMap((routineItem) =>
+          routineItem.sets.map((set) => ({
+            exerciseId: routineItem.exercise.id,
+            set: set,
+          }))
+        )
+        .map((x) => {
+          let repRange = x.set.repRange
+            .trim()
+            .split("-")
+            .map((x) => parseInt(x));
+
+          if (repRange.length === 1)
+            repRange = x.set.repRange
+              .trim()
+              .split(" ")
+              .map((x) => parseInt(x));
+
+          if (repRange.length === 1) repRange = [repRange[0], repRange[0]];
+
+          const enumValue = ["1", "w", "d", "f"].indexOf(
+            x.set.selectedIcon ?? "1"
+          );
+
+          return {
+            exerciseId: x.exerciseId,
+            bottomRepRange: repRange[0],
+            topRepRange: repRange[1],
+            intensity: x.set.rir,
+            type: enumValue as Schema<"SetType">,
+          };
+        }),
     };
- */
+
     setRoutineItems([]);
     setIsNewWindowOpen(false);
     setIsChooseExerciseOpen(false);

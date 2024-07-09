@@ -22,8 +22,10 @@ interface Set {
   rir: number;
   repRange: string;
   isDropdownOpen: boolean;
-  selectedIcon: string | null;
+  selectedIcon: PossibleSetIcon | null;
 }
+
+type PossibleSetIcon = "1" | "w" | "d" | "f";
 
 //**********************************************************RoutineItem***************************************************************************\\
 //#region RoutineItem
@@ -286,7 +288,7 @@ function ExerciseSet({
     return sets.findIndex((set) => set.id === id);
   };
 
-  const changeSetIcon = (id: string, icon: string) => {
+  const changeSetIcon = (id: string, icon: PossibleSetIcon) => {
     setSets((prevSets) => {
       return prevSets.map((set) => {
         if (set.id === id) {
@@ -486,7 +488,7 @@ type SingleExerciseSetProps = {
   dropDownMenuWrapper?: MutableRefObject<(HTMLDivElement | null)[]>;
   onSetClick?: (id: string) => void;
   onDeleteSet?: (id: string) => void;
-  onChangeSetIcon?: (id: string, icon: string) => void;
+  onChangeSetIcon?: (id: string, icon: PossibleSetIcon) => void;
   onDragStart?: (ref: HTMLDivElement) => void;
   onDragEnd?: (ref: HTMLDivElement) => void;
   onMouseOver?: (ref: HTMLDivElement) => void;

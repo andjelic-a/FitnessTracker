@@ -3,6 +3,8 @@ import type { RefToSchemaName, SchemaFromString } from "./SchemaParser";
 export type ParseSchemaProperty<T> = T extends { type: infer Type }
   ? Type extends "integer"
     ? number
+    : Type extends "number"
+    ? number
     : Type extends "string"
     ? string
     : Type extends "boolean"
