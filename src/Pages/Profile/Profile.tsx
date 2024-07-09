@@ -1,8 +1,10 @@
-import { useState, Suspense } from "react";
+import { useState, Suspense, useRef } from "react";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
 import WorkoutsContainer from "../../Components/WorkoutsContainer/WorkoutsContainer";
 import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
 import CreateRoutine from "../../Components/WorkoutsContainer/CreateRoutine/CreateRoutine";
+import FollowContainer from "../../Components/FollowContainer/FollowContainer";
+import useOutsideClick from "../../Hooks/UseOutsideClick";
 import { Await, useLoaderData } from "react-router-dom";
 import "./Profile.scss";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";
@@ -20,10 +22,21 @@ export default function Profile() {
   };
 
   const [isNewWindowOpen, setIsNewWindowOpen] = useState<boolean>(false);
+  const [folowersOrFollowing, setFollowersOrFollowing] = useState<
+    "followers" | "following" | null
+  >(null);
+
+  const followContainerRef = useRef<HTMLDivElement>(null);
 
   const toggleNewWorkoutWindow = () => {
     setIsNewWindowOpen((prev) => !prev);
   };
+
+  useOutsideClick(followContainerRef, () => {
+    if (folowersOrFollowing) {
+      setFollowersOrFollowing(null);
+    }
+  });
 
   return (
     <div className="profile">
@@ -63,12 +76,17 @@ export default function Profile() {
                   </Await>
                 </Suspense>
                 <div className="profile-user-container">
+                  <FollowContainer
+                    ref = {followContainerRef}
+                    folowersOrFollowing={folowersOrFollowing}
+                  />
                   <ProfileHeader
                     username={loadedUserData.content.name}
                     image={loadedUserData.content.image}
                     workouts={loadedUserData.content.totalCompletedWorkouts}
                     followers={loadedUserData.content.followers}
                     following={loadedUserData.content.following}
+                    setFollowersOrFollowing={setFollowersOrFollowing}
                   />
                   <button className="profile-edit-button">Edit Profile</button>
                   <div className="profile-body">
