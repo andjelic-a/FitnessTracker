@@ -34,26 +34,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -79,6 +59,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -127,26 +127,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "200": {
             description: "OK";
             content: {
@@ -172,6 +152,26 @@ type MappedEndpoints = {
                   items: {
                     $ref: "#/components/schemas/SimpleMuscleGroupResponseDTO";
                   };
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
                 };
               };
             };
@@ -211,26 +211,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -256,6 +236,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -300,26 +300,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -365,6 +345,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -436,26 +436,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "200": {
             description: "OK";
             content: {
@@ -485,6 +465,26 @@ type MappedEndpoints = {
               };
             };
           };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
         };
       };
       put: {
@@ -509,48 +509,8 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "204": {
             description: "No Content";
-          };
-          "404": {
-            description: "Not Found";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
           };
           "401": {
             description: "Unauthorized";
@@ -574,6 +534,46 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "404": {
+            description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -610,48 +610,8 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "200": {
             description: "OK";
-          };
-          "404": {
-            description: "Not Found";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
           };
           "401": {
             description: "Unauthorized";
@@ -693,24 +653,26 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-    };
-    "/api/exercise/{id}/favorite": {
-      post: {
-        tags: ["Exercise"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "integer";
-              format: "int32";
+          "404": {
+            description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
             };
-          }
-        ];
-        responses: {
+          };
           "429": {
             description: "Too Many Requests";
             content: {
@@ -731,6 +693,24 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+    };
+    "/api/exercise/{id}/favorite": {
+      post: {
+        tags: ["Exercise"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          }
+        ];
+        responses: {
           "201": {
             description: "Created";
           };
@@ -774,22 +754,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-      delete: {
-        tags: ["Exercise"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "integer";
-              format: "int32";
-            };
-          }
-        ];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -810,6 +774,22 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+      delete: {
+        tags: ["Exercise"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          }
+        ];
+        responses: {
           "204": {
             description: "No Content";
           };
@@ -853,24 +833,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-    };
-    "/api/exercise/{id}/detailed": {
-      get: {
-        tags: ["Exercise"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "integer";
-              format: "int32";
-            };
-          }
-        ];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -891,6 +853,24 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+    };
+    "/api/exercise/{id}/detailed": {
+      get: {
+        tags: ["Exercise"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          }
+        ];
+        responses: {
           "200": {
             description: "OK";
             content: {
@@ -913,6 +893,26 @@ type MappedEndpoints = {
           };
           "404": {
             description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -957,26 +957,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -1002,6 +982,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -1050,26 +1050,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "200": {
             description: "OK";
             content: {
@@ -1095,6 +1075,26 @@ type MappedEndpoints = {
                   items: {
                     $ref: "#/components/schemas/SimpleMuscleResponseDTO";
                   };
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
                 };
               };
             };
@@ -1134,26 +1134,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -1197,24 +1177,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-    };
-    "/api/muscle/{id}": {
-      delete: {
-        tags: ["Muscle"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "integer";
-              format: "int32";
-            };
-          }
-        ];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -1235,6 +1197,24 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+    };
+    "/api/muscle/{id}": {
+      delete: {
+        tags: ["Muscle"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          }
+        ];
+        responses: {
           "204": {
             description: "No Content";
           };
@@ -1280,6 +1260,26 @@ type MappedEndpoints = {
           };
           "404": {
             description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -1324,26 +1324,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -1369,6 +1349,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -1410,26 +1410,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "200": {
             description: "OK";
             content: {
@@ -1455,6 +1435,26 @@ type MappedEndpoints = {
                   items: {
                     $ref: "#/components/schemas/SimpleMuscleGroupResponseDTO";
                   };
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
                 };
               };
             };
@@ -1494,26 +1494,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -1557,24 +1537,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-    };
-    "/api/musclegroup/{id}": {
-      delete: {
-        tags: ["MuscleGroup"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "integer";
-              format: "int32";
-            };
-          }
-        ];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -1595,6 +1557,24 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+    };
+    "/api/musclegroup/{id}": {
+      delete: {
+        tags: ["MuscleGroup"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          }
+        ];
+        responses: {
           "204": {
             description: "No Content";
           };
@@ -1658,6 +1638,26 @@ type MappedEndpoints = {
               };
             };
           };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
         };
       };
     };
@@ -1683,26 +1683,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "200": {
             description: "OK";
             content: {
@@ -1728,6 +1708,26 @@ type MappedEndpoints = {
                   items: {
                     $ref: "#/components/schemas/DetailedMuscleGroupResponseDTO";
                   };
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
                 };
               };
             };
@@ -1758,26 +1758,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -1843,6 +1823,26 @@ type MappedEndpoints = {
           };
           "404": {
             description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -1898,26 +1898,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -1981,22 +1961,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-      get: {
-        tags: ["Split"];
-        parameters: [
-          {
-            name: "splitId";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          }
-        ];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -2017,6 +1981,22 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+      get: {
+        tags: ["Split"];
+        parameters: [
+          {
+            name: "splitId";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+              format: "uuid";
+            };
+          }
+        ];
+        responses: {
           "200": {
             description: "OK";
             content: {
@@ -2068,6 +2048,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -2132,26 +2132,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -2197,6 +2177,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -2242,26 +2242,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "204": {
             description: "No Content";
           };
@@ -2307,6 +2287,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -2343,26 +2343,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -2426,22 +2406,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-      delete: {
-        tags: ["Split"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          }
-        ];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -2462,6 +2426,22 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+      delete: {
+        tags: ["Split"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+              format: "uuid";
+            };
+          }
+        ];
+        responses: {
           "204": {
             description: "No Content";
           };
@@ -2507,6 +2487,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -2543,26 +2543,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -2626,22 +2606,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-      delete: {
-        tags: ["Split"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          }
-        ];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -2662,6 +2626,22 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+      delete: {
+        tags: ["Split"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+              format: "uuid";
+            };
+          }
+        ];
+        responses: {
           "204": {
             description: "No Content";
           };
@@ -2707,6 +2687,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -2743,26 +2743,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -2826,22 +2806,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-      delete: {
-        tags: ["Split"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          }
-        ];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -2862,6 +2826,22 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+      delete: {
+        tags: ["Split"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+              format: "uuid";
+            };
+          }
+        ];
+        responses: {
           "204": {
             description: "No Content";
           };
@@ -2925,22 +2905,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-    };
-    "/api/split/public/simple": {
-      get: {
-        tags: ["Split"];
-        parameters: [
-          {
-            name: "name";
-            in: "query";
-            schema: {
-              type: "string";
-            };
-          }
-        ];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -2961,6 +2925,22 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+    };
+    "/api/split/public/simple": {
+      get: {
+        tags: ["Split"];
+        parameters: [
+          {
+            name: "name";
+            in: "query";
+            schema: {
+              type: "string";
+            };
+          }
+        ];
+        responses: {
           "200": {
             description: "OK";
             content: {
@@ -2986,6 +2966,26 @@ type MappedEndpoints = {
                   items: {
                     $ref: "#/components/schemas/SimpleSplitResponseDTO";
                   };
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
                 };
               };
             };
@@ -3015,26 +3015,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "200": {
             description: "OK";
             content: {
@@ -3064,22 +3044,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-    };
-    "/api/split/personal/simple": {
-      get: {
-        tags: ["Split"];
-        parameters: [
-          {
-            name: "name";
-            in: "query";
-            schema: {
-              type: "string";
-            };
-          }
-        ];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -3100,6 +3064,22 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+    };
+    "/api/split/personal/simple": {
+      get: {
+        tags: ["Split"];
+        parameters: [
+          {
+            name: "name";
+            in: "query";
+            schema: {
+              type: "string";
+            };
+          }
+        ];
+        responses: {
           "200": {
             description: "OK";
             content: {
@@ -3169,24 +3149,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-    };
-    "/api/split/{id}/detailed": {
-      get: {
-        tags: ["Split"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          }
-        ];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -3207,6 +3169,24 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+    };
+    "/api/split/{id}/detailed": {
+      get: {
+        tags: ["Split"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+              format: "uuid";
+            };
+          }
+        ];
+        responses: {
           "200": {
             description: "OK";
             content: {
@@ -3267,6 +3247,26 @@ type MappedEndpoints = {
               };
             };
           };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
         };
       };
     };
@@ -3294,26 +3294,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "200": {
             description: "OK";
             content: {
@@ -3365,6 +3345,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -3420,26 +3420,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "204": {
             description: "No Content";
           };
@@ -3505,6 +3485,26 @@ type MappedEndpoints = {
           };
           "404": {
             description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -3568,26 +3568,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "204": {
             description: "No Content";
           };
@@ -3653,6 +3633,26 @@ type MappedEndpoints = {
           };
           "404": {
             description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -3697,26 +3697,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
             content: {
@@ -3739,6 +3719,26 @@ type MappedEndpoints = {
           };
           "400": {
             description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -3783,26 +3783,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
             content: {
@@ -3825,6 +3805,26 @@ type MappedEndpoints = {
           };
           "400": {
             description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -3850,26 +3850,6 @@ type MappedEndpoints = {
       post: {
         tags: ["User"];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
             content: {
@@ -3930,13 +3910,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-    };
-    "/api/user/logout": {
-      delete: {
-        tags: ["User"];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -3957,11 +3930,38 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+    };
+    "/api/user/logout": {
+      delete: {
+        tags: ["User"];
+        responses: {
           "204": {
             description: "No Content";
           };
           "401": {
             description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -3987,26 +3987,6 @@ type MappedEndpoints = {
       post: {
         tags: ["User"];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -4052,6 +4032,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -4088,26 +4088,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "204": {
             description: "No Content";
           };
@@ -4171,24 +4151,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-    };
-    "/api/user/{id}/follow": {
-      post: {
-        tags: ["User"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          }
-        ];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -4209,6 +4171,24 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+    };
+    "/api/user/{id}/follow": {
+      post: {
+        tags: ["User"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+              format: "uuid";
+            };
+          }
+        ];
+        responses: {
           "204": {
             description: "No Content";
           };
@@ -4234,6 +4214,26 @@ type MappedEndpoints = {
           };
           "401": {
             description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -4268,26 +4268,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "204": {
             description: "No Content";
           };
@@ -4313,6 +4293,26 @@ type MappedEndpoints = {
           };
           "401": {
             description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -4357,26 +4357,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -4402,6 +4382,26 @@ type MappedEndpoints = {
           };
           "404": {
             description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -4457,8 +4457,11 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
+          "204": {
+            description: "No Content";
+          };
+          "400": {
+            description: "Bad Request";
             content: {
               "text/plain": {
                 schema: {
@@ -4477,11 +4480,8 @@ type MappedEndpoints = {
               };
             };
           };
-          "204": {
-            description: "No Content";
-          };
-          "400": {
-            description: "Bad Request";
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -4526,26 +4526,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -4609,13 +4589,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-    };
-    "/api/user/me/detailed": {
-      get: {
-        tags: ["User"];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -4636,6 +4609,13 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+    };
+    "/api/user/me/detailed": {
+      get: {
+        tags: ["User"];
+        responses: {
           "200": {
             description: "OK";
             content: {
@@ -4676,24 +4656,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-    };
-    "/api/user/{id}/detailed": {
-      get: {
-        tags: ["User"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          }
-        ];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -4714,22 +4676,60 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+    };
+    "/api/user/{id}/detailed": {
+      get: {
+        tags: ["User"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+              format: "uuid";
+            };
+          }
+        ];
+        responses: {
           "200": {
             description: "OK";
             content: {
               "text/plain": {
                 schema: {
-                  $ref: "#/components/schemas/DetailedUserResponseDTO";
+                  $ref: "#/components/schemas/DetailedPublicUserResponseDTO";
                 };
               };
               "application/json": {
                 schema: {
-                  $ref: "#/components/schemas/DetailedUserResponseDTO";
+                  $ref: "#/components/schemas/DetailedPublicUserResponseDTO";
                 };
               };
               "text/json": {
                 schema: {
-                  $ref: "#/components/schemas/DetailedUserResponseDTO";
+                  $ref: "#/components/schemas/DetailedPublicUserResponseDTO";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
                 };
               };
             };
@@ -4768,26 +4768,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "200": {
             description: "OK";
             content: {
@@ -4819,6 +4799,26 @@ type MappedEndpoints = {
           };
           "404": {
             description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -4871,26 +4871,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "200": {
             description: "OK";
             content: {
@@ -4940,23 +4920,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-    };
-    "/api/user/me/streak": {
-      get: {
-        tags: ["User"];
-        parameters: [
-          {
-            name: "year";
-            in: "query";
-            schema: {
-              type: "integer";
-              format: "int32";
-            };
-          }
-        ];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -4977,6 +4940,23 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+    };
+    "/api/user/me/streak": {
+      get: {
+        tags: ["User"];
+        parameters: [
+          {
+            name: "year";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          }
+        ];
+        responses: {
           "200": {
             description: "OK";
             content: {
@@ -5028,6 +5008,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -5064,26 +5064,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "200": {
             description: "OK";
             content: {
@@ -5126,6 +5106,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -5170,26 +5170,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "204": {
             description: "No Content";
           };
@@ -5235,6 +5215,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -5279,26 +5279,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "204": {
             description: "No Content";
           };
@@ -5362,6 +5342,26 @@ type MappedEndpoints = {
               };
             };
           };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
         };
       };
     };
@@ -5388,26 +5388,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -5453,6 +5433,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -5508,26 +5508,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -5591,22 +5571,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-      get: {
-        tags: ["Workout"];
-        parameters: [
-          {
-            name: "workoutId";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          }
-        ];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -5627,6 +5591,22 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+      get: {
+        tags: ["Workout"];
+        parameters: [
+          {
+            name: "workoutId";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+              format: "uuid";
+            };
+          }
+        ];
+        responses: {
           "200": {
             description: "OK";
             content: {
@@ -5678,6 +5658,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -5742,26 +5742,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -5807,6 +5787,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -5852,26 +5852,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "204": {
             description: "No Content";
           };
@@ -5917,6 +5897,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -5953,26 +5953,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -6036,22 +6016,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-      delete: {
-        tags: ["Workout"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          }
-        ];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -6072,6 +6036,22 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+      delete: {
+        tags: ["Workout"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+              format: "uuid";
+            };
+          }
+        ];
+        responses: {
           "204": {
             description: "No Content";
           };
@@ -6117,6 +6097,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -6153,26 +6153,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -6236,22 +6216,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-      delete: {
-        tags: ["Workout"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          }
-        ];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -6272,6 +6236,22 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+      delete: {
+        tags: ["Workout"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+              format: "uuid";
+            };
+          }
+        ];
+        responses: {
           "204": {
             description: "No Content";
           };
@@ -6317,6 +6297,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -6353,26 +6353,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -6436,22 +6416,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-      delete: {
-        tags: ["Workout"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          }
-        ];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -6472,6 +6436,22 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+      delete: {
+        tags: ["Workout"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+              format: "uuid";
+            };
+          }
+        ];
+        responses: {
           "204": {
             description: "No Content";
           };
@@ -6517,6 +6497,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -6567,26 +6567,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "200": {
             description: "OK";
             content: {
@@ -6612,6 +6592,26 @@ type MappedEndpoints = {
                   items: {
                     $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
                   };
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
                 };
               };
             };
@@ -6657,26 +6657,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "200": {
             description: "OK";
             content: {
@@ -6702,6 +6682,26 @@ type MappedEndpoints = {
                   items: {
                     $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
                   };
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
                 };
               };
             };
@@ -6738,26 +6738,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "200": {
             description: "OK";
             content: {
@@ -6827,6 +6807,26 @@ type MappedEndpoints = {
               };
             };
           };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
         };
       };
     };
@@ -6859,26 +6859,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "200": {
             description: "OK";
             content: {
@@ -6928,24 +6908,6 @@ type MappedEndpoints = {
               };
             };
           };
-        };
-      };
-    };
-    "/api/workout/{id}/detailed": {
-      get: {
-        tags: ["Workout"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          }
-        ];
-        responses: {
           "429": {
             description: "Too Many Requests";
             content: {
@@ -6966,6 +6928,24 @@ type MappedEndpoints = {
               };
             };
           };
+        };
+      };
+    };
+    "/api/workout/{id}/detailed": {
+      get: {
+        tags: ["Workout"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+              format: "uuid";
+            };
+          }
+        ];
+        responses: {
           "200": {
             description: "OK";
             content: {
@@ -7026,6 +7006,26 @@ type MappedEndpoints = {
               };
             };
           };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
         };
       };
     };
@@ -7053,26 +7053,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "200": {
             description: "OK";
             content: {
@@ -7124,6 +7104,26 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -7179,26 +7179,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "204": {
             description: "No Content";
           };
@@ -7264,6 +7244,26 @@ type MappedEndpoints = {
           };
           "404": {
             description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -7328,26 +7328,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "204": {
             description: "No Content";
           };
@@ -7413,6 +7393,26 @@ type MappedEndpoints = {
           };
           "404": {
             description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -7456,26 +7456,6 @@ type MappedEndpoints = {
           }
         ];
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "204": {
             description: "No Content";
           };
@@ -7541,6 +7521,26 @@ type MappedEndpoints = {
           };
           "404": {
             description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -7596,26 +7596,6 @@ type MappedEndpoints = {
           };
         };
         responses: {
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
           "201": {
             description: "Created";
           };
@@ -7681,6 +7661,26 @@ type MappedEndpoints = {
           };
           "404": {
             description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
             content: {
               "text/plain": {
                 schema: {
@@ -7991,6 +7991,51 @@ type MappedEndpoints = {
             type: "array";
             items: {
               $ref: "#/components/schemas/SimpleMuscleResponseDTO";
+            };
+          };
+        };
+        additionalProperties: false;
+      };
+      DetailedPublicUserResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "string";
+            format: "uuid";
+          };
+          name: {
+            type: "string";
+          };
+          image: {
+            type: "string";
+            nullable: true;
+          };
+          isMe: {
+            type: "boolean";
+          };
+          followers: {
+            type: "integer";
+            format: "int32";
+          };
+          following: {
+            type: "integer";
+            format: "int32";
+          };
+          totalCompletedWorkouts: {
+            type: "integer";
+            format: "int32";
+          };
+          isFollowing: {
+            type: "boolean";
+          };
+          joinedAt: {
+            type: "string";
+            format: "date-time";
+          };
+          streak: {
+            type: "array";
+            items: {
+              $ref: "#/components/schemas/SimpleWeekOfCompletedWorkoutsResponseDTO";
             };
           };
         };
