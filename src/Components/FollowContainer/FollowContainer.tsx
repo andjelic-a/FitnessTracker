@@ -3,6 +3,7 @@ import "./FollowContainer.scss";
 import { Await } from "react-router-dom";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import sendAPIRequest from "../../Data/SendAPIRequest";
+import useLazyLoading from "../../Hooks/UseLazyLoading";
 
 type FollowContainerProps = {
   userId: string;
@@ -22,23 +23,25 @@ const FollowContainer = forwardRef<HTMLDivElement, FollowContainerProps>(
       following: boolean;
     }>({ followers: false, following: false });
 
+    useLazyLoading("#followContainer", 0.75, () => void getData(true));
+
     async function getData(lazyLoad: boolean = false) {
       if (!followersOrFollowing) return [];
 
-      //Initial load
-      if (!lazyLoad) {
-        if (
-          followersOrFollowing === "followers" &&
-          (reachedEnd.current.followers || followers.current.length > 0)
-        )
-          return followers.current;
+      if (
+        followersOrFollowing === "followers" &&
+        (reachedEnd.current.followers ||
+          (!lazyLoad && followers.current.length > 0))
+      )
+        return followers.current;
 
-        if (
-          followersOrFollowing === "following" &&
-          (reachedEnd.current.following || following.current.length > 0)
-        )
-          return following.current;
-      }
+      if (
+        followersOrFollowing === "following" &&
+        (reachedEnd.current.following ||
+          (lazyLoad && following.current.length > 0))
+      )
+        return following.current;
+
       if (waitingFor.current)
         return waitingFor.current.type === followersOrFollowing
           ? await waitingFor.current.data
@@ -76,15 +79,18 @@ const FollowContainer = forwardRef<HTMLDivElement, FollowContainerProps>(
       const userDTOs = await waitingFor.current?.data;
 
       followersOrFollowing === "followers"
-        ? (followers.current = userDTOs)
-        : (following.current = userDTOs);
+        ? followers.current.push(...userDTOs)
+        : following.current.push(...userDTOs);
 
-      return userDTOs;
+      return followersOrFollowing === "followers"
+        ? followers.current
+        : following.current;
     }
 
     return (
       <div
         ref={ref}
+        id="#follow-container"
         className={`follow-container ${!followersOrFollowing ? "hidden" : ""}`}
       >
         <div className="follow-container-header">
