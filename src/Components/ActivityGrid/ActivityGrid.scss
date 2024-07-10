@@ -173,7 +173,7 @@
   @for $total from 1 through 7 {
     @for $completed from 1 through $total {
       &.fill-#{$completed}-of-#{$total} {
-        $percentage: (100 / $total) * $completed * 1%;
+        $percentage: calc(100 / $total) * $completed * 1%;
         background: linear-gradient(
           to top,
           $primary-300 $percentage,

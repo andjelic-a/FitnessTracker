@@ -1,7 +1,9 @@
 import { useRef, useState } from "react";
-import "./ChooseExercise.scss";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 import { ExerciseOption } from "./ExerciseOption";
+import Dropdown from "../../../DropdownMenu/Dropdown";
+import Icon from "../../../Icon/Icon";
+import "./ChooseExercise.scss";
 
 type ChooseExerciseProps = {
   onClose: () => void;
@@ -68,6 +70,13 @@ export default function ChooseExercise({
         <h3>Choose Exercise</h3>
       </div>
       <div className="choose-exercise-body">
+        <div className="choose-exercise-search-container">
+          <div className="choose-exercise-search-bar-container">
+            <Icon className="choose-exercise-search-bar-icon" name="search" />
+            <input type="text" className="choose-exercise-search-bar" />
+          </div>
+          <Dropdown className="choose-exercise-filter-dropdown"/>
+        </div>
         {[...preLoadedExercises, ...lazyLoaded].map((exercise) => (
           <ExerciseOption
             key={exercise.id}
