@@ -4,28 +4,28 @@ import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 import { ExerciseOption } from "./ExerciseOption";
 import { v4 as uuidv4 } from "uuid";
 
-export type ChooseExerciseType = {
+export type ChooseExerciseData = {
   id: string;
   exercise: Schema<"SimpleExerciseResponseDTO">;
 };
 
-type ChooseExerciseProps = {
+type ChooseExerciseWindowProps = {
   onClose: () => void;
-  onAddExercise: (exercise: ChooseExerciseType[]) => void;
-  isReplaceMode: boolean;
+  onAddExercise: (exercise: ChooseExerciseData[]) => void;
+  replaceMode: boolean;
   exercises: Schema<"SimpleExerciseResponseDTO">[];
-  onRequireLazyLoad?: () => Promise<
+  onRequestLazyLoad?: () => Promise<
     Schema<"SimpleExerciseResponseDTO">[] | null
   >;
 };
 
-export default function ChooseExercise({
+export default function ChooseExerciseWindow({
   onClose,
   onAddExercise,
-  isReplaceMode,
+  replaceMode,
   exercises: preLoadedExercises,
-  onRequireLazyLoad,
-}: ChooseExerciseProps) {
+  onRequestLazyLoad,
+}: ChooseExerciseWindowProps) {
   const [selectedExercises, setSelectedExercises] = useState<
     Schema<"SimpleExerciseResponseDTO">[]
   >([]);
@@ -46,7 +46,7 @@ export default function ChooseExercise({
     exercise: Schema<"SimpleExerciseResponseDTO">
   ) => {
     setSelectedExercises((prevSelectedExercises) => {
-      if (isReplaceMode) {
+      if (replaceMode) {
         return [exercise];
       } else {
         if (prevSelectedExercises.includes(exercise)) {
@@ -65,9 +65,9 @@ export default function ChooseExercise({
   // useLazyLoading("#choose-exercise", 0.7, requireLazyLoad);
 
   async function requireLazyLoad() {
-    if (!onRequireLazyLoad) return;
+    if (!onRequestLazyLoad) return;
 
-    const newExercises = await onRequireLazyLoad();
+    const newExercises = await onRequestLazyLoad();
     setLazyLoaded([...lazyLoaded, ...(newExercises ?? [])]);
   }
 
@@ -90,7 +90,7 @@ export default function ChooseExercise({
       </div>
       <div className="choose-exercise-footer">
         <button className="choose-exercise-button" onClick={handleConfirm}>
-          {isReplaceMode ? "Replace" : "Add"}
+          {replaceMode ? "Replace" : "Add"}
         </button>
         <button
           className={"choose-exercise-button"}

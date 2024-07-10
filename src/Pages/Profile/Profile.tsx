@@ -3,7 +3,7 @@ import { useState, Suspense } from "react";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
 import WorkoutsContainer from "../../Components/WorkoutsContainer/WorkoutsContainer";
 import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
-import CreateRoutine from "../../Components/WorkoutsContainer/CreateRoutine/CreateRoutine";
+import CreateRoutineWindow from "../../Components/WorkoutsContainer/CreateRoutine/CreateRoutine";
 import { Await, useLoaderData } from "react-router-dom";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 
@@ -13,14 +13,16 @@ export default function Profile() {
     workouts: Promise<APIResponse<"/api/workout/personal/simple", "get">>;
   };
 
-  const [isNewWindowOpen, setIsNewWindowOpen] = useState<boolean>(false);
-  const toggleNewWorkoutWindow = () => void setIsNewWindowOpen((prev) => !prev);
+  const [isNewRoutineWindowOpen, setIsNewRoutineWindowOpen] =
+    useState<boolean>(false);
+  const toggleNewWorkoutWindow = () =>
+    void setIsNewRoutineWindowOpen((prev) => !prev);
 
   return (
     <div className="profile">
-      <CreateRoutine
-        isNewWindowOpen={isNewWindowOpen}
-        closeNewRoutineWindow={() => setIsNewWindowOpen(false)}
+      <CreateRoutineWindow
+        isVisible={isNewRoutineWindowOpen}
+        onClose={() => setIsNewRoutineWindowOpen(false)}
         animationLength={0.2}
         safeGuard={100}
       />

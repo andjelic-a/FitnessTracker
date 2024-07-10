@@ -41,7 +41,7 @@ interface RoutineItemProps {
   id: string;
   exercise: Schema<"SimpleExerciseResponseDTO">;
   onDelete: () => void;
-  onReplace: (id: string) => void;
+  onRequestExerciseReplace: (id: string) => void;
   onDragStart?: (ref: HTMLDivElement) => void;
   onDrag?: (xDelta: number, yDelta: number) => void;
   onDragEnd?: (ref: HTMLDivElement) => void;
@@ -74,7 +74,7 @@ export default function RoutineItem({
   id,
   exercise,
   onDelete,
-  onReplace,
+  onRequestExerciseReplace,
   onDrag,
   onDragEnd,
   onDragStart,
@@ -92,7 +92,7 @@ export default function RoutineItem({
 
   const handleReplaceExerciseClick = () => {
     setIsSettingsOpen(false);
-    onReplace(id);
+    onRequestExerciseReplace(id);
   };
 
   useEffect(() => {
