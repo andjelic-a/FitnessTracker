@@ -1,6 +1,6 @@
-import { forwardRef, Suspense, useRef } from "react";
 import "./FollowContainer.scss";
-import { Await } from "react-router-dom";
+import { forwardRef, Suspense, useEffect, useRef } from "react";
+import { Await, useNavigate } from "react-router-dom";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import useLazyLoading from "../../Hooks/UseLazyLoading";
@@ -12,6 +12,8 @@ type FollowContainerProps = {
 
 const FollowContainer = forwardRef<HTMLDivElement, FollowContainerProps>(
   ({ followersOrFollowing, userId }, ref) => {
+    const navigate = useNavigate();
+
     const followers = useRef<Schema<"SimpleUserResponseDTO">[]>([]);
     const following = useRef<Schema<"SimpleUserResponseDTO">[]>([]);
     const waitingFor = useRef<{
@@ -22,6 +24,14 @@ const FollowContainer = forwardRef<HTMLDivElement, FollowContainerProps>(
       followers: boolean;
       following: boolean;
     }>({ followers: false, following: false });
+
+    useEffect(() => {
+      followers.current = [];
+      following.current = [];
+      reachedEnd.current.followers = false;
+      reachedEnd.current.following = false;
+      waitingFor.current = null;
+    }, [userId]);
 
     useLazyLoading("#followContainer", 0.75, () => void getData(true));
 
@@ -90,7 +100,7 @@ const FollowContainer = forwardRef<HTMLDivElement, FollowContainerProps>(
     return (
       <div
         ref={ref}
-        id="#follow-container"
+        id="follow-container"
         className={`follow-container ${!followersOrFollowing ? "hidden" : ""}`}
       >
         <div className="follow-container-header">
@@ -101,7 +111,11 @@ const FollowContainer = forwardRef<HTMLDivElement, FollowContainerProps>(
           <Await resolve={getData()}>
             {(userDTOs: Awaited<ReturnType<typeof getData>>) => {
               return userDTOs.map((x) => (
-                <div className="follow-container-user" key={x.id}>
+                <div
+                  className="follow-container-user"
+                  key={x.id}
+                  onClick={() => void navigate(`/user/${x.id}`)}
+                >
                   <img
                     src={x.image ?? "/DefaultProfilePicture.png"}
                     alt={`Profile picture of a user named ${x.name}`}
