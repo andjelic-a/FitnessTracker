@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import "./ChooseExercise.scss";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 import { ExerciseOption } from "./ExerciseOption";
-import { v4 as uuidv4 } from "uuid";
 
 export type ChooseExerciseData = {
   id: string;
@@ -11,50 +10,44 @@ export type ChooseExerciseData = {
 
 type ChooseExerciseWindowProps = {
   onClose: () => void;
-  onAddExercise: (exercise: ChooseExerciseData[]) => void;
-  replaceMode: boolean;
+  onConfirmSelection: (
+    exercise:
+      | Schema<"SimpleExerciseResponseDTO">
+      | Schema<"SimpleExerciseResponseDTO">[]
+  ) => void;
+  singleMode?: boolean;
   exercises: Schema<"SimpleExerciseResponseDTO">[];
-  onRequestLazyLoad?: () => Promise<
+  onRequestLazyLoad: () => Promise<
     Schema<"SimpleExerciseResponseDTO">[] | null
   >;
 };
 
 export default function ChooseExerciseWindow({
   onClose,
-  onAddExercise,
-  replaceMode,
+  onConfirmSelection,
+  singleMode: replaceMode,
   exercises: preLoadedExercises,
   onRequestLazyLoad,
 }: ChooseExerciseWindowProps) {
-  const [selectedExercises, setSelectedExercises] = useState<
-    Schema<"SimpleExerciseResponseDTO">[]
+  const [selected, setSelectedExercises] = useState<
+    Schema<"SimpleExerciseResponseDTO"> | Schema<"SimpleExerciseResponseDTO">[]
   >([]);
 
   const handleConfirm = () => {
-    if (selectedExercises.length > 0) {
-      onAddExercise(
-        selectedExercises.map((x) => ({
-          exercise: x,
-          id: uuidv4(),
-        }))
-      );
-      onClose();
-    }
+    onConfirmSelection(selected);
+    onClose();
   };
 
   const handleSelectExercise = (
     exercise: Schema<"SimpleExerciseResponseDTO">
   ) => {
     setSelectedExercises((prevSelectedExercises) => {
-      if (replaceMode) {
-        return [exercise];
-      } else {
-        if (prevSelectedExercises.includes(exercise)) {
-          return prevSelectedExercises.filter((e) => e !== exercise);
-        } else {
-          return [...prevSelectedExercises, exercise];
-        }
-      }
+      if (replaceMode || !Array.isArray(prevSelectedExercises)) return exercise;
+
+      if (prevSelectedExercises.includes(exercise))
+        return prevSelectedExercises.filter((e) => e !== exercise);
+
+      return [...prevSelectedExercises, exercise];
     });
   };
 
@@ -84,7 +77,11 @@ export default function ChooseExerciseWindow({
             key={exercise.id}
             exercise={exercise}
             onSelectExercise={handleSelectExercise}
-            isSelected={selectedExercises.includes(exercise)}
+            isSelected={
+              Array.isArray(selected)
+                ? selected.includes(exercise)
+                : selected === exercise
+            }
           />
         ))}
       </div>

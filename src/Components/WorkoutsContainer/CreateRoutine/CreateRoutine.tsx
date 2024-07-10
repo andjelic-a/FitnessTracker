@@ -14,6 +14,7 @@ import { APIResponse } from "../../../Types/Endpoints/ResponseParser";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import { Await } from "react-router-dom";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
+import { v4 as uuidv4 } from "uuid";
 
 gsap.registerPlugin(Flip);
 gsap.registerPlugin(Observer);
@@ -237,16 +238,24 @@ export default function CreateRoutineWindow({
     else createdRoutineItemsRef.current[index] = routineItem;
   }
 
-  const handleExerciseChosen = (exercises: ChooseExerciseData[]) => {
-    if (!replacingExerciseId) {
-      setRoutineItems((prevState) => [...prevState, ...exercises]);
+  const handleExerciseChosen = (
+    selected:
+      | Schema<"SimpleExerciseResponseDTO">
+      | Schema<"SimpleExerciseResponseDTO">[]
+  ) => {
+    if (!replacingExerciseId && Array.isArray(selected)) {
+      setRoutineItems((prevState) => [
+        ...prevState,
+        ...selected.map((x) => ({ exercise: x, id: uuidv4() })),
+      ]);
       return;
     }
 
     setReplacingExerciseId(null);
     setRoutineItems((prev) => {
       const index = prev.findIndex((x) => x.id === replacingExerciseId);
-      if (index >= 0) prev[index] = exercises[0];
+      if (index >= 0 && !Array.isArray(selected))
+        prev[index].exercise = selected;
 
       return prev;
     });
@@ -368,8 +377,8 @@ export default function CreateRoutineWindow({
 
                     lazyLoadedExercises.current = [];
                   }}
-                  onAddExercise={handleExerciseChosen}
-                  replaceMode={!!replacingExerciseId}
+                  onConfirmSelection={handleExerciseChosen}
+                  singleMode={!!replacingExerciseId}
                   exercises={exercises
                     .filter((x) => x.code === "OK")
                     .flatMap((x) => x.content)}
