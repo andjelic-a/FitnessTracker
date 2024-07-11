@@ -2,13 +2,12 @@ import "./ChooseExercise.scss";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 import Icon from "../../../Icon/Icon";
 
-interface ExerciseOptionProps {
+type ExerciseOptionProps = {
   exercise: Schema<"SimpleExerciseResponseDTO">;
   onSelectExercise: (exercise: Schema<"SimpleExerciseResponseDTO">) => void;
   isSelected: boolean;
-}
+};
 
-//TODO: On hover over image (hold click on mobile) enlarge it for better UX
 export function ExerciseOption({
   exercise,
   onSelectExercise,

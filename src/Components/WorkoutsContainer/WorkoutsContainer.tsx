@@ -2,28 +2,21 @@ import { useState } from "react";
 import Icon from "../../Components/Icon/Icon";
 import InputField from "../../Components/InputField/InputField";
 import "./WorkoutsContainer.scss";
+import { Schema } from "../../Types/Endpoints/SchemaParser";
 
-interface Workout {
-  id: string;
-  name: string;
-  image: string | null;
-}
-
-interface WorkoutsContainerProps {
-  workouts: Workout[];
+type WorkoutsContainerProps = {
+  workouts: Schema<"SimpleWorkoutResponseDTO">[];
   toggleNewWorkoutWindow: () => void;
-}
+};
 
-const WorkoutsContainer: React.FC<WorkoutsContainerProps> = ({ workouts, toggleNewWorkoutWindow }) => {
+function WorkoutsContainer({
+  workouts,
+  toggleNewWorkoutWindow,
+}: WorkoutsContainerProps) {
   const [showAll, setShowAll] = useState<boolean>(false);
 
+  const toggleShowAll = () => void setShowAll((prevState) => !prevState);
 
-  const displayedWorkouts = showAll ? workouts : workouts.slice(0, 8);
-
-  const toggleShowAll = () => {
-    setShowAll((prevState) => !prevState);
-  };
-  
   return (
     <div className="profile-workouts-container">
       <div className="profile-workouts-header">
@@ -39,10 +32,12 @@ const WorkoutsContainer: React.FC<WorkoutsContainerProps> = ({ workouts, toggleN
           placeholder="Search workouts"
         />
         <div className="profile-workouts-items-container">
-          {displayedWorkouts.map((workout) => (
+          {(showAll ? workouts : workouts.slice(0, 8)).map((workout) => (
             <div key={workout.id}>
-              {/* Replace with actual image path */}
-              <img src={workout.image??"../../../DefaultProfilePicture.png"} alt={workout.name} />
+              <img
+                src={workout.creator.image ?? "/DefaultProfilePicture.png"}
+                alt={"Profile picture of the creator of " + workout.name}
+              />
               <p>{workout.name}</p>
             </div>
           ))}
@@ -55,6 +50,6 @@ const WorkoutsContainer: React.FC<WorkoutsContainerProps> = ({ workouts, toggleN
       </div>
     </div>
   );
-};
+}
 
 export default WorkoutsContainer;

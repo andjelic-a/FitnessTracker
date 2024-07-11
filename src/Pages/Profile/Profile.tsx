@@ -1,17 +1,11 @@
+import "./Profile.scss";
 import { useState, Suspense } from "react";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
 import WorkoutsContainer from "../../Components/WorkoutsContainer/WorkoutsContainer";
 import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
-import CreateRoutine from "../../Components/WorkoutsContainer/CreateRoutine/CreateRoutine";
+import CreateRoutineWindow from "../../Components/WorkoutsContainer/CreateRoutine/CreateRoutine";
 import { Await, useLoaderData } from "react-router-dom";
-import "./Profile.scss";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";
-
-interface Workout {
-  id: string;
-  name: string;
-  image: string | null;
-}
 
 export default function Profile() {
   const userData = useLoaderData() as {
@@ -19,70 +13,60 @@ export default function Profile() {
     workouts: Promise<APIResponse<"/api/workout/personal/simple", "get">>;
   };
 
-  const [isNewWindowOpen, setIsNewWindowOpen] = useState<boolean>(false);
-
-  const toggleNewWorkoutWindow = () => {
-    setIsNewWindowOpen((prev) => !prev);
-  };
+  const [isNewRoutineWindowOpen, setIsNewRoutineWindowOpen] =
+    useState<boolean>(false);
+  const toggleNewWorkoutWindow = () =>
+    void setIsNewRoutineWindowOpen((prev) => !prev);
 
   return (
     <div className="profile">
-      <CreateRoutine
-        isNewWindowOpen={isNewWindowOpen}
-        setIsNewWindowOpen={setIsNewWindowOpen}
+      <CreateRoutineWindow
+        isVisible={isNewRoutineWindowOpen}
+        onClose={() => setIsNewRoutineWindowOpen(false)}
         animationLength={0.2}
         safeGuard={100}
       />
+
+      <Suspense fallback={<div>Loading...</div>}>
+        <Await resolve={userData.workouts}>
+          {(loadedWorkoutData: Awaited<typeof userData.workouts>) => {
+            if (loadedWorkoutData.code !== "OK") return null;
+
+            return (
+              <WorkoutsContainer
+                workouts={loadedWorkoutData.content}
+                toggleNewWorkoutWindow={toggleNewWorkoutWindow}
+              />
+            );
+          }}
+        </Await>
+      </Suspense>
+
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={userData.user}>
           {(loadedUserData: Awaited<typeof userData.user>) => {
             if (loadedUserData.code !== "OK") return null;
 
             return (
-              <>
-                <Suspense fallback={<div>Loading...</div>}>
-                  <Await resolve={userData.workouts}>
-                    {(loadedWorkoutData: Awaited<typeof userData.workouts>) => {
-                      if (loadedWorkoutData.code !== "OK") return null;
+              <div className="profile-user-container">
+                <ProfileHeader
+                  username={loadedUserData.content.name}
+                  image={loadedUserData.content.image}
+                  workouts={loadedUserData.content.totalCompletedWorkouts}
+                  followers={loadedUserData.content.followers}
+                  following={loadedUserData.content.following}
+                />
 
-                      const workouts: Workout[] = loadedWorkoutData.content.map(
-                        (workout) => ({
-                          id: workout.id,
-                          name: workout.name,
-                          image: workout.creator.image,
-                        })
-                      );
+                <button className="profile-edit-button">Edit Profile</button>
 
-                      return (
-                        <WorkoutsContainer
-                          workouts={workouts}
-                          toggleNewWorkoutWindow={toggleNewWorkoutWindow}
-                        />
-                      );
-                    }}
-                  </Await>
-                </Suspense>
-                <div className="profile-user-container">
-                  <ProfileHeader
-                    username={loadedUserData.content.name}
-                    image={loadedUserData.content.image}
-                    workouts={loadedUserData.content.totalCompletedWorkouts}
-                    followers={loadedUserData.content.followers}
-                    following={loadedUserData.content.following}
-                  />
-                  <button className="profile-edit-button">Edit Profile</button>
-                  <div className="profile-body">
-                    <ActivityGrid activity={loadedUserData.content.streak} />
-                  </div>
+                <div className="profile-body">
+                  <ActivityGrid activity={loadedUserData.content.streak} />
                 </div>
-              </>
+              </div>
             );
           }}
         </Await>
       </Suspense>
-      {/*<button onClick={() => logout().then(() => navigate("/authentication"))}>
-        Logout
-      </button>*/}
     </div>
   );
 }

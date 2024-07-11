@@ -57,7 +57,6 @@ export default function Exercises() {
           return;
         }
 
-        console.log(newExercises, offset.current);
         setLazyLoadedExercises([...lazyLoadedExercises, newExercises]);
 
         if (newExercises.content.length === exercisesLimitPerLoad)
