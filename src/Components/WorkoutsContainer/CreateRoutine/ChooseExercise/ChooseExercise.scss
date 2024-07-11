@@ -49,6 +49,13 @@
   align-items: center;
 }
 
+.choose-exercise-filter {
+  display: flex;
+  width: 35rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .choose-exercise-search-container {
   display: flex;
   flex-direction: column;
@@ -86,8 +93,10 @@
     }
   }
 
-  & .choose-exercise-filter-dropdown {
+  & .choose-exercise-filter-muscles-dropdown {
     border-radius: 2rem;
+    width: 15rem;
+    height: 3.5rem;
     color: white;
 
     & .dropdown-button {
@@ -96,9 +105,71 @@
     }
 
     & .dropdown-content {
-      transform: translate(0, -0.35rem);
-      border-radius: 0 0 0.5rem 0.5rem;
+      border-radius: 0.5rem;
       background-color: $primary-300;
+
+      &::-webkit-scrollbar {
+        width: 8px;
+        border-radius: 10px;
+      }
+    
+      &::-webkit-scrollbar-track {
+        background: rgb(255, 193, 193);
+        border-radius: 10px;
+      }
+    
+      &::-webkit-scrollbar-thumb {
+        background: $primary-400;
+        border-radius: 10px;
+      }
+    
+      &::-webkit-scrollbar-thumb:hover {
+        background: $primary-500;
+      }
+
+      & :last-child {
+        border-radius: 0 0 0.5rem 0.5rem;
+      }
+
+      & .dropdown-item:hover {
+        background-color:  $primary-400;
+      }
+    }
+  }
+
+  & .choose-exercise-filter-equipment-dropdown {
+    border-radius: 2rem;
+    width: 15rem;
+    height: 3.5rem;
+    color: white;
+
+    & .dropdown-button {
+      background-color: $primary-400;
+      border-radius: 0.5rem;
+    }
+
+    & .dropdown-content {
+      border-radius: 0.5rem;
+      background-color: $primary-300;
+
+      &::-webkit-scrollbar {
+        width: 8px;
+        border-radius: 10px;
+      }
+    
+      &::-webkit-scrollbar-track {
+        background: rgb(255, 193, 193);
+        border-radius: 10px;
+      }
+    
+      &::-webkit-scrollbar-thumb {
+        background: $primary-400;
+        border-radius: 10px;
+      }
+    
+      &::-webkit-scrollbar-thumb:hover {
+        background: $primary-500;
+      }
 
       & :last-child {
         border-radius: 0 0 0.5rem 0.5rem;

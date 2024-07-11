@@ -81,14 +81,42 @@ export default function ChooseExerciseWindow({
             <Icon className="choose-exercise-search-bar-icon" name="search" />
             <input type="text" className="choose-exercise-search-bar" />
           </div>
-          <Dropdown
-            className="choose-exercise-filter-dropdown"
-            placeholder="All muscles"
-          >
-            <DropdownItem>Option 1</DropdownItem>
-            <DropdownItem>Option 2</DropdownItem>
-            <DropdownItem>Option 3</DropdownItem>
-          </Dropdown>
+          <div className="choose-exercise-filter">
+            <Dropdown
+              className="choose-exercise-filter-muscles-dropdown"
+              placeholder="All muscles"
+            >
+              <DropdownItem>Option 1</DropdownItem>
+              <DropdownItem>Option 2</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+            </Dropdown>
+            <Dropdown
+              className="choose-exercise-filter-equipment-dropdown"
+              placeholder="All equipment"
+            >
+              <DropdownItem>Option 1</DropdownItem>
+              <DropdownItem>Option 2</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+            </Dropdown>
+          </div>
         </div>
         {[...preLoadedExercises, ...lazyLoaded].map((exercise) => (
           <ExerciseOption
