@@ -32,7 +32,7 @@ export default function Dropdown({ className, placeholder, children }: DropdownP
   );
 
   return (
-    <div ref={dropdownMenuRef} className={className + " dropdown-menu"}>
+    <div ref={dropdownMenuRef} className={`${className} dropdown-menu${isOpen ? " rounded" : ""}`}>
       <div
         className="dropdown-button"
         onClick={() => {

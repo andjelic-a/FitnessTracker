@@ -98,6 +98,7 @@
     width: 15rem;
     height: 3.5rem;
     color: white;
+    background-color: $primary-300;
 
     & .dropdown-button {
       background-color: $primary-400;
@@ -105,24 +106,22 @@
     }
 
     & .dropdown-content {
-      border-radius: 0.5rem;
       background-color: $primary-300;
+      border-radius: 0 0 0.5rem 0.5rem;
 
       &::-webkit-scrollbar {
         width: 8px;
-        border-radius: 10px;
       }
-    
+
       &::-webkit-scrollbar-track {
-        background: rgb(255, 193, 193);
-        border-radius: 10px;
+        background: $primary-300;
       }
-    
+
       &::-webkit-scrollbar-thumb {
-        background: $primary-400;
-        border-radius: 10px;
+        background: $primary-600;
+        border-radius: 0px;
       }
-    
+
       &::-webkit-scrollbar-thumb:hover {
         background: $primary-500;
       }
@@ -132,7 +131,7 @@
       }
 
       & .dropdown-item:hover {
-        background-color:  $primary-400;
+        background-color: $primary-400;
       }
     }
   }
@@ -142,6 +141,7 @@
     width: 15rem;
     height: 3.5rem;
     color: white;
+    background-color: $primary-300;
 
     & .dropdown-button {
       background-color: $primary-400;
@@ -149,24 +149,22 @@
     }
 
     & .dropdown-content {
-      border-radius: 0.5rem;
       background-color: $primary-300;
+      border-radius: 0 0 0.5rem 0.5rem;
 
       &::-webkit-scrollbar {
         width: 8px;
-        border-radius: 10px;
       }
-    
+
       &::-webkit-scrollbar-track {
-        background: rgb(255, 193, 193);
-        border-radius: 10px;
+        background: $primary-300;
       }
-    
+
       &::-webkit-scrollbar-thumb {
-        background: $primary-400;
-        border-radius: 10px;
+        background: $primary-600;
+        border-radius: 0px;
       }
-    
+
       &::-webkit-scrollbar-thumb:hover {
         background: $primary-500;
       }
@@ -176,7 +174,7 @@
       }
 
       & .dropdown-item:hover {
-        background-color:  $primary-400;
+        background-color: $primary-400;
       }
     }
   }
