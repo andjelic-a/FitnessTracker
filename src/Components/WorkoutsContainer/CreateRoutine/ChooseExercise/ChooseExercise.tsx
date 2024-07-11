@@ -1,13 +1,19 @@
+import "./ChooseExercise.scss";
 import { useRef, useState } from "react";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 import { ExerciseOption } from "./ExerciseOption";
+import { v4 as uuidv4 } from "uuid";
 import Dropdown from "../../../DropdownMenu/Dropdown";
 import Icon from "../../../Icon/Icon";
-import "./ChooseExercise.scss";
+
+export type ChooseExerciseType = {
+  id: string;
+  exercise: Schema<"SimpleExerciseResponseDTO">;
+};
 
 type ChooseExerciseProps = {
   onClose: () => void;
-  onAddExercise: (exercises: Schema<"SimpleExerciseResponseDTO">[]) => void;
+  onAddExercise: (exercise: ChooseExerciseType[]) => void;
   isReplaceMode: boolean;
   exercises: Schema<"SimpleExerciseResponseDTO">[];
   onRequireLazyLoad?: () => Promise<
@@ -28,7 +34,12 @@ export default function ChooseExercise({
 
   const handleConfirm = () => {
     if (selectedExercises.length > 0) {
-      onAddExercise(selectedExercises);
+      onAddExercise(
+        selectedExercises.map((x) => ({
+          exercise: x,
+          id: uuidv4(),
+        }))
+      );
       onClose();
     }
   };
@@ -75,7 +86,7 @@ export default function ChooseExercise({
             <Icon className="choose-exercise-search-bar-icon" name="search" />
             <input type="text" className="choose-exercise-search-bar" />
           </div>
-          <Dropdown className="choose-exercise-filter-dropdown"/>
+          <Dropdown className="choose-exercise-filter-dropdown" />
         </div>
         {[...preLoadedExercises, ...lazyLoaded].map((exercise) => (
           <ExerciseOption

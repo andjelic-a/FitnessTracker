@@ -29,6 +29,10 @@ export default function AdminPanel() {
       <Link className="admin-panel-link" to="exercises">
         Exercises
       </Link>
+
+      <Link className="admin-panel-link" to="muscles">
+        Muscles
+      </Link>
     </div>
   );
 }

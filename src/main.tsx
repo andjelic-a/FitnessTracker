@@ -10,6 +10,8 @@ import Profile from "./Pages/Profile/Profile.tsx";
 import Authentication from "./Pages/Authentication/Authentication.tsx";
 import AdminPanel from "./Pages/AdminPanel/AdminPanel.tsx";
 import AdminExercisePanel from "./Pages/AdminPanel/Exercises/AdminExercisePanel.tsx";
+import MuscleAdminPanel from "./Pages/AdminPanel/Muscles/MuscleAdminPanel.tsx";
+import muscleAdminPanelLoader from "./Pages/AdminPanel/Muscles/MuscleAdminPanel.ts";
 import NewExercise from "./Pages/AdminPanel/Exercises/New/NewExercise.tsx";
 import { newExerciseLoader } from "./Pages/AdminPanel/Exercises/New/NewExerciseLoader.tsx";
 import exerciseLoader from "./Pages/Exercises/ExerciseLoader.ts";
@@ -105,6 +107,11 @@ const router = createBrowserRouter([
             path: "exercises/:exerciseId",
             element: <UpdateExercise />,
             loader: updateExerciseLoader,
+          },
+          {
+            path: "muscles",
+            element: <MuscleAdminPanel />,
+            loader: muscleAdminPanelLoader,
           },
         ],
       },
