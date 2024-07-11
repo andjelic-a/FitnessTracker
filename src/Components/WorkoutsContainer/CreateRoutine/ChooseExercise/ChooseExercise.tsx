@@ -4,6 +4,7 @@ import { ExerciseOption } from "./ExerciseOption";
 import Dropdown from "../../../DropdownMenu/Dropdown";
 import Icon from "../../../Icon/Icon";
 import "./ChooseExercise.scss";
+import DropdownItem from "../../../DropdownMenu/DropdownItem";
 
 type ChooseExerciseProps = {
   onClose: () => void;
@@ -75,7 +76,14 @@ export default function ChooseExercise({
             <Icon className="choose-exercise-search-bar-icon" name="search" />
             <input type="text" className="choose-exercise-search-bar" />
           </div>
-          <Dropdown className="choose-exercise-filter-dropdown"/>
+          <Dropdown
+            className="choose-exercise-filter-dropdown"
+            placeholder="All muscles"
+          >
+            <DropdownItem>Option 1</DropdownItem>
+            <DropdownItem>Option 2</DropdownItem>
+            <DropdownItem>Option 3</DropdownItem>
+          </Dropdown>
         </div>
         {[...preLoadedExercises, ...lazyLoaded].map((exercise) => (
           <ExerciseOption

@@ -1,28 +1,61 @@
-import { useState } from "react";
+import React, { useState, useRef } from "react";
+import useOutsideClick from "../../Hooks/UseOutsideClick";
+import DropdownItem from "./DropdownItem";
 import "./Dropdown.scss";
 
 interface DropdownProps {
+  children: React.ReactNode;
   className: string;
+  placeholder: string;
 }
 
-export default function Dropdown({ className }: DropdownProps) {
+export default function Dropdown({ className, placeholder, children }: DropdownProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [value, setValue] = useState<string | null>(null);
+  const [value, setValue] = useState<string>(placeholder);
+
+  const dropdownMenuRef = useRef<HTMLDivElement>(null);
+
+  useOutsideClick(dropdownMenuRef, () => {
+    setIsOpen(false);
+  });
+
+  const handleItemClick = (placeholder: string) => {
+    setValue(placeholder);
+    setIsOpen(false);
+    console.log(dropdownItems);
+  };
+
+  const dropdownItems = React.Children.toArray(children).filter(
+    (child): child is React.ReactElement => {
+      return React.isValidElement(child) && child.type === DropdownItem;
+    }
+  );
 
   return (
-    <div className={className + " dropdown-menu"}>
+    <div ref={dropdownMenuRef} className={className + " dropdown-menu"}>
       <div
-      className="dropdown-button"
+        className="dropdown-button"
         onClick={() => {
           setIsOpen((prevState) => !prevState);
         }}
       >
-        {value ? value : "Placeholder"}
+        {value}
       </div>
       <div className={`dropdown-content ${isOpen ? "open" : ""}`}>
-        <div onClick={() => setValue("Item 1")} className="dropdown-item">Item 1</div>
-        <div onClick={() => setValue("Item 2")} className="dropdown-item">Item 2</div>
-        <div onClick={() => setValue("Item 3")} className="dropdown-item">Item 3</div>
+        <div
+          onClick={() => handleItemClick(placeholder)}
+          className="dropdown-item"
+        >
+          {placeholder}
+        </div>
+        {dropdownItems.map((item, index) => (
+            <div
+            key={index}
+            className="dropdown-item"
+            onClick={(() => handleItemClick(item.props.children))}>
+                {item.props.children}
+            </div>
+        ))}
       </div>
     </div>
   );
