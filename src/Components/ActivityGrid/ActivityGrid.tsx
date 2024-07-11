@@ -29,6 +29,11 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
     return newDate;
   }
 
+  function getStartOfWeek(date: Date): Date {
+    const diff = (7 + (date.getDay() - 1)) % 7;
+    return new Date(date.getTime() - diff * 24 * 60 * 60 * 1000);
+  }
+
   async function getStreak(): Promise<
     Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[]
   > {
@@ -64,17 +69,16 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
       if (yearStart < new Date(`${showing}-01-01`))
         yearStart = addDays(yearStart, 7);
 
-      let newArray: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[] =
-        new Array(53);
+      let newArray: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[] = [];
 
       for (let curr = yearStart, i = 0; i < 52; curr = addDays(curr, 7), i++) {
-        const found = response.findIndex(
+        const currentIndexInResponse = response.findIndex(
           (x) => curr.toDateString() === new Date(x.startDate).toDateString()
         );
 
         newArray[i] =
-          found >= 0
-            ? response[found]
+          currentIndexInResponse >= 0
+            ? response[currentIndexInResponse]
             : {
                 startDate: curr.toUTCString(),
                 completedCount: 0,
@@ -84,11 +88,6 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
 
       return newArray;
     });
-  }
-
-  function getStartOfWeek(date: Date): Date {
-    const diff = (7 + (date.getDay() - 1)) % 7;
-    return new Date(date.getTime() - diff * 24 * 60 * 60 * 1000);
   }
 
   function getYears(): number[] {
@@ -154,6 +153,8 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
           {year}
         </p>
       ))}
+
+      <p onClick={() => setShowing("latest")}>Latest</p>
     </div>
   );
 }
