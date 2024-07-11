@@ -91,7 +91,10 @@ export default function Profile() {
                   />
                   <button className="profile-edit-button">Edit Profile</button>
                   <div className="profile-body">
-                    <ActivityGrid latestActivity={loadedUserData.content.streak} />
+                    <ActivityGrid
+                      latestActivity={loadedUserData.content.streak}
+                      joinedAt={new Date(loadedUserData.content.joinedAt)}
+                    />
                   </div>
                 </div>
               </>
