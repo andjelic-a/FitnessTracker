@@ -24,6 +24,8 @@ import emailVerificationLoader from "./Pages/EmailVerification/EmailVerification
 import LandingPage from "./Pages/LandingPage/LandingPage.tsx";
 import landingPageLoader from "./Pages/LandingPage/LandingPageLoader.ts";
 import ForgotPassword from "./Pages/ForgotPasswordPage/ForgotPassword.tsx";
+import User from "./Pages/User/User.tsx";
+import userLoader from "./Pages/User/UserLoader.ts";
 
 const router = createBrowserRouter([
   {
@@ -67,6 +69,11 @@ const router = createBrowserRouter([
       {
         path: "nutrition",
         element: <div>Nutrition</div>,
+      },
+      {
+        path: "user/:userId",
+        element: <User />,
+        loader: userLoader,
       },
       {
         path: "email-verification/:code",

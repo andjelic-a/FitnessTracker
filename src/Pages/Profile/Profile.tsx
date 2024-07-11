@@ -22,7 +22,7 @@ export default function Profile() {
   };
 
   const [isNewWindowOpen, setIsNewWindowOpen] = useState<boolean>(false);
-  const [folowersOrFollowing, setFollowersOrFollowing] = useState<
+  const [followersOrFollowing, setFollowersOrFollowing] = useState<
     "followers" | "following" | null
   >(null);
 
@@ -33,7 +33,7 @@ export default function Profile() {
   };
 
   useOutsideClick(followContainerRef, () => {
-    if (folowersOrFollowing) {
+    if (followersOrFollowing) {
       setFollowersOrFollowing(null);
     }
   });
@@ -77,8 +77,9 @@ export default function Profile() {
                 </Suspense>
                 <div className="profile-user-container">
                   <FollowContainer
-                    ref = {followContainerRef}
-                    folowersOrFollowing={folowersOrFollowing}
+                    userId={loadedUserData.content.id}
+                    ref={followContainerRef}
+                    followersOrFollowing={followersOrFollowing}
                   />
                   <ProfileHeader
                     username={loadedUserData.content.name}
