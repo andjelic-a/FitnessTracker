@@ -10,6 +10,8 @@ import Profile from "./Pages/Profile/Profile.tsx";
 import Authentication from "./Pages/Authentication/Authentication.tsx";
 import AdminPanel from "./Pages/AdminPanel/AdminPanel.tsx";
 import AdminExercisePanel from "./Pages/AdminPanel/Exercises/AdminExercisePanel.tsx";
+import MuscleAdminPanel from "./Pages/AdminPanel/Muscles/MuscleAdminPanel.tsx";
+import muscleAdminPanelLoader from "./Pages/AdminPanel/Muscles/MuscleAdminPanel.ts";
 import NewExercise from "./Pages/AdminPanel/Exercises/New/NewExercise.tsx";
 import { newExerciseLoader } from "./Pages/AdminPanel/Exercises/New/NewExerciseLoader.tsx";
 import exerciseLoader from "./Pages/Exercises/ExerciseLoader.ts";
@@ -24,6 +26,8 @@ import emailVerificationLoader from "./Pages/EmailVerification/EmailVerification
 import LandingPage from "./Pages/LandingPage/LandingPage.tsx";
 import landingPageLoader from "./Pages/LandingPage/LandingPageLoader.ts";
 import ForgotPassword from "./Pages/ForgotPasswordPage/ForgotPassword.tsx";
+import User from "./Pages/User/User.tsx";
+import userLoader from "./Pages/User/UserLoader.ts";
 
 const router = createBrowserRouter([
   {
@@ -69,6 +73,11 @@ const router = createBrowserRouter([
         element: <div>Nutrition</div>,
       },
       {
+        path: "user/:userId",
+        element: <User />,
+        loader: userLoader,
+      },
+      {
         path: "email-verification/:code",
         element: <EmailVerification />,
         loader: emailVerificationLoader,
@@ -98,6 +107,11 @@ const router = createBrowserRouter([
             path: "exercises/:exerciseId",
             element: <UpdateExercise />,
             loader: updateExerciseLoader,
+          },
+          {
+            path: "muscles",
+            element: <MuscleAdminPanel />,
+            loader: muscleAdminPanelLoader,
           },
         ],
       },

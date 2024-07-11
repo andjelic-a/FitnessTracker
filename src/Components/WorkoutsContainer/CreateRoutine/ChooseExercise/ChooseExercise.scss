@@ -97,6 +97,10 @@
   border-radius: 0.5rem;
   cursor: pointer;
 
+  &.selected {
+    background-color: $dark-400;
+  }
+
   & .select-circle-container {
     display: flex;
     justify-content: center;
@@ -141,10 +145,6 @@
   &:hover {
     background-color: $dark-400;
   }
-}
-
-.selected {
-  background-color: $dark-400;
 }
 
 .choose-exercise-footer {

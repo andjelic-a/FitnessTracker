@@ -6,6 +6,8 @@ interface DropdownItemProps {
 
 export default function DropdownItem({ children }: DropdownItemProps) {
   return (
+    <div>
       {children}
+    </div>
   );
 }
