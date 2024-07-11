@@ -1,0 +1,27 @@
+@import "../../Palette.scss";
+
+.expander {
+  & .expander-header {
+    background-color: $dark-400;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+
+    .expander-icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      margin-right: 0.5rem;
+
+      &.invisible {
+        display: none;
+      }
+    }
+  }
+  
+}
