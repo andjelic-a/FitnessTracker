@@ -8,9 +8,10 @@ import sendAPIRequest from "../../Data/SendAPIRequest";
 type ActivityGrid = {
   latestActivity: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[];
   joinedAt: Date;
+  userId: string;
 };
 
-function ActivityGrid({ latestActivity, joinedAt }: ActivityGrid) {
+function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
   const [hoveredWeek, setHoveredWeek] = useState<string | null>(null);
   const [showing, setShowing] = useState<"latest" | number>("latest");
   const [currentlyDisplayed, setCurrentlyDisplayed] = useState<Promise<
@@ -49,10 +50,11 @@ function ActivityGrid({ latestActivity, joinedAt }: ActivityGrid) {
       return [...fill, ...latestActivity];
     }
 
-    return sendAPIRequest("/api/user/me/streak", {
+    return sendAPIRequest("/api/user/{userId}/streak", {
       method: "get",
       parameters: {
         year: showing,
+        userId: userId,
       },
     }).then((x) => {
       const response = x.code === "OK" ? x.content : [];
@@ -62,20 +64,15 @@ function ActivityGrid({ latestActivity, joinedAt }: ActivityGrid) {
       if (yearStart < new Date(`${showing}-01-01`))
         yearStart = addDays(yearStart, 7);
 
-      let yearEnd = getStartOfWeek(new Date(`${showing}-12-31`));
-      if (yearEnd > new Date(`${showing}-12-31`))
-        yearEnd = addDays(yearEnd, -7);
-
       let newArray: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[] =
         new Array(53);
 
-      let i = 0;
-      for (let curr = yearStart; curr <= yearEnd; curr = addDays(curr, 7)) {
+      for (let curr = yearStart, i = 0; i < 52; curr = addDays(curr, 7), i++) {
         const found = response.findIndex(
           (x) => curr.toDateString() === new Date(x.startDate).toDateString()
         );
 
-        newArray[i++] =
+        newArray[i] =
           found >= 0
             ? response[found]
             : {

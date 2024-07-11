@@ -94,6 +94,7 @@ export default function Profile() {
                     <ActivityGrid
                       latestActivity={loadedUserData.content.streak}
                       joinedAt={new Date(loadedUserData.content.joinedAt)}
+                      userId={loadedUserData.content.id}
                     />
                   </div>
                 </div>

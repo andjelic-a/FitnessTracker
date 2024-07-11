@@ -98,6 +98,7 @@ export default function User() {
                   <ActivityGrid
                     latestActivity={response.content.streak}
                     joinedAt={new Date(response.content.joinedAt)}
+                    userId={response.content.id}
                   />
                 </div>
               </div>
