@@ -85,6 +85,30 @@
       font-size: 2rem;
     }
   }
+
+  & .choose-exercise-filter-dropdown {
+    border-radius: 2rem;
+    color: white;
+
+    & .dropdown-button {
+      background-color: $primary-400;
+      border-radius: 0.5rem;
+    }
+
+    & .dropdown-content {
+      transform: translate(0, -0.35rem);
+      border-radius: 0 0 0.5rem 0.5rem;
+      background-color: $primary-300;
+
+      & :last-child {
+        border-radius: 0 0 0.5rem 0.5rem;
+      }
+
+      & .dropdown-item:hover {
+        background-color:  $primary-400;
+      }
+    }
+  }
 }
 
 .exercise-option {
