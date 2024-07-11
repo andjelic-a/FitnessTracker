@@ -2,31 +2,26 @@ import { useState } from "react";
 import Icon from "../../Components/Icon/Icon";
 import InputField from "../../Components/InputField/InputField";
 import "./WorkoutsContainer.scss";
+import { Schema } from "../../Types/Endpoints/SchemaParser";
 import useSearch from "../../Hooks/UseSearch";
 
-interface Workout {
-  id: string;
-  name: string;
-  image: string | null;
-}
-
-interface WorkoutsContainerProps {
-  workouts: Workout[];
+type WorkoutsContainerProps = {
+  workouts: Schema<"SimpleWorkoutResponseDTO">[];
   toggleNewWorkoutWindow: () => void;
-}
+};
 
-const WorkoutsContainer: React.FC<WorkoutsContainerProps> = ({
+function WorkoutsContainer({
   workouts,
   toggleNewWorkoutWindow,
-}) => {
-  const search = useSearch(workouts.slice(), (x) => x.name);
+}: WorkoutsContainerProps) {
   const [showAll, setShowAll] = useState<boolean>(false);
 
-  const [searchResults, setSearchResults] = useState<Workout[] | null>(null);
+  const search = useSearch(workouts.slice(), (x) => x.name);
+  const [searchResults, setSearchResults] = useState<
+    Schema<"SimpleWorkoutResponseDTO">[] | null
+  >(null);
 
-  const toggleShowAll = () => {
-    setShowAll((prevState) => !prevState);
-  };
+  const toggleShowAll = () => void setShowAll((prevState) => !prevState);
 
   return (
     <div className="profile-workouts-container">
@@ -55,16 +50,15 @@ const WorkoutsContainer: React.FC<WorkoutsContainerProps> = ({
           {(searchResults ?? (showAll ? workouts : workouts.slice(0, 8))).map(
             (workout) => (
               <div key={workout.id}>
-                {/* Replace with actual image path */}
                 <img
-                  src={workout.image ?? "../../../DefaultProfilePicture.png"}
-                  alt={workout.name}
+                  src={workout.creator.image ?? "/DefaultProfilePicture.png"}
+                  alt={"Profile picture of the creator of " + workout.name}
                 />
                 <p>{workout.name}</p>
               </div>
             )
           )}
-          {workouts.length > 8 && !searchResults && (
+          {workouts.length > 8 && (
             <button className="profile-workouts-show" onClick={toggleShowAll}>
               {showAll ? "Show less" : "Show more"}
             </button>
@@ -73,6 +67,6 @@ const WorkoutsContainer: React.FC<WorkoutsContainerProps> = ({
       </div>
     </div>
   );
-};
+}
 
 export default WorkoutsContainer;

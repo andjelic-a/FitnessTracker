@@ -7,36 +7,35 @@ import Observer from "gsap/Observer";
 import reorderArray from "./ReorderArray";
 import { useGSAP } from "@gsap/react";
 import useOutsideClick from "../../../Hooks/UseOutsideClick";
-import ChooseExercise, {
-  ChooseExerciseType,
+import ChooseExerciseWindow, {
+  ChooseExerciseData,
 } from "./ChooseExercise/ChooseExercise";
 import { APIResponse } from "../../../Types/Endpoints/ResponseParser";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import { Await } from "react-router-dom";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
+import { v4 as uuidv4 } from "uuid";
 
 gsap.registerPlugin(Flip);
 gsap.registerPlugin(Observer);
 
-interface CreateRoutineProps {
-  isNewWindowOpen: boolean;
-  setIsNewWindowOpen: (isOpen: boolean) => void;
+type CreateRoutineWindowProps = {
+  isVisible: boolean;
+  onClose: () => void;
   animationLength?: number;
   safeGuard?: number;
-}
+};
 
-export default function CreateRoutine({
-  isNewWindowOpen,
-  setIsNewWindowOpen,
+export default function CreateRoutineWindow({
+  isVisible,
+  onClose,
   animationLength,
   safeGuard,
-}: CreateRoutineProps): JSX.Element {
-  const [routineItems, setRoutineItems] = useState<ChooseExerciseType[]>([]);
+}: CreateRoutineWindowProps): JSX.Element {
+  const { contextSafe } = useGSAP();
 
-  const createdRoutineItemsRef = useRef<RoutineItemData[]>([]);
-
-  const [isChooseExerciseOpen, setIsChooseExerciseOpen] =
-    useState<boolean>(false);
+  const [routineItems, setRoutineItems] = useState<ChooseExerciseData[]>([]);
+  const [isChoosingExercise, setIsChoosingExercise] = useState<boolean>(false);
   const [replacingExerciseId, setReplacingExerciseId] = useState<string | null>(
     null
   );
@@ -47,48 +46,23 @@ export default function CreateRoutine({
   const loadingExercises = useRef<Promise<
     APIResponse<"/api/exercise", "get">
   > | null>(null);
-
+  const createdRoutineItemsRef = useRef<RoutineItemData[]>([]);
   const reachedEnd = useRef(false);
   const lazyLoadedExercises = useRef<APIResponse<"/api/exercise", "get">[]>([]);
-
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
   const routineTitleRef = useRef<HTMLInputElement | null>(null);
-
-  const { contextSafe } = useGSAP();
   const dragging = useRef<HTMLElement | null>(null);
   const currentFlipState = useRef<Flip.FlipState | null>(null);
   const currentFlipTimeline = useRef<gsap.core.Timeline | null>(null);
   const movableRef = useRef<HTMLElement | null>(null);
   const isDraggingAvailable = useRef(true);
-  const isDragging = useRef(false);
   const routineItemContainerRef = useRef<HTMLDivElement>(null);
   const isMoveAvailable = useRef(true);
-
-  const handleTouchMove = useCallback(
-    (e: TouchEvent) => {
-      const touch = e.touches[0];
-      let element = document.elementFromPoint(touch.clientX, touch.clientY);
-
-      while (element && !element.classList.contains("routine-item"))
-        element = element.parentElement;
-
-      if (!element) return;
-
-      handleHoverOverItem(element as HTMLElement);
-    },
-    [handleHoverOverItem]
-  );
-
-  useEffect(() => {
-    document.addEventListener("touchmove", handleTouchMove);
-    return () => {
-      document.removeEventListener("touchmove", handleTouchMove);
-    };
-  }, [handleTouchMove]);
 
   useEffect(() => {
     playReorderAnimation();
 
+    //Sort data according to their respective elements
     const idToIndexMap = new Map<string, number>();
     routineItems.forEach((item, index) => {
       idToIndexMap.set(item.id, index);
@@ -104,13 +78,32 @@ export default function CreateRoutine({
 
       return 0;
     });
-    console.log(createdRoutineItemsRef.current);
   }, [routineItems]);
 
   useOutsideClick(excludedDivRef, () => {
-    setIsNewWindowOpen(false);
     if (routineTitleRef.current) routineTitleRef.current.value = "";
+    onClose();
   });
+
+  //#region Routine item drag and drop logic / animations
+  const handleTouchMove = useCallback(
+    (e: TouchEvent) => {
+      const touch = e.touches[0];
+      let element = document.elementFromPoint(touch.clientX, touch.clientY);
+
+      while (element && !element.classList.contains("routine-item"))
+        element = element.parentElement;
+
+      if (element) handleHoverOverItem(element as HTMLElement);
+    },
+    [handleHoverOverItem]
+  );
+
+  useEffect(() => {
+    document.addEventListener("touchmove", handleTouchMove);
+    return () =>
+      void document.removeEventListener("touchmove", handleTouchMove);
+  }, [handleTouchMove]);
 
   const playReorderAnimation = contextSafe(() => {
     if (!currentFlipState.current) return;
@@ -118,32 +111,123 @@ export default function CreateRoutine({
     isMoveAvailable.current = false;
     setTimeout(() => void (isMoveAvailable.current = true), safeGuard ?? 150);
 
-    currentFlipTimeline.current?.kill();
     currentFlipTimeline.current = Flip.from(currentFlipState.current, {
       duration: animationLength ?? 0.3,
-      absolute: false,
       onComplete: () => {
         currentFlipState.current = null;
         currentFlipTimeline.current = null;
       },
     });
-
-    return;
   });
 
-  const handleAddNewExerciseClick = () => {
-    setIsChooseExerciseOpen(true);
+  function handleHoverOverItem(target: HTMLElement) {
+    if (
+      !dragging.current ||
+      dragging.current.contains(target) ||
+      !isMoveAvailable.current
+    )
+      return;
+
+    let element: HTMLElement | null = target;
+    while (element && !element.classList.contains("routine-item")) {
+      element = element.parentNode as HTMLElement;
+    }
+    if (!element) return;
+
+    const hoverId = element.id.replace("routine-item-", "");
+    const hoverIdx = routineItems.findIndex((x) => x.id === hoverId);
+
+    const draggingId = dragging.current!.id.replace("routine-item-", "");
+    const draggingIdx = routineItems.findIndex((x) => x.id === draggingId);
+
+    if (hoverIdx < 0 || draggingIdx < 0 || hoverIdx === draggingIdx) return;
+
+    if (currentFlipTimeline.current) currentFlipTimeline.current.kill();
+
+    currentFlipState.current = Flip.getState(
+      routineItemContainerRef.current!.children
+    );
+
+    setRoutineItems(reorderArray(routineItems, draggingIdx, hoverIdx));
+  }
+
+  const updateMovablePosition = useCallback(
+    contextSafe((x: number, y: number) => {
+      if (!movableRef.current) return;
+
+      gsap.set(movableRef.current, {
+        x: `+=${x}`,
+        y: `+=${y}`,
+      });
+    }),
+    [contextSafe, movableRef.current]
+  );
+
+  const beginDragging = contextSafe((element: HTMLElement) => {
+    if (!isDraggingAvailable) return;
+    isDraggingAvailable.current = false;
+
+    movableRef.current = element.cloneNode(true) as HTMLElement;
+    document.body.appendChild(movableRef.current);
+    movableRef.current.classList.add("temporary");
+
+    const rect = element.getBoundingClientRect();
+    gsap.set(movableRef.current, {
+      x: rect.x,
+      y: rect.y,
+      width: rect.width,
+      height: rect.height,
+    });
+
+    element.classList.add("dragging");
+    dragging.current = element;
+  });
+
+  const endDragging = contextSafe((element: HTMLElement) => {
+    if (!dragging.current) return;
+    dragging.current = null;
+
+    const rect = element.getBoundingClientRect();
+    gsap.to(movableRef.current, {
+      x: rect.x - +gsap.getProperty(element, "x"),
+      y: rect.y - +gsap.getProperty(element, "y"),
+      left: 0,
+      top: 0,
+      duration: 0.25,
+      onComplete: () => {
+        routineItemContainerRef.current!.childNodes.forEach(
+          (x) => void (x as HTMLElement).classList.remove("dragging")
+        );
+
+        document.body
+          .querySelectorAll(".routine-item.temporary")
+          .forEach((x) => {
+            x.remove();
+          });
+      },
+    });
+
+    isDraggingAvailable.current = true;
+    movableRef.current = null;
+  });
+  //#endregion
+
+  function handleAddExerciseSetBtnClick() {
+    setIsChoosingExercise(true);
 
     if (excludedDivRef.current) {
       excludedDivRef.current.scrollTo({
         top: 0,
       });
     }
-  };
+  }
 
-  const handleAddExercise = (exercises: ChooseExerciseType[]) => {
-    setRoutineItems((prevState) => [...prevState, ...exercises]);
-  };
+  function handleReplaceExerciseRequest(id: string) {
+    setIsChoosingExercise(true);
+    setReplacingExerciseId(id);
+
+    if (excludedDivRef.current) excludedDivRef.current.scrollTop = 0;
+  }
 
   function handleRoutineItemChanged(routineItem: RoutineItemData) {
     const index = createdRoutineItemsRef.current.findIndex(
@@ -154,35 +238,31 @@ export default function CreateRoutine({
     else createdRoutineItemsRef.current[index] = routineItem;
   }
 
-  const handleReplaceExercise = (id: string) => {
-    setIsChooseExerciseOpen(true);
-    setReplacingExerciseId(id);
-
-    if (excludedDivRef.current) {
-      excludedDivRef.current.scrollTo({
-        top: 0,
-      });
+  const handleExerciseChosen = (
+    selected:
+      | Schema<"SimpleExerciseResponseDTO">
+      | Schema<"SimpleExerciseResponseDTO">[]
+  ) => {
+    if (!replacingExerciseId && Array.isArray(selected)) {
+      setRoutineItems((prevState) => [
+        ...prevState,
+        ...selected.map((x) => ({ exercise: x, id: uuidv4() })),
+      ]);
+      return;
     }
+
+    setReplacingExerciseId(null);
+    setRoutineItems((prev) => {
+      const index = prev.findIndex((x) => x.id === replacingExerciseId);
+      if (index >= 0 && !Array.isArray(selected))
+        prev[index].exercise = selected;
+
+      return prev;
+    });
   };
 
-  const handleExerciseChosen = (exercises: ChooseExerciseType[]) => {
-    if (replacingExerciseId) {
-      const updatedItems = routineItems.slice();
-      updatedItems.forEach((x, i) => {
-        if (x.id === replacingExerciseId) updatedItems[i] = exercises[0];
-      });
-
-      setRoutineItems(updatedItems);
-      setReplacingExerciseId(null);
-      setIsChooseExerciseOpen(false);
-    } else {
-      handleAddExercise(exercises);
-    }
-  };
-
-  const handleDeleteExercise = (id: string) => {
-    setRoutineItems((prevState) => prevState.filter((item) => item.id !== id));
-  };
+  const handleDeleteExercise = (id: string) =>
+    void setRoutineItems((prev) => prev.filter((item) => item.id !== id));
 
   const handleSaveClick = () => {
     if (!routineTitleRef.current?.value) return;
@@ -232,115 +312,10 @@ export default function CreateRoutine({
     });
 
     setRoutineItems([]);
-    setIsNewWindowOpen(false);
-    setIsChooseExerciseOpen(false);
+    onClose();
   };
 
-  function handleHoverOverItem(target: HTMLElement) {
-    if (
-      !isDragging.current ||
-      !dragging.current ||
-      dragging.current.contains(target) ||
-      !isMoveAvailable.current
-    )
-      return;
-
-    let element: HTMLElement | null = target;
-    while (element && !element.classList.contains("routine-item")) {
-      element = element.parentNode as HTMLElement;
-    }
-    if (!element) return;
-
-    const hoverId = element.id.replace("routine-item-", "");
-    const hoverIdx = routineItems.findIndex((x) => x.id === hoverId);
-
-    const draggingId = dragging.current!.id.replace("routine-item-", "");
-    const draggingIdx = routineItems.findIndex((x) => x.id === draggingId);
-
-    if (
-      hoverIdx === undefined ||
-      draggingIdx === undefined ||
-      hoverIdx === draggingIdx
-    )
-      return;
-
-    if (currentFlipTimeline.current) {
-      currentFlipTimeline.current.kill();
-      currentFlipTimeline.current = null;
-    }
-    currentFlipState.current = Flip.getState(
-      routineItemContainerRef.current!.children
-    );
-
-    setRoutineItems(reorderArray(routineItems, draggingIdx, hoverIdx));
-  }
-
-  const updateMovablePosition = useCallback(
-    contextSafe((x: number, y: number) => {
-      if (!movableRef.current) return;
-
-      gsap.set(movableRef.current, {
-        x: `+=${x}`,
-        y: `+=${y}`,
-      });
-    }),
-    [contextSafe, movableRef.current]
-  );
-
-  const beginDragging = contextSafe((element: HTMLElement) => {
-    if (!isDraggingAvailable) return;
-    isDraggingAvailable.current = false;
-
-    movableRef.current = element.cloneNode(true) as HTMLElement;
-    document.body.appendChild(movableRef.current);
-    movableRef.current.classList.add("temporary");
-
-    const rect = element.getBoundingClientRect();
-    gsap.set(movableRef.current, {
-      x: rect.x,
-      y: rect.y,
-      width: rect.width,
-      height: rect.height,
-    });
-
-    element.classList.add("dragging");
-    dragging.current = element;
-    isDragging.current = true;
-  });
-
-  const endDragging = contextSafe((element: HTMLElement) => {
-    if (isDraggingAvailable.current || !isDragging.current) return;
-
-    isDragging.current = false;
-    const rect = element.getBoundingClientRect();
-
-    gsap.to(movableRef.current, {
-      x: rect.x,
-      y: rect.y,
-      left: 0,
-      top: 0,
-      duration: 0.25,
-      onComplete: () => {
-        movableRef.current = null;
-        isDraggingAvailable.current = true;
-        dragging.current = null;
-
-        routineItemContainerRef.current!.childNodes.forEach((x) => {
-          const routineItem = x as HTMLElement;
-          if (routineItem.classList.contains("dragging"))
-            routineItem.classList.remove("dragging");
-        });
-
-        document.body
-          .querySelectorAll(".routine-item.temporary")
-          .forEach((x) => {
-            x.remove();
-          });
-      },
-    });
-  });
-
-  async function getExercises(): Promise<
+  async function getInitialExercises(): Promise<
     APIResponse<"/api/exercise", "get">[]
   > {
     if (previouslyLoadedExercises.length > 0) return previouslyLoadedExercises;
@@ -363,8 +338,6 @@ export default function CreateRoutine({
       previouslyLoadedExercises.filter((x) => x.code === "OK").length +
       lazyLoadedExercises.current.length;
 
-    console.log(okResultCount * 10);
-
     loadingExercises.current ??= sendAPIRequest("/api/exercise", {
       method: "get",
       parameters: {
@@ -385,18 +358,18 @@ export default function CreateRoutine({
   return (
     <div
       ref={excludedDivRef}
-      className={`create-routine-window ${
-        isNewWindowOpen ? "create-routine-window-open" : ""
-      } ${isChooseExerciseOpen ? "no-scroll" : ""}`}
+      className={`create-routine-window ${isVisible ? "visible" : "hidden"} ${
+        isChoosingExercise ? "no-scroll" : "scrollable"
+      }`}
     >
-      {isChooseExerciseOpen && (
+      {isChoosingExercise && (
         <Suspense fallback={null}>
-          <Await resolve={getExercises()}>
+          <Await resolve={getInitialExercises()}>
             {(exercises: APIResponse<"/api/exercise", "get">[]) => {
               return (
-                <ChooseExercise
+                <ChooseExerciseWindow
                   onClose={() => {
-                    setIsChooseExerciseOpen(false);
+                    setIsChoosingExercise(false);
                     setPreviouslyLoadedExercises([
                       ...previouslyLoadedExercises,
                       ...lazyLoadedExercises.current,
@@ -404,13 +377,12 @@ export default function CreateRoutine({
 
                     lazyLoadedExercises.current = [];
                   }}
-                  onAddExercise={handleExerciseChosen}
-                  isReplaceMode={!!replacingExerciseId}
+                  onConfirmSelection={handleExerciseChosen}
+                  singleMode={!!replacingExerciseId}
                   exercises={exercises
                     .filter((x) => x.code === "OK")
                     .flatMap((x) => x.content)}
-                  onRequireLazyLoad={async () => {
-                    console.log("lazy load");
+                  onRequestLazyLoad={async () => {
                     const newExercises = getMoreExercises(true).then((x) =>
                       x?.code === "OK" ? x?.content ?? [] : []
                     );
@@ -422,6 +394,7 @@ export default function CreateRoutine({
           </Await>
         </Suspense>
       )}
+
       <div className="create-routine-header">
         <input
           ref={routineTitleRef}
@@ -434,6 +407,7 @@ export default function CreateRoutine({
           Save
         </button>
       </div>
+
       <div className="create-routine-body" ref={routineItemContainerRef}>
         {routineItems.map((x) => (
           <RoutineItem
@@ -446,11 +420,12 @@ export default function CreateRoutine({
             id={x.id}
             onDelete={() => handleDeleteExercise(x.id)}
             exercise={x.exercise}
-            onReplace={handleReplaceExercise}
+            onRequestExerciseReplace={handleReplaceExerciseRequest}
           />
         ))}
+
         <button
-          onClick={handleAddNewExerciseClick}
+          onClick={handleAddExerciseSetBtnClick}
           className="create-routine-add-exercise"
         >
           Add exercise
