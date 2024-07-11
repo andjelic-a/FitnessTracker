@@ -95,7 +95,11 @@ export default function User() {
                 />
 
                 <div className="profile-body">
-                  <ActivityGrid activity={response.content.streak} />
+                  <ActivityGrid
+                    latestActivity={response.content.streak}
+                    joinedAt={new Date(response.content.joinedAt)}
+                    userId={response.content.id}
+                  />
                 </div>
               </div>
             </div>

@@ -5049,6 +5049,121 @@ type MappedEndpoints = {
         };
       };
     };
+    "/api/user/{userId}/streak": {
+      get: {
+        tags: ["User"];
+        parameters: [
+          {
+            name: "userId";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+              format: "uuid";
+            };
+          },
+          {
+            name: "year";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          }
+        ];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWeekOfCompletedWorkoutsResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWeekOfCompletedWorkoutsResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWeekOfCompletedWorkoutsResponseDTO";
+                  };
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "403": {
+            description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
     "/api/user/me/streak/week/{date}": {
       get: {
         tags: ["User"];
