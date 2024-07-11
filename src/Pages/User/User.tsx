@@ -95,7 +95,7 @@ export default function User() {
                 />
 
                 <div className="profile-body">
-                  <ActivityGrid activity={response.content.streak} />
+                  <ActivityGrid latestActivity={response.content.streak} />
                 </div>
               </div>
             </div>
