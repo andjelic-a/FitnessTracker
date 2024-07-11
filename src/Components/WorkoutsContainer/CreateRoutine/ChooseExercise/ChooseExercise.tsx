@@ -2,63 +2,56 @@ import "./ChooseExercise.scss";
 import { useRef, useState } from "react";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 import { ExerciseOption } from "./ExerciseOption";
-import { v4 as uuidv4 } from "uuid";
 import Dropdown from "../../../DropdownMenu/Dropdown";
 import Icon from "../../../Icon/Icon";
 import "./ChooseExercise.scss";
 import DropdownItem from "../../../DropdownMenu/DropdownItem";
 
-export type ChooseExerciseType = {
+export type ChooseExerciseData = {
   id: string;
   exercise: Schema<"SimpleExerciseResponseDTO">;
 };
 
-type ChooseExerciseProps = {
+type ChooseExerciseWindowProps = {
   onClose: () => void;
-  onAddExercise: (exercise: ChooseExerciseType[]) => void;
-  isReplaceMode: boolean;
+  onConfirmSelection: (
+    exercise:
+      | Schema<"SimpleExerciseResponseDTO">
+      | Schema<"SimpleExerciseResponseDTO">[]
+  ) => void;
+  singleMode?: boolean;
   exercises: Schema<"SimpleExerciseResponseDTO">[];
-  onRequireLazyLoad?: () => Promise<
+  onRequestLazyLoad: () => Promise<
     Schema<"SimpleExerciseResponseDTO">[] | null
   >;
 };
 
-export default function ChooseExercise({
+export default function ChooseExerciseWindow({
   onClose,
-  onAddExercise,
-  isReplaceMode,
+  onConfirmSelection,
+  singleMode: replaceMode,
   exercises: preLoadedExercises,
-  onRequireLazyLoad,
-}: ChooseExerciseProps) {
-  const [selectedExercises, setSelectedExercises] = useState<
-    Schema<"SimpleExerciseResponseDTO">[]
+  onRequestLazyLoad,
+}: ChooseExerciseWindowProps) {
+  const [selected, setSelectedExercises] = useState<
+    Schema<"SimpleExerciseResponseDTO"> | Schema<"SimpleExerciseResponseDTO">[]
   >([]);
 
   const handleConfirm = () => {
-    if (selectedExercises.length > 0) {
-      onAddExercise(
-        selectedExercises.map((x) => ({
-          exercise: x,
-          id: uuidv4(),
-        }))
-      );
-      onClose();
-    }
+    onConfirmSelection(selected);
+    onClose();
   };
 
   const handleSelectExercise = (
     exercise: Schema<"SimpleExerciseResponseDTO">
   ) => {
     setSelectedExercises((prevSelectedExercises) => {
-      if (isReplaceMode) {
-        return [exercise];
-      } else {
-        if (prevSelectedExercises.includes(exercise)) {
-          return prevSelectedExercises.filter((e) => e !== exercise);
-        } else {
-          return [...prevSelectedExercises, exercise];
-        }
-      }
+      if (replaceMode || !Array.isArray(prevSelectedExercises)) return exercise;
+
+      if (prevSelectedExercises.includes(exercise))
+        return prevSelectedExercises.filter((e) => e !== exercise);
+
+      return [...prevSelectedExercises, exercise];
     });
   };
 
@@ -69,9 +62,9 @@ export default function ChooseExercise({
   // useLazyLoading("#choose-exercise", 0.7, requireLazyLoad);
 
   async function requireLazyLoad() {
-    if (!onRequireLazyLoad) return;
+    if (!onRequestLazyLoad) return;
 
-    const newExercises = await onRequireLazyLoad();
+    const newExercises = await onRequestLazyLoad();
     setLazyLoaded([...lazyLoaded, ...(newExercises ?? [])]);
   }
 
@@ -102,13 +95,17 @@ export default function ChooseExercise({
             key={exercise.id}
             exercise={exercise}
             onSelectExercise={handleSelectExercise}
-            isSelected={selectedExercises.includes(exercise)}
+            isSelected={
+              Array.isArray(selected)
+                ? selected.includes(exercise)
+                : selected === exercise
+            }
           />
         ))}
       </div>
       <div className="choose-exercise-footer">
         <button className="choose-exercise-button" onClick={handleConfirm}>
-          {isReplaceMode ? "Replace" : "Add"}
+          {replaceMode ? "Replace" : "Add"}
         </button>
         <button
           className={"choose-exercise-button"}

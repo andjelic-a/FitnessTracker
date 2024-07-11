@@ -2,28 +2,27 @@ import { useState } from "react";
 import Icon from "../../Components/Icon/Icon";
 import InputField from "../../Components/InputField/InputField";
 import "./WorkoutsContainer.scss";
+import { Schema } from "../../Types/Endpoints/SchemaParser";
+import useSearch from "../../Hooks/UseSearch";
 
-interface Workout {
-  id: string;
-  name: string;
-  image: string | null;
-}
-
-interface WorkoutsContainerProps {
-  workouts: Workout[];
+type WorkoutsContainerProps = {
+  workouts: Schema<"SimpleWorkoutResponseDTO">[];
   toggleNewWorkoutWindow: () => void;
-}
+};
 
-const WorkoutsContainer: React.FC<WorkoutsContainerProps> = ({ workouts, toggleNewWorkoutWindow }) => {
+function WorkoutsContainer({
+  workouts,
+  toggleNewWorkoutWindow,
+}: WorkoutsContainerProps) {
   const [showAll, setShowAll] = useState<boolean>(false);
 
+  const search = useSearch(workouts.slice(), (x) => x.name);
+  const [searchResults, setSearchResults] = useState<
+    Schema<"SimpleWorkoutResponseDTO">[] | null
+  >(null);
 
-  const displayedWorkouts = showAll ? workouts : workouts.slice(0, 8);
+  const toggleShowAll = () => void setShowAll((prevState) => !prevState);
 
-  const toggleShowAll = () => {
-    setShowAll((prevState) => !prevState);
-  };
-  
   return (
     <div className="profile-workouts-container">
       <div className="profile-workouts-header">
@@ -37,15 +36,28 @@ const WorkoutsContainer: React.FC<WorkoutsContainerProps> = ({ workouts, toggleN
         <InputField
           className="profile-workouts-search"
           placeholder="Search workouts"
+          onChange={(e) => {
+            if (e.target.value === "") {
+              setSearchResults(null);
+              return;
+            }
+
+            const results = search(e.target.value, workouts.length / 2);
+            setSearchResults(results);
+          }}
         />
         <div className="profile-workouts-items-container">
-          {displayedWorkouts.map((workout) => (
-            <div key={workout.id}>
-              {/* Replace with actual image path */}
-              <img src={workout.image??"../../../DefaultProfilePicture.png"} alt={workout.name} />
-              <p>{workout.name}</p>
-            </div>
-          ))}
+          {(searchResults ?? (showAll ? workouts : workouts.slice(0, 8))).map(
+            (workout) => (
+              <div key={workout.id}>
+                <img
+                  src={workout.creator.image ?? "/DefaultProfilePicture.png"}
+                  alt={"Profile picture of the creator of " + workout.name}
+                />
+                <p>{workout.name}</p>
+              </div>
+            )
+          )}
           {workouts.length > 8 && (
             <button className="profile-workouts-show" onClick={toggleShowAll}>
               {showAll ? "Show less" : "Show more"}
@@ -55,6 +67,6 @@ const WorkoutsContainer: React.FC<WorkoutsContainerProps> = ({ workouts, toggleN
       </div>
     </div>
   );
-};
+}
 
 export default WorkoutsContainer;
