@@ -2,7 +2,8 @@
 
 .activity-grid {
   width: auto;
-  height: auto;
+  max-width: 73rem;
+  max-height: 12.4rem;
   display: grid;
   grid-template-columns: repeat(18, 1fr);
   grid-template-rows: repeat(3, 1fr);
@@ -11,7 +12,6 @@
   border: 2px solid $dark-400;
   border-radius: 5px;
   padding: 5px;
-  overflow-x: auto;
 
   &::-webkit-scrollbar {
     height: 8px;
@@ -40,131 +40,6 @@
   border-radius: 5px;
   width: 30px;
   height: 30px;
-
-  &:nth-child(1):hover .popup {
-    top: 30px;
-    left: 16rem;
-  }
-  &:nth-child(2):hover .popup {
-    top: 30px;
-    left: 11rem;
-  }
-  &:nth-child(3):hover .popup {
-    top: 30px;
-    left: 6rem;
-  }
-  &:nth-child(4):hover .popup {
-    top: 30px;
-    left: 2.3rem;
-  }
-  &:nth-child(5):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(6):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(7):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(8):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(9):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(10):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(11):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(12):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(13):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(14):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(15):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(16):hover .popup {
-    top: 30px;
-    left: -1.2rem;
-  }
-  &:nth-child(17):hover .popup {
-    top: 30px;
-    left: -5.9rem;
-  }
-  &:nth-child(18):hover .popup {
-    top: 30px;
-    left: -9.9rem;
-  }
-  &:nth-child(19):hover .popup {
-    top: -30px;
-    left: 12.2rem;
-  }
-  &:nth-child(20):hover .popup {
-    top: -30px;
-    left: 8.5rem;
-  }
-  &:nth-child(21):hover .popup {
-    top: -30px;
-    left: 4.8rem;
-  }
-  &:nth-child(33):hover .popup {
-    top: -30px;
-    left: -50%;
-  }
-  &:nth-child(34):hover .popup {
-    top: -30px;
-    left: -3.25rem;
-  }
-  &:nth-child(35):hover .popup {
-    top: -30px;
-    left: -7.3rem;
-  }
-  &:nth-child(36):hover .popup {
-    top: -30px;
-    left: -11.9rem;
-  }
-  &:nth-child(37):hover .popup {
-    top: -30px;
-    left: 16rem;
-  }
-  &:nth-child(38):hover .popup {
-    top: -30px;
-    left: 12.25rem;
-  }
-  &:nth-child(39):hover .popup {
-    top: -30px;
-    left: 8.2rem;
-  }
-  &:nth-child(40):hover .popup {
-    top: -30px;
-    left: 3rem;
-  }
-  &:nth-child(51):hover .popup {
-    top: -30px;
-    left: -1rem;
-  }
-  &:nth-child(52):hover .popup {
-    top: -30px;
-    left: -5rem;
-  }
 
   &.fill-0 {
     background-color: $dark-200;
