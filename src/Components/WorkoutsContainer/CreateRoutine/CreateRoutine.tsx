@@ -60,6 +60,7 @@ export default function CreateRoutineWindow({
   const isDraggingAvailable = useRef(true);
   const routineItemContainerRef = useRef<HTMLDivElement>(null);
   const isMoveAvailable = useRef(true);
+  const addExerciseButtonRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     playReorderAnimation();
@@ -266,12 +267,40 @@ export default function CreateRoutineWindow({
   const handleDeleteExercise = (id: string) =>
     void setRoutineItems((prev) => prev.filter((item) => item.id !== id));
 
+  const isRoutineTitleValid = (): boolean => {
+    if (routineTitleRef.current?.value === "") {
+      routineTitleRef.current?.classList.add("routine-item-error-title");
+      return false;
+    } else {
+      routineTitleRef.current?.classList.remove("routine-item-error-title");
+      return true;
+    }
+  };
+
+  const isRoutineItemsValid = (): boolean => {
+    if (routineItems.length > 0){
+      addExerciseButtonRef.current?.classList.remove("routine-item-error-button");
+      return true;
+    }
+    else {
+      addExerciseButtonRef.current?.classList.add("routine-item-error-button");
+      return false;
+    }
+  };
+
   const handleSaveClick = () => {
-    if (!routineTitleRef.current?.value) return;
+    let isValid = true;
+    if (!isRoutineTitleValid()) isValid = false;
+
+    if(!isRoutineItemsValid()) isValid = false;
+
+    if(!isValid) return;
+
+    if (!routineTitleRef.current?.value) return false;
 
     const newWorkout: Schema<"CreateWorkoutRequestDTO"> = {
       isPublic: true,
-      name: routineTitleRef.current?.value,
+      name: routineTitleRef.current.value,
       description: "",
       sets: createdRoutineItemsRef.current
         .flatMap((routineItem) =>
@@ -432,6 +461,7 @@ export default function CreateRoutineWindow({
         <button
           onClick={handleAddExerciseSetBtnClick}
           className="create-routine-add-exercise"
+          ref={addExerciseButtonRef}
         >
           Add exercise
         </button>
