@@ -24,6 +24,7 @@ type CreateRoutineWindowProps = {
   onClose: () => void;
   animationLength?: number;
   safeGuard?: number;
+  onNewWorkoutCreated?: (newWorkout: Schema<"NewWorkoutResponseDTO">) => void;
 };
 
 export default function CreateRoutineWindow({
@@ -31,6 +32,7 @@ export default function CreateRoutineWindow({
   onClose,
   animationLength,
   safeGuard,
+  onNewWorkoutCreated,
 }: CreateRoutineWindowProps): JSX.Element {
   const { contextSafe } = useGSAP();
 
@@ -309,7 +311,9 @@ export default function CreateRoutineWindow({
     sendAPIRequest("/api/workout", {
       method: "post",
       payload: newWorkout,
-    });
+    }).then((x) =>
+      x.code === "Created" ? onNewWorkoutCreated?.(x.content) : void 0
+    );
 
     setRoutineItems([]);
     onClose();
