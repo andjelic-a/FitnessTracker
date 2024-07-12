@@ -98,11 +98,9 @@ export default function RoutineSetDisplay({
           className={`set-dropdown-menu ${!set.isDropdownOpen ? "hidden" : ""}`}
         >
           <span>
-            <Icon
-              onClick={() => onChangeSetIcon?.(set.id, "1")}
-              className="set-icon"
-              name="1"
-            />
+            <div onClick={() => onChangeSetIcon?.(set.id, "1")}>
+              {index + 1}
+            </div>
           </span>
           <span>
             <div onClick={() => onChangeSetIcon?.(set.id, "w")}>Warmup</div>
