@@ -15,5 +15,9 @@ export default async function profileLoader() {
         limit: -1,
       },
     }),
+    streak: sendAPIRequest("/api/user/me/streak", {
+      method: "get",
+      parameters: {},
+    }),
   });
 }

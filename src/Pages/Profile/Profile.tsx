@@ -13,6 +13,7 @@ export default function Profile() {
   const userData = useLoaderData() as {
     user: Promise<APIResponse<"/api/user/me/detailed", "get">>;
     workouts: Promise<APIResponse<"/api/workout/personal/simple", "get">>;
+    streak: Promise<APIResponse<"/api/user/me/streak", "get">>;
   };
 
   const [newWorkouts, setNewWorkouts] = useState<
@@ -103,11 +104,21 @@ export default function Profile() {
                 <button className="profile-edit-button">Edit Profile</button>
 
                 <div className="profile-body">
-                  <ActivityGrid
-                    userId={loadedUserData.content.id}
-                    latestActivity={loadedUserData.content.streak}
-                    joinedAt={new Date(loadedUserData.content.joinedAt)}
-                  />
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <Await resolve={userData.streak}>
+                      {(loadedStreakData: Awaited<typeof userData.streak>) => {
+                        if (loadedStreakData.code !== "OK") return null;
+
+                        return (
+                          <ActivityGrid
+                            userId={loadedUserData.content.id}
+                            latestActivity={loadedStreakData.content}
+                            joinedAt={new Date(loadedUserData.content.joinedAt)}
+                          />
+                        );
+                      }}
+                    </Await>
+                  </Suspense>
                 </div>
               </div>
             );
