@@ -1,6 +1,28 @@
 @import "../../Palette.scss";
 
 .expander {
+  &.expanded {
+    .expander-body {
+      display: block;
+    }
+
+    .expander-header {
+      border-radius: 0.5rem 0.5rem 0 0;
+    }
+
+    .caret {
+      transform: rotate(180deg);
+    }
+  }
+
+  &:not(.expanded) {
+    .expander-body {
+      display: none;
+    }
+  }
+
+  height: fit-content;
+
   & .expander-header {
     background-color: $dark-400;
     border-radius: 0.5rem;
@@ -8,6 +30,7 @@
     margin-bottom: 1rem;
     cursor: pointer;
 
+    user-select: none;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -23,5 +46,10 @@
       }
     }
   }
-  
+
+  & .expander-body {
+    background-color: $dark-300;
+    pointer-events: none;
+    border-radius: 0 0 1rem 1rem;
+  }
 }

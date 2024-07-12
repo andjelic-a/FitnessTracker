@@ -1,4 +1,5 @@
 import Expander from "../../Components/Expander/Expander";
+import ExpanderItem from "../../Components/Expander/ExpanderItem";
 import InfoCard from "../../Components/InfoCard/InfoCard";
 import "./LandingPage.scss";
 
@@ -19,14 +20,26 @@ function LandingPage() {
         style={{
           display: "flex",
           justifyContent: "center",
+          alignItems: "center",
           marginTop: "5em",
+          flexDirection: "column",
         }}
       >
         <Expander name="Expander">
-          <p>Hello</p>
-          <p>Hi</p>
-          <p>Hey</p>
+          <ExpanderItem>Hello</ExpanderItem>
+          <ExpanderItem>Hi</ExpanderItem>
+          <ExpanderItem>Hello</ExpanderItem>
+          <ExpanderItem>Hi</ExpanderItem>
+          <ExpanderItem>Hello</ExpanderItem>
+          <ExpanderItem>Hi</ExpanderItem>
         </Expander>
+
+{/*         <Expander name="Expander 2">
+          <ExpanderItem>Hello</ExpanderItem>
+          <ExpanderItem>Hi</ExpanderItem>
+          <ExpanderItem>Hello</ExpanderItem>
+          <ExpanderItem>Hi</ExpanderItem>
+        </Expander> */}
       </div>
     </>
   );
