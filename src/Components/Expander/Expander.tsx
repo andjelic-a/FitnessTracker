@@ -8,9 +8,15 @@ type ExpanderProps = {
   name: string;
   icon?: string;
   children: React.ReactNode | React.ReactNode[];
+  className?: string;
 };
 
-export default function Expander({ name, icon, children }: ExpanderProps) {
+export default function Expander({
+  name,
+  icon,
+  children,
+  className,
+}: ExpanderProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const flipState = useRef<Flip.FlipState | null>(null);
   const expanderRef = useRef<HTMLDivElement>(null);
@@ -48,7 +54,7 @@ export default function Expander({ name, icon, children }: ExpanderProps) {
     });
   }, [isExpanded]);
 
-  function a(collection: HTMLCollection) {
+  function collectionToArray(collection: HTMLCollection) {
     const arr = [];
     for (let i = 0; i < collection.length; i++) {
       arr.push(collection[i]);
@@ -58,7 +64,7 @@ export default function Expander({ name, icon, children }: ExpanderProps) {
 
   return (
     <div
-      className={"expander" + (isExpanded ? " expanded" : "")}
+      className={"expander" + (isExpanded ? " expanded" : "") + " " + className}
       ref={expanderRef}
     >
       <div
@@ -67,10 +73,10 @@ export default function Expander({ name, icon, children }: ExpanderProps) {
           if (flipState.current || !expanderRef.current) return;
 
           flipState.current = Flip.getState([
-            ...a(expanderRef.current.parentElement!.children),
-            ...a(expanderRef.current.parentElement!.children).flatMap((x) =>
-              a(x.children)
-            ),
+            ...collectionToArray(expanderRef.current.parentElement!.children),
+            ...collectionToArray(
+              expanderRef.current.parentElement!.children
+            ).flatMap((x) => collectionToArray(x.children)),
           ]);
 
           setIsExpanded(!isExpanded);

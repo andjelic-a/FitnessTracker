@@ -89,6 +89,14 @@
     }
   }
 
+  .routine-item-error-title {
+    border-color: rgb(255, 0, 0) !important;
+
+    &::placeholder {
+      color: red !important;
+    }
+  }
+
   & .create-routine-save {
     width: 5.5rem;
     height: 3.75rem;
@@ -129,7 +137,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 60%;
+  width: 23rem;
   height: 3rem;
   border-radius: 0.2rem;
   border: none;
@@ -141,4 +149,8 @@
   &:hover {
     background-color: $primary-400;
   }
+}
+
+.routine-item-error-button{
+  background-color: red;
 }

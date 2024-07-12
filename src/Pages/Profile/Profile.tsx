@@ -7,6 +7,7 @@ import useOutsideClick from "../../Hooks/UseOutsideClick";
 import CreateRoutineWindow from "../../Components/WorkoutsContainer/CreateRoutine/CreateRoutine";
 import { Await, useLoaderData } from "react-router-dom";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";
+import { Schema } from "../../Types/Endpoints/SchemaParser";
 
 export default function Profile() {
   const userData = useLoaderData() as {
@@ -14,6 +15,9 @@ export default function Profile() {
     workouts: Promise<APIResponse<"/api/workout/personal/simple", "get">>;
   };
 
+  const [newWorkouts, setNewWorkouts] = useState<
+    Schema<"SimpleWorkoutResponseDTO">[]
+  >([]);
   const [isNewRoutineWindowOpen, setIsNewRoutineWindowOpen] =
     useState<boolean>(false);
   const toggleNewWorkoutWindow = () =>
@@ -38,6 +42,25 @@ export default function Profile() {
         onClose={() => setIsNewRoutineWindowOpen(false)}
         animationLength={0.2}
         safeGuard={100}
+        onNewWorkoutCreated={(newWorkout) =>
+          userData.user.then((userData) => {
+            if (userData.code !== "OK") return;
+
+            setNewWorkouts([
+              ...newWorkouts,
+              {
+                id: newWorkout.id,
+                name: newWorkout.name,
+                isPublic: newWorkout.isPublic,
+                creator: {
+                  id: userData.content.id,
+                  name: userData.content.name,
+                  image: userData.content.image,
+                },
+              },
+            ]);
+          })
+        }
       />
 
       <Suspense fallback={<div>Loading...</div>}>
@@ -47,7 +70,7 @@ export default function Profile() {
 
             return (
               <WorkoutsContainer
-                workouts={loadedWorkoutData.content}
+                workouts={[...loadedWorkoutData.content, ...newWorkouts]}
                 toggleNewWorkoutWindow={toggleNewWorkoutWindow}
               />
             );
