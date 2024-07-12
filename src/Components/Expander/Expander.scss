@@ -1,0 +1,52 @@
+@import "../../Palette.scss";
+
+.expander {
+  &.expanded {
+    .expander-body {
+      display: block;
+    }
+
+    .expander-header {
+      border-radius: 0.5rem 0.5rem 0 0;
+    }
+  }
+
+  &:not(.expanded) {
+    .expander-body {
+      display: none;
+    }
+  }
+
+  height: fit-content;
+  min-width: max-content;
+
+  & .expander-header {
+    background-color: $dark-400;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+
+    user-select: none;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+
+    .expander-icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      margin-right: 0.5rem;
+
+      &.invisible {
+        display: none;
+      }
+    }
+  }
+
+  & .expander-body {
+    background-color: $dark-300;
+    pointer-events: none;
+    border-radius: 0 0 1rem 1rem;
+  }
+}
