@@ -16,7 +16,7 @@ export default function Expander({ name, icon, children }: ExpanderProps) {
   const expanderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!flipState.current) return;
+    if (!flipState.current || !expanderRef.current) return;
 
     Flip.from(flipState.current, {
       onComplete: () => (flipState.current = null),
@@ -31,6 +31,7 @@ export default function Expander({ name, icon, children }: ExpanderProps) {
             y: "+=3rem",
             opacity: 1,
             duration: 0.3,
+            delay: 0.075,
           }
         );
       },
@@ -38,13 +39,22 @@ export default function Expander({ name, icon, children }: ExpanderProps) {
         return gsap.to(elements, {
           opacity: 0,
           y: "-=3rem",
-          duration: 0.3,
+          duration: 0.2,
         });
       },
       absolute: true,
       duration: 0.3,
+      nested: true,
     });
   }, [isExpanded]);
+
+  function a(collection: HTMLCollection) {
+    const arr = [];
+    for (let i = 0; i < collection.length; i++) {
+      arr.push(collection[i]);
+    }
+    return arr;
+  }
 
   return (
     <div
@@ -56,7 +66,12 @@ export default function Expander({ name, icon, children }: ExpanderProps) {
         onClick={() => {
           if (flipState.current || !expanderRef.current) return;
 
-          flipState.current = Flip.getState(expanderRef.current.children);
+          flipState.current = Flip.getState([
+            ...a(expanderRef.current.parentElement!.children),
+            ...a(expanderRef.current.parentElement!.children).flatMap((x) =>
+              a(x.children)
+            ),
+          ]);
 
           setIsExpanded(!isExpanded);
         }}

@@ -9,10 +9,6 @@
     .expander-header {
       border-radius: 0.5rem 0.5rem 0 0;
     }
-
-    .caret {
-      transform: rotate(180deg);
-    }
   }
 
   &:not(.expanded) {
@@ -22,6 +18,7 @@
   }
 
   height: fit-content;
+  min-width: max-content;
 
   & .expander-header {
     background-color: $dark-400;

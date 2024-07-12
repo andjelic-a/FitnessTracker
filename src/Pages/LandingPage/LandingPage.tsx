@@ -19,10 +19,12 @@ function LandingPage() {
       <div
         style={{
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "start",
           alignItems: "center",
           marginTop: "5em",
           flexDirection: "column",
+          height: "50vh",
+          gap: "1rem",
         }}
       >
         <Expander name="Expander">
@@ -34,12 +36,12 @@ function LandingPage() {
           <ExpanderItem>Hi</ExpanderItem>
         </Expander>
 
-{/*         <Expander name="Expander 2">
+        <Expander name="Expander 2">
           <ExpanderItem>Hello</ExpanderItem>
           <ExpanderItem>Hi</ExpanderItem>
           <ExpanderItem>Hello</ExpanderItem>
           <ExpanderItem>Hi</ExpanderItem>
-        </Expander> */}
+        </Expander>
       </div>
     </>
   );
