@@ -1,7 +1,11 @@
-import { useRef, useState } from "react";
 import "./ChooseExercise.scss";
+import { useRef, useState } from "react";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 import { ExerciseOption } from "./ExerciseOption";
+import Dropdown from "../../../DropdownMenu/Dropdown";
+import Icon from "../../../Icon/Icon";
+import "./ChooseExercise.scss";
+import DropdownItem from "../../../DropdownMenu/DropdownItem";
 
 export type ChooseExerciseData = {
   id: string;
@@ -72,6 +76,48 @@ export default function ChooseExerciseWindow({
         <h3>Choose Exercise</h3>
       </div>
       <div className="choose-exercise-body">
+        <div className="choose-exercise-search-container">
+          <div className="choose-exercise-search-bar-container">
+            <Icon className="choose-exercise-search-bar-icon" name="search" />
+            <input type="text" className="choose-exercise-search-bar" />
+          </div>
+          <div className="choose-exercise-filter">
+            <Dropdown
+              className="choose-exercise-filter-muscles-dropdown"
+              placeholder="All muscles"
+            >
+              <DropdownItem>Option 1</DropdownItem>
+              <DropdownItem>Option 2</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+            </Dropdown>
+            <Dropdown
+              className="choose-exercise-filter-equipment-dropdown"
+              placeholder="All equipment"
+            >
+              <DropdownItem>Option 1</DropdownItem>
+              <DropdownItem>Option 2</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+              <DropdownItem>Option 3</DropdownItem>
+            </Dropdown>
+          </div>
+        </div>
         {[...preLoadedExercises, ...lazyLoaded].map((exercise) => (
           <ExerciseOption
             key={exercise.id}

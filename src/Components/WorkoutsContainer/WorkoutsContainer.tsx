@@ -3,6 +3,7 @@ import Icon from "../../Components/Icon/Icon";
 import InputField from "../../Components/InputField/InputField";
 import "./WorkoutsContainer.scss";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
+import useSearch from "../../Hooks/UseSearch";
 
 type WorkoutsContainerProps = {
   workouts: Schema<"SimpleWorkoutResponseDTO">[];
@@ -14,6 +15,11 @@ function WorkoutsContainer({
   toggleNewWorkoutWindow,
 }: WorkoutsContainerProps) {
   const [showAll, setShowAll] = useState<boolean>(false);
+
+  const search = useSearch(workouts.slice(), (x) => x.name);
+  const [searchResults, setSearchResults] = useState<
+    Schema<"SimpleWorkoutResponseDTO">[] | null
+  >(null);
 
   const toggleShowAll = () => void setShowAll((prevState) => !prevState);
 
@@ -30,18 +36,29 @@ function WorkoutsContainer({
         <InputField
           className="profile-workouts-search"
           placeholder="Search workouts"
+          onChange={(e) => {
+            if (e.target.value === "") {
+              setSearchResults(null);
+              return;
+            }
+
+            const results = search(e.target.value, workouts.length / 2);
+            setSearchResults(results);
+          }}
         />
         <div className="profile-workouts-items-container">
-          {(showAll ? workouts : workouts.slice(0, 8)).map((workout) => (
-            <div key={workout.id}>
-              <img
-                src={workout.creator.image ?? "/DefaultProfilePicture.png"}
-                alt={"Profile picture of the creator of " + workout.name}
-              />
-              <p>{workout.name}</p>
-            </div>
-          ))}
-          {workouts.length > 8 && (
+          {(searchResults ?? (showAll ? workouts : workouts.slice(0, 8))).map(
+            (workout) => (
+              <div key={workout.id}>
+                <img
+                  src={workout.creator.image ?? "/DefaultProfilePicture.png"}
+                  alt={"Profile picture of the creator of " + workout.name}
+                />
+                <p>{workout.name}</p>
+              </div>
+            )
+          )}
+          {(searchResults ?? workouts).length > 8 && (
             <button className="profile-workouts-show" onClick={toggleShowAll}>
               {showAll ? "Show less" : "Show more"}
             </button>

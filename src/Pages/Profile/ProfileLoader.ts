@@ -11,7 +11,9 @@ export default async function profileLoader() {
     }),
     workouts: sendAPIRequest("/api/workout/personal/simple", {
       method: "get",
-      parameters: {},
+      parameters: {
+        limit: -1,
+      },
     }),
   });
 }

@@ -2,7 +2,8 @@
 
 .activity-grid {
   width: auto;
-  height: auto;
+  max-width: 73rem;
+  max-height: 12.4rem;
   display: grid;
   grid-template-columns: repeat(18, 1fr);
   grid-template-rows: repeat(3, 1fr);
@@ -11,7 +12,6 @@
   border: 2px solid $dark-400;
   border-radius: 5px;
   padding: 5px;
-  overflow-x: auto;
 
   &::-webkit-scrollbar {
     height: 8px;
@@ -41,91 +41,6 @@
   width: 30px;
   height: 30px;
 
-  &:nth-child(1):hover .popup {
-    top: 30px;
-    left: 150%;
-  }
-  &:nth-child(2):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(3):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(4):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(5):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(6):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(7):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(8):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(9):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(10):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(11):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(12):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(13):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(14):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(15):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(16):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(17):hover .popup {
-    top: 30px;
-    left: 50%;
-  }
-  &:nth-child(18):hover .popup {
-    top: 30px;
-    left: -50%;
-  }
-  &:nth-child(19):hover .popup {
-    top: -30px;
-    left: 150%;
-  }
-  &:nth-child(36):hover .popup {
-    top: -30px;
-    left: -50%;
-  }
-  &:nth-child(37):hover .popup {
-    top: -30px;
-    left: 150%;
-  }
-
   &.fill-0 {
     background-color: $dark-200;
   }
@@ -133,7 +48,7 @@
   @for $total from 1 through 7 {
     @for $completed from 1 through $total {
       &.fill-#{$completed}-of-#{$total} {
-        $percentage: (100 / $total) * $completed * 1%;
+        $percentage: calc(100 / $total) * $completed * 1%;
         background: linear-gradient(
           to top,
           $primary-300 $percentage,

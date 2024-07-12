@@ -1,4 +1,5 @@
 import "./ChooseExercise.scss";
+import { useState } from "react";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 import Icon from "../../../Icon/Icon";
 
@@ -13,16 +14,20 @@ export function ExerciseOption({
   onSelectExercise,
   isSelected,
 }: ExerciseOptionProps) {
+  const [isLinkHovered, setIsLinkHovered] = useState<boolean>(false);
+
   const handleClick = () => void onSelectExercise(exercise);
 
-  const handleImageScaleUp = (image: HTMLImageElement) =>
-    void image.classList.add("big");
+  const handleScaleUp = (element: HTMLImageElement | HTMLDivElement) =>
+    void element.classList.add("big");
 
-  const handleImageScaleDown = (image: HTMLImageElement) =>
-    void image.classList.remove("big");
+  const handleScaleDown = (element: HTMLImageElement | HTMLDivElement) =>
+    void element.classList.remove("big");
 
-  const handleImageScaleToggle = (image: HTMLImageElement) =>
-    void image.classList.toggle("big");
+  const handleLinkContainerClick = () => {
+    setIsLinkHovered(false);
+    console.log("link");
+  }
 
   return (
     <div
@@ -34,14 +39,30 @@ export function ExerciseOption({
           {isSelected && <Icon className="select-circle-check" name="check" />}
         </div>
       </div>
-      <img
-        src={exercise.image}
-        alt="Exercise"
-        onMouseOver={(e) => handleImageScaleUp(e.target as HTMLImageElement)}
-        onMouseLeave={(e) => handleImageScaleDown(e.target as HTMLImageElement)}
-        onClick={(e) => handleImageScaleToggle(e.target as HTMLImageElement)}
-      />
+      <div
+        className="image-container"
+        onMouseOver={(e) => handleScaleUp(e.currentTarget)}
+        onMouseLeave={(e) => handleScaleDown(e.currentTarget)}
+        onClick={(e) => handleScaleDown(e.currentTarget)}
+      >
+        <img src={exercise.image} alt="Exercise" />
+      </div>
       <h3>{exercise.name}</h3>
+      <div
+        onMouseEnter={() => setIsLinkHovered(true)}
+        onMouseLeave={() => setIsLinkHovered(false)}
+        onClick={() => handleLinkContainerClick()}
+        className="choose-exercise-link-container"
+      >
+        <Icon name="link" />
+        <div
+          className={`choose-exercise-link-popup ${
+            isLinkHovered ? "show" : ""
+          }`}
+        >
+          <p>link</p>
+        </div>
+      </div>
     </div>
   );
 }

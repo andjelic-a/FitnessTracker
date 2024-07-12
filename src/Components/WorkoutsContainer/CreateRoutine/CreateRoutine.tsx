@@ -370,6 +370,7 @@ export default function CreateRoutineWindow({
                 <ChooseExerciseWindow
                   onClose={() => {
                     setIsChoosingExercise(false);
+                    setReplacingExerciseId(null);
                     setPreviouslyLoadedExercises([
                       ...previouslyLoadedExercises,
                       ...lazyLoadedExercises.current,

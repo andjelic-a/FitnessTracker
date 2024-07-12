@@ -7,6 +7,7 @@ type ProfileHeaderProps = {
   workouts: number;
   followers: number;
   following: number;
+  setFollowersOrFollowing: (type: "followers" | "following" | null) => void;
 };
 
 function ProfileHeader({
@@ -15,7 +16,12 @@ function ProfileHeader({
   workouts,
   followers,
   following,
+  setFollowersOrFollowing,
 }: ProfileHeaderProps) {
+  const handleFollowersOrFollowingClick = (type: "followers" | "following") => {
+    setFollowersOrFollowing(type);
+  };
+
   return (
     <div className="profile-header">
       <div className="profile-picture">
@@ -34,11 +40,17 @@ function ProfileHeader({
             <div className="profile-user-stats-name">Workouts</div>
             <div className="profile-user-stats-num">{workouts ?? 0}</div>
           </div>
-          <div className="profile-user-stats-stat">
+          <div
+            className="profile-user-stats-stat"
+            onClick={() => handleFollowersOrFollowingClick("followers")}
+          >
             <div className="profile-user-stats-name">Followers</div>
             <div className="profile-user-stats-num">{followers ?? 0}</div>
           </div>
-          <div className="profile-user-stats-stat">
+          <div
+            className="profile-user-stats-stat"
+            onClick={() => handleFollowersOrFollowingClick("following")}
+          >
             <div className="profile-user-stats-name">Following</div>
             <div className="profile-user-stats-num">{following ?? 0}</div>
           </div>

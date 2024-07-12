@@ -1,0 +1,48 @@
+@import "../../Palette.scss";
+
+.follow-container {
+  align-self: flex-end;
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 40rem;
+  min-height: 100svh;
+  transform: translate(0, -10svh);
+  background-color: $dark-300;
+  padding: 2rem 0.5rem 2rem 0.5rem;
+  transition: 0.2s;
+
+  &.hidden {
+    z-index: -1;
+    opacity: 0;
+    visibility: 0;
+    transform: translate(100%, 0);
+  }
+
+  & .follow-container-header {
+    width: 100%;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.2rem;
+    font-weight: 550;
+  }
+
+  & .follow-container-user {
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+
+    img {
+      width: 5rem;
+    }
+  }
+}
