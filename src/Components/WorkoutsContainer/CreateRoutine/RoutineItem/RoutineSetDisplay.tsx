@@ -123,12 +123,21 @@ export default function RoutineSetDisplay({
         </div>
       </div>
       <div>
-        <input
-          type="text"
-          placeholder={set.rir.toString()}
-          maxLength={4}
-          onChange={(e) => onSetChanged?.({ ...set, rir: +e.target.value })}
-        />
+        {!set.selectedIcon || set.selectedIcon === "1" ? (
+          <input
+            type="text"
+            value={set.rir === 0 ? "" : set.rir}
+            placeholder={set.rir.toString()}
+            maxLength={4}
+            onChange={(e) => onSetChanged?.({ ...set, rir: +e.target.value })}
+          />
+        ) : (
+          <input
+            type="text"
+            disabled
+            value={set.selectedIcon === "w" ? "∞" : "0"}
+          />
+        )}
       </div>
       <div>
         <input
