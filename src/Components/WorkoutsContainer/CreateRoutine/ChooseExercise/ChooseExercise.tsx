@@ -122,6 +122,9 @@ export default function ChooseExerciseWindow({
               type="text"
               className="choose-exercise-search-bar"
               ref={searchBarRef}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSearch();
+              }}
             />
             <Icon
               onClick={handleSearch}
