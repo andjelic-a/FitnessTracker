@@ -75,7 +75,23 @@ export default function ChooseExerciseWindow({
 
   const requireLazyLoadBtnRef = useRef<HTMLButtonElement>(null);
 
-  function handleSearch() {}
+  const equipmentFilter = useRef<number>(-1);
+  const muscleGroupFilter = useRef<number>(-1);
+  const searchBarRef = useRef<HTMLInputElement>(null);
+
+  function handleSearch() {
+    console.log(searchBarRef.current?.value);
+    console.log(equipmentFilter.current);
+    console.log(muscleGroupFilter.current);
+  }
+
+  function handleEquipmentFilterChange(newSelectionKey: string) {
+    equipmentFilter.current = +newSelectionKey.replace(".$", "");
+  }
+
+  function handleMuscleGroupFilterChange(newSelectionKey: string) {
+    muscleGroupFilter.current = +newSelectionKey.replace(".$", "");
+  }
 
   return (
     <div className="choose-exercise" id="choose-exercise">
@@ -86,7 +102,11 @@ export default function ChooseExerciseWindow({
         <div className="choose-exercise-search-container">
           <div className="choose-exercise-search-bar-container">
             <Icon className="choose-exercise-search-bar-icon" name="search" />
-            <input type="text" className="choose-exercise-search-bar" />
+            <input
+              type="text"
+              className="choose-exercise-search-bar"
+              ref={searchBarRef}
+            />
             <Icon
               onClick={handleSearch}
               className="choose-exercise-search-bar-icon arrow-right-icon"
@@ -98,12 +118,14 @@ export default function ChooseExerciseWindow({
               onRequest={onRequestMuscleGroups}
               placeholder="All muscles"
               className="choose-exercise-filter-muscles-dropdown"
+              onSelectionChanged={handleMuscleGroupFilterChange}
             />
 
             <AsyncDropdown<"SimpleEquipmentResponseDTO">
               onRequest={onRequestEquipment}
               placeholder="All equipment"
               className="choose-exercise-filter-equipment-dropdown"
+              onSelectionChanged={handleEquipmentFilterChange}
             />
           </div>
         </div>

@@ -190,6 +190,10 @@ export default function RoutineExerciseDisplay({
       onComplete: () => {
         currentFlipState.current = null;
         currentFlipTimeline.current = null;
+
+        setContainerRef.current!.childNodes.forEach(
+          (x) => void ((x as HTMLElement).style.transform = "")
+        );
       },
     });
 
@@ -234,9 +238,7 @@ export default function RoutineExerciseDisplay({
       currentFlipTimeline.current.kill();
       currentFlipTimeline.current = null;
     }
-    currentFlipState.current = Flip.getState(
-      ".exercise-set-item:not(.temporary)"
-    );
+    currentFlipState.current = Flip.getState(setContainerRef.current!.children);
 
     setSets(reorderArray(sets, draggingIdx, hoverIdx));
   }

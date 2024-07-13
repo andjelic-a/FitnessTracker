@@ -9,12 +9,14 @@ type AsyncDropdownProps<T extends SchemaNames> = {
   placeholder: string;
   className?: string;
   onRequest: () => Promise<Schema<T>[]>;
+  onSelectionChanged?: (key: string) => void;
 };
 
 export default function AsyncDropdown<T extends SchemaNames>({
   onRequest,
   placeholder,
   className,
+  onSelectionChanged,
 }: AsyncDropdownProps<T>) {
   const [data, setData] = useState<Promise<Schema<T>[]> | null>(null);
 
@@ -46,6 +48,7 @@ export default function AsyncDropdown<T extends SchemaNames>({
                   placeholder={placeholder}
                   className={className ?? ""}
                   openOnStart
+                  onSelectionChanged={onSelectionChanged}
                 >
                   {resolvedData?.map((x) => (
                     <DropdownItem key={x.id}>{x.name}</DropdownItem>
