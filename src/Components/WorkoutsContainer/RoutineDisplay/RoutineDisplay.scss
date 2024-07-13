@@ -1,0 +1,59 @@
+@import "../../../Palette.scss";
+
+.routine-display {
+
+    &,
+    * {
+      user-select: none;
+    }
+  
+    position: absolute;
+    z-index: -5;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -45%) scale(0.8);
+    width: 80rem;
+    height: 50rem;
+    background-color: $dark-200;
+    border-radius: 0.5rem;
+    padding: 1rem 2rem 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transition: transform 0.4s, opacity 0.2s;
+    overflow-y: auto;
+    overflow-x: hidden;
+  
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+  
+    &::-webkit-scrollbar-track {
+      background: $dark-200;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background: $dark-500;
+      border-radius: 10px;
+    }
+  
+    &::-webkit-scrollbar-thumb:hover {
+      background: $dark-600;
+    }
+  
+    &.visible {
+      z-index: 10;
+      transform: translate(-50%, -45%) scale(1);
+      opacity: 1;
+  
+      ~ * {
+        transition: 0.4s;
+        filter: blur(6px);
+        pointer-events: none;
+      }
+    }
+  
+    &.no-scroll {
+      overflow: hidden;
+    }
+}
