@@ -46,6 +46,7 @@ export default function CreateRoutineWindow({
   const [previouslyLoadedExercises, setPreviouslyLoadedExercises] = useState<
     APIResponse<"/api/exercise", "get">[]
   >([]);
+  const [routineDescription, setRoutineDescription] = useState<string>("");
 
   const loadingExercises = useRef<Promise<
     APIResponse<"/api/exercise", "get">
@@ -64,6 +65,7 @@ export default function CreateRoutineWindow({
   const isMoveAvailable = useRef(true);
   const addExerciseButtonRef = useRef<HTMLButtonElement | null>(null);
   const publicOrPrivatePopupRef = useRef<HTMLDivElement | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     playReorderAnimation();
@@ -392,6 +394,17 @@ export default function CreateRoutineWindow({
     return loadingExercises.current;
   }
 
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [routineDescription]); 
+
+  const handleDescriptionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setRoutineDescription(event.target.value);
+  };
+
   return (
     <div
       ref={excludedDivRef}
@@ -489,6 +502,15 @@ export default function CreateRoutineWindow({
         >
           Add exercise
         </button>
+      </div>
+      <div className="create-routine-description">
+      <textarea
+        id="routine-description"
+        ref={textareaRef}
+        value={routineDescription}
+        onChange={handleDescriptionChange}
+      />
+        <label htmlFor="routine-description" className="routine-description-placeholder">Routine description</label>
       </div>
     </div>
   );
