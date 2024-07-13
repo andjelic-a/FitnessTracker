@@ -11,6 +11,12 @@ export type ChooseExerciseData = {
   exercise: Schema<"SimpleExerciseResponseDTO">;
 };
 
+export type ChooseExerciseFilters = {
+  muscleGroupId: number | null;
+  equipmentId: number | null;
+  name: string | null;
+};
+
 type ChooseExerciseWindowProps = {
   onClose: () => void;
   onConfirmSelection: (
@@ -27,6 +33,7 @@ type ChooseExerciseWindowProps = {
     Schema<"SimpleMuscleGroupResponseDTO">[]
   >;
   onRequestEquipment: () => Promise<Schema<"SimpleEquipmentResponseDTO">[]>;
+  onSearch: (filters: ChooseExerciseFilters) => void;
 };
 
 export default function ChooseExerciseWindow({
@@ -37,6 +44,7 @@ export default function ChooseExerciseWindow({
   onRequestLazyLoad,
   onRequestEquipment,
   onRequestMuscleGroups,
+  onSearch,
 }: ChooseExerciseWindowProps) {
   const [selected, setSelectedExercises] = useState<
     Schema<"SimpleExerciseResponseDTO"> | Schema<"SimpleExerciseResponseDTO">[]
@@ -64,8 +72,6 @@ export default function ChooseExerciseWindow({
     Schema<"SimpleExerciseResponseDTO">[]
   >([]);
 
-  // useLazyLoading("#choose-exercise", 0.7, requireLazyLoad);
-
   async function requireLazyLoad() {
     if (!onRequestLazyLoad) return;
 
@@ -80,9 +86,19 @@ export default function ChooseExerciseWindow({
   const searchBarRef = useRef<HTMLInputElement>(null);
 
   function handleSearch() {
-    console.log(searchBarRef.current?.value);
-    console.log(equipmentFilter.current);
-    console.log(muscleGroupFilter.current);
+    if (!onSearch) return;
+    setLazyLoaded([]);
+
+    onSearch({
+      equipmentId:
+        equipmentFilter.current === -1 ? null : equipmentFilter.current,
+      muscleGroupId:
+        muscleGroupFilter.current === -1 ? null : muscleGroupFilter.current,
+      name:
+        !searchBarRef.current || searchBarRef.current?.value === ""
+          ? null
+          : searchBarRef.current?.value,
+    });
   }
 
   function handleEquipmentFilterChange(newSelectionKey: string) {
