@@ -11,6 +11,7 @@ import sendAPIRequest from "../../Data/SendAPIRequest";
 export default function User() {
   const data = useLoaderData() as {
     user: Promise<APIResponse<"/api/user/{id}/detailed", "get">>;
+    streak: Promise<APIResponse<"/api/user/{userId}/streak", "get">>;
   };
 
   const [followingOrFollowers, setFollowingOrFollowers] = useState<
@@ -52,55 +53,63 @@ export default function User() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Await resolve={data.user}>
-        {(response: Awaited<typeof data.user>) => {
-          if (response.code !== "OK") return null;
+        {(userData: Awaited<typeof data.user>) => {
+          if (userData.code !== "OK") return null;
 
           return (
             <div className="profile">
               <div className="profile-user-container">
                 <ProfileHeader
-                  image={response.content.image}
-                  username={response.content.name}
-                  workouts={response.content.totalCompletedWorkouts}
-                  followers={followers ?? response.content.followers}
-                  following={response.content.following}
+                  image={userData.content.image}
+                  username={userData.content.name}
+                  workouts={userData.content.totalCompletedWorkouts}
+                  followers={followers ?? userData.content.followers}
+                  following={userData.content.following}
                   setFollowersOrFollowing={setFollowingOrFollowers}
                 />
 
                 <button
                   onClick={() => {
-                    if (response.content.isMe) {
+                    if (userData.content.isMe) {
                       console.log("Hi");
                       return;
                     }
 
                     onToggleFollow(
-                      response.content.id,
-                      response.content.isFollowing,
-                      response.content.followers
+                      userData.content.id,
+                      userData.content.isFollowing,
+                      userData.content.followers
                     );
                   }}
                 >
-                  {response.content.isMe
+                  {userData.content.isMe
                     ? "It's me!"
-                    : isFollowing ?? response.content.isFollowing
+                    : isFollowing ?? userData.content.isFollowing
                     ? "Unfollow"
                     : "Follow"}
                 </button>
 
                 <FollowContainer
-                  userId={response.content.id}
+                  userId={userData.content.id}
                   followersOrFollowing={followingOrFollowers}
                   ref={followerContainerRef}
                 />
 
-                <div className="profile-body">
-                  <ActivityGrid
-                    latestActivity={response.content.streak}
-                    joinedAt={new Date(response.content.joinedAt)}
-                    userId={response.content.id}
-                  />
-                </div>
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Await resolve={data.streak}>
+                    {(streakData: Awaited<typeof data.streak>) => {
+                      if (streakData.code !== "OK") return null;
+
+                      return (
+                        <ActivityGrid
+                          userId={userData.content.id}
+                          latestActivity={streakData.content}
+                          joinedAt={new Date(userData.content.joinedAt)}
+                        />
+                      );
+                    }}
+                  </Await>
+                </Suspense>
               </div>
             </div>
           );

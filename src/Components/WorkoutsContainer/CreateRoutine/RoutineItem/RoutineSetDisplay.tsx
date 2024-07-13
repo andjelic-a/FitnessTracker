@@ -98,11 +98,9 @@ export default function RoutineSetDisplay({
           className={`set-dropdown-menu ${!set.isDropdownOpen ? "hidden" : ""}`}
         >
           <span>
-            <Icon
-              onClick={() => onChangeSetIcon?.(set.id, "1")}
-              className="set-icon"
-              name="1"
-            />
+            <div onClick={() => onChangeSetIcon?.(set.id, "1")}>
+              {index + 1}
+            </div>
           </span>
           <span>
             <div onClick={() => onChangeSetIcon?.(set.id, "w")}>Warmup</div>
@@ -123,12 +121,21 @@ export default function RoutineSetDisplay({
         </div>
       </div>
       <div>
-        <input
-          type="text"
-          placeholder={set.rir.toString()}
-          maxLength={4}
-          onChange={(e) => onSetChanged?.({ ...set, rir: +e.target.value })}
-        />
+        {!set.selectedIcon || set.selectedIcon === "1" ? (
+          <input
+            type="text"
+            value={set.rir === 0 ? "" : set.rir}
+            placeholder={set.rir.toString()}
+            maxLength={4}
+            onChange={(e) => onSetChanged?.({ ...set, rir: +e.target.value })}
+          />
+        ) : (
+          <input
+            type="text"
+            disabled
+            value={set.selectedIcon === "w" ? "∞" : "0"}
+          />
+        )}
       </div>
       <div>
         <input
