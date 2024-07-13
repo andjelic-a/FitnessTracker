@@ -58,7 +58,7 @@ function WorkoutsContainer({
               </div>
             )
           )}
-          {(searchResults ?? workouts).length > 8 && (
+          {!searchResults && workouts.length > 8 && (
             <button className="profile-workouts-show" onClick={toggleShowAll}>
               {showAll ? "Show less" : "Show more"}
             </button>
