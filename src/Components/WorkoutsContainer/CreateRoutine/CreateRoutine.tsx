@@ -295,19 +295,21 @@ export default function CreateRoutineWindow({
   };
 
   const handleSaveClick = () => {
+
+    if(!textareaRef.current) return;
+    textareaRef.current?.blur();
+    textareaRef.current.value = "";
+    setRoutineDescription("");
     let isValid = true;
     if (!isRoutineTitleValid()) isValid = false;
-
     if (!isRoutineItemsValid()) isValid = false;
-
     if (!isValid) return;
-
     if (!routineTitleRef.current?.value) return false;
 
     const newWorkout: Schema<"CreateWorkoutRequestDTO"> = {
-      isPublic: true,
+      isPublic: isPublic,
       name: routineTitleRef.current.value,
-      description: "",
+      description: textareaRef.current?.value ?? "",
       sets: createdRoutineItemsRef.current
         .flatMap((routineItem) =>
           routineItem.sets.map((set) => ({
