@@ -206,7 +206,7 @@
   position: relative;
   margin-top: auto;
   align-self: center;
-  width: 60%;
+  width: 80%;
   height: auto;
   border-radius: 0.5rem;
   border: 2px solid $dark-600;
@@ -225,6 +225,7 @@
     color: rgb(231, 231, 231);
     resize: none;
     padding: 1rem;
+    overflow: hidden;
   }
 
   .routine-description-placeholder {
