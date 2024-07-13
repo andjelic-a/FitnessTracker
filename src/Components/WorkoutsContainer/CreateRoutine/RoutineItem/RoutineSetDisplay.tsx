@@ -133,7 +133,7 @@ export default function RoutineSetDisplay({
           <input
             type="text"
             disabled
-            value={set.selectedIcon === "w" ? "∞" : "0"}
+            value={set.selectedIcon === "w" ? "-" : "0"}
           />
         )}
       </div>
@@ -141,7 +141,7 @@ export default function RoutineSetDisplay({
         <input
           type="text"
           placeholder={set.repRange}
-          maxLength={4}
+          maxLength={5}
           onChange={(e) => onSetChanged?.({ ...set, repRange: e.target.value })}
         />
       </div>

@@ -5,6 +5,7 @@ import gsap from "gsap";
 import Flip from "gsap/Flip";
 import Observer from "gsap/Observer";
 import reorderArray from "./ReorderArray";
+import Icon from "../../Icon/Icon";
 import { useGSAP } from "@gsap/react";
 import useOutsideClick from "../../../Hooks/UseOutsideClick";
 import ChooseExerciseWindow, {
@@ -36,6 +37,7 @@ export default function CreateRoutineWindow({
 }: CreateRoutineWindowProps): JSX.Element {
   const { contextSafe } = useGSAP();
 
+  const [isPublic, setIsPublic] = useState<boolean>(false);
   const [routineItems, setRoutineItems] = useState<ChooseExerciseData[]>([]);
   const [isChoosingExercise, setIsChoosingExercise] = useState<boolean>(false);
   const [replacingExerciseId, setReplacingExerciseId] = useState<string | null>(
@@ -44,6 +46,7 @@ export default function CreateRoutineWindow({
   const [previouslyLoadedExercises, setPreviouslyLoadedExercises] = useState<
     Schema<"SimpleExerciseResponseDTO">[]
   >([]);
+  const [routineDescription, setRoutineDescription] = useState<string>("");
 
   const loadingExercises = useRef<Promise<
     Schema<"SimpleExerciseResponseDTO">[] | null
@@ -61,6 +64,8 @@ export default function CreateRoutineWindow({
   const routineItemContainerRef = useRef<HTMLDivElement>(null);
   const isMoveAvailable = useRef(true);
   const addExerciseButtonRef = useRef<HTMLButtonElement | null>(null);
+  const publicOrPrivatePopupRef = useRef<HTMLDivElement | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const filtersRef = useRef<ChooseExerciseFilters | null>(null);
 
   useEffect(() => {
@@ -309,19 +314,21 @@ export default function CreateRoutineWindow({
   };
 
   const handleSaveClick = () => {
+
+    if(!textareaRef.current) return;
+    textareaRef.current?.blur();
+    textareaRef.current.value = "";
+    setRoutineDescription("");
     let isValid = true;
     if (!isRoutineTitleValid()) isValid = false;
-
     if (!isRoutineItemsValid()) isValid = false;
-
     if (!isValid) return;
-
     if (!routineTitleRef.current?.value) return false;
 
     const newWorkout: Schema<"CreateWorkoutRequestDTO"> = {
-      isPublic: true,
+      isPublic: isPublic,
       name: routineTitleRef.current.value,
-      description: "",
+      description: textareaRef.current?.value ?? "",
       sets: createdRoutineItemsRef.current
         .flatMap((routineItem) =>
           routineItem.sets.map((set) => ({
@@ -425,6 +432,17 @@ export default function CreateRoutineWindow({
     return loadingExercises.current;
   }
 
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [routineDescription]); 
+
+  const handleDescriptionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setRoutineDescription(event.target.value);
+  };
+
   return (
     <div
       ref={excludedDivRef}
@@ -470,6 +488,26 @@ export default function CreateRoutineWindow({
           placeholder="Routine title"
           maxLength={25}
         />
+        <div className="create-routine-public-or-private">
+        <div ref={publicOrPrivatePopupRef} className="create-routine-public-or-private-popup">{isPublic ? "Public" : "Private"}</div>
+          {isPublic ? (
+            <Icon
+              className="lock"
+              name="unlock"
+              onClick={() => setIsPublic(false)}
+              onMouseEnter={() => publicOrPrivatePopupRef.current?.classList.add("show")}
+              onMouseLeave={() => publicOrPrivatePopupRef.current?.classList.remove("show")}
+            />
+          ) : (
+            <Icon
+              className="lock"
+              name="lock"
+              onClick={() => setIsPublic(true)}
+              onMouseEnter={() => publicOrPrivatePopupRef.current?.classList.add("show")}
+              onMouseLeave={() => publicOrPrivatePopupRef.current?.classList.remove("show")}
+            />
+          )}
+        </div>
         <button onClick={handleSaveClick} className="create-routine-save">
           Save
         </button>
@@ -498,6 +536,15 @@ export default function CreateRoutineWindow({
         >
           Add exercise
         </button>
+      </div>
+      <div className="create-routine-description">
+      <textarea
+        id="routine-description"
+        ref={textareaRef}
+        value={routineDescription}
+        onChange={handleDescriptionChange}
+      />
+        <label htmlFor="routine-description" className="routine-description-placeholder">Routine description</label>
       </div>
     </div>
   );
