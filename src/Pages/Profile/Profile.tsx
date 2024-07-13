@@ -22,10 +22,16 @@ export default function Profile() {
   >([]);
   const [isNewRoutineWindowOpen, setIsNewRoutineWindowOpen] =
     useState<boolean>(false);
-  const [isRoutineDisplayOpen, setIsRoutineDisplayOpen] = useState<boolean>(false);
+  const [isRoutineDisplayOpen, setIsRoutineDisplayOpen] =
+    useState<boolean>(false);
+  const [selectedWorkoutId, setSelectedWorkoutId] = useState<string | null>(
+    null
+  );
 
-  const toggleRoutineDisplay = () =>
-    void setIsRoutineDisplayOpen((prev) => !prev);
+  const toggleRoutineDisplay = (workoutId: string) => {
+    setSelectedWorkoutId(workoutId);
+    setIsRoutineDisplayOpen((prev) => !prev);
+  };
 
   const toggleNewWorkoutWindow = () =>
     void setIsNewRoutineWindowOpen((prev) => !prev);
@@ -70,7 +76,11 @@ export default function Profile() {
         }
       />
 
-      <RoutineDisplay isVisible={isRoutineDisplayOpen} onClose={() => setIsRoutineDisplayOpen(false)} />
+      <RoutineDisplay
+        isVisible={isRoutineDisplayOpen}
+        onClose={() => setIsRoutineDisplayOpen(false)}
+        workoutId={selectedWorkoutId}
+      />
 
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={userData.workouts}>

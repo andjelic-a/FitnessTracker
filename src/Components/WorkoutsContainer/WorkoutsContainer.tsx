@@ -8,8 +8,9 @@ import useSearch from "../../Hooks/UseSearch";
 type WorkoutsContainerProps = {
   workouts: Schema<"SimpleWorkoutResponseDTO">[];
   toggleNewWorkoutWindow: () => void;
-  toggleRoutineDisplay: () => void;
+  toggleRoutineDisplay: (workoutId: string) => void;
 };
+
 function WorkoutsContainer({
   workouts,
   toggleNewWorkoutWindow,
@@ -50,7 +51,7 @@ function WorkoutsContainer({
         <div className="profile-workouts-items-container">
           {(searchResults ?? (showAll ? workouts : workouts.slice(0, 8))).map(
             (workout) => (
-              <div onClick={toggleRoutineDisplay} key={workout.id}>
+              <div onClick={() =>toggleRoutineDisplay(workout.id)} key={workout.id}>
                 <img
                   src={workout.creator.image ?? "/DefaultProfilePicture.png"}
                   alt={"Profile picture of the creator of " + workout.name}
