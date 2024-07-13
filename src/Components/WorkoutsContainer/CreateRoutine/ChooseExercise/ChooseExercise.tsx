@@ -2,14 +2,19 @@ import "./ChooseExercise.scss";
 import { useRef, useState } from "react";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 import { ExerciseOption } from "./ExerciseOption";
-import Dropdown from "../../../DropdownMenu/Dropdown";
 import Icon from "../../../Icon/Icon";
 import "./ChooseExercise.scss";
-import DropdownItem from "../../../DropdownMenu/DropdownItem";
+import AsyncDropdown from "../../../DropdownMenu/AsyncDropdown/AsyncDropdown";
 
 export type ChooseExerciseData = {
   id: string;
   exercise: Schema<"SimpleExerciseResponseDTO">;
+};
+
+export type ChooseExerciseFilters = {
+  muscleGroupId: number | null;
+  equipmentId: number | null;
+  name: string | null;
 };
 
 type ChooseExerciseWindowProps = {
@@ -24,6 +29,11 @@ type ChooseExerciseWindowProps = {
   onRequestLazyLoad: () => Promise<
     Schema<"SimpleExerciseResponseDTO">[] | null
   >;
+  onRequestMuscleGroups: () => Promise<
+    Schema<"SimpleMuscleGroupResponseDTO">[]
+  >;
+  onRequestEquipment: () => Promise<Schema<"SimpleEquipmentResponseDTO">[]>;
+  onSearch: (filters: ChooseExerciseFilters) => void;
 };
 
 export default function ChooseExerciseWindow({
@@ -32,6 +42,9 @@ export default function ChooseExerciseWindow({
   singleMode: replaceMode,
   exercises: preLoadedExercises,
   onRequestLazyLoad,
+  onRequestEquipment,
+  onRequestMuscleGroups,
+  onSearch,
 }: ChooseExerciseWindowProps) {
   const [selected, setSelectedExercises] = useState<
     Schema<"SimpleExerciseResponseDTO"> | Schema<"SimpleExerciseResponseDTO">[]
@@ -59,8 +72,6 @@ export default function ChooseExerciseWindow({
     Schema<"SimpleExerciseResponseDTO">[]
   >([]);
 
-  // useLazyLoading("#choose-exercise", 0.7, requireLazyLoad);
-
   async function requireLazyLoad() {
     if (!onRequestLazyLoad) return;
 
@@ -69,6 +80,34 @@ export default function ChooseExerciseWindow({
   }
 
   const requireLazyLoadBtnRef = useRef<HTMLButtonElement>(null);
+
+  const equipmentFilter = useRef<number>(-1);
+  const muscleGroupFilter = useRef<number>(-1);
+  const searchBarRef = useRef<HTMLInputElement>(null);
+
+  function handleSearch() {
+    if (!onSearch) return;
+    setLazyLoaded([]);
+
+    onSearch({
+      equipmentId:
+        equipmentFilter.current === -1 ? null : equipmentFilter.current,
+      muscleGroupId:
+        muscleGroupFilter.current === -1 ? null : muscleGroupFilter.current,
+      name:
+        !searchBarRef.current || searchBarRef.current?.value === ""
+          ? null
+          : searchBarRef.current?.value,
+    });
+  }
+
+  function handleEquipmentFilterChange(newSelectionKey: string) {
+    equipmentFilter.current = +newSelectionKey.replace(".$", "");
+  }
+
+  function handleMuscleGroupFilterChange(newSelectionKey: string) {
+    muscleGroupFilter.current = +newSelectionKey.replace(".$", "");
+  }
 
   return (
     <div className="choose-exercise" id="choose-exercise">
@@ -79,43 +118,31 @@ export default function ChooseExerciseWindow({
         <div className="choose-exercise-search-container">
           <div className="choose-exercise-search-bar-container">
             <Icon className="choose-exercise-search-bar-icon" name="search" />
-            <input type="text" className="choose-exercise-search-bar" />
+            <input
+              type="text"
+              className="choose-exercise-search-bar"
+              ref={searchBarRef}
+            />
+            <Icon
+              onClick={handleSearch}
+              className="choose-exercise-search-bar-icon arrow-right-icon"
+              name="arrow-right"
+            />
           </div>
           <div className="choose-exercise-filter">
-            <Dropdown
-              className="choose-exercise-filter-muscles-dropdown"
+            <AsyncDropdown<"SimpleMuscleGroupResponseDTO">
+              onRequest={onRequestMuscleGroups}
               placeholder="All muscles"
-            >
-              <DropdownItem>Option 1</DropdownItem>
-              <DropdownItem>Option 2</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-            </Dropdown>
-            <Dropdown
-              className="choose-exercise-filter-equipment-dropdown"
+              className="choose-exercise-filter-muscles-dropdown"
+              onSelectionChanged={handleMuscleGroupFilterChange}
+            />
+
+            <AsyncDropdown<"SimpleEquipmentResponseDTO">
+              onRequest={onRequestEquipment}
               placeholder="All equipment"
-            >
-              <DropdownItem>Option 1</DropdownItem>
-              <DropdownItem>Option 2</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-            </Dropdown>
+              className="choose-exercise-filter-equipment-dropdown"
+              onSelectionChanged={handleEquipmentFilterChange}
+            />
           </div>
         </div>
         {[...preLoadedExercises, ...lazyLoaded].map((exercise) => (
