@@ -392,8 +392,6 @@ export default function CreateRoutineWindow({
     if (!newExercises) return [];
 
     setPreviouslyLoadedExercises(newExercises);
-    console.log(newExercises);
-
     return newExercises;
   }
 
@@ -411,8 +409,8 @@ export default function CreateRoutineWindow({
           offset ??
           previouslyLoadedExercises.length + lazyLoadedExercises.current.length,
         name: filtersRef.current?.name ?? undefined,
-        muscleGroup: filtersRef.current?.muscleGroupId ?? undefined,
-        equipment: filtersRef.current?.equipmentId ?? undefined,
+        muscleGroupId: filtersRef.current?.muscleGroupId ?? undefined,
+        equipmentId: filtersRef.current?.equipmentId ?? undefined,
       },
     }).then((x) => {
       loadingExercises.current = null;
