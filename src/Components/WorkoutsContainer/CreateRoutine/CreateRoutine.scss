@@ -89,6 +89,52 @@
     }
   }
 
+  & .create-routine-public-or-private {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 6rem;
+    height: 3.75rem;
+    margin-left: auto;
+    font-size: 1.8rem;
+    font-weight: 550;
+    color: $dark-600;
+
+    & .lock {
+      cursor: pointer;
+    }
+
+    & .create-routine-public-or-private-popup {
+      position: absolute;
+      left: 0;
+      z-index: -1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 3.5rem;
+      height: 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      outline: none;
+      background-color: $dark-600;
+      color: $dark-100;
+      font-size: 1.6rem;
+      visibility: 0;
+      opacity: 0;
+      transition: 0.2s;
+    }
+
+    & .show {
+      z-index: 1;
+      visibility: visible;
+      opacity: 1;
+      left: -6rem;
+      width: 7rem;
+      height: 3rem;
+    }
+  }
+
   .routine-item-error-title {
     border-color: rgb(255, 0, 0) !important;
 
@@ -151,6 +197,6 @@
   }
 }
 
-.routine-item-error-button{
+.routine-item-error-button {
   background-color: red;
 }
