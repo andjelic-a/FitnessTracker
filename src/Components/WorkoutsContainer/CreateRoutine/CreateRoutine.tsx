@@ -88,6 +88,24 @@ export default function CreateRoutineWindow({
     onClose();
   });
 
+  async function handleMuscleGroupRequest(): Promise<
+    Schema<"SimpleMuscleGroupResponseDTO">[]
+  > {
+    return sendAPIRequest("/api/musclegroup", {
+      method: "get",
+      parameters: {},
+    }).then((x) => (x.code === "OK" ? x.content : []));
+  }
+
+  async function handleEquipmentRequest(): Promise<
+    Schema<"SimpleEquipmentResponseDTO">[]
+  > {
+    return sendAPIRequest("/api/equipment", {
+      method: "get",
+      parameters: {},
+    }).then((x) => (x.code === "OK" ? x.content : []));
+  }
+
   //#region Routine item drag and drop logic / animations
   const handleTouchMove = useCallback(
     (e: TouchEvent) => {
@@ -423,6 +441,8 @@ export default function CreateRoutineWindow({
                     );
                     return newExercises;
                   }}
+                  onRequestEquipment={handleEquipmentRequest}
+                  onRequestMuscleGroups={handleMuscleGroupRequest}
                 />
               );
             }}

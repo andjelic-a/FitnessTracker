@@ -2,10 +2,9 @@ import "./ChooseExercise.scss";
 import { useRef, useState } from "react";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 import { ExerciseOption } from "./ExerciseOption";
-import Dropdown from "../../../DropdownMenu/Dropdown";
 import Icon from "../../../Icon/Icon";
 import "./ChooseExercise.scss";
-import DropdownItem from "../../../DropdownMenu/DropdownItem";
+import AsyncDropdown from "../../../DropdownMenu/AsyncDropdown/AsyncDropdown";
 
 export type ChooseExerciseData = {
   id: string;
@@ -24,6 +23,10 @@ type ChooseExerciseWindowProps = {
   onRequestLazyLoad: () => Promise<
     Schema<"SimpleExerciseResponseDTO">[] | null
   >;
+  onRequestMuscleGroups: () => Promise<
+    Schema<"SimpleMuscleGroupResponseDTO">[]
+  >;
+  onRequestEquipment: () => Promise<Schema<"SimpleEquipmentResponseDTO">[]>;
 };
 
 export default function ChooseExerciseWindow({
@@ -32,6 +35,8 @@ export default function ChooseExerciseWindow({
   singleMode: replaceMode,
   exercises: preLoadedExercises,
   onRequestLazyLoad,
+  onRequestEquipment,
+  onRequestMuscleGroups,
 }: ChooseExerciseWindowProps) {
   const [selected, setSelectedExercises] = useState<
     Schema<"SimpleExerciseResponseDTO"> | Schema<"SimpleExerciseResponseDTO">[]
@@ -70,6 +75,8 @@ export default function ChooseExerciseWindow({
 
   const requireLazyLoadBtnRef = useRef<HTMLButtonElement>(null);
 
+  function handleSearch() {}
+
   return (
     <div className="choose-exercise" id="choose-exercise">
       <div className="choose-exercise-header">
@@ -80,42 +87,24 @@ export default function ChooseExerciseWindow({
           <div className="choose-exercise-search-bar-container">
             <Icon className="choose-exercise-search-bar-icon" name="search" />
             <input type="text" className="choose-exercise-search-bar" />
+            <Icon
+              onClick={handleSearch}
+              className="choose-exercise-search-bar-icon arrow-right-icon"
+              name="arrow-right"
+            />
           </div>
           <div className="choose-exercise-filter">
-            <Dropdown
-              className="choose-exercise-filter-muscles-dropdown"
+            <AsyncDropdown<"SimpleMuscleGroupResponseDTO">
+              onRequest={onRequestMuscleGroups}
               placeholder="All muscles"
-            >
-              <DropdownItem>Option 1</DropdownItem>
-              <DropdownItem>Option 2</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-            </Dropdown>
-            <Dropdown
-              className="choose-exercise-filter-equipment-dropdown"
+              className="choose-exercise-filter-muscles-dropdown"
+            />
+
+            <AsyncDropdown<"SimpleEquipmentResponseDTO">
+              onRequest={onRequestEquipment}
               placeholder="All equipment"
-            >
-              <DropdownItem>Option 1</DropdownItem>
-              <DropdownItem>Option 2</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-              <DropdownItem>Option 3</DropdownItem>
-            </Dropdown>
+              className="choose-exercise-filter-equipment-dropdown"
+            />
           </div>
         </div>
         {[...preLoadedExercises, ...lazyLoaded].map((exercise) => (

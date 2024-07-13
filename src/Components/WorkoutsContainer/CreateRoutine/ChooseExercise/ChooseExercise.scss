@@ -90,6 +90,15 @@
       align-items: center;
       width: 4rem;
       font-size: 2rem;
+
+      &.arrow-right-icon {
+        cursor: pointer;
+        transition: all 100ms;
+
+        &:hover {
+          color: $primary-500;
+        }
+      }
     }
   }
 
