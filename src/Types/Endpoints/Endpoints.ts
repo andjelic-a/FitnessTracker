@@ -8164,12 +8164,6 @@ type MappedEndpoints = {
             type: "string";
             format: "date-time";
           };
-          streak: {
-            type: "array";
-            items: {
-              $ref: "#/components/schemas/SimpleWeekOfCompletedWorkoutsResponseDTO";
-            };
-          };
         };
         additionalProperties: false;
       };
@@ -8284,12 +8278,6 @@ type MappedEndpoints = {
           joinedAt: {
             type: "string";
             format: "date-time";
-          };
-          streak: {
-            type: "array";
-            items: {
-              $ref: "#/components/schemas/SimpleWeekOfCompletedWorkoutsResponseDTO";
-            };
           };
         };
         additionalProperties: false;

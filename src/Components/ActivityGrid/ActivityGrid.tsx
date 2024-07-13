@@ -38,21 +38,29 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
     Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[]
   > {
     if (showing === "latest") {
-      if (latestActivity.length >= 52) return latestActivity;
+      const response = latestActivity;
+      if (response.length >= 52) return response;
 
-      const fill: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[] = [];
-      for (let i = latestActivity.length; i < 52; i++) {
-        fill.push({
-          startDate: addDays(
-            new Date(latestActivity[0]?.startDate ?? new Date()),
-            -i * 7
-          ).toISOString(),
-          completedCount: 0,
-          totalCount: 7,
-        });
+      let yearStart = getStartOfWeek(addDays(new Date(), -358));
+
+      let newArray: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[] = [];
+
+      for (let curr = yearStart, i = 0; i < 52; curr = addDays(curr, 7), i++) {
+        const currentIndexInResponse = response.findIndex(
+          (x) => curr.toDateString() === new Date(x.startDate).toDateString()
+        );
+
+        newArray[i] =
+          currentIndexInResponse >= 0
+            ? response[currentIndexInResponse]
+            : {
+                startDate: curr.toUTCString(),
+                completedCount: 0,
+                totalCount: 7,
+              };
       }
 
-      return [...fill, ...latestActivity];
+      return newArray;
     }
 
     return sendAPIRequest("/api/user/{userId}/streak", {
