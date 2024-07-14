@@ -8,7 +8,7 @@ import CreateRoutineWindow from "../../Components/WorkoutsContainer/CreateRoutin
 import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
-import AnimatedOutlet from "../../AnimatedOutlet";
+import AnimatedOutlet from "../../Components/WindowWrapper/AnimatedOutlet";
 
 export default function Profile() {
   const userData = useLoaderData() as {

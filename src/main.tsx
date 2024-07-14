@@ -72,7 +72,6 @@ const router = createBrowserRouter([
             path: "workout/:id",
             element: <RoutineDisplay />,
             loader: () => {
-              console.log("hello");
               return null;
             },
           },
