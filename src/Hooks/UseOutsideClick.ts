@@ -6,9 +6,12 @@ export default function useOutsideClick(
     | RefObject<HTMLElement | null>
     | RefObject<HTMLElement[]>
     | RefObject<(HTMLElement | null)[]>,
-  callback: () => void
+  callback: () => void,
+  type: "left" | "all" = "all"
 ) {
   const handleClick = (event: MouseEvent) => {
+    if (type === "left" && event.button !== 0) return;
+
     if (!ref?.current) return;
 
     if (

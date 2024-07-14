@@ -5,8 +5,7 @@ import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
 import FollowContainer from "../../Components/FollowContainer/FollowContainer";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
 import CreateRoutineWindow from "../../Components/WorkoutsContainer/CreateRoutine/CreateRoutine";
-import RoutineDisplay from "../../Components/WorkoutsContainer/RoutineDisplay/RoutineDisplay";
-import { Await, useLoaderData } from "react-router-dom";
+import { Await, Outlet, useLoaderData, useNavigate } from "react-router-dom";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 
@@ -22,16 +21,11 @@ export default function Profile() {
   >([]);
   const [isNewRoutineWindowOpen, setIsNewRoutineWindowOpen] =
     useState<boolean>(false);
-  const [isRoutineDisplayOpen, setIsRoutineDisplayOpen] =
-    useState<boolean>(false);
-  const [selectedWorkoutId, setSelectedWorkoutId] = useState<string | null>(
-    null
-  );
 
-  const toggleRoutineDisplay = (workoutId: string) => {
-    setSelectedWorkoutId(workoutId);
-    setIsRoutineDisplayOpen((prev) => !prev);
-  };
+  const navigate = useNavigate();
+
+  const toggleRoutineDisplay = (workoutId: string) =>
+    void navigate(`workout/${workoutId}`);
 
   const toggleNewWorkoutWindow = () =>
     void setIsNewRoutineWindowOpen((prev) => !prev);
@@ -76,11 +70,13 @@ export default function Profile() {
         }
       />
 
-      <RoutineDisplay
+      {/*       <RoutineDisplay
         isVisible={isRoutineDisplayOpen}
         onClose={() => setIsRoutineDisplayOpen(false)}
         workoutId={selectedWorkoutId}
-      />
+      /> */}
+
+      <Outlet />
 
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={userData.workouts}>

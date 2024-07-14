@@ -28,6 +28,7 @@ import landingPageLoader from "./Pages/LandingPage/LandingPageLoader.ts";
 import ForgotPassword from "./Pages/ForgotPasswordPage/ForgotPassword.tsx";
 import User from "./Pages/User/User.tsx";
 import userLoader from "./Pages/User/UserLoader.ts";
+import RoutineDisplay from "./Components/RoutineDisplay/RoutineDisplay.tsx";
 
 const router = createBrowserRouter([
   {
@@ -62,6 +63,20 @@ const router = createBrowserRouter([
         path: "me",
         element: <Profile />,
         loader: profileLoader,
+        children: [
+          {
+            path: ".",
+            element: <></>,
+          },
+          {
+            path: "workout/:id",
+            element: <RoutineDisplay />,
+            loader: () => {
+              console.log("hello");
+              return null;
+            },
+          },
+        ],
       },
       {
         path: "authentication",
