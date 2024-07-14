@@ -10,8 +10,8 @@ import { useGSAP } from "@gsap/react";
 import useOutsideClick from "../../../Hooks/UseOutsideClick";
 import ChooseExerciseWindow, {
   ChooseExerciseData,
+  ChooseExerciseFilters,
 } from "./ChooseExercise/ChooseExercise";
-import { APIResponse } from "../../../Types/Endpoints/ResponseParser";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import { Await } from "react-router-dom";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
@@ -44,16 +44,16 @@ export default function CreateRoutineWindow({
     null
   );
   const [previouslyLoadedExercises, setPreviouslyLoadedExercises] = useState<
-    APIResponse<"/api/exercise", "get">[]
+    Schema<"SimpleExerciseResponseDTO">[]
   >([]);
   const [routineDescription, setRoutineDescription] = useState<string>("");
 
   const loadingExercises = useRef<Promise<
-    APIResponse<"/api/exercise", "get">
+    Schema<"SimpleExerciseResponseDTO">[] | null
   > | null>(null);
   const createdRoutineItemsRef = useRef<RoutineItemData[]>([]);
   const reachedEnd = useRef(false);
-  const lazyLoadedExercises = useRef<APIResponse<"/api/exercise", "get">[]>([]);
+  const lazyLoadedExercises = useRef<Schema<"SimpleExerciseResponseDTO">[]>([]);
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
   const routineTitleRef = useRef<HTMLInputElement | null>(null);
   const dragging = useRef<HTMLElement | null>(null);
@@ -66,6 +66,7 @@ export default function CreateRoutineWindow({
   const addExerciseButtonRef = useRef<HTMLButtonElement | null>(null);
   const publicOrPrivatePopupRef = useRef<HTMLDivElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const filtersRef = useRef<ChooseExerciseFilters | null>(null);
 
   useEffect(() => {
     playReorderAnimation();
@@ -92,6 +93,24 @@ export default function CreateRoutineWindow({
     if (routineTitleRef.current) routineTitleRef.current.value = "";
     onClose();
   });
+
+  async function handleMuscleGroupRequest(): Promise<
+    Schema<"SimpleMuscleGroupResponseDTO">[]
+  > {
+    return sendAPIRequest("/api/musclegroup", {
+      method: "get",
+      parameters: {},
+    }).then((x) => (x.code === "OK" ? x.content : []));
+  }
+
+  async function handleEquipmentRequest(): Promise<
+    Schema<"SimpleEquipmentResponseDTO">[]
+  > {
+    return sendAPIRequest("/api/equipment", {
+      method: "get",
+      parameters: {},
+    }).then((x) => (x.code === "OK" ? x.content : []));
+  }
 
   //#region Routine item drag and drop logic / animations
   const handleTouchMove = useCallback(
@@ -356,41 +375,58 @@ export default function CreateRoutineWindow({
     onClose();
   };
 
+  function handleExerciseSearch(filters: ChooseExerciseFilters) {
+    reachedEnd.current = false;
+    filtersRef.current = filters;
+    loadingExercises.current = null;
+
+    setPreviouslyLoadedExercises([]);
+    lazyLoadedExercises.current = [];
+    getMoreExercises(false, 0).then((x) => {
+      if (x) setPreviouslyLoadedExercises(x);
+    });
+    lazyLoadedExercises.current = [];
+  }
+
   async function getInitialExercises(): Promise<
-    APIResponse<"/api/exercise", "get">[]
+    Schema<"SimpleExerciseResponseDTO">[]
   > {
     if (previouslyLoadedExercises.length > 0) return previouslyLoadedExercises;
 
-    if (loadingExercises.current) return [await loadingExercises.current];
+    if (loadingExercises.current) return (await loadingExercises.current) ?? [];
 
     const newExercises = await getMoreExercises(false);
     if (!newExercises) return [];
 
-    setPreviouslyLoadedExercises([newExercises]);
-    return [newExercises];
+    setPreviouslyLoadedExercises(newExercises);
+    return newExercises;
   }
 
   async function getMoreExercises(
-    lazyLoading: boolean
-  ): Promise<APIResponse<"/api/exercise", "get"> | null> {
+    lazyLoading: boolean,
+    offset?: number
+  ): Promise<Schema<"SimpleExerciseResponseDTO">[] | null> {
     if (reachedEnd.current) return null;
-
-    const okResultCount =
-      previouslyLoadedExercises.filter((x) => x.code === "OK").length +
-      lazyLoadedExercises.current.length;
 
     loadingExercises.current ??= sendAPIRequest("/api/exercise", {
       method: "get",
       parameters: {
         limit: 10,
-        offset: okResultCount * 10,
+        offset:
+          offset ??
+          previouslyLoadedExercises.length + lazyLoadedExercises.current.length,
+        name: filtersRef.current?.name ?? undefined,
+        muscleGroupId: filtersRef.current?.muscleGroupId ?? undefined,
+        equipmentId: filtersRef.current?.equipmentId ?? undefined,
       },
     }).then((x) => {
       loadingExercises.current = null;
-      if (x.code === "OK" && x.content.length < 10) reachedEnd.current = true;
-      if (lazyLoading && x.code === "OK") lazyLoadedExercises.current.push(x);
+      if (x.code !== "OK") return null;
 
-      return x;
+      if (x.content.length < 10) reachedEnd.current = true;
+      if (lazyLoading) lazyLoadedExercises.current.push(...x.content);
+
+      return x.content;
     });
 
     return loadingExercises.current;
@@ -417,9 +453,10 @@ export default function CreateRoutineWindow({
       {isChoosingExercise && (
         <Suspense fallback={null}>
           <Await resolve={getInitialExercises()}>
-            {(exercises: APIResponse<"/api/exercise", "get">[]) => {
+            {(exercises: Awaited<ReturnType<typeof getInitialExercises>>) => {
               return (
                 <ChooseExerciseWindow
+                  onSearch={handleExerciseSearch}
                   onClose={() => {
                     setIsChoosingExercise(false);
                     setReplacingExerciseId(null);
@@ -432,15 +469,10 @@ export default function CreateRoutineWindow({
                   }}
                   onConfirmSelection={handleExerciseChosen}
                   singleMode={!!replacingExerciseId}
-                  exercises={exercises
-                    .filter((x) => x.code === "OK")
-                    .flatMap((x) => x.content)}
-                  onRequestLazyLoad={async () => {
-                    const newExercises = getMoreExercises(true).then((x) =>
-                      x?.code === "OK" ? x?.content ?? [] : []
-                    );
-                    return newExercises;
-                  }}
+                  exercises={exercises}
+                  onRequestLazyLoad={async () => getMoreExercises(true)}
+                  onRequestEquipment={handleEquipmentRequest}
+                  onRequestMuscleGroups={handleMuscleGroupRequest}
                 />
               );
             }}
