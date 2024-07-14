@@ -24,8 +24,10 @@ export default function RoutineDisplay({
       ref={routineDisplayRef}
       className={`routine-display ${isVisible ? "visible" : "hidden"}`}
     >
-      <p>Routine Display</p>
-      {workoutId && <p>Workout ID: {workoutId}</p>}
+      <div className="routine-display-header">
+        <p className="routine-display-title">Push</p>
+        <button className="routine-display-edit">Edit</button>
+      </div>
     </div>
   );
 }
