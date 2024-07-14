@@ -5,9 +5,10 @@ import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
 import FollowContainer from "../../Components/FollowContainer/FollowContainer";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
 import CreateRoutineWindow from "../../Components/WorkoutsContainer/CreateRoutine/CreateRoutine";
-import { Await, Outlet, useLoaderData, useNavigate } from "react-router-dom";
+import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
+import AnimatedOutlet from "../../AnimatedOutlet";
 
 export default function Profile() {
   const userData = useLoaderData() as {
@@ -70,13 +71,7 @@ export default function Profile() {
         }
       />
 
-      {/*       <RoutineDisplay
-        isVisible={isRoutineDisplayOpen}
-        onClose={() => setIsRoutineDisplayOpen(false)}
-        workoutId={selectedWorkoutId}
-      /> */}
-
-      <Outlet />
+      <AnimatedOutlet />
 
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={userData.workouts}>
