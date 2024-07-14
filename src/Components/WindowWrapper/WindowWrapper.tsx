@@ -1,6 +1,6 @@
 import "./WindowWrapper.scss";
-import { AnimatePresence, useIsPresent } from "framer-motion";
-import { ReactNode, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
+import { ReactNode } from "react";
 import AnimatedLayout from "./AnimatedLayout";
 
 type WindowWrapperProps = {
@@ -8,10 +8,10 @@ type WindowWrapperProps = {
 };
 
 export default function WindowWrapper({ children }: WindowWrapperProps) {
-  const isPresent = useIsPresent();
+  /*   const isPresent = useIsPresent();
   useEffect(() => {
     console.log(isPresent);
-  }, [isPresent]);
+  }, [isPresent]); */
 
   return (
     <AnimatedLayout>

@@ -29,6 +29,7 @@ import ForgotPassword from "./Pages/ForgotPasswordPage/ForgotPassword.tsx";
 import User from "./Pages/User/User.tsx";
 import userLoader from "./Pages/User/UserLoader.ts";
 import RoutineDisplay from "./Components/RoutineDisplay/RoutineDisplay.tsx";
+import routineDisplayLoader from "./Components/RoutineDisplay/RoutineDisplayLoader.ts";
 
 const router = createBrowserRouter([
   {
@@ -71,9 +72,7 @@ const router = createBrowserRouter([
           {
             path: "workout/:id",
             element: <RoutineDisplay />,
-            loader: () => {
-              return null;
-            },
+            loader: routineDisplayLoader,
           },
         ],
       },
