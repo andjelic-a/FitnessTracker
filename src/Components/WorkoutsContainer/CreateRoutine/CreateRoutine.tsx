@@ -292,13 +292,13 @@ export default function CreateRoutineWindow({
     void setRoutineItems((prev) => prev.filter((item) => item.id !== id));
 
   const isRoutineTitleValid = (): boolean => {
-    if (routineTitleRef.current?.value === "") {
+    if (!routineTitleRef.current?.value) {
       routineTitleRef.current?.classList.add("routine-item-error-title");
       return false;
-    } else {
-      routineTitleRef.current?.classList.remove("routine-item-error-title");
-      return true;
     }
+
+    routineTitleRef.current?.classList.remove("routine-item-error-title");
+    return true;
   };
 
   const isRoutineItemsValid = (): boolean => {
@@ -307,28 +307,25 @@ export default function CreateRoutineWindow({
         "routine-item-error-button"
       );
       return true;
-    } else {
-      addExerciseButtonRef.current?.classList.add("routine-item-error-button");
-      return false;
     }
+
+    addExerciseButtonRef.current?.classList.add("routine-item-error-button");
+    return false;
   };
 
   const handleSaveClick = () => {
-
-    if(!textareaRef.current) return;
-    textareaRef.current?.blur();
-    textareaRef.current.value = "";
-    setRoutineDescription("");
-    let isValid = true;
-    if (!isRoutineTitleValid()) isValid = false;
-    if (!isRoutineItemsValid()) isValid = false;
-    if (!isValid) return;
-    if (!routineTitleRef.current?.value) return false;
+    if (
+      !textareaRef.current ||
+      !routineTitleRef.current ||
+      !isRoutineTitleValid() ||
+      !isRoutineItemsValid()
+    )
+      return;
 
     const newWorkout: Schema<"CreateWorkoutRequestDTO"> = {
       isPublic: isPublic,
       name: routineTitleRef.current.value,
-      description: textareaRef.current?.value ?? "",
+      description: textareaRef.current.value,
       sets: createdRoutineItemsRef.current
         .flatMap((routineItem) =>
           routineItem.sets.map((set) => ({
@@ -354,16 +351,26 @@ export default function CreateRoutineWindow({
             x.set.selectedIcon ?? "1"
           );
 
+          const rir =
+            !x.set.selectedIcon || x.set.selectedIcon === "1"
+              ? x.set.rir
+              : x.set.selectedIcon === "w"
+              ? -1
+              : 0;
+
           return {
             exerciseId: x.exerciseId,
             bottomRepRange: repRange[0],
             topRepRange: repRange[1],
-            intensity: x.set.rir,
+            riR: rir,
             type: enumValue as Schema<"SetType">,
           };
         }),
     };
 
+    setRoutineDescription("");
+    textareaRef.current.value = "";
+    textareaRef.current.blur();
     sendAPIRequest("/api/workout", {
       method: "post",
       payload: newWorkout,
@@ -437,9 +444,11 @@ export default function CreateRoutineWindow({
       textareaRef.current.style.height = "auto";
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
-  }, [routineDescription]); 
+  }, [routineDescription]);
 
-  const handleDescriptionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleDescriptionChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
     setRoutineDescription(event.target.value);
   };
 
@@ -489,22 +498,35 @@ export default function CreateRoutineWindow({
           maxLength={25}
         />
         <div className="create-routine-public-or-private">
-        <div ref={publicOrPrivatePopupRef} className="create-routine-public-or-private-popup">{isPublic ? "Public" : "Private"}</div>
+          <div
+            ref={publicOrPrivatePopupRef}
+            className="create-routine-public-or-private-popup"
+          >
+            {isPublic ? "Public" : "Private"}
+          </div>
           {isPublic ? (
             <Icon
               className="lock"
               name="unlock"
               onClick={() => setIsPublic(false)}
-              onMouseEnter={() => publicOrPrivatePopupRef.current?.classList.add("show")}
-              onMouseLeave={() => publicOrPrivatePopupRef.current?.classList.remove("show")}
+              onMouseEnter={() =>
+                publicOrPrivatePopupRef.current?.classList.add("show")
+              }
+              onMouseLeave={() =>
+                publicOrPrivatePopupRef.current?.classList.remove("show")
+              }
             />
           ) : (
             <Icon
               className="lock"
               name="lock"
               onClick={() => setIsPublic(true)}
-              onMouseEnter={() => publicOrPrivatePopupRef.current?.classList.add("show")}
-              onMouseLeave={() => publicOrPrivatePopupRef.current?.classList.remove("show")}
+              onMouseEnter={() =>
+                publicOrPrivatePopupRef.current?.classList.add("show")
+              }
+              onMouseLeave={() =>
+                publicOrPrivatePopupRef.current?.classList.remove("show")
+              }
             />
           )}
         </div>
@@ -538,13 +560,17 @@ export default function CreateRoutineWindow({
         </button>
       </div>
       <div className="create-routine-description">
-      <textarea
-        id="routine-description"
-        ref={textareaRef}
-        value={routineDescription}
-        onChange={handleDescriptionChange}
-      />
-        <label htmlFor="routine-description" className="routine-description-placeholder">Routine description</label>
+        <textarea
+          id="routine-description"
+          ref={textareaRef}
+          onChange={handleDescriptionChange}
+        />
+        <label
+          htmlFor="routine-description"
+          className="routine-description-placeholder"
+        >
+          Routine description
+        </label>
       </div>
     </div>
   );

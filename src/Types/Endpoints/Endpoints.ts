@@ -7964,9 +7964,9 @@ type MappedEndpoints = {
             type: "integer";
             format: "int32";
           };
-          intensity: {
-            type: "number";
-            format: "float";
+          riR: {
+            type: "integer";
+            format: "int32";
           };
           type: {
             $ref: "#/components/schemas/SetType";
@@ -8188,6 +8188,10 @@ type MappedEndpoints = {
           };
           type: {
             $ref: "#/components/schemas/SetType";
+          };
+          riR: {
+            type: "integer";
+            format: "int32";
           };
           weightUsedLastTime: {
             type: "number";
@@ -8757,9 +8761,9 @@ type MappedEndpoints = {
             type: "integer";
             format: "int32";
           };
-          intensity: {
-            type: "number";
-            format: "float";
+          riR: {
+            type: "integer";
+            format: "int32";
           };
         };
         additionalProperties: false;
