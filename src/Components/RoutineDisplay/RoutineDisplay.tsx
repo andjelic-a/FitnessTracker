@@ -64,10 +64,6 @@ export default function RoutineDisplay() {
 
                 return (
                   <>
-                    <p className="routine-display-description">
-                      {routine.content.description}
-                    </p>
-
                     {routine.content.exercises.map((exercise) => (
                       <RoutineDisplayItem
                         key={exercise.id}
