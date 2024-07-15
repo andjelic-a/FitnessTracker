@@ -2,7 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.scss";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  RouteObject,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
 import Error from "./Components/Error/Error.tsx";
 import Exercises from "./Pages/Exercises/Exercises.tsx";
 import FullExerciseDisplay from "./Components/FullExerciseDisplay/FullExerciseDisplay.tsx";
@@ -32,8 +36,9 @@ import RoutineDisplay from "./Components/RoutineDisplay/RoutineDisplay.tsx";
 import routineDisplayLoader from "./Components/RoutineDisplay/RoutineDisplayLoader.ts";
 import CreateRoutineWindow from "./Components/WorkoutsContainer/CreateRoutine/CreateRoutine.tsx";
 import createRoutineLoader from "./Components/WorkoutsContainer/CreateRoutine/CreateRoutineLoader.ts";
+import { Join } from "./Types/Utility/StringLiteralsUtility.ts";
 
-const router = createBrowserRouter([
+const routes = [
   {
     path: "/",
     element: <App />,
@@ -137,7 +142,55 @@ const router = createBrowserRouter([
       },
     ],
   },
-]);
+] as const;
+
+type RouteObjects = typeof routes;
+type Routes = UnwrappedRoutes<RouteObjects>;
+const test: Routes = "/me/workout/new";
+
+type UnwrappedRoutes<RouteObjects> = RouteObjects extends readonly [
+  infer First,
+  ...infer Rest
+]
+  ?
+      | (First extends {
+          path: infer Path;
+        }
+          ? Path | ParseChildRoutes<First, Path>
+          : never)
+      | UnwrappedRoutes<Rest>
+  : never;
+
+type ParseChildRoutes<RouteObject, Path> = RouteObject extends {
+  children: infer Children;
+}
+  ? ConnectRoutes<UnwrappedRoutes<Children>, Path>
+  : never;
+
+type ConnectRoutes<UnwrappedChildRoutes, ParentRoute> =
+  UnwrappedChildRoutes extends string
+    ? ParentRoute extends string
+      ? `${RemoveTrailingSlash<ParentRoute>}/${RemoveTrailingSlash<UnwrappedChildRoutes>}`
+      : never
+    : never;
+
+type RemoveTrailingSlash<T extends string> = RemoveStartingSlash<
+  RemoveEndingSlash<T>
+>;
+
+type RemoveStartingSlash<T extends string> = T extends `/${infer R}`
+  ? R extends `/${infer S}`
+    ? RemoveStartingSlash<S>
+    : R
+  : T;
+
+type RemoveEndingSlash<T extends string> = T extends `${infer R}/`
+  ? R extends `${infer S}/`
+    ? RemoveEndingSlash<S>
+    : R
+  : T;
+
+const router = createBrowserRouter(routes as unknown as RouteObject[]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
