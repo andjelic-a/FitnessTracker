@@ -13,29 +13,32 @@ import ChooseExerciseWindow, {
   ChooseExerciseFilters,
 } from "./ChooseExercise/ChooseExercise";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
-import { Await } from "react-router-dom";
+import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import { v4 as uuidv4 } from "uuid";
+import WindowWrapper from "../../WindowWrapper/WindowWrapper";
+import {
+  getProfileCache,
+  setProfileCache,
+} from "../../../Pages/Profile/ProfileCache";
 
 gsap.registerPlugin(Flip);
 gsap.registerPlugin(Observer);
 
 type CreateRoutineWindowProps = {
-  isVisible: boolean;
-  onClose: () => void;
   animationLength?: number;
   safeGuard?: number;
-  onNewWorkoutCreated?: (newWorkout: Schema<"NewWorkoutResponseDTO">) => void;
 };
 
 export default function CreateRoutineWindow({
-  isVisible,
-  onClose,
   animationLength,
   safeGuard,
-  onNewWorkoutCreated,
 }: CreateRoutineWindowProps): JSX.Element {
+  const loaderData = useLoaderData() as {
+    user: Schema<"SimpleUserResponseDTO"> | null;
+  };
   const { contextSafe } = useGSAP();
+  const navigate = useNavigate();
 
   const [isPublic, setIsPublic] = useState<boolean>(false);
   const [routineItems, setRoutineItems] = useState<ChooseExerciseData[]>([]);
@@ -91,7 +94,8 @@ export default function CreateRoutineWindow({
 
   useOutsideClick(excludedDivRef, () => {
     if (routineTitleRef.current) routineTitleRef.current.value = "";
-    onClose();
+    navigate("/me");
+    // onClose();
   });
 
   async function handleMuscleGroupRequest(): Promise<
@@ -313,8 +317,9 @@ export default function CreateRoutineWindow({
     return false;
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = (user: Schema<"SimpleUserResponseDTO"> | null) => {
     if (
+      !user ||
       !textareaRef.current ||
       !routineTitleRef.current ||
       !isRoutineTitleValid() ||
@@ -374,12 +379,37 @@ export default function CreateRoutineWindow({
     sendAPIRequest("/api/workout", {
       method: "post",
       payload: newWorkout,
-    }).then((x) =>
-      x.code === "Created" ? onNewWorkoutCreated?.(x.content) : void 0
-    );
+    }).then((newWorkout) => {
+      if (newWorkout.code !== "Created") return;
 
-    setRoutineItems([]);
-    onClose();
+      const profileCache = getProfileCache();
+      setProfileCache({
+        streak: profileCache!.streak,
+        user: profileCache!.user,
+        workouts: profileCache!.workouts.then((x) => {
+          if (x?.code !== "OK") return x;
+
+          x.content = [
+            ...x.content,
+            {
+              id: newWorkout.content.id,
+              name: newWorkout.content.name,
+              isPublic: newWorkout.content.isPublic,
+              creator: {
+                id: user.id,
+                name: user.name,
+                image: user.image,
+              },
+            },
+          ];
+
+          return x;
+        }),
+      });
+
+      setRoutineItems([]);
+      navigate("/me");
+    });
   };
 
   function handleExerciseSearch(filters: ChooseExerciseFilters) {
@@ -453,125 +483,140 @@ export default function CreateRoutineWindow({
   };
 
   return (
-    <div
-      ref={excludedDivRef}
-      className={`create-routine-window ${isVisible ? "visible" : "hidden"} ${
-        isChoosingExercise ? "no-scroll" : "scrollable"
-      }`}
-    >
-      {isChoosingExercise && (
-        <Suspense fallback={null}>
-          <Await resolve={getInitialExercises()}>
-            {(exercises: Awaited<ReturnType<typeof getInitialExercises>>) => {
-              return (
-                <ChooseExerciseWindow
-                  onSearch={handleExerciseSearch}
-                  onClose={() => {
-                    setIsChoosingExercise(false);
-                    setReplacingExerciseId(null);
-                    setPreviouslyLoadedExercises([
-                      ...previouslyLoadedExercises,
-                      ...lazyLoadedExercises.current,
-                    ]);
+    <WindowWrapper>
+      <div
+        ref={excludedDivRef}
+        className={`create-routine-window visible ${
+          isChoosingExercise ? "no-scroll" : "scrollable"
+        }`}
+      >
+        {isChoosingExercise && (
+          <Suspense fallback={null}>
+            <Await resolve={getInitialExercises()}>
+              {(exercises: Awaited<ReturnType<typeof getInitialExercises>>) => {
+                return (
+                  <ChooseExerciseWindow
+                    onSearch={handleExerciseSearch}
+                    onClose={() => {
+                      setIsChoosingExercise(false);
+                      setReplacingExerciseId(null);
+                      setPreviouslyLoadedExercises([
+                        ...previouslyLoadedExercises,
+                        ...lazyLoadedExercises.current,
+                      ]);
 
-                    lazyLoadedExercises.current = [];
-                  }}
-                  onConfirmSelection={handleExerciseChosen}
-                  singleMode={!!replacingExerciseId}
-                  exercises={exercises}
-                  onRequestLazyLoad={async () => getMoreExercises(true)}
-                  onRequestEquipment={handleEquipmentRequest}
-                  onRequestMuscleGroups={handleMuscleGroupRequest}
-                />
-              );
-            }}
-          </Await>
-        </Suspense>
-      )}
+                      lazyLoadedExercises.current = [];
+                    }}
+                    onConfirmSelection={handleExerciseChosen}
+                    singleMode={!!replacingExerciseId}
+                    exercises={exercises}
+                    onRequestLazyLoad={async () => getMoreExercises(true)}
+                    onRequestEquipment={handleEquipmentRequest}
+                    onRequestMuscleGroups={handleMuscleGroupRequest}
+                  />
+                );
+              }}
+            </Await>
+          </Suspense>
+        )}
 
-      <div className="create-routine-header">
-        <input
-          ref={routineTitleRef}
-          type="text"
-          id="routine-title"
-          placeholder="Routine title"
-          maxLength={25}
-        />
-        <div className="create-routine-public-or-private">
-          <div
-            ref={publicOrPrivatePopupRef}
-            className="create-routine-public-or-private-popup"
-          >
-            {isPublic ? "Public" : "Private"}
-          </div>
-          {isPublic ? (
-            <Icon
-              className="lock"
-              name="unlock"
-              onClick={() => setIsPublic(false)}
-              onMouseEnter={() =>
-                publicOrPrivatePopupRef.current?.classList.add("show")
-              }
-              onMouseLeave={() =>
-                publicOrPrivatePopupRef.current?.classList.remove("show")
-              }
-            />
-          ) : (
-            <Icon
-              className="lock"
-              name="lock"
-              onClick={() => setIsPublic(true)}
-              onMouseEnter={() =>
-                publicOrPrivatePopupRef.current?.classList.add("show")
-              }
-              onMouseLeave={() =>
-                publicOrPrivatePopupRef.current?.classList.remove("show")
-              }
-            />
-          )}
-        </div>
-        <button onClick={handleSaveClick} className="create-routine-save">
-          Save
-        </button>
-      </div>
-
-      <div className="create-routine-body" ref={routineItemContainerRef}>
-        {routineItems.map((x) => (
-          <RoutineItem
-            onDrag={updateMovablePosition}
-            onDragStart={beginDragging}
-            onDragEnd={endDragging}
-            onMouseOver={handleHoverOverItem}
-            onChange={handleRoutineItemChanged}
-            key={x.id}
-            id={x.id}
-            onDelete={() => handleDeleteExercise(x.id)}
-            exercise={x.exercise}
-            onRequestExerciseReplace={handleReplaceExerciseRequest}
+        <div className="create-routine-header">
+          <input
+            ref={routineTitleRef}
+            type="text"
+            id="routine-title"
+            placeholder="Routine title"
+            maxLength={25}
           />
-        ))}
+          <div className="create-routine-public-or-private">
+            <div
+              ref={publicOrPrivatePopupRef}
+              className="create-routine-public-or-private-popup"
+            >
+              {isPublic ? "Public" : "Private"}
+            </div>
+            {isPublic ? (
+              <Icon
+                className="lock"
+                name="unlock"
+                onClick={() => setIsPublic(false)}
+                onMouseEnter={() =>
+                  publicOrPrivatePopupRef.current?.classList.add("show")
+                }
+                onMouseLeave={() =>
+                  publicOrPrivatePopupRef.current?.classList.remove("show")
+                }
+              />
+            ) : (
+              <Icon
+                className="lock"
+                name="lock"
+                onClick={() => setIsPublic(true)}
+                onMouseEnter={() =>
+                  publicOrPrivatePopupRef.current?.classList.add("show")
+                }
+                onMouseLeave={() =>
+                  publicOrPrivatePopupRef.current?.classList.remove("show")
+                }
+              />
+            )}
+          </div>
+          <Suspense fallback={null}>
+            <Await resolve={loaderData?.user ?? null}>
+              {(user: Awaited<typeof loaderData.user>) => {
+                if (!user) return null;
 
-        <button
-          onClick={handleAddExerciseSetBtnClick}
-          className="create-routine-add-exercise"
-          ref={addExerciseButtonRef}
-        >
-          Add exercise
-        </button>
+                return (
+                  <button
+                    onClick={() => handleSaveClick(user)}
+                    className="create-routine-save"
+                  >
+                    Save
+                  </button>
+                );
+              }}
+            </Await>
+          </Suspense>
+        </div>
+
+        <div className="create-routine-body" ref={routineItemContainerRef}>
+          {routineItems.map((x) => (
+            <RoutineItem
+              onDrag={updateMovablePosition}
+              onDragStart={beginDragging}
+              onDragEnd={endDragging}
+              onMouseOver={handleHoverOverItem}
+              onChange={handleRoutineItemChanged}
+              key={x.id}
+              id={x.id}
+              onDelete={() => handleDeleteExercise(x.id)}
+              exercise={x.exercise}
+              onRequestExerciseReplace={handleReplaceExerciseRequest}
+            />
+          ))}
+
+          <button
+            onClick={handleAddExerciseSetBtnClick}
+            className="create-routine-add-exercise"
+            ref={addExerciseButtonRef}
+          >
+            Add exercise
+          </button>
+        </div>
+        <div className="create-routine-description">
+          <textarea
+            id="routine-description"
+            ref={textareaRef}
+            onChange={handleDescriptionChange}
+          />
+          <label
+            htmlFor="routine-description"
+            className="routine-description-placeholder"
+          >
+            Routine description
+          </label>
+        </div>
       </div>
-      <div className="create-routine-description">
-        <textarea
-          id="routine-description"
-          ref={textareaRef}
-          onChange={handleDescriptionChange}
-        />
-        <label
-          htmlFor="routine-description"
-          className="routine-description-placeholder"
-        >
-          Routine description
-        </label>
-      </div>
-    </div>
+    </WindowWrapper>
   );
 }

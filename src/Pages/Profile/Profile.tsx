@@ -4,10 +4,8 @@ import WorkoutsContainer from "../../Components/WorkoutsContainer/WorkoutsContai
 import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
 import FollowContainer from "../../Components/FollowContainer/FollowContainer";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
-import CreateRoutineWindow from "../../Components/WorkoutsContainer/CreateRoutine/CreateRoutine";
 import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";
-import { Schema } from "../../Types/Endpoints/SchemaParser";
 import AnimatedOutlet from "../../Components/WindowWrapper/AnimatedOutlet";
 
 export default function Profile() {
@@ -17,19 +15,12 @@ export default function Profile() {
     streak: Promise<APIResponse<"/api/user/me/streak", "get">>;
   };
 
-  const [newWorkouts, setNewWorkouts] = useState<
-    Schema<"SimpleWorkoutResponseDTO">[]
-  >([]);
-  const [isNewRoutineWindowOpen, setIsNewRoutineWindowOpen] =
-    useState<boolean>(false);
-
   const navigate = useNavigate();
 
   const toggleRoutineDisplay = (workoutId: string) =>
     void navigate(`workout/${workoutId}`);
 
-  const toggleNewWorkoutWindow = () =>
-    void setIsNewRoutineWindowOpen((prev) => !prev);
+  const toggleNewWorkoutWindow = () => void navigate(`workout/new`);
 
   const [followersOrFollowing, setFollowersOrFollowing] = useState<
     "followers" | "following" | null
@@ -45,32 +36,6 @@ export default function Profile() {
 
   return (
     <div className="profile">
-      <CreateRoutineWindow
-        isVisible={isNewRoutineWindowOpen}
-        onClose={() => setIsNewRoutineWindowOpen(false)}
-        animationLength={0.2}
-        safeGuard={100}
-        onNewWorkoutCreated={(newWorkout) =>
-          userData.user.then((userData) => {
-            if (userData.code !== "OK") return;
-
-            setNewWorkouts([
-              ...newWorkouts,
-              {
-                id: newWorkout.id,
-                name: newWorkout.name,
-                isPublic: newWorkout.isPublic,
-                creator: {
-                  id: userData.content.id,
-                  name: userData.content.name,
-                  image: userData.content.image,
-                },
-              },
-            ]);
-          })
-        }
-      />
-
       <AnimatedOutlet />
 
       <Suspense fallback={<div>Loading...</div>}>
@@ -80,7 +45,7 @@ export default function Profile() {
 
             return (
               <WorkoutsContainer
-                workouts={[...loadedWorkoutData.content, ...newWorkouts]}
+                workouts={loadedWorkoutData.content}
                 toggleNewWorkoutWindow={toggleNewWorkoutWindow}
                 toggleRoutineDisplay={toggleRoutineDisplay}
               />

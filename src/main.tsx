@@ -30,6 +30,8 @@ import User from "./Pages/User/User.tsx";
 import userLoader from "./Pages/User/UserLoader.ts";
 import RoutineDisplay from "./Components/RoutineDisplay/RoutineDisplay.tsx";
 import routineDisplayLoader from "./Components/RoutineDisplay/RoutineDisplayLoader.ts";
+import CreateRoutineWindow from "./Components/WorkoutsContainer/CreateRoutine/CreateRoutine.tsx";
+import createRoutineLoader from "./Components/WorkoutsContainer/CreateRoutine/CreateRoutineLoader.ts";
 
 const router = createBrowserRouter([
   {
@@ -73,6 +75,11 @@ const router = createBrowserRouter([
             path: "workout/:id",
             element: <RoutineDisplay />,
             loader: routineDisplayLoader,
+          },
+          {
+            path: "workout/new",
+            element: <CreateRoutineWindow />,
+            loader: createRoutineLoader,
           },
         ],
       },
