@@ -20,7 +20,7 @@ export default function ProfileWorkoutsContainerSkeleton() {
           disabled
         />
         <div className="profile-workouts-items-container">
-          {[1, 2, 3, 4, 5, 6, 7, 8].map(() => (
+          {new Array(8).fill(0).map(() => (
             <div
               key={v4()}
               style={{

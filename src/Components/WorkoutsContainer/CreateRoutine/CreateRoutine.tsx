@@ -20,6 +20,7 @@ import {
   setProfileCache,
 } from "../../../Pages/Profile/ProfileCache";
 import WindowFC from "../../WindowWrapper/WindowFC";
+import ChooseExerciseSkeleton from "./ChooseExercise/ChooseExerciseSkeleton";
 
 gsap.registerPlugin(Flip);
 gsap.registerPlugin(Observer);
@@ -486,7 +487,7 @@ const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
         }`}
       >
         {isChoosingExercise && (
-          <Suspense fallback={null}>
+          <Suspense fallback={<ChooseExerciseSkeleton />}>
             <Await resolve={getInitialExercises()}>
               {(exercises: Awaited<ReturnType<typeof getInitialExercises>>) => {
                 return (
