@@ -82,6 +82,28 @@ export default function RoutineDisplay() {
         </div>
 
         <div className="routine-display-footer">
+          <Suspense fallback={<div>Loading...</div>}>
+            <Await resolve={data?.routine}>
+              {(routine: Awaited<typeof data.routine>) => {
+                if (!routine || routine.code !== "OK") return null;
+
+                return (
+                  <>
+                    {routine.content.description !== "" && (
+                      <div className="routine-display-description-container">
+                        <div className="routine-display-description">
+                          <label className="routine-display-description-placeholder">
+                            Routine Description
+                          </label>
+                          {routine.content.description}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                );
+              }}
+            </Await>
+          </Suspense>
           <div className="icon-container">
             <Icon
               name="thumbs-up"
