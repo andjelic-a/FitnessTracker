@@ -72,6 +72,7 @@ export default function RoutineDisplay() {
                       <RoutineDisplayItem
                         key={exercise.id}
                         name={exercise.name}
+                        image={exercise.image}
                         sets={routine.content.sets.filter(
                           (set) => set.exerciseId === exercise.id
                         )}
