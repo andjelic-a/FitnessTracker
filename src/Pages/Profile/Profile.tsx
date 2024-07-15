@@ -7,6 +7,8 @@ import useOutsideClick from "../../Hooks/UseOutsideClick";
 import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 import AnimatedOutlet from "../../Components/WindowWrapper/AnimatedOutlet";
+import ProfileWorkoutsContainerSkeleton from "./Skeletons/ProfileWorkoutsContainerSkeleton";
+import ProfileSkeleton from "./Skeletons/ProfileSkeleton";
 
 export default function Profile() {
   const userData = useLoaderData() as {
@@ -38,7 +40,7 @@ export default function Profile() {
     <div className="profile">
       <AnimatedOutlet />
 
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<ProfileWorkoutsContainerSkeleton />}>
         <Await resolve={userData.workouts}>
           {(loadedWorkoutData: Awaited<typeof userData.workouts>) => {
             if (loadedWorkoutData.code !== "OK") return null;
@@ -54,7 +56,7 @@ export default function Profile() {
         </Await>
       </Suspense>
 
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<ProfileSkeleton />}>
         <Await resolve={userData.user}>
           {(loadedUserData: Awaited<typeof userData.user>) => {
             if (loadedUserData.code !== "OK") return null;
