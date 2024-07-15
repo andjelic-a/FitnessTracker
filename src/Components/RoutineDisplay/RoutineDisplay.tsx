@@ -1,12 +1,18 @@
 import "./RoutineDisplay.scss";
-import { Suspense, useRef } from "react";
+import { Suspense, useRef, useState } from "react";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
+import Icon from "../Icon/Icon";
 import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import WindowWrapper from "../WindowWrapper/WindowWrapper";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 
 export default function RoutineDisplay() {
+  const [thumbsUpActive, setThumbsUpActive] = useState<boolean>(false);
+  const [thumbsDownActive, setThumbsDownActive] = useState<boolean>(false);
+  const [commentActive, setCommentActive] = useState<boolean>(false);
+
   const routineDisplayRef = useRef<HTMLDivElement>(null);
+
   const data = useLoaderData() as {
     routine: Promise<APIResponse<"/api/workout/{id}/detailed", "get">>;
   };
@@ -15,12 +21,36 @@ export default function RoutineDisplay() {
 
   useOutsideClick(routineDisplayRef, () => navigate("/me"), "left");
 
+  const handleThumbsDownClick = () => {
+    setThumbsDownActive((prevState) => !prevState);
+    setThumbsUpActive(false);
+  };
+
+  const handleThumbsUpClick = () => {
+    setThumbsDownActive(false);
+    setThumbsUpActive((prevState) => !prevState);
+  };
+
   return (
     <WindowWrapper>
       <div ref={routineDisplayRef} className={`routine-display visible`}>
         <div className="routine-display-header">
-          <p className="routine-display-title">Push</p>
-          <button className="routine-display-edit">Edit</button>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Await resolve={data?.routine}>
+              {(routine: Awaited<typeof data.routine>) => {
+                if (!routine || routine.code !== "OK") return null;
+
+                return (
+                  <>
+                    <p className="routine-display-title">
+                      {routine.content.name}
+                    </p>
+                    <button className="routine-display-edit">Edit</button>
+                  </>
+                );
+              }}
+            </Await>
+          </Suspense>
         </div>
 
         <div className="routine-display-body">
@@ -43,6 +73,26 @@ export default function RoutineDisplay() {
               }}
             </Await>
           </Suspense>
+        </div>
+
+        <div className="routine-display-footer">
+          <div className="icon-container">
+            <Icon
+              name="thumbs-up"
+              onClick={handleThumbsUpClick}
+              className={`routine-display-thumbs-up ${
+                thumbsUpActive ? "active" : ""
+              }`}
+            />
+            <Icon name="comment" className={`routine-display-comment $`} />
+            <Icon
+              name="thumbs-down"
+              onClick={handleThumbsDownClick}
+              className={`routine-display-thumbs-down ${
+                thumbsDownActive ? "active" : ""
+              }`}
+            />
+          </div>
         </div>
       </div>
     </WindowWrapper>
