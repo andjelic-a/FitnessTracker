@@ -2,12 +2,13 @@ import "./RoutineDisplay.scss";
 import { Suspense, useRef, useState } from "react";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
 import Icon from "../Icon/Icon";
+import RoutineDisplayItem from "./RoutineDisplayItem/RoutineDisplayItem";
 import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import WindowWrapper from "../WindowWrapper/WindowWrapper";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 
 export default function RoutineDisplay() {
-  const [thumbsUpActive, setThumbsUpActive] = useState<boolean>(false);;
+  const [thumbsUpActive, setThumbsUpActive] = useState<boolean>(false);
   const [commentActive, setCommentActive] = useState<boolean>(false);
   const [favoriteActive, setFavoriteActive] = useState<boolean>(false);
 
@@ -26,11 +27,11 @@ export default function RoutineDisplay() {
   };
 
   const handleCommentClick = () => {
-    setCommentActive((prevState) => !prevState)
+    setCommentActive((prevState) => !prevState);
   };
 
   const handleFavoriteClick = () => {
-    setFavoriteActive((prevState) => !prevState)
+    setFavoriteActive((prevState) => !prevState);
   };
 
   return (
@@ -67,8 +68,14 @@ export default function RoutineDisplay() {
                       {routine.content.description}
                     </p>
 
-                    {routine.content.exercises.map((x) => (
-                      <p key={x.id}>{x.name}</p>
+                    {routine.content.exercises.map((exercise) => (
+                      <RoutineDisplayItem
+                        key={exercise.id}
+                        name={exercise.name}
+                        sets={routine.content.sets.filter(
+                          (set) => set.exerciseId === exercise.id
+                        )}
+                      />
                     ))}
                   </>
                 );
@@ -102,9 +109,7 @@ export default function RoutineDisplay() {
             />
           </div>
         </div>
-        <div className="routine-display-comment-popup">
-          dasdas
-        </div>
+        <div className="routine-display-comment-popup">dasdas</div>
       </div>
     </WindowWrapper>
   );
