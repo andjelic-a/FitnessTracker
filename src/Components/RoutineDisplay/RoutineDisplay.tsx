@@ -7,9 +7,9 @@ import WindowWrapper from "../WindowWrapper/WindowWrapper";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 
 export default function RoutineDisplay() {
-  const [thumbsUpActive, setThumbsUpActive] = useState<boolean>(false);
-  const [thumbsDownActive, setThumbsDownActive] = useState<boolean>(false);
+  const [thumbsUpActive, setThumbsUpActive] = useState<boolean>(false);;
   const [commentActive, setCommentActive] = useState<boolean>(false);
+  const [favoriteActive, setFavoriteActive] = useState<boolean>(false);
 
   const routineDisplayRef = useRef<HTMLDivElement>(null);
 
@@ -21,14 +21,16 @@ export default function RoutineDisplay() {
 
   useOutsideClick(routineDisplayRef, () => navigate("/me"), "left");
 
-  const handleThumbsDownClick = () => {
-    setThumbsDownActive((prevState) => !prevState);
-    setThumbsUpActive(false);
+  const handleThumbsUpClick = () => {
+    setThumbsUpActive((prevState) => !prevState);
   };
 
-  const handleThumbsUpClick = () => {
-    setThumbsDownActive(false);
-    setThumbsUpActive((prevState) => !prevState);
+  const handleCommentClick = () => {
+    setCommentActive((prevState) => !prevState)
+  };
+
+  const handleFavoriteClick = () => {
+    setFavoriteActive((prevState) => !prevState)
   };
 
   return (
@@ -84,15 +86,24 @@ export default function RoutineDisplay() {
                 thumbsUpActive ? "active" : ""
               }`}
             />
-            <Icon name="comment" className={`routine-display-comment $`} />
             <Icon
-              name="thumbs-down"
-              onClick={handleThumbsDownClick}
-              className={`routine-display-thumbs-down ${
-                thumbsDownActive ? "active" : ""
+              onClick={handleCommentClick}
+              name="comment"
+              className={`routine-display-comment ${
+                commentActive ? "active" : ""
+              }`}
+            />
+            <Icon
+              name="bookmark"
+              onClick={handleFavoriteClick}
+              className={`routine-display-bookmark ${
+                favoriteActive ? "active" : ""
               }`}
             />
           </div>
+        </div>
+        <div className="routine-display-comment-popup">
+          dasdas
         </div>
       </div>
     </WindowWrapper>
