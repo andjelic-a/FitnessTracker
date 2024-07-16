@@ -35,7 +35,7 @@ import RoutineDisplay from "./Components/RoutineDisplay/RoutineDisplay.tsx";
 import routineDisplayLoader from "./Components/RoutineDisplay/RoutineDisplayLoader.ts";
 import CreateRoutineWindow from "./Components/WorkoutsContainer/CreateRoutine/CreateRoutine.tsx";
 import createRoutineLoader from "./Components/WorkoutsContainer/CreateRoutine/CreateRoutineLoader.ts";
-import { landingPageLoader } from "./Pages/LandingPage/LandingPageLoader.ts";
+import landingPageLoader from "./Pages/LandingPage/LandingPageLoader.ts";
 
 const routes: RouteObject[] = [
   {

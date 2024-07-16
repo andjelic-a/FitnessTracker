@@ -1,7 +1,7 @@
 import createLoader from "../../BetterRouter/CreateLoader";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 
-export const landingPageLoader = createLoader("/exercises", () => {
+const landingPageLoader = createLoader("/exercises", () => {
   return {
     exercises: sendAPIRequest("/api/exercise", {
       method: "get",
@@ -9,3 +9,5 @@ export const landingPageLoader = createLoader("/exercises", () => {
     }),
   };
 });
+
+export default landingPageLoader;

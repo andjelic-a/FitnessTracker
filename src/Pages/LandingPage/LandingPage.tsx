@@ -1,9 +1,12 @@
-import Expander from "../../Components/Expander/Expander";
-import ExpanderItem from "../../Components/Expander/ExpanderItem";
+import useLoaderData from "../../BetterRouter/UseLoaderData";
+import Async from "../../Components/Async/Async";
 import InfoCard from "../../Components/InfoCard/InfoCard";
 import "./LandingPage.scss";
+import landingPageLoader from "./LandingPageLoader";
 
 function LandingPage() {
+  const loaderData = useLoaderData<typeof landingPageLoader>();
+
   return (
     <>
       <h1
@@ -16,33 +19,13 @@ function LandingPage() {
         <InfoCard>{`##Hello\nThis is a landing /*page*/`}</InfoCard>
       </h1>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "start",
-          alignItems: "center",
-          marginTop: "5em",
-          flexDirection: "column",
-          height: "50vh",
-          gap: "1rem",
-        }}
-      >
-        <Expander name="Expander">
-          <ExpanderItem>Hello</ExpanderItem>
-          <ExpanderItem>Hi</ExpanderItem>
-          <ExpanderItem>Hello</ExpanderItem>
-          <ExpanderItem>Hi</ExpanderItem>
-          <ExpanderItem>Hello</ExpanderItem>
-          <ExpanderItem>Hi</ExpanderItem>
-        </Expander>
+      <Async await={loaderData.exercises}>
+        {(exercises) => {
+          if (exercises.code !== "OK") return null;
 
-        <Expander name="Expander 2">
-          <ExpanderItem>Hello</ExpanderItem>
-          <ExpanderItem>Hi</ExpanderItem>
-          <ExpanderItem>Hello</ExpanderItem>
-          <ExpanderItem>Hi</ExpanderItem>
-        </Expander>
-      </div>
+          return exercises.content.map((x) => <p>{x.name}</p>);
+        }}
+      </Async>
     </>
   );
 }
