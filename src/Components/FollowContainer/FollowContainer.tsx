@@ -107,6 +107,14 @@ const FollowContainer = forwardRef<HTMLDivElement, FollowContainerProps>(
           {followersOrFollowing === "followers" ? "Followers" : "Following"}
         </div>
 
+        <div className="follow-container-search">
+          <input
+            type="text"
+            placeholder="Search"
+            className="follow-container-search-input"
+          />
+        </div>
+
         <Suspense fallback={<div>Loading...</div>}>
           <Await resolve={getData()}>
             {(userDTOs: Awaited<ReturnType<typeof getData>>) => {
