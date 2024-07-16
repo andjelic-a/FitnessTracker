@@ -1,9 +1,9 @@
 import { Suspense, useEffect, useState } from "react";
 import Icon from "../Icon/Icon";
-import "./ActivityGrid.scss";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import { Await } from "react-router-dom";
 import sendAPIRequest from "../../Data/SendAPIRequest";
+import "./ActivityGrid.scss";
 
 type ActivityGrid = {
   latestActivity: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[];
@@ -138,7 +138,14 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
   return (
     <div className="activity-grid-wrapper">
       <div className="activity-grid">
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={Array.from({ length: 52 }).map((_, index) => (
+            <div
+            className="activity-item"
+            key={index}
+          >
+            <Icon name="dumbbell" className="activity-icon" />
+          </div>
+          ))}>
           <Await resolve={currentlyDisplayed ?? getStreak()}>
             {(streak: Awaited<ReturnType<typeof getStreak>>) =>
               streak.map((weekOfActivity) => {
@@ -184,14 +191,6 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
         <Icon onClick={() => handlePreviousClick(getYears())} className="caret-icon" name="caret-left"/>
         <p>{showing}</p>
         <Icon onClick={() => handleNextClick(getYears())} className="caret-icon" name="caret-right"/>
-
-        {/*{getYears().map((year) => (
-          <p key={year} onClick={() => setShowing(year)}>
-            {year}
-          </p>
-        ))}
-
-        <p onClick={() => setShowing("latest")}>Latest</p>*/}
       </div>
     </div>
   );

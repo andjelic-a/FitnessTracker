@@ -91,15 +91,24 @@
   justify-content: center;
   align-items: center;
   width: 10rem;
-  height: 4rem;
+  height: auto;
   text-transform: capitalize;
+  font-size: 2rem;
 
   & .caret-icon {
     color: $dark-500;
     cursor: pointer;
+
+    &:hover {
+      color: $primary-300;
+    }
   }
 
   & p {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin: 0 1rem;
   }
 }
