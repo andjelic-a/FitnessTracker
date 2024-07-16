@@ -112,80 +112,102 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
   );
 
   const handlePreviousClick = (years: number[]) => {
-    if(showing === "latest") {
+    if (showing === "latest") {
       setShowing(years[years.length - 1]);
-    }
-    else if(showing === years[0]) {
+    } else if (showing === years[0]) {
       setShowing("latest");
-    }
-    else {
+    } else {
       setShowing(showing - 1);
     }
   };
 
   const handleNextClick = (years: number[]) => {
-    if(showing === "latest") {
+    if (showing === "latest") {
       setShowing(years[0]);
-    }
-    else if(showing === years[years.length - 1]) {
+    } else if (showing === years[years.length - 1]) {
       setShowing("latest");
-    }
-    else {
+    } else {
       setShowing(showing + 1);
     }
   };
 
   return (
     <div className="activity-grid-wrapper">
-      <div className="activity-grid">
-        <Suspense fallback={Array.from({ length: 52 }).map((_, index) => (
-            <div key={index} className="activity-item"></div>
-          ))}>
-          <Await resolve={currentlyDisplayed ?? getStreak()}>
-            {(streak: Awaited<ReturnType<typeof getStreak>>) =>
-              streak.map((weekOfActivity) => {
-                const startOfWeek = new Date(weekOfActivity.startDate);
+      <Suspense
+        fallback={
+          <>
+            <h3 className="activity-grid-header">
+              <b>0</b> workouts done in last year
+            </h3>
+            <div className="activity-grid">
+              {Array.from({ length: 52 }).map((_, index) => (
+                <div key={index} className="activity-item"></div>
+              ))}
+            </div>
+          </>
+        }
+      >
+        <Await resolve={currentlyDisplayed ?? getStreak()}>
+          {(streak: Awaited<ReturnType<typeof getStreak>>) => (
+            <>
+              <h3 className="activity-grid-header">
+                <b>{streak.length}</b> workouts done in last year
+              </h3>
+              <div className="activity-grid">
+                {streak.map((weekOfActivity) => {
+                  const startOfWeek = new Date(weekOfActivity.startDate);
 
-                return (
-                  <div
-                    className={`activity-item ${getFillClass(
-                      weekOfActivity.completedCount,
-                      weekOfActivity.totalCount
-                    )}`}
-                    onMouseEnter={() =>
-                      setHoveredWeek(weekOfActivity.startDate)
-                    }
-                    onMouseLeave={() => setHoveredWeek(null)}
-                    key={weekOfActivity.startDate}
-                  >
-                    <Icon name="dumbbell" className="activity-icon" />
-                    {hoveredWeek === weekOfActivity.startDate && (
-                      <div className="popup">
-                        Completed {weekOfActivity.completedCount} workouts
-                        from&nbsp;
-                        {startOfWeek.toLocaleDateString("default", {
-                          month: "long",
-                          day: "numeric",
-                        })}
-                        &nbsp;to&nbsp;
-                        {addDays(startOfWeek, 6).toLocaleDateString("default", {
-                          month: "long",
-                          day: "numeric",
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
-              })
-            }
-          </Await>
-        </Suspense>
-      </div>
-
+                  return (
+                    <div
+                      className={`activity-item ${getFillClass(
+                        weekOfActivity.completedCount,
+                        weekOfActivity.totalCount
+                      )}`}
+                      onMouseEnter={() =>
+                        setHoveredWeek(weekOfActivity.startDate)
+                      }
+                      onMouseLeave={() => setHoveredWeek(null)}
+                      key={weekOfActivity.startDate}
+                    >
+                      <Icon name="dumbbell" className="activity-icon" />
+                      {hoveredWeek === weekOfActivity.startDate && (
+                        <div className="popup">
+                          Completed {weekOfActivity.completedCount} workouts
+                          from&nbsp;
+                          {startOfWeek.toLocaleDateString("default", {
+                            month: "long",
+                            day: "numeric",
+                          })}
+                          &nbsp;to&nbsp;
+                          {addDays(startOfWeek, 6).toLocaleDateString(
+                            "default",
+                            {
+                              month: "long",
+                              day: "numeric",
+                            }
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
+        </Await>
+      </Suspense>
       <div className="activity-grid-footer">
-        <Icon onClick={() => handlePreviousClick(getYears())} className="caret-icon" name="caret-left"/>
+        <Icon
+          onClick={() => handlePreviousClick(getYears())}
+          className="caret-icon"
+          name="caret-left"
+        />
         <p>{showing}</p>
-        <Icon onClick={() => handleNextClick(getYears())} className="caret-icon" name="caret-right"/>
+        <Icon
+          onClick={() => handleNextClick(getYears())}
+          className="caret-icon"
+          name="caret-right"
+        />
       </div>
     </div>
   );
