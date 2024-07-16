@@ -83,3 +83,23 @@
 .activity-icon {
   font-size: auto;
 }
+
+.activity-grid-footer {
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10rem;
+  height: 4rem;
+  text-transform: capitalize;
+
+  & .caret-icon {
+    color: $dark-500;
+    cursor: pointer;
+  }
+
+  & p {
+    margin: 0 1rem;
+  }
+}

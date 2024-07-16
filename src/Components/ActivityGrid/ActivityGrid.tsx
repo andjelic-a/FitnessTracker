@@ -111,6 +111,30 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
     [showing, latestActivity]
   );
 
+  const handlePreviousClick = (years: number[]) => {
+    if(showing === "latest") {
+      setShowing(years[years.length - 1]);
+    }
+    else if(showing === years[0]) {
+      setShowing("latest");
+    }
+    else {
+      setShowing(showing - 1);
+    }
+  };
+
+  const handleNextClick = (years: number[]) => {
+    if(showing === "latest") {
+      setShowing(years[0]);
+    }
+    else if(showing === years[years.length - 1]) {
+      setShowing("latest");
+    }
+    else {
+      setShowing(showing + 1);
+    }
+  };
+
   return (
     <div className="activity-grid-wrapper">
       <div className="activity-grid">
@@ -156,13 +180,19 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
         </Suspense>
       </div>
 
-      {getYears().map((year) => (
-        <p key={year} onClick={() => setShowing(year)}>
-          {year}
-        </p>
-      ))}
+      <div className="activity-grid-footer">
+        <Icon onClick={() => handlePreviousClick(getYears())} className="caret-icon" name="caret-left"/>
+        <p>{showing}</p>
+        <Icon onClick={() => handleNextClick(getYears())} className="caret-icon" name="caret-right"/>
 
-      <p onClick={() => setShowing("latest")}>Latest</p>
+        {/*{getYears().map((year) => (
+          <p key={year} onClick={() => setShowing(year)}>
+            {year}
+          </p>
+        ))}
+
+        <p onClick={() => setShowing("latest")}>Latest</p>*/}
+      </div>
     </div>
   );
 }
