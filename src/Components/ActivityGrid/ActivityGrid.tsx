@@ -140,10 +140,9 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
       <div className="activity-grid">
         <Suspense fallback={Array.from({ length: 52 }).map((_, index) => (
             <div
-            className="activity-item"
+            className="activity-item activity-item-skeleton"
             key={index}
           >
-            <Icon name="dumbbell" className="activity-icon" />
           </div>
           ))}>
           <Await resolve={currentlyDisplayed ?? getStreak()}>
