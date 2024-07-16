@@ -3,7 +3,7 @@ import "./ActivityGrid.scss";
 
 export default function ActivityGridSkeleton() {
   return (
-    <>
+    <div className="activity-grid-wrapper">
       <h3 className="activity-grid-header">
         <b>0</b> workouts done in last year
       </h3>
@@ -14,9 +14,9 @@ export default function ActivityGridSkeleton() {
       </div>
       <div className="activity-grid-footer">
         <Icon className="caret-icon" name="caret-left" />
-        <p>Latest</p>
+        <p></p>
         <Icon className="caret-icon" name="caret-right" />
       </div>
-    </>
+    </div>
   );
 }
