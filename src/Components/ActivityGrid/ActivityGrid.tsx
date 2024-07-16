@@ -139,11 +139,7 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
     <div className="activity-grid-wrapper">
       <div className="activity-grid">
         <Suspense fallback={Array.from({ length: 52 }).map((_, index) => (
-            <div
-            className="activity-item activity-item-skeleton"
-            key={index}
-          >
-          </div>
+            <div key={index} className="activity-item"></div>
           ))}>
           <Await resolve={currentlyDisplayed ?? getStreak()}>
             {(streak: Awaited<ReturnType<typeof getStreak>>) =>

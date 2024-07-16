@@ -9,6 +9,7 @@ import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 import AnimatedOutlet from "../../Components/WindowWrapper/AnimatedOutlet";
 import ProfileWorkoutsContainerSkeleton from "./Skeletons/ProfileWorkoutsContainerSkeleton";
 import ProfileSkeleton from "./Skeletons/ProfileSkeleton";
+import "./Profile.scss";
 
 export default function Profile() {
   const userData = useLoaderData() as {
