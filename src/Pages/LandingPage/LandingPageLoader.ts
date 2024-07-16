@@ -1,5 +1,11 @@
-import { defer } from "react-router-dom";
+import createLoader from "../../BetterRouter/CreateLoader";
+import sendAPIRequest from "../../Data/SendAPIRequest";
 
-export default async function landingPageLoader() {
-  return defer({});
-}
+export const landingPageLoader = createLoader("/exercises", () => {
+  return {
+    exercises: sendAPIRequest("/api/exercise", {
+      method: "get",
+      parameters: {},
+    }),
+  };
+});
