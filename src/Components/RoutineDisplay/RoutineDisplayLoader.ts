@@ -2,17 +2,21 @@ import { redirect } from "react-router-dom";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import createLoader from "../../BetterRouter/CreateLoader";
 
-const routineDisplayLoader = createLoader("/workouts/:workoutId", (request) => {
-  if (!request.params.workoutId) return redirect("/me");
+const routineDisplayLoader = createLoader(
+  "/me/workout/:id",
+  ({ params: { id } }) => {
+    console.log(id);
+    if (!id) return redirect("/me");
 
-  return {
-    routine: sendAPIRequest("/api/workout/{id}/detailed", {
-      method: "get",
-      parameters: {
-        id: request.params.workoutId,
-      },
-    }),
-  };
-});
+    return {
+      routine: sendAPIRequest("/api/workout/{id}/detailed", {
+        method: "get",
+        parameters: {
+          id: id,
+        },
+      }),
+    };
+  }
+);
 
 export default routineDisplayLoader;
