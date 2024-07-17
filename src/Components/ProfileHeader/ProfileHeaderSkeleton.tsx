@@ -3,7 +3,7 @@ import Icon from "../Icon/Icon";
 
 export default function ProfileHeaderSkeleton() {
   return (
-    <div className="profile-header" style={{ filter: "blur(2px)" }}>
+    <div className="profile-header">
       <div className="profile-picture"></div>
       <div className="profile-user-information">
         <div className="profile-user-username">

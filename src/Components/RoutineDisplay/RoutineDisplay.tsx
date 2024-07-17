@@ -84,45 +84,46 @@ export default function RoutineDisplay() {
 
               return (
                 <>
-                  {routine.content.description !== "" && (
-                    <div className="routine-display-description-container">
-                      <div className="routine-display-description">
-                        <label className="routine-display-description-placeholder">
-                          Routine Description
-                        </label>
-                        {routine.content.description}
+                  {routine.content.description?.trim() !== "" ||
+                    (routine.content.description && (
+                      <div className="routine-display-description-container">
+                        <div className="routine-display-description">
+                          <label className="routine-display-description-placeholder">
+                            Routine Description
+                          </label>
+                          {routine.content.description}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    ))}
+                  <div className="icon-container">
+                    <Icon
+                      name="thumbs-up"
+                      onClick={handleThumbsUpClick}
+                      className={`routine-display-thumbs-up ${
+                        thumbsUpActive ? "active" : ""
+                      }`}
+                    />
+                    <Icon
+                      onClick={handleCommentClick}
+                      name="comment"
+                      className={`routine-display-comment ${
+                        commentActive ? "active" : ""
+                      }`}
+                    />
+                    <Icon
+                      name="bookmark"
+                      onClick={handleFavoriteClick}
+                      className={`routine-display-bookmark ${
+                        favoriteActive ? "active" : ""
+                      }`}
+                    />
+                  </div>
                 </>
               );
             }}
           </Async>
-          <div className="icon-container">
-            <Icon
-              name="thumbs-up"
-              onClick={handleThumbsUpClick}
-              className={`routine-display-thumbs-up ${
-                thumbsUpActive ? "active" : ""
-              }`}
-            />
-            <Icon
-              onClick={handleCommentClick}
-              name="comment"
-              className={`routine-display-comment ${
-                commentActive ? "active" : ""
-              }`}
-            />
-            <Icon
-              name="bookmark"
-              onClick={handleFavoriteClick}
-              className={`routine-display-bookmark ${
-                favoriteActive ? "active" : ""
-              }`}
-            />
-          </div>
         </div>
-        <div className="routine-display-comment-popup">dasdas</div>
+        <div className="routine-display-comment-popup">Comments</div>
       </div>
     </WindowWrapper>
   );

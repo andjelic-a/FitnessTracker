@@ -1,3 +1,4 @@
+import "./Profile.scss";
 import { useState, useRef } from "react";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
 import WorkoutsContainer from "../../Components/WorkoutsContainer/WorkoutsContainer";

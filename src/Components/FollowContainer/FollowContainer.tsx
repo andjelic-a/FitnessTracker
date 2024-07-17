@@ -108,6 +108,14 @@ const FollowContainer = forwardRef<HTMLDivElement, FollowContainerProps>(
           {followersOrFollowing === "followers" ? "Followers" : "Following"}
         </div>
 
+        <div className="follow-container-search">
+          <input
+            type="text"
+            placeholder="Search"
+            className="follow-container-search-input"
+          />
+        </div>
+
         <Async await={getData()}>
           {(userDTOs) => {
             return userDTOs.map((x) => (
