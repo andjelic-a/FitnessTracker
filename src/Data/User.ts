@@ -1,11 +1,9 @@
 import sendAPIRequest from "./SendAPIRequest";
 
-let currentRequest: Promise<string | null> | null = null;
-
 export function isJWTExpired(jwt: string) {
   const parts = jwt.split(".");
   if (parts.length !== 3) {
-    localStorage.removeItem("token");
+    // localStorage.removeItem("token");
     return true;
   }
 
@@ -14,37 +12,28 @@ export function isJWTExpired(jwt: string) {
   return exp * 1000 < Date.now();
 }
 
-export function hasJWT() {
-  getJWT();
-  return localStorage.getItem("token") !== null;
-}
-
 export async function getJWT(): Promise<string | null> {
-  if (currentRequest) return currentRequest;
-
   const jwt = localStorage.getItem("token");
   if (jwt === null) return null;
 
   if (!isJWTExpired(jwt)) return jwt;
 
-  currentRequest = sendAPIRequest(
+  const response = await sendAPIRequest(
     "/api/user/refresh",
     {
       method: "post",
     },
     jwt,
     true
-  ).then((response) => {
-    if (response.code === "Created") {
-      localStorage.setItem("token", response.content.token);
-      return response.content.token;
-    }
+  );
 
-    if (response.code === "Unauthorized") localStorage.removeItem("token");
-    return null; //TODO: Handle errors
-  });
+  if (response.code === "Created") {
+    localStorage.setItem("token", response.content.token);
+    return response.content.token;
+  }
 
-  return currentRequest;
+  if (response.code === "Unauthorized") localStorage.removeItem("token");
+  return null; //TODO: Handle errors
 }
 
 export async function login(email: string, password: string): Promise<boolean> {

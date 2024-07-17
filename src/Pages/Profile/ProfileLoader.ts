@@ -1,5 +1,5 @@
 import { redirect } from "react-router-dom";
-import { hasJWT } from "../../Data/User";
+import { getJWT } from "../../Data/User";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 import { getProfileCache, setProfileCache } from "./ProfileCache";
@@ -11,8 +11,8 @@ export type ProfileData = {
   streak: Promise<APIResponse<"/api/user/me/streak", "get">>;
 };
 
-const profileLoader = createLoader("/me", () => {
-  if (!hasJWT()) {
+const profileLoader = createLoader("/me", async () => {
+  if (!(await getJWT())) {
     setProfileCache(null);
     return redirect("/authentication");
   }
