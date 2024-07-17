@@ -9,8 +9,13 @@ export type Loader<
   params: LoaderParams<Route>;
   request: Request;
 }) =>
-  | ((T extends ReturnType<typeof defer> ? never : T) | Response | null)
-  | Promise<(T extends ReturnType<typeof defer> ? never : T) | Response | null>;
+  | (T extends ReturnType<typeof defer>
+      ? never
+      : T extends Promise<any>
+      ? never
+      : T)
+  | Response
+  | null;
 
 export type LoaderReturnType<C extends Loader<any, any>> = C extends Loader<
   any,
@@ -23,9 +28,9 @@ export default function createLoader<
   Route extends Routes,
   T extends { [key: string]: any }
 >(route: Route, loader: Loader<Route, T>) {
-  return async (x: LoaderFunctionArgs) => {
+  return (x: LoaderFunctionArgs) => {
     try {
-      const data: T | Response | null = await loader({
+      const data: T | Response | null = loader({
         params: x.params as LoaderParams<Route>,
         request: x.request,
       });

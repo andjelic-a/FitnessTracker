@@ -12,7 +12,7 @@ import ChooseExerciseWindow, {
   ChooseExerciseFilters,
 } from "./ChooseExercise/ChooseExercise";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
-import { Await, useLoaderData } from "react-router-dom";
+import { Await } from "react-router-dom";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -21,6 +21,8 @@ import {
 } from "../../../Pages/Profile/ProfileCache";
 import WindowFC from "../../WindowWrapper/WindowFC";
 import ChooseExerciseSkeleton from "./ChooseExercise/ChooseExerciseSkeleton";
+import createRoutineLoader from "./CreateRoutineLoader";
+import useLoaderData from "../../../BetterRouter/UseLoaderData";
 
 gsap.registerPlugin(Flip);
 gsap.registerPlugin(Observer);
@@ -32,9 +34,7 @@ type CreateRoutineWindowProps = {
 
 const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
   ({ animationLength, safeGuard }, onClose) => {
-    const loaderData = useLoaderData() as {
-      user: Schema<"SimpleUserResponseDTO"> | null;
-    };
+    const loaderData = useLoaderData<typeof createRoutineLoader>();
     const { contextSafe } = useGSAP();
 
     const [isPublic, setIsPublic] = useState<boolean>(false);

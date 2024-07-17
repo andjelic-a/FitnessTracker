@@ -1,16 +1,15 @@
 import "./MuscleAdminPanel.scss";
 import { Suspense, useRef } from "react";
 import InputField from "../../../Components/InputField/InputField";
-import { Await, useLoaderData, useNavigate } from "react-router-dom";
-import { APIResponse } from "../../../Types/Endpoints/ResponseParser";
+import { Await, useNavigate } from "react-router-dom";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import Icon from "../../../Components/Icon/Icon";
+import useLoaderData from "../../../BetterRouter/UseLoaderData";
+import adminMuscleLoader from "./MuscleAdminPanel";
 
 export default function MuscleAdminPanel() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const data = useLoaderData() as {
-    muscles: Promise<APIResponse<"/api/musclegroup/detailed", "get">>;
-  };
+  const data = useLoaderData<typeof adminMuscleLoader>();
   const navigate = useNavigate();
 
   function add(type: "muscle" | "muscle-group", muscleGroupId: number) {

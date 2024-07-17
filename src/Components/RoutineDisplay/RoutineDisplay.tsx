@@ -3,9 +3,10 @@ import { Suspense, useRef, useState } from "react";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
 import Icon from "../Icon/Icon";
 import RoutineDisplayItem from "./RoutineDisplayItem/RoutineDisplayItem";
-import { Await, useLoaderData, useNavigate } from "react-router-dom";
+import { Await, useNavigate } from "react-router-dom";
 import WindowWrapper from "../WindowWrapper/WindowWrapper";
-import { APIResponse } from "../../Types/Endpoints/ResponseParser";
+import useLoaderData from "../../BetterRouter/UseLoaderData";
+import routineDisplayLoader from "./RoutineDisplayLoader";
 
 export default function RoutineDisplay() {
   const [thumbsUpActive, setThumbsUpActive] = useState<boolean>(false);
@@ -14,9 +15,7 @@ export default function RoutineDisplay() {
 
   const routineDisplayRef = useRef<HTMLDivElement>(null);
 
-  const data = useLoaderData() as {
-    routine: Promise<APIResponse<"/api/workout/{id}/detailed", "get">>;
-  };
+  const data = useLoaderData<typeof routineDisplayLoader>();
 
   const navigate = useNavigate();
 

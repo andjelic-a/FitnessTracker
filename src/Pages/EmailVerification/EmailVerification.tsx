@@ -1,11 +1,10 @@
-import { Await, useLoaderData, useNavigate } from "react-router-dom";
+import { Await, useNavigate } from "react-router-dom";
 import { Suspense } from "react";
-import { APIResponse } from "../../Types/Endpoints/ResponseParser";
+import useLoaderData from "../../BetterRouter/UseLoaderData";
+import emailVerificationLoader from "./EmailVerificationLoader";
 
 export default function EmailVerification() {
-  const data = useLoaderData() as {
-    response: Promise<APIResponse<"/api/user/me/confirmemail/{code}", "patch">>;
-  };
+  const data = useLoaderData<typeof emailVerificationLoader>();
   const navigate = useNavigate();
 
   return (

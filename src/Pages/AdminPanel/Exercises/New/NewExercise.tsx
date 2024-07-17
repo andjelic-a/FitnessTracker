@@ -1,19 +1,17 @@
-import { Await, useLoaderData, useNavigate } from "react-router-dom";
+import { Await, useNavigate } from "react-router-dom";
 import "./NewExercise.scss";
 import { Suspense, useRef } from "react";
 import MuscleSelector from "../../Selectors/Muscle/MuscleSelector";
 import compressImage from "../../../../Data/ImageCompression";
 import EquipmentSelector from "../../Selectors/Equipment/EquipmentSelector";
-import { APIResponse } from "../../../../Types/Endpoints/ResponseParser";
 import sendAPIRequest from "../../../../Data/SendAPIRequest";
+import useLoaderData from "../../../../BetterRouter/UseLoaderData";
+import adminNewExerciseLoader from "./NewExerciseLoader";
 
 export default function NewExercise() {
   const navigate = useNavigate();
 
-  const data = useLoaderData() as {
-    muscleGroups: APIResponse<"/api/musclegroup/detailed", "get">;
-    equipment: APIResponse<"/api/equipment", "get">;
-  };
+  const data = useLoaderData<typeof adminNewExerciseLoader>();
 
   const nameFieldRef = useRef<HTMLInputElement>(null);
   const imageFieldRef = useRef<HTMLInputElement>(null);

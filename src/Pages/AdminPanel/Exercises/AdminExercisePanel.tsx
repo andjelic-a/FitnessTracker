@@ -1,11 +1,10 @@
 import { Suspense } from "react";
-import { Await, useLoaderData, useNavigate } from "react-router-dom";
-import { APIResponse } from "../../../Types/Endpoints/ResponseParser";
+import { Await, useNavigate } from "react-router-dom";
+import useLoaderData from "../../../BetterRouter/UseLoaderData";
+import adminExerciseLoader from "./AdminExercisesLoader";
 
 export default function AdminExercisePanel() {
-  const data = useLoaderData() as {
-    exercises: APIResponse<"/api/exercise", "get">;
-  };
+  const data = useLoaderData<typeof adminExerciseLoader>();
   const navigate = useNavigate();
 
   return (

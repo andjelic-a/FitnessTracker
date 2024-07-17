@@ -1,5 +1,5 @@
 import "./Exercises.scss";
-import { Await, Link, useLoaderData, useSearchParams } from "react-router-dom";
+import { Await, Link, useSearchParams } from "react-router-dom";
 import {
   Suspense,
   useContext,
@@ -8,16 +8,15 @@ import {
   useRef,
   useState,
 } from "react";
-import { getExerciseQueryString } from "./ExerciseLoader";
+import exerciseLoader, { getExerciseQueryString } from "./ExerciseLoader";
 import { scrollPositionContext } from "../../App";
 import InputField from "../../Components/InputField/InputField";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 import sendAPIRequest from "../../Data/SendAPIRequest";
+import useLoaderData from "../../BetterRouter/UseLoaderData";
 
 export default function Exercises() {
-  const data = useLoaderData() as {
-    exercises: APIResponse<"/api/exercise", "get">;
-  };
+  const data = useLoaderData<typeof exerciseLoader>();
   const scrollPositionContextConsumer = useContext(scrollPositionContext);
   const [lazyLoadedExercises, setLazyLoadedExercises] = useState<
     APIResponse<"/api/exercise", "get">[]

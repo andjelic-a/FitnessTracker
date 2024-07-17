@@ -1,18 +1,16 @@
-import { Suspense, useEffect, useRef, useState } from "react";
 import "./User.scss";
-import { Await, useLoaderData } from "react-router-dom";
-import { APIResponse } from "../../Types/Endpoints/ResponseParser";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { Await } from "react-router-dom";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
 import FollowContainer from "../../Components/FollowContainer/FollowContainer";
 import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
 import sendAPIRequest from "../../Data/SendAPIRequest";
+import useLoaderData from "../../BetterRouter/UseLoaderData";
+import userLoader from "./UserLoader";
 
 export default function User() {
-  const data = useLoaderData() as {
-    user: Promise<APIResponse<"/api/user/{id}/detailed", "get">>;
-    streak: Promise<APIResponse<"/api/user/{userId}/streak", "get">>;
-  };
+  const data = useLoaderData<typeof userLoader>();
 
   const [followingOrFollowers, setFollowingOrFollowers] = useState<
     "followers" | "following" | null

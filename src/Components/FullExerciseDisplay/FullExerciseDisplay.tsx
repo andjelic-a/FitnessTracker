@@ -1,13 +1,12 @@
 import "./FullExerciseDisplay.scss";
-import { Await, useLoaderData } from "react-router-dom";
+import { Await } from "react-router-dom";
 import { Suspense } from "react";
-import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 import FormattedText from "../FormattedText/FormattedText";
+import useLoaderData from "../../BetterRouter/UseLoaderData";
+import singleExerciseLoader from "./SingleExerciseLoader";
 
 export default function FullExerciseDisplay() {
-  const data = useLoaderData() as {
-    exercise: Promise<APIResponse<"/api/exercise/{id}/detailed", "get">>;
-  };
+  const data = useLoaderData<typeof singleExerciseLoader>();
 
   return (
     <Suspense fallback={<div>Loading...</div>}>

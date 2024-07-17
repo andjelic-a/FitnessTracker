@@ -4,18 +4,15 @@ import WorkoutsContainer from "../../Components/WorkoutsContainer/WorkoutsContai
 import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
 import FollowContainer from "../../Components/FollowContainer/FollowContainer";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
-import { Await, useLoaderData, useNavigate } from "react-router-dom";
-import { APIResponse } from "../../Types/Endpoints/ResponseParser";
+import { Await, useNavigate } from "react-router-dom";
 import AnimatedOutlet from "../../Components/WindowWrapper/AnimatedOutlet";
 import ProfileWorkoutsContainerSkeleton from "./Skeletons/ProfileWorkoutsContainerSkeleton";
 import ProfileSkeleton from "./Skeletons/ProfileSkeleton";
+import profileLoader from "./ProfileLoader";
+import useLoaderData from "../../BetterRouter/UseLoaderData";
 
 export default function Profile() {
-  const userData = useLoaderData() as {
-    user: Promise<APIResponse<"/api/user/me/detailed", "get">>;
-    workouts: Promise<APIResponse<"/api/workout/personal/simple", "get">>;
-    streak: Promise<APIResponse<"/api/user/me/streak", "get">>;
-  };
+  const userData = useLoaderData<typeof profileLoader>();
 
   const navigate = useNavigate();
 
