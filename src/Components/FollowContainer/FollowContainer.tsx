@@ -1,9 +1,10 @@
 import "./FollowContainer.scss";
-import { forwardRef, Suspense, useEffect, useRef } from "react";
-import { Await, useNavigate } from "react-router-dom";
+import { forwardRef, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import useLazyLoading from "../../Hooks/UseLazyLoading";
+import Async from "../Async/Async";
 
 type FollowContainerProps = {
   userId: string;
@@ -107,25 +108,23 @@ const FollowContainer = forwardRef<HTMLDivElement, FollowContainerProps>(
           {followersOrFollowing === "followers" ? "Followers" : "Following"}
         </div>
 
-        <Suspense fallback={<div>Loading...</div>}>
-          <Await resolve={getData()}>
-            {(userDTOs: Awaited<ReturnType<typeof getData>>) => {
-              return userDTOs.map((x) => (
-                <div
-                  className="follow-container-user"
-                  key={x.id}
-                  onClick={() => void navigate(`/user/${x.id}`)}
-                >
-                  <img
-                    src={x.image ?? "/DefaultProfilePicture.png"}
-                    alt={`Profile picture of a user named ${x.name}`}
-                  />
-                  <p>{x.name}</p>
-                </div>
-              ));
-            }}
-          </Await>
-        </Suspense>
+        <Async await={getData()}>
+          {(userDTOs) => {
+            return userDTOs.map((x) => (
+              <div
+                className="follow-container-user"
+                key={x.id}
+                onClick={() => void navigate(`/user/${x.id}`)}
+              >
+                <img
+                  src={x.image ?? "/DefaultProfilePicture.png"}
+                  alt={`Profile picture of a user named ${x.name}`}
+                />
+                <p>{x.name}</p>
+              </div>
+            ));
+          }}
+        </Async>
       </div>
     );
   }

@@ -1,19 +1,13 @@
 import "./Exercises.scss";
-import { Await, Link, useSearchParams } from "react-router-dom";
-import {
-  Suspense,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import exerciseLoader, { getExerciseQueryString } from "./ExerciseLoader";
 import { scrollPositionContext } from "../../App";
 import InputField from "../../Components/InputField/InputField";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
+import Async from "../../Components/Async/Async";
 
 export default function Exercises() {
   const data = useLoaderData<typeof exerciseLoader>();
@@ -104,19 +98,17 @@ export default function Exercises() {
         <button onClick={handleSearch}>Filter</button>
       </div>
 
-      <Suspense fallback={<div>Loading...</div>}>
-        <Await resolve={data.exercises}>
-          {(initialExercises: Awaited<typeof data.exercises>) => {
-            if (initialExercises.code !== "OK") return null;
+      <Async await={data.exercises}>
+        {(initialExercises) => {
+          if (initialExercises.code !== "OK") return null;
 
-            return (
-              <InnerExercises
-                exercises={[initialExercises, ...lazyLoadedExercises]}
-              />
-            );
-          }}
-        </Await>
-      </Suspense>
+          return (
+            <InnerExercises
+              exercises={[initialExercises, ...lazyLoadedExercises]}
+            />
+          );
+        }}
+      </Async>
     </div>
   );
 }

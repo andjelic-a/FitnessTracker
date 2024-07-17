@@ -1,11 +1,12 @@
 import "./MuscleAdminPanel.scss";
-import { Suspense, useRef } from "react";
+import { useRef } from "react";
 import InputField from "../../../Components/InputField/InputField";
-import { Await, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import Icon from "../../../Components/Icon/Icon";
 import useLoaderData from "../../../BetterRouter/UseLoaderData";
 import adminMuscleLoader from "./MuscleAdminPanel";
+import Async from "../../../Components/Async/Async";
 
 export default function MuscleAdminPanel() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -57,55 +58,53 @@ export default function MuscleAdminPanel() {
         <InputField inputRef={inputRef} />
       </div>
 
-      <Suspense fallback={<div>Loading...</div>}>
-        <Await resolve={data.muscles}>
-          {(muscles: Awaited<typeof data.muscles>) => {
-            if (muscles.code !== "OK") return null;
+      <Async await={data.muscles}>
+        {(muscles) => {
+          if (muscles.code !== "OK") return null;
 
-            return (
-              <>
-                <ul>
-                  {muscles.content.map((muscleGroup) => (
-                    <li key={"muscle-group" + muscleGroup.id}>
-                      <h1>
-                        {muscleGroup.name}{" "}
-                        <Icon
-                          name="trash"
-                          onClick={() =>
-                            handleDelete("muscle-group", muscleGroup.id)
-                          }
-                        />
-                      </h1>
-                      <ul>
-                        {muscleGroup.muscles.map((muscle) => (
-                          <li key={"muscle" + muscle.id}>
-                            {muscle.name}{" "}
-                            <Icon
-                              name="trash"
-                              onClick={() =>
-                                handleDelete("muscle-group", muscleGroup.id)
-                              }
-                            />
-                          </li>
-                        ))}
-                        <button onClick={() => add("muscle", muscleGroup.id)}>
-                          Add muscle to {muscleGroup.name}
-                        </button>
-                      </ul>
-                    </li>
-                  ))}
-                </ul>
+          return (
+            <>
+              <ul>
+                {muscles.content.map((muscleGroup) => (
+                  <li key={"muscle-group" + muscleGroup.id}>
+                    <h1>
+                      {muscleGroup.name}{" "}
+                      <Icon
+                        name="trash"
+                        onClick={() =>
+                          handleDelete("muscle-group", muscleGroup.id)
+                        }
+                      />
+                    </h1>
+                    <ul>
+                      {muscleGroup.muscles.map((muscle) => (
+                        <li key={"muscle" + muscle.id}>
+                          {muscle.name}{" "}
+                          <Icon
+                            name="trash"
+                            onClick={() =>
+                              handleDelete("muscle-group", muscleGroup.id)
+                            }
+                          />
+                        </li>
+                      ))}
+                      <button onClick={() => add("muscle", muscleGroup.id)}>
+                        Add muscle to {muscleGroup.name}
+                      </button>
+                    </ul>
+                  </li>
+                ))}
+              </ul>
 
-                <br />
-                <button onClick={() => add("muscle-group", 0)}>
-                  Add muscle group
-                </button>
-                <br />
-              </>
-            );
-          }}
-        </Await>
-      </Suspense>
+              <br />
+              <button onClick={() => add("muscle-group", 0)}>
+                Add muscle group
+              </button>
+              <br />
+            </>
+          );
+        }}
+      </Async>
     </div>
   );
 }

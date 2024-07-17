@@ -1,9 +1,9 @@
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import Dropdown from "../Dropdown";
-import { Await } from "react-router-dom";
 import DropdownItem from "../DropdownItem";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import { SchemaNames } from "../../../Types/Endpoints/Endpoints";
+import Async from "../../Async/Async";
 
 type AsyncDropdownProps<T extends SchemaNames> = {
   placeholder: string;
@@ -30,8 +30,9 @@ export default function AsyncDropdown<T extends SchemaNames>({
           children={null}
         />
       ) : (
-        <Suspense
-          fallback={
+        <Async
+          await={data}
+          skeleton={
             <Dropdown
               placeholder={placeholder}
               className={className ?? ""}
@@ -39,25 +40,23 @@ export default function AsyncDropdown<T extends SchemaNames>({
             />
           }
         >
-          <Await resolve={data}>
-            {(resolvedData: Awaited<typeof data>) => {
-              if (!resolvedData) return null;
+          {(resolvedData) => {
+            if (!resolvedData) return null;
 
-              return (
-                <Dropdown
-                  placeholder={placeholder}
-                  className={className ?? ""}
-                  openOnStart
-                  onSelectionChanged={onSelectionChanged}
-                >
-                  {resolvedData?.map((x) => (
-                    <DropdownItem key={x.id}>{x.name}</DropdownItem>
-                  ))}
-                </Dropdown>
-              );
-            }}
-          </Await>
-        </Suspense>
+            return (
+              <Dropdown
+                placeholder={placeholder}
+                className={className ?? ""}
+                openOnStart
+                onSelectionChanged={onSelectionChanged}
+              >
+                {resolvedData?.map((x) => (
+                  <DropdownItem key={x.id}>{x.name}</DropdownItem>
+                ))}
+              </Dropdown>
+            );
+          }}
+        </Async>
       )}
     </>
   );
