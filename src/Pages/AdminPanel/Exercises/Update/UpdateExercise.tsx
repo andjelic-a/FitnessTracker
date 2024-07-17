@@ -1,19 +1,16 @@
 import "./UpdateExercise.scss";
-import { Await, useLoaderData, useNavigate } from "react-router-dom";
+import { Await, useNavigate } from "react-router-dom";
 import { Suspense, useRef } from "react";
 import MuscleSelector from "../../Selectors/Muscle/MuscleSelector";
 import EquipmentSelector from "../../Selectors/Equipment/EquipmentSelector";
-import { APIResponse } from "../../../../Types/Endpoints/ResponseParser";
 import sendAPIRequest from "../../../../Data/SendAPIRequest";
 import compressImage from "../../../../Data/ImageCompression";
+import useLoaderData from "../../../../BetterRouter/UseLoaderData";
+import adminUpdateExerciseLoader from "./UpdateExerciseLoader";
 
 export default function UpdateExercise() {
   const navigate = useNavigate();
-  const data = useLoaderData() as {
-    exercise: APIResponse<"/api/exercise/{id}/detailed", "get">;
-    muscleGroups: APIResponse<"/api/musclegroup/detailed", "get">;
-    equipment: APIResponse<"/api/equipment", "get">;
-  };
+  const data = useLoaderData<typeof adminUpdateExerciseLoader>();
 
   const nameFieldRef = useRef<HTMLInputElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);

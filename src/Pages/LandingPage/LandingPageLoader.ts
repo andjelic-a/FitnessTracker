@@ -1,5 +1,7 @@
-import { defer } from "react-router-dom";
+import createLoader from "../../BetterRouter/CreateLoader";
 
-export default async function landingPageLoader() {
-  return defer({});
-}
+const landingPageLoader = createLoader("/exercises", () => {
+  return {};
+});
+
+export default landingPageLoader;

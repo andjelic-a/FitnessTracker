@@ -1,4 +1,4 @@
-import { defer } from "react-router-dom";
+import createLoader from "../../BetterRouter/CreateLoader";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 
 const validSearchParams: string[] = [
@@ -29,11 +29,11 @@ export function getExerciseQueryString(
   return query;
 }
 
-export default async function exerciseLoader({ request }: any) {
+const exerciseLoader = createLoader("/exercises", ({ request }) => {
   const url = new URL(request.url).searchParams;
   const query = getExerciseQueryString(url);
 
-  return defer({
+  return {
     exercises: sendAPIRequest("/api/exercise", {
       method: "get",
       parameters: {
@@ -42,5 +42,7 @@ export default async function exerciseLoader({ request }: any) {
         limit: 10,
       },
     }),
-  });
-}
+  };
+});
+
+export default exerciseLoader;

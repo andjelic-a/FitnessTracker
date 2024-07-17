@@ -1,24 +1,16 @@
-import {
-  LoaderFunctionArgs,
-  ParamParseKey,
-  Params,
-  defer,
-} from "react-router-dom";
+import createLoader from "../../BetterRouter/CreateLoader";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 
-interface emailVerificationLoaderArgs extends LoaderFunctionArgs {
-  params: Params<ParamParseKey<":code">>;
-}
-
-export default async function emailVerificationLoader({
-  params: { code },
-}: emailVerificationLoaderArgs) {
-  return defer({
+const emailVerificationLoader = createLoader(
+  "/email-verification/:code",
+  ({ params: { code } }) => ({
     response: sendAPIRequest("/api/user/me/confirmemail/{code}", {
       method: "patch",
       parameters: {
         code: code ?? "",
       },
     }),
-  });
-}
+  })
+);
+
+export default emailVerificationLoader;
