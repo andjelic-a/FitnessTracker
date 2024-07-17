@@ -15,16 +15,16 @@ import Authentication from "./Pages/Authentication/Authentication.tsx";
 import AdminPanel from "./Pages/AdminPanel/AdminPanel.tsx";
 import AdminExercisePanel from "./Pages/AdminPanel/Exercises/AdminExercisePanel.tsx";
 import MuscleAdminPanel from "./Pages/AdminPanel/Muscles/MuscleAdminPanel.tsx";
-import muscleAdminPanelLoader from "./Pages/AdminPanel/Muscles/MuscleAdminPanel.ts";
+import adminMuscleLoader from "./Pages/AdminPanel/Muscles/MuscleAdminPanel.ts";
 import NewExercise from "./Pages/AdminPanel/Exercises/New/NewExercise.tsx";
-import { newExerciseLoader } from "./Pages/AdminPanel/Exercises/New/NewExerciseLoader.tsx";
+import adminNewExerciseLoader from "./Pages/AdminPanel/Exercises/New/NewExerciseLoader.tsx";
 import exerciseLoader from "./Pages/Exercises/ExerciseLoader.ts";
 import singleExerciseLoader from "./Components/FullExerciseDisplay/SingleExerciseLoader.ts";
 import UpdateExercise from "./Pages/AdminPanel/Exercises/Update/UpdateExercise.tsx";
-import updateExerciseLoader from "./Pages/AdminPanel/Exercises/Update/UpdateExerciseLoader.ts";
+import adminUpdateExerciseLoader from "./Pages/AdminPanel/Exercises/Update/UpdateExerciseLoader.ts";
 import profileLoader from "./Pages/Profile/ProfileLoader.ts";
 import authenticationLoader from "./Pages/Authentication/AuthenticationLoader.ts";
-import allExercisesLoader from "./Pages/AdminPanel/Exercises/AllExercisesLoader.ts";
+import adminExerciseLoader from "./Pages/AdminPanel/Exercises/AdminExercisesLoader.ts";
 import EmailVerification from "./Pages/EmailVerification/EmailVerification.tsx";
 import emailVerificationLoader from "./Pages/EmailVerification/EmailVerificationLoader.ts";
 import LandingPage from "./Pages/LandingPage/LandingPage.tsx";
@@ -120,22 +120,22 @@ const routes: RouteObject[] = [
           {
             path: "exercises",
             element: <AdminExercisePanel />,
-            loader: allExercisesLoader,
+            loader: adminExerciseLoader,
           },
           {
             path: "exercises/new",
             element: <NewExercise />,
-            loader: newExerciseLoader,
+            loader: adminNewExerciseLoader,
           },
           {
             path: "exercises/:exerciseId",
             element: <UpdateExercise />,
-            loader: updateExerciseLoader,
+            loader: adminUpdateExerciseLoader,
           },
           {
             path: "muscles",
             element: <MuscleAdminPanel />,
-            loader: muscleAdminPanelLoader,
+            loader: adminMuscleLoader,
           },
         ],
       },

@@ -1,11 +1,11 @@
-import { defer } from "react-router-dom";
+import createLoader from "../../../BetterRouter/CreateLoader";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 
-export default function muscleAdminPanelLoader() {
-  return defer({
-    muscles: sendAPIRequest("/api/musclegroup/detailed", {
-      method: "get",
-      parameters: {},
-    }),
-  });
-}
+const adminMuscleLoader = createLoader("/admin/muscles", () => ({
+  muscles: sendAPIRequest("/api/musclegroup/detailed", {
+    method: "get",
+    parameters: {},
+  }),
+}));
+
+export default adminMuscleLoader;

@@ -5,7 +5,12 @@ import sendAPIRequest from "../Data/SendAPIRequest";
 export type Loader<
   Route extends Routes,
   T extends { [key: string]: any }
-> = (args: { params: LoaderParams<Route>; request: Request }) => T | null;
+> = (args: {
+  params: LoaderParams<Route>;
+  request: Request;
+}) =>
+  | ((T extends ReturnType<typeof defer> ? never : T) | Response | null)
+  | Promise<(T extends ReturnType<typeof defer> ? never : T) | Response | null>;
 
 export type LoaderReturnType<C extends Loader<any, any>> = C extends Loader<
   any,
@@ -18,9 +23,9 @@ export default function createLoader<
   Route extends Routes,
   T extends { [key: string]: any }
 >(route: Route, loader: Loader<Route, T>) {
-  return (x: LoaderFunctionArgs) => {
+  return async (x: LoaderFunctionArgs) => {
     try {
-      const data: T | null = loader({
+      const data: T | Response | null = await loader({
         params: x.params as LoaderParams<Route>,
         request: x.request,
       });

@@ -1,8 +1,11 @@
 import { redirect } from "react-router-dom";
 import { getJWT } from "../../Data/User";
+import createLoader from "../../BetterRouter/CreateLoader";
 
-export default async function authenticationLoader() {
+const authenticationLoader = createLoader("/authentication", async () => {
   if (await getJWT()) return redirect("/me");
 
   return null;
-}
+});
+
+export default authenticationLoader;

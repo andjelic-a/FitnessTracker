@@ -1,22 +1,11 @@
-import {
-  defer,
-  LoaderFunctionArgs,
-  ParamParseKey,
-  Params,
-  redirect,
-} from "react-router-dom";
+import { redirect } from "react-router-dom";
 import sendAPIRequest from "../../Data/SendAPIRequest";
+import createLoader from "../../BetterRouter/CreateLoader";
 
-interface UserLoaderArguments extends LoaderFunctionArgs {
-  params: Params<ParamParseKey<":userId">>;
-}
-
-export default async function userLoader({
-  params: { userId },
-}: UserLoaderArguments) {
+const userLoader = createLoader("/user/:userId", ({ params: { userId } }) => {
   if (!userId) return redirect("/me");
 
-  return defer({
+  return {
     user: sendAPIRequest("/api/user/{id}/detailed", {
       method: "get",
       parameters: {
@@ -29,5 +18,7 @@ export default async function userLoader({
         userId,
       },
     }),
-  });
-}
+  };
+});
+
+export default userLoader;

@@ -1,8 +1,9 @@
-import { defer, redirect } from "react-router-dom";
+import { redirect } from "react-router-dom";
 import { getJWT } from "../../Data/User";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 import { getProfileCache, setProfileCache } from "./ProfileCache";
+import createLoader from "../../BetterRouter/CreateLoader";
 
 export type ProfileData = {
   user: Promise<APIResponse<"/api/user/me/detailed", "get">>;
@@ -10,14 +11,14 @@ export type ProfileData = {
   streak: Promise<APIResponse<"/api/user/me/streak", "get">>;
 };
 
-export default async function profileLoader() {
+const profileLoader = createLoader("/me", async () => {
   if (!(await getJWT())) {
     setProfileCache(null);
     return redirect("/authentication");
   }
 
   const cache = getProfileCache();
-  if (cache) return defer(cache);
+  if (cache) return cache;
 
   const newData = {
     user: sendAPIRequest("/api/user/me/detailed", {
@@ -36,5 +37,7 @@ export default async function profileLoader() {
   };
 
   setProfileCache(newData);
-  return defer(newData);
-}
+  return newData;
+});
+
+export default profileLoader;
