@@ -23,5 +23,11 @@ export default async function userLoader({
         id: userId,
       },
     }),
+    streak: sendAPIRequest("/api/user/{userId}/streak", {
+      method: "get",
+      parameters: {
+        userId,
+      },
+    }),
   });
 }

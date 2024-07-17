@@ -31,6 +31,14 @@ export default async function sendAPIRequest<
     Object.keys(request.parameters).forEach((key) => {
       if (!("parameters" in request) || typeof request.parameters !== "object")
         return;
+
+      if (
+        request.parameters[key as keyof typeof request.parameters] === undefined
+      ) {
+        delete (request.parameters as Record<string, string>)[key];
+        return;
+      }
+
       if (!url.href.includes("%7B" + key + "%7D")) return;
 
       url.href = url.href.replace(

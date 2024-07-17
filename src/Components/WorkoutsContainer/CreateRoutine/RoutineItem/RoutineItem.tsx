@@ -149,7 +149,6 @@ export default function RoutineItem({
       <div className="routine-item-header">
         <img
           src={exercise.image}
-          alt="Exercise"
           onMouseOver={(e) => handleImageScaleUp(e.target as HTMLImageElement)}
           onMouseLeave={(e) =>
             handleImageScaleDown(e.target as HTMLImageElement)
