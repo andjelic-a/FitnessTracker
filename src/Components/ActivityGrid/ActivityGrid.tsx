@@ -141,7 +141,8 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
         {(streak) => (
           <>
             <h3 className="activity-grid-header">
-              <b>{streak.length}</b> workouts done in last year
+              <b>{streak.reduce((a, b) => a + b.completedCount, 0)}</b> workouts
+              done in last year
             </h3>
             <div className="activity-grid">
               {streak.map(
