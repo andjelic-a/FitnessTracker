@@ -1,5 +1,5 @@
 import "./RoutineDisplay.scss";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Icon from "../Icon/Icon";
 import RoutineDisplayItem from "./RoutineDisplayItem/RoutineDisplayItem";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
@@ -7,12 +7,10 @@ import routineDisplayLoader from "./RoutineDisplayLoader";
 import Async from "../Async/Async";
 import WindowFC from "../WindowWrapper/WindowFC";
 
-const RoutineDisplay = WindowFC(() => {
+const RoutineDisplay = WindowFC(({}, routineDisplayRef) => {
   const [thumbsUpActive, setThumbsUpActive] = useState<boolean>(false);
   const [commentActive, setCommentActive] = useState<boolean>(false);
   const [favoriteActive, setFavoriteActive] = useState<boolean>(false);
-
-  const routineDisplayRef = useRef<HTMLDivElement>(null);
 
   const data = useLoaderData<typeof routineDisplayLoader>();
 

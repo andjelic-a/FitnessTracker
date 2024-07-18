@@ -13,8 +13,10 @@ export default function WindowWrapper({
   animationTriggers,
 }: WindowWrapperProps) {
   return (
-    <AnimatedLayout variants={animationTriggers}>
-      <AnimatePresence>{children}</AnimatePresence>
-    </AnimatedLayout>
+    <div className="window-wrapper">
+      <AnimatedLayout variants={animationTriggers}>
+        <AnimatePresence>{children}</AnimatePresence>
+      </AnimatedLayout>
+    </div>
   );
 }

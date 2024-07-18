@@ -5,7 +5,6 @@ import createLoader from "../../BetterRouter/CreateLoader";
 const routineDisplayLoader = createLoader(
   "/me/workout/:id",
   ({ params: { id } }) => {
-    console.log(id);
     if (!id) return redirect("/me");
 
     return {

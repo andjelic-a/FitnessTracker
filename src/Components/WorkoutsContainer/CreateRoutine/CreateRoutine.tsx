@@ -33,7 +33,7 @@ type CreateRoutineWindowProps = {
 };
 
 const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
-  ({ animationLength, safeGuard }, onClose) => {
+  ({ animationLength, safeGuard }, wrapperRef, onClose) => {
     const loaderData = useLoaderData<typeof createRoutineLoader>();
     const { contextSafe } = useGSAP();
 
@@ -57,7 +57,6 @@ const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
     const lazyLoadedExercises = useRef<Schema<"SimpleExerciseResponseDTO">[]>(
       []
     );
-    const excludedDivRef = useRef<HTMLDivElement | null>(null);
     const routineTitleRef = useRef<HTMLInputElement | null>(null);
     const dragging = useRef<HTMLElement | null>(null);
     const currentFlipState = useRef<Flip.FlipState | null>(null);
@@ -240,8 +239,8 @@ const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
     function handleAddExerciseSetBtnClick() {
       setIsChoosingExercise(true);
 
-      if (excludedDivRef.current) {
-        excludedDivRef.current.scrollTo({
+      if (wrapperRef.current) {
+        wrapperRef.current.scrollTo({
           top: 0,
         });
       }
@@ -251,7 +250,7 @@ const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
       setIsChoosingExercise(true);
       setReplacingExerciseId(id);
 
-      if (excludedDivRef.current) excludedDivRef.current.scrollTop = 0;
+      if (wrapperRef.current) wrapperRef.current.scrollTop = 0;
     }
 
     function handleRoutineItemChanged(routineItem: RoutineItemData) {
@@ -481,7 +480,7 @@ const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
 
     return (
       <div
-        ref={excludedDivRef}
+        ref={wrapperRef}
         className={`create-routine-window visible ${
           isChoosingExercise ? "no-scroll" : "scrollable"
         }`}

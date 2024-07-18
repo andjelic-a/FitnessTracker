@@ -36,6 +36,9 @@ import routineDisplayLoader from "./Components/RoutineDisplay/RoutineDisplayLoad
 import CreateRoutineWindow from "./Components/WorkoutsContainer/CreateRoutine/CreateRoutine.tsx";
 import createRoutineLoader from "./Components/WorkoutsContainer/CreateRoutine/CreateRoutineLoader.ts";
 import landingPageLoader from "./Pages/LandingPage/LandingPageLoader.ts";
+import FollowContainer from "./Components/FollowContainer/FollowContainer.tsx";
+import profileFollowersContainerLoader from "./Components/FollowContainer/ProfileFollowersContainerLoader.ts";
+import profileFollowingContainerLoader from "./Components/FollowContainer/ProfileFollowingContainerLoader.ts";
 
 const routes: RouteObject[] = [
   {
@@ -84,6 +87,16 @@ const routes: RouteObject[] = [
             path: "workout/new",
             element: <CreateRoutineWindow />,
             loader: createRoutineLoader,
+          },
+          {
+            path: "followers",
+            element: <FollowContainer followersOrFollowing="followers" />,
+            loader: profileFollowersContainerLoader,
+          },
+          {
+            path: "following",
+            element: <FollowContainer followersOrFollowing="following" />,
+            loader: profileFollowingContainerLoader,
           },
         ],
       },
@@ -173,6 +186,12 @@ export type RoutePathObjects = [
           },
           {
             path: "workout/new";
+          },
+          {
+            path: "followers";
+          },
+          {
+            path: "following";
           }
         ];
       },

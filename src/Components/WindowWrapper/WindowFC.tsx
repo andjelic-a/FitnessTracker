@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { RefObject, useRef } from "react";
 import WindowWrapper from "./WindowWrapper";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
 import { useIsPresent } from "framer-motion";
@@ -7,7 +7,11 @@ import { AnimatedLayoutVariants } from "./AnimatedLayout";
 
 const WindowFC =
   <T extends {}>(
-    component: (props: T, onClose: () => void) => JSX.Element,
+    component: (
+      props: T,
+      wrapperRef: RefObject<HTMLDivElement>,
+      close: () => void
+    ) => JSX.Element,
     animationTriggers?: AnimatedLayoutVariants
   ) =>
   (props: T) => {
@@ -20,7 +24,7 @@ const WindowFC =
 
     return (
       <WindowWrapper animationTriggers={animationTriggers}>
-        <div ref={wrapperRef}>{component(props, handleClose)}</div>
+        {component(props, wrapperRef, handleClose)}
       </WindowWrapper>
     );
   };

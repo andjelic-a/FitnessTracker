@@ -1,6 +1,6 @@
+import "./WindowWrapper.scss";
 import { motion as Motion, Variant, Variants } from "framer-motion";
 import { ReactNode, useMemo } from "react";
-import "./WindowWrapper.scss";
 
 type AnimatedLayoutProps = {
   children: ReactNode;
@@ -42,7 +42,7 @@ const AnimatedLayout = ({
       exit="exit"
       variants={variants ?? defaultVariants}
       transition={{ duration: 0.3, type: "easeInOut" }}
-      className="window-wrapper"
+      className={"window-animation-wrapper"}
     >
       {children}
     </Motion.div>
