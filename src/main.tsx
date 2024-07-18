@@ -39,6 +39,8 @@ import landingPageLoader from "./Pages/LandingPage/LandingPageLoader.ts";
 import FollowContainer from "./Components/FollowContainer/FollowContainer.tsx";
 import profileFollowersContainerLoader from "./Components/FollowContainer/ProfileFollowersContainerLoader.ts";
 import profileFollowingContainerLoader from "./Components/FollowContainer/ProfileFollowingContainerLoader.ts";
+import userPageFollowingContainerLoader from "./Components/FollowContainer/UserPageFollowingContainerLoader.ts";
+import userPageFollowersContainerLoader from "./Components/FollowContainer/UserPageFollowersContainerLoader.ts";
 
 const routes: RouteObject[] = [
   {
@@ -75,10 +77,6 @@ const routes: RouteObject[] = [
         loader: profileLoader,
         children: [
           {
-            path: ".",
-            element: <></>,
-          },
-          {
             path: "workout/:id",
             element: <RoutineDisplay />,
             loader: routineDisplayLoader,
@@ -113,6 +111,18 @@ const routes: RouteObject[] = [
         path: "user/:userId",
         element: <User />,
         loader: userLoader,
+        children: [
+          {
+            path: "followers",
+            element: <FollowContainer followersOrFollowing="followers" />,
+            loader: userPageFollowersContainerLoader,
+          },
+          {
+            path: "following",
+            element: <FollowContainer followersOrFollowing="following" />,
+            loader: userPageFollowingContainerLoader,
+          },
+        ],
       },
       {
         path: "email-verification/:code",
@@ -203,6 +213,14 @@ export type RoutePathObjects = [
       },
       {
         path: "user/:userId";
+        children: [
+          {
+            path: "followers";
+          },
+          {
+            path: "following";
+          }
+        ];
       },
       {
         path: "email-verification/:code";

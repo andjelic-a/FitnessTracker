@@ -1,35 +1,24 @@
 import "./User.scss";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
-import FollowContainer from "../../Components/FollowContainer/FollowContainer";
 import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
-import useOutsideClick from "../../Hooks/UseOutsideClick";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
 import userLoader from "./UserLoader";
 import Async from "../../Components/Async/Async";
+import AnimatedOutlet from "../../Components/WindowWrapper/AnimatedOutlet";
+import { useNavigate } from "react-router-dom";
 
 export default function User() {
   const data = useLoaderData<typeof userLoader>();
-
-  const [followingOrFollowers, setFollowingOrFollowers] = useState<
-    "followers" | "following" | null
-  >(null);
 
   const [isFollowing, setIsFollowing] = useState<boolean | null>(null);
   const [followers, setFollowers] = useState<number | null>(null);
 
   useEffect(() => {
-    setFollowingOrFollowers(null);
     setFollowers(null);
     setIsFollowing(null);
   }, [data]);
-
-  const followerContainerRef = useRef<HTMLDivElement>(null);
-  useOutsideClick(
-    followerContainerRef,
-    () => void setFollowingOrFollowers(null)
-  );
 
   async function onToggleFollow(
     userId: string,
@@ -48,6 +37,8 @@ export default function User() {
     setIsFollowing(!(isFollowing ?? isFollowingFromRequest));
   }
 
+  const navigate = useNavigate();
+
   return (
     <Async await={data.user}>
       {(userData) => {
@@ -62,7 +53,7 @@ export default function User() {
                 workouts={userData.content.totalCompletedWorkouts}
                 followers={followers ?? userData.content.followers}
                 following={userData.content.following}
-                setFollowersOrFollowing={setFollowingOrFollowers}
+                setFollowersOrFollowing={(x) => void navigate(x as string)}
               />
 
               <button
@@ -86,11 +77,7 @@ export default function User() {
                   : "Follow"}
               </button>
 
-              <FollowContainer
-                userId={userData.content.id}
-                followersOrFollowing={followingOrFollowers}
-                ref={followerContainerRef}
-              />
+              <AnimatedOutlet />
 
               <Async await={data.streak}>
                 {(streakData) => {

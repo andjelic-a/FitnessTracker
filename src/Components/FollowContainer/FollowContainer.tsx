@@ -9,6 +9,8 @@ import profileFollowersContainerLoader from "./ProfileFollowersContainerLoader";
 import profileFollowingContainerLoader from "./ProfileFollowingContainerLoader";
 import WindowFC from "../WindowWrapper/WindowFC";
 import sendAPIRequest from "../../Data/SendAPIRequest";
+import userPageFollowersContainerLoader from "./UserPageFollowersContainerLoader";
+import userPageFollowingContainerLoader from "./UserPageFollowingContainerLoader";
 
 type FollowContainerProps = {
   followersOrFollowing: "followers" | "following";
@@ -23,6 +25,8 @@ const FollowContainer = WindowFC<FollowContainerProps>(
     const loaderData = useLoaderData<
       | typeof profileFollowersContainerLoader
       | typeof profileFollowingContainerLoader
+      | typeof userPageFollowersContainerLoader
+      | typeof userPageFollowingContainerLoader
     >();
 
     const followers = useRef<Schema<"SimpleUserResponseDTO">[]>([]);
@@ -36,14 +40,6 @@ const FollowContainer = WindowFC<FollowContainerProps>(
       followers: boolean;
       following: boolean;
     }>({ followers: false, following: false });
-
-    /*     useEffect(() => {
-      followers.current = [];
-      following.current = [];
-      reachedEnd.current.followers = false;
-      reachedEnd.current.following = false;
-      waitingFor.current = null;
-    }, [userId]); */
 
     useLazyLoading("#followContainer", 0.75, () => void getData(true));
 

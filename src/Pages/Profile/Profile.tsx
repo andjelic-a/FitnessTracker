@@ -20,18 +20,6 @@ export default function Profile() {
 
   const toggleNewWorkoutWindow = () => void navigate(`workout/new`);
 
-  /*   const [followersOrFollowing, setFollowersOrFollowing] = useState<
-    "followers" | "following" | null
-  >(null);
- */
-  /*   const followContainerRef = useRef<HTMLDivElement>(null);
-
-  useOutsideClick(followContainerRef, () => {
-    if (followersOrFollowing) {
-      setFollowersOrFollowing(null);
-    }
-  }); */
-
   return (
     <div className="profile">
       <AnimatedOutlet />
@@ -59,12 +47,6 @@ export default function Profile() {
 
           return (
             <div className="profile-user-container">
-              {/* <FollowContainer
-                userId={loadedUserData.content.id}
-                ref={followContainerRef}
-                followersOrFollowing={followersOrFollowing}
-              /> */}
-
               <ProfileHeader
                 username={loadedUserData.content.name}
                 image={loadedUserData.content.image}
