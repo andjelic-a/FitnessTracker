@@ -1,6 +1,6 @@
 import "./FollowContainer.scss";
 import { useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import useLazyLoading from "../../Hooks/UseLazyLoading";
 import Async from "../Async/Async";
@@ -8,14 +8,17 @@ import useLoaderData from "../../BetterRouter/UseLoaderData";
 import profileFollowersContainerLoader from "./ProfileFollowersContainerLoader";
 import profileFollowingContainerLoader from "./ProfileFollowingContainerLoader";
 import WindowFC from "../WindowWrapper/WindowFC";
+import sendAPIRequest from "../../Data/SendAPIRequest";
 
 type FollowContainerProps = {
-  followersOrFollowing: "followers" | "following" | null;
+  followersOrFollowing: "followers" | "following";
 };
 
 const FollowContainer = WindowFC<FollowContainerProps>(
   ({ followersOrFollowing }, wrapperRef) => {
     const navigate = useNavigate();
+
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const loaderData = useLoaderData<
       | typeof profileFollowersContainerLoader
@@ -24,6 +27,7 @@ const FollowContainer = WindowFC<FollowContainerProps>(
 
     const followers = useRef<Schema<"SimpleUserResponseDTO">[]>([]);
     const following = useRef<Schema<"SimpleUserResponseDTO">[]>([]);
+    const searchBarRef = useRef<HTMLInputElement>(null);
     const waitingFor = useRef<{
       type: "followers" | "following";
       data: Promise<Schema<"SimpleUserResponseDTO">[]>;
@@ -65,20 +69,20 @@ const FollowContainer = WindowFC<FollowContainerProps>(
           ? await waitingFor.current.data
           : [];
 
-      /*       waitingFor.current = {
+      waitingFor.current = {
         data: sendAPIRequest(
           followersOrFollowing === "followers"
-            ? "/api/user/{id}/followers"
-            : "/api/user/{id}/following",
+            ? "/api/user/me/followers"
+            : "/api/user/me/following",
           {
             method: "get",
             parameters: {
-              id: userId,
               offset:
                 followersOrFollowing === "followers"
                   ? followers.current.length
                   : following.current.length,
               limit: 10,
+              name: searchParams.get("search") ?? undefined,
             },
           },
           null
@@ -93,7 +97,7 @@ const FollowContainer = WindowFC<FollowContainerProps>(
         }),
         type: followersOrFollowing,
       };
- */
+
       const userDTOs: any = []; // await waitingFor.current?.data;
 
       followersOrFollowing === "followers"
@@ -103,6 +107,11 @@ const FollowContainer = WindowFC<FollowContainerProps>(
       return followersOrFollowing === "followers"
         ? followers.current
         : following.current;
+    }
+
+    function handleSearch() {
+      if (!searchBarRef.current || !searchBarRef.current.value) return;
+      setSearchParams({ search: searchBarRef.current.value });
     }
 
     return (
@@ -120,6 +129,10 @@ const FollowContainer = WindowFC<FollowContainerProps>(
             type="text"
             placeholder="Search"
             className="follow-container-search-input"
+            ref={searchBarRef}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSearch();
+            }}
           />
         </div>
 
