@@ -1,33 +1,46 @@
-import { motion as Motion, Variants } from "framer-motion";
-import { ReactNode } from "react";
+import { motion as Motion, Variant, Variants } from "framer-motion";
+import { ReactNode, useMemo } from "react";
 import "./WindowWrapper.scss";
 
-type Props = {
+type AnimatedLayoutProps = {
   children: ReactNode;
+  variants?: AnimatedLayoutVariants;
 };
 
-const variants: Variants = {
-  hidden: {
-    opacity: 0,
-    scale: 0.5,
-  },
-  enter: {
-    opacity: 1,
-    scale: 1,
-  },
-  exit: {
-    opacity: 0,
-    scale: 0.5,
-  },
+export type AnimatedLayoutVariants = {
+  hidden: Variant;
+  enter: Variant;
+  exit: Variant;
 };
 
-const AnimatedLayout = ({ children }: Props): React.JSX.Element => {
+const AnimatedLayout = ({
+  children,
+  variants,
+}: AnimatedLayoutProps): React.JSX.Element => {
+  const defaultVariants = useMemo<Variants>(
+    () => ({
+      hidden: {
+        opacity: 0,
+        scale: 0.5,
+      },
+      enter: {
+        opacity: 1,
+        scale: 1,
+      },
+      exit: {
+        opacity: 0,
+        scale: 0.5,
+      },
+    }),
+    []
+  );
+
   return (
     <Motion.div
       initial="hidden"
       animate="enter"
       exit="exit"
-      variants={variants}
+      variants={variants ?? defaultVariants}
       transition={{ duration: 0.3, type: "easeInOut" }}
       className="window-wrapper"
     >

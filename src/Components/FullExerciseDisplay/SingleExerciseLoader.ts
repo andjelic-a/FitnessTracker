@@ -1,26 +1,21 @@
-import {
-  LoaderFunctionArgs,
-  ParamParseKey,
-  Params,
-  defer,
-} from "react-router-dom";
 import sendAPIRequest from "../../Data/SendAPIRequest";
+import createLoader from "../../BetterRouter/CreateLoader";
+import { redirect } from "react-router-dom";
 
-interface SingleExerciseLoaderArguments extends LoaderFunctionArgs {
-  params: Params<ParamParseKey<":exerciseId">>;
-}
+const singleExerciseLoader = createLoader(
+  "/exercises/:exerciseId",
+  (request) => {
+    if (!request.params.exerciseId) return redirect("/exercises");
 
-export default async function singleExerciseLoader({
-  params: { exerciseId },
-}: SingleExerciseLoaderArguments) {
-  if (!exerciseId) throw new Error("No exerciseId provided");
+    return {
+      exercise: sendAPIRequest("/api/exercise/{id}/detailed", {
+        method: "get",
+        parameters: {
+          id: parseInt(request.params.exerciseId),
+        },
+      }),
+    };
+  }
+);
 
-  return defer({
-    exercise: sendAPIRequest("/api/exercise/{id}/detailed", {
-      method: "get",
-      parameters: {
-        id: parseInt(exerciseId),
-      },
-    }),
-  });
-}
+export default singleExerciseLoader;

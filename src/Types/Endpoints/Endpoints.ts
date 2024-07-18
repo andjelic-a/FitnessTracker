@@ -4751,6 +4751,13 @@ type MappedEndpoints = {
             };
           },
           {
+            name: "name";
+            in: "query";
+            schema: {
+              type: "string";
+            };
+          },
+          {
             name: "limit";
             in: "query";
             schema: {
@@ -4851,6 +4858,13 @@ type MappedEndpoints = {
             schema: {
               type: "string";
               format: "uuid";
+            };
+          },
+          {
+            name: "name";
+            in: "query";
+            schema: {
+              type: "string";
             };
           },
           {

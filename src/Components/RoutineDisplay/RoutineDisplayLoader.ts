@@ -1,27 +1,22 @@
-import {
-  defer,
-  LoaderFunctionArgs,
-  ParamParseKey,
-  Params,
-  redirect,
-} from "react-router-dom";
+import { redirect } from "react-router-dom";
 import sendAPIRequest from "../../Data/SendAPIRequest";
+import createLoader from "../../BetterRouter/CreateLoader";
 
-interface RoutineDisplayLoaderArguments extends LoaderFunctionArgs {
-  params: Params<ParamParseKey<":id">>;
-}
+const routineDisplayLoader = createLoader(
+  "/me/workout/:id",
+  ({ params: { id } }) => {
+    console.log(id);
+    if (!id) return redirect("/me");
 
-export default async function routineDisplayLoader({
-  params: { id },
-}: RoutineDisplayLoaderArguments) {
-  if (!id) return redirect("/me");
+    return {
+      routine: sendAPIRequest("/api/workout/{id}/detailed", {
+        method: "get",
+        parameters: {
+          id: id,
+        },
+      }),
+    };
+  }
+);
 
-  return defer({
-    routine: sendAPIRequest("/api/workout/{id}/detailed", {
-      method: "get",
-      parameters: {
-        id,
-      },
-    }),
-  });
-}
+export default routineDisplayLoader;

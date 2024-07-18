@@ -1,8 +1,8 @@
-import { defer } from "react-router-dom";
+import createLoader from "../../../BetterRouter/CreateLoader";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 
-export default async function allExercisesLoader() {
-  return defer({
+const adminExerciseLoader = createLoader("/admin/exercises", () => {
+  return {
     exercises: sendAPIRequest("/api/exercise", {
       method: "get",
       parameters: {
@@ -10,5 +10,7 @@ export default async function allExercisesLoader() {
         offset: 0,
       },
     }),
-  });
-}
+  };
+});
+
+export default adminExerciseLoader;

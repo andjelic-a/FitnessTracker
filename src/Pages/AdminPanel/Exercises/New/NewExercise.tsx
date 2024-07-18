@@ -1,19 +1,18 @@
-import { Await, useLoaderData, useNavigate } from "react-router-dom";
 import "./NewExercise.scss";
-import { Suspense, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 import MuscleSelector from "../../Selectors/Muscle/MuscleSelector";
 import compressImage from "../../../../Data/ImageCompression";
 import EquipmentSelector from "../../Selectors/Equipment/EquipmentSelector";
-import { APIResponse } from "../../../../Types/Endpoints/ResponseParser";
 import sendAPIRequest from "../../../../Data/SendAPIRequest";
+import useLoaderData from "../../../../BetterRouter/UseLoaderData";
+import adminNewExerciseLoader from "./NewExerciseLoader";
+import Async from "../../../../Components/Async/Async";
 
 export default function NewExercise() {
   const navigate = useNavigate();
 
-  const data = useLoaderData() as {
-    muscleGroups: APIResponse<"/api/musclegroup/detailed", "get">;
-    equipment: APIResponse<"/api/equipment", "get">;
-  };
+  const data = useLoaderData<typeof adminNewExerciseLoader>();
 
   const nameFieldRef = useRef<HTMLInputElement>(null);
   const imageFieldRef = useRef<HTMLInputElement>(null);
@@ -33,55 +32,51 @@ export default function NewExercise() {
       <input type="file" accept="image/*" ref={imageFieldRef} />
       <textarea placeholder="Description" ref={descriptionFieldRef} />
 
-      <Suspense fallback={<div>Loading...</div>}>
-        <Await resolve={data.muscleGroups}>
-          {(muscleGroups: Awaited<(typeof data)["muscleGroups"]>) => {
-            if (muscleGroups.code !== "OK") return null;
+      <Async await={data.muscleGroups}>
+        {(muscleGroups) => {
+          if (muscleGroups.code !== "OK") return null;
 
-            return (
-              <div className="new-exercise-muscle-selection-container">
-                <MuscleSelector
-                  selectedOnStart={[]}
-                  title="Primary"
-                  onSelectionChanged={(muscleGroups, muscles) => {
-                    selectedPrimaryMuscleGroups.current = muscleGroups;
-                    selectedPrimaryMuscles.current = muscles;
-                  }}
-                  muscleGroups={muscleGroups.content}
-                />
-
-                <MuscleSelector
-                  selectedOnStart={[]}
-                  title="Secondary"
-                  onSelectionChanged={(muscleGroups, muscles) => {
-                    selectedSecondaryMuscleGroups.current = muscleGroups;
-                    selectedSecondaryMuscles.current = muscles;
-                  }}
-                  muscleGroups={muscleGroups.content}
-                />
-              </div>
-            );
-          }}
-        </Await>
-      </Suspense>
-
-      <Suspense fallback={<div>Loading...</div>}>
-        <Await resolve={data.equipment}>
-          {(equipment: Awaited<(typeof data)["equipment"]>) => {
-            if (equipment.code !== "OK") return null;
-
-            return (
-              <EquipmentSelector
+          return (
+            <div className="new-exercise-muscle-selection-container">
+              <MuscleSelector
                 selectedOnStart={[]}
-                equipment={equipment.content}
-                onSelectionChanged={(equipment) => {
-                  selectedEquipment.current = equipment;
+                title="Primary"
+                onSelectionChanged={(muscleGroups, muscles) => {
+                  selectedPrimaryMuscleGroups.current = muscleGroups;
+                  selectedPrimaryMuscles.current = muscles;
                 }}
+                muscleGroups={muscleGroups.content}
               />
-            );
-          }}
-        </Await>
-      </Suspense>
+
+              <MuscleSelector
+                selectedOnStart={[]}
+                title="Secondary"
+                onSelectionChanged={(muscleGroups, muscles) => {
+                  selectedSecondaryMuscleGroups.current = muscleGroups;
+                  selectedSecondaryMuscles.current = muscles;
+                }}
+                muscleGroups={muscleGroups.content}
+              />
+            </div>
+          );
+        }}
+      </Async>
+
+      <Async await={data.equipment}>
+        {(equipment) => {
+          if (equipment.code !== "OK") return null;
+
+          return (
+            <EquipmentSelector
+              selectedOnStart={[]}
+              equipment={equipment.content}
+              onSelectionChanged={(equipment) => {
+                selectedEquipment.current = equipment;
+              }}
+            />
+          );
+        }}
+      </Async>
 
       <button onClick={save}>Save</button>
     </div>

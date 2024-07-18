@@ -1,8 +1,8 @@
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Icon from "../Icon/Icon";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
-import { Await } from "react-router-dom";
 import sendAPIRequest from "../../Data/SendAPIRequest";
+import Async from "../Async/Async";
 import ActivityGridSkeleton from "./ActivityGridSkeleton";
 import "./ActivityGrid.scss";
 
@@ -138,73 +138,75 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
 
   return (
     <div className="activity-grid-wrapper">
-      <Suspense fallback={<ActivityGridSkeleton />}>
-        <Await resolve={currentlyDisplayed ?? getStreak()}>
-          {(streak: Awaited<ReturnType<typeof getStreak>>) => (
-            <>
-              <h3 className="activity-grid-header">
-                <b>{getNumberOfWorkoutsInYear(streak)}</b> workouts done in last year
-              </h3>
-              <div className="activity-grid">
-                {streak.map(
-                  (
-                    weekOfActivity: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">
-                  ) => {
-                    const startOfWeek = new Date(weekOfActivity.startDate);
+      <Async
+        await={currentlyDisplayed ?? getStreak()}
+        skeleton={<ActivityGridSkeleton />}
+      >
+        {(streak) => (
+          <>
+            <h3 className="activity-grid-header">
+              <b>{getNumberOfWorkoutsInYear(streak)}</b> workouts
+              done in last year
+            </h3>
+            <div className="activity-grid">
+              {streak.map(
+                (
+                  weekOfActivity: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">
+                ) => {
+                  const startOfWeek = new Date(weekOfActivity.startDate);
 
-                    return (
-                      <div
-                        className={`activity-item ${getFillClass(
-                          weekOfActivity.completedCount,
-                          weekOfActivity.totalCount
-                        )}`}
-                        onMouseEnter={() =>
-                          setHoveredWeek(weekOfActivity.startDate)
-                        }
-                        onMouseLeave={() => setHoveredWeek(null)}
-                        key={weekOfActivity.startDate}
-                      >
-                        <Icon name="dumbbell" className="activity-icon" />
-                        {hoveredWeek === weekOfActivity.startDate && (
-                          <div className="popup">
-                            Completed {weekOfActivity.completedCount} workouts
-                            from&nbsp;
-                            {startOfWeek.toLocaleDateString("default", {
+                  return (
+                    <div
+                      className={`activity-item ${getFillClass(
+                        weekOfActivity.completedCount,
+                        weekOfActivity.totalCount
+                      )}`}
+                      onMouseEnter={() =>
+                        setHoveredWeek(weekOfActivity.startDate)
+                      }
+                      onMouseLeave={() => setHoveredWeek(null)}
+                      key={weekOfActivity.startDate}
+                    >
+                      <Icon name="dumbbell" className="activity-icon" />
+                      {hoveredWeek === weekOfActivity.startDate && (
+                        <div className="popup">
+                          Completed {weekOfActivity.completedCount} workouts
+                          from&nbsp;
+                          {startOfWeek.toLocaleDateString("default", {
+                            month: "long",
+                            day: "numeric",
+                          })}
+                          &nbsp;to&nbsp;
+                          {addDays(startOfWeek, 6).toLocaleDateString(
+                            "default",
+                            {
                               month: "long",
                               day: "numeric",
-                            })}
-                            &nbsp;to&nbsp;
-                            {addDays(startOfWeek, 6).toLocaleDateString(
-                              "default",
-                              {
-                                month: "long",
-                                day: "numeric",
-                              }
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  }
-                )}
-              </div>
-              <div className="activity-grid-footer">
-                <Icon
-                  onClick={() => handlePreviousClick(getYears())}
-                  className="caret-icon"
-                  name="caret-left"
-                />
-                <p>{showing}</p>
-                <Icon
-                  onClick={() => handleNextClick(getYears())}
-                  className="caret-icon"
-                  name="caret-right"
-                />
-              </div>
-            </>
-          )}
-        </Await>
-      </Suspense>
+                            }
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+              )}
+            </div>
+            <div className="activity-grid-footer">
+              <Icon
+                onClick={() => handlePreviousClick(getYears())}
+                className="caret-icon"
+                name="caret-left"
+              />
+              <p>{showing}</p>
+              <Icon
+                onClick={() => handleNextClick(getYears())}
+                className="caret-icon"
+                name="caret-right"
+              />
+            </div>
+          </>
+        )}
+      </Async>
     </div>
   );
 }

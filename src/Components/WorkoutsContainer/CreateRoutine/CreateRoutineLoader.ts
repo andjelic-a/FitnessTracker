@@ -1,12 +1,14 @@
-import { defer } from "react-router-dom";
 import { getProfileCache } from "../../../Pages/Profile/ProfileCache";
+import createLoader from "../../../BetterRouter/CreateLoader";
 
-export default async function createRoutineLoader() {
+const createRoutineLoader = createLoader("/me/workout/new", () => {
   const cache = getProfileCache();
   if (cache)
-    return defer({
+    return {
       user: cache.user.then((x) => (x.code === "OK" ? x.content : null)),
-    });
+    };
 
   return null;
-}
+});
+
+export default createRoutineLoader;

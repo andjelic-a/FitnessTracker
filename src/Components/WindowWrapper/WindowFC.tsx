@@ -3,9 +3,13 @@ import WindowWrapper from "./WindowWrapper";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
 import { useIsPresent } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { AnimatedLayoutVariants } from "./AnimatedLayout";
 
 const WindowFC =
-  <T extends {}>(component: (props: T, onClose: () => void) => JSX.Element) =>
+  <T extends {}>(
+    component: (props: T, onClose: () => void) => JSX.Element,
+    animationTriggers?: AnimatedLayoutVariants
+  ) =>
   (props: T) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const exists = useIsPresent();
@@ -15,7 +19,7 @@ const WindowFC =
     useOutsideClick(wrapperRef, handleClose, "left");
 
     return (
-      <WindowWrapper>
+      <WindowWrapper animationTriggers={animationTriggers}>
         <div ref={wrapperRef}>{component(props, handleClose)}</div>
       </WindowWrapper>
     );

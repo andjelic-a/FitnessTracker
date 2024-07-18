@@ -1,5 +1,5 @@
 import "./CreateRoutine.scss";
-import { useRef, useEffect, useState, useCallback, Suspense } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import RoutineItem, { RoutineItemData } from "./RoutineItem/RoutineItem";
 import gsap from "gsap";
 import Flip from "gsap/Flip";
@@ -12,7 +12,6 @@ import ChooseExerciseWindow, {
   ChooseExerciseFilters,
 } from "./ChooseExercise/ChooseExercise";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
-import { Await, useLoaderData } from "react-router-dom";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -21,6 +20,9 @@ import {
 } from "../../../Pages/Profile/ProfileCache";
 import WindowFC from "../../WindowWrapper/WindowFC";
 import ChooseExerciseSkeleton from "./ChooseExercise/ChooseExerciseSkeleton";
+import createRoutineLoader from "./CreateRoutineLoader";
+import useLoaderData from "../../../BetterRouter/UseLoaderData";
+import Async from "../../Async/Async";
 
 gsap.registerPlugin(Flip);
 gsap.registerPlugin(Observer);
@@ -32,9 +34,7 @@ type CreateRoutineWindowProps = {
 
 const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
   ({ animationLength, safeGuard }, onClose) => {
-    const loaderData = useLoaderData() as {
-      user: Schema<"SimpleUserResponseDTO"> | null;
-    };
+    const loaderData = useLoaderData<typeof createRoutineLoader>();
     const { contextSafe } = useGSAP();
 
     const [isPublic, setIsPublic] = useState<boolean>(false);
@@ -487,33 +487,34 @@ const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
         }`}
       >
         {isChoosingExercise && (
-          <Suspense fallback={<ChooseExerciseSkeleton />}>
-            <Await resolve={getInitialExercises()}>
-              {(exercises: Awaited<ReturnType<typeof getInitialExercises>>) => {
-                return (
-                  <ChooseExerciseWindow
-                    onSearch={handleExerciseSearch}
-                    onClose={() => {
-                      setIsChoosingExercise(false);
-                      setReplacingExerciseId(null);
-                      setPreviouslyLoadedExercises([
-                        ...previouslyLoadedExercises,
-                        ...lazyLoadedExercises.current,
-                      ]);
+          <Async
+            await={getInitialExercises()}
+            skeleton={<ChooseExerciseSkeleton />}
+          >
+            {(exercises) => {
+              return (
+                <ChooseExerciseWindow
+                  onSearch={handleExerciseSearch}
+                  onClose={() => {
+                    setIsChoosingExercise(false);
+                    setReplacingExerciseId(null);
+                    setPreviouslyLoadedExercises([
+                      ...previouslyLoadedExercises,
+                      ...lazyLoadedExercises.current,
+                    ]);
 
-                      lazyLoadedExercises.current = [];
-                    }}
-                    onConfirmSelection={handleExerciseChosen}
-                    singleMode={!!replacingExerciseId}
-                    exercises={exercises}
-                    onRequestLazyLoad={async () => getMoreExercises(true)}
-                    onRequestEquipment={handleEquipmentRequest}
-                    onRequestMuscleGroups={handleMuscleGroupRequest}
-                  />
-                );
-              }}
-            </Await>
-          </Suspense>
+                    lazyLoadedExercises.current = [];
+                  }}
+                  onConfirmSelection={handleExerciseChosen}
+                  singleMode={!!replacingExerciseId}
+                  exercises={exercises}
+                  onRequestLazyLoad={async () => getMoreExercises(true)}
+                  onRequestEquipment={handleEquipmentRequest}
+                  onRequestMuscleGroups={handleMuscleGroupRequest}
+                />
+              );
+            }}
+          </Async>
         )}
 
         <div className="create-routine-header">
@@ -557,22 +558,21 @@ const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
               />
             )}
           </div>
-          <Suspense fallback={null}>
-            <Await resolve={loaderData?.user ?? null}>
-              {(user: Awaited<typeof loaderData.user>) => {
-                if (!user) return null;
 
-                return (
-                  <button
-                    onClick={() => handleSaveClick(user)}
-                    className="create-routine-save"
-                  >
-                    Save
-                  </button>
-                );
-              }}
-            </Await>
-          </Suspense>
+          <Async await={loaderData?.user ?? null}>
+            {(user) => {
+              if (!user) return null;
+
+              return (
+                <button
+                  onClick={() => handleSaveClick(user)}
+                  className="create-routine-save"
+                >
+                  Save
+                </button>
+              );
+            }}
+          </Async>
         </div>
 
         <div className="create-routine-body" ref={routineItemContainerRef}>

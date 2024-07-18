@@ -1,28 +1,25 @@
-import { Await, useLoaderData, useNavigate } from "react-router-dom";
-import { Suspense } from "react";
-import { APIResponse } from "../../Types/Endpoints/ResponseParser";
+import { useNavigate } from "react-router-dom";
+import useLoaderData from "../../BetterRouter/UseLoaderData";
+import emailVerificationLoader from "./EmailVerificationLoader";
+import Async from "../../Components/Async/Async";
 
 export default function EmailVerification() {
-  const data = useLoaderData() as {
-    response: Promise<APIResponse<"/api/user/me/confirmemail/{code}", "patch">>;
-  };
+  const data = useLoaderData<typeof emailVerificationLoader>();
   const navigate = useNavigate();
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Await resolve={data.response}>
-        {(response: Awaited<typeof data.response>) => {
-          if (response.code === "No Content") navigate("/me");
+    <Async await={data.response}>
+      {(response) => {
+        if (response.code === "No Content") navigate("/me");
 
-          return (
-            <div>
-              {response.code === "No Content"
-                ? "Successfully verified your email"
-                : "Error verifying email"}
-            </div>
-          );
-        }}
-      </Await>
-    </Suspense>
+        return (
+          <div>
+            {response.code === "No Content"
+              ? "Successfully verified your email"
+              : "Error verifying email"}
+          </div>
+        );
+      }}
+    </Async>
   );
 }
