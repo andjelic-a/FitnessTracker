@@ -1,20 +1,19 @@
 import "./WindowWrapper.scss";
 import { AnimatePresence } from "framer-motion";
 import { ReactNode } from "react";
-import AnimatedLayout from "./AnimatedLayout";
+import AnimatedLayout, { AnimatedLayoutVariants } from "./AnimatedLayout";
 
 type WindowWrapperProps = {
   children: ReactNode;
+  animationTriggers?: AnimatedLayoutVariants;
 };
 
-export default function WindowWrapper({ children }: WindowWrapperProps) {
-  /*   const isPresent = useIsPresent();
-  useEffect(() => {
-    console.log(isPresent);
-  }, [isPresent]); */
-
+export default function WindowWrapper({
+  children,
+  animationTriggers,
+}: WindowWrapperProps) {
   return (
-    <AnimatedLayout>
+    <AnimatedLayout variants={animationTriggers}>
       <AnimatePresence>{children}</AnimatePresence>
     </AnimatedLayout>
   );
