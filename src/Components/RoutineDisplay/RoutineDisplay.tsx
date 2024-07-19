@@ -6,8 +6,11 @@ import useLoaderData from "../../BetterRouter/UseLoaderData";
 import routineDisplayLoader from "./RoutineDisplayLoader";
 import Async from "../Async/Async";
 import WindowFC from "../WindowWrapper/WindowFC";
+import { useNavigate } from "react-router-dom";
 
 const RoutineDisplay = WindowFC(({}, routineDisplayRef) => {
+  const navigate = useNavigate();
+
   const [thumbsUpActive, setThumbsUpActive] = useState<boolean>(false);
   const [commentActive, setCommentActive] = useState<boolean>(false);
   const [favoriteActive, setFavoriteActive] = useState<boolean>(false);
@@ -36,7 +39,12 @@ const RoutineDisplay = WindowFC(({}, routineDisplayRef) => {
             return (
               <>
                 <p className="routine-display-title">{routine.content.name}</p>
-                <button className="routine-display-edit">Edit</button>
+                <button
+                  className="routine-display-edit"
+                  onClick={() => void navigate("edit")}
+                >
+                  Edit
+                </button>
               </>
             );
           }}
