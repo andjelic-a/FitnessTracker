@@ -41,6 +41,8 @@ import profileFollowersContainerLoader from "./Components/FollowContainer/Profil
 import profileFollowingContainerLoader from "./Components/FollowContainer/ProfileFollowingContainerLoader.ts";
 import userPageFollowingContainerLoader from "./Components/FollowContainer/UserPageFollowingContainerLoader.ts";
 import userPageFollowersContainerLoader from "./Components/FollowContainer/UserPageFollowersContainerLoader.ts";
+import EquipmentAdminPanel from "./Pages/AdminPanel/Equipment/EquipmentAdminPanel.tsx";
+import adminEquipmentLoader from "./Pages/AdminPanel/Equipment/EquipmentAdminPanelLoader.ts";
 
 const routes: RouteObject[] = [
   {
@@ -160,6 +162,11 @@ const routes: RouteObject[] = [
             element: <MuscleAdminPanel />,
             loader: adminMuscleLoader,
           },
+          {
+            path: "equipment",
+            element: <EquipmentAdminPanel />,
+            loader: adminEquipmentLoader,
+          },
         ],
       },
     ],
@@ -245,6 +252,9 @@ export type RoutePathObjects = [
           },
           {
             path: "muscles";
+          },
+          {
+            path: "equipment";
           }
         ];
       }
