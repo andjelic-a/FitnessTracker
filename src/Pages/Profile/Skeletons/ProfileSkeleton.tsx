@@ -11,7 +11,6 @@ export default function ProfileSkeleton() {
     >
       <div className="profile-user-container">
         <ProfileHeaderSkeleton />
-        <button className="profile-edit-button">Edit Profile</button>
         <div className="profile-body">
           <ActivityGridSkeleton />
         </div>

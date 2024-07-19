@@ -69,6 +69,10 @@
         align-items: center;
         cursor: pointer;
 
+        &:first-child{
+          cursor: auto;
+        }
+
         & .profile-user-stats-name {
           color: $dark-600;
           font-size: 1.4rem;

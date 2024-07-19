@@ -58,8 +58,6 @@ export default function Profile() {
                 }}
               />
 
-              <button className="profile-edit-button">Edit Profile</button>
-
               <div className="profile-body">
                 <Async await={userData.streak} skeleton={<ProfileSkeleton />}>
                   {(loadedStreakData) => {
