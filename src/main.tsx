@@ -43,6 +43,7 @@ import userPageFollowingContainerLoader from "./Components/FollowContainer/UserP
 import userPageFollowersContainerLoader from "./Components/FollowContainer/UserPageFollowersContainerLoader.ts";
 import EquipmentAdminPanel from "./Pages/AdminPanel/Equipment/EquipmentAdminPanel.tsx";
 import adminEquipmentLoader from "./Pages/AdminPanel/Equipment/EquipmentAdminPanelLoader.ts";
+import Settings from "./Pages/Settings/Settings.tsx";
 
 const routes: RouteObject[] = [
   {
@@ -97,6 +98,10 @@ const routes: RouteObject[] = [
             path: "following",
             element: <FollowContainer followersOrFollowing="following" />,
             loader: profileFollowingContainerLoader,
+          },
+          {
+            path: "settings",
+            element: <Settings />,
           },
         ],
       },
