@@ -58,6 +58,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
+  gap: 1rem;
 
   & .routine-display-title {
     display: flex;
@@ -79,7 +80,7 @@
   }
 
   & .routine-display-edit {
-    width: 5.5rem;
+    width: 6rem;
     height: 3.75rem;
     border: none;
     border-radius: 0.5rem;
@@ -92,6 +93,23 @@
 
     &:hover {
       background-color: $primary-400;
+    }
+  }
+
+  & .routine-display-delete {
+    width: 7.5rem;
+    height: 3.75rem;
+    border: none;
+    border-radius: 0.5rem;
+    outline: none;
+    background-color: $primary-100;
+    color: white;
+    cursor: pointer;
+    font-size: 1.6rem;
+    font-weight: 550;
+
+    &:hover {
+      background-color: red;
     }
   }
 }
@@ -127,7 +145,6 @@
     flex-direction: column;
   }
 }
-
 
 .routine-display-description-container {
   position: relative;
@@ -198,7 +215,7 @@
       font-weight: normal;
       transition: 0.2s;
     }
-  
+
     & .active {
       color: $primary-300;
       font-weight: bold;

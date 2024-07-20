@@ -8,15 +8,20 @@ import Async from "../Async/Async";
 import WindowFC from "../WindowWrapper/WindowFC";
 import { useNavigate } from "react-router-dom";
 import { extractSetsNoMapping } from "../WorkoutsContainer/EditRoutine/ExtractSetsFromWorkout";
+import sendAPIRequest from "../../Data/SendAPIRequest";
+import {
+  getProfileCache,
+  setProfileCache,
+} from "../../Pages/Profile/ProfileCache";
 
-const RoutineDisplay = WindowFC(({}, routineDisplayRef) => {
+const RoutineDisplay = WindowFC(({}, routineDisplayRef, close) => {
   const navigate = useNavigate();
 
   const [thumbsUpActive, setThumbsUpActive] = useState<boolean>(false);
   const [commentActive, setCommentActive] = useState<boolean>(false);
   const [favoriteActive, setFavoriteActive] = useState<boolean>(false);
 
-  const data = useLoaderData<typeof routineDisplayLoader>();
+  const loaderData = useLoaderData<typeof routineDisplayLoader>();
 
   const handleThumbsUpClick = () => {
     setThumbsUpActive((prevState) => !prevState);
@@ -30,10 +35,40 @@ const RoutineDisplay = WindowFC(({}, routineDisplayRef) => {
     setFavoriteActive((prevState) => !prevState);
   };
 
+  const handleWorkoutDelete = () => {
+    loaderData?.routine?.then((currentWorkout) => {
+      if (currentWorkout.code !== "OK") {
+        close();
+        return;
+      }
+
+      sendAPIRequest("/api/workout/{id}", {
+        method: "delete",
+        parameters: {
+          id: currentWorkout.content.id,
+        },
+      });
+
+      const profileCache = getProfileCache();
+      if (profileCache) {
+        profileCache.workouts.then((workouts) => {
+          if (workouts.code !== "OK") return;
+
+          workouts.content = workouts.content.filter(
+            (x) => x.id !== currentWorkout.content.id
+          );
+          setProfileCache(profileCache);
+        });
+      }
+
+      close();
+    });
+  };
+
   return (
     <div ref={routineDisplayRef} className={`routine-display visible`}>
       <div className="routine-display-header">
-        <Async await={data?.routine}>
+        <Async await={loaderData?.routine}>
           {(routine) => {
             if (!routine || routine.code !== "OK") return null;
 
@@ -46,6 +81,12 @@ const RoutineDisplay = WindowFC(({}, routineDisplayRef) => {
                 >
                   Edit
                 </button>
+                <button
+                  className="routine-display-delete"
+                  onClick={handleWorkoutDelete}
+                >
+                  Delete
+                </button>
               </>
             );
           }}
@@ -53,7 +94,7 @@ const RoutineDisplay = WindowFC(({}, routineDisplayRef) => {
       </div>
 
       <div className="routine-display-body">
-        <Async await={data?.routine}>
+        <Async await={loaderData?.routine}>
           {(routine) => {
             if (!routine || routine.code !== "OK") return null;
 
@@ -73,7 +114,7 @@ const RoutineDisplay = WindowFC(({}, routineDisplayRef) => {
       </div>
 
       <div className="routine-display-footer">
-        <Async await={data?.routine}>
+        <Async await={loaderData?.routine}>
           {(routine) => {
             if (!routine || routine.code !== "OK") return null;
 
