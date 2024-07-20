@@ -10,6 +10,10 @@ import sendAPIRequest from "../../../Data/SendAPIRequest";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import Icon from "../../Icon/Icon";
 import extractSets from "./ExtractSetsFromWorkout";
+import {
+  getProfileCache,
+  setProfileCache,
+} from "../../../Pages/Profile/ProfileCache";
 
 type EditRoutineWindowProps = {
   animationLength?: number;
@@ -48,89 +52,91 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
     };
 
     const handleSaveClick = () => {
-      let isValid = isRoutineTitleValid();
-      isValid = isSetSelectionValid() && isValid;
+      loaderData?.routine.then((originalWorkout) => {
+        let isValid = isRoutineTitleValid();
+        isValid = isSetSelectionValid() && isValid;
 
-      if (!textareaRef.current || !routineTitleRef.current || !isValid) return;
+        if (originalWorkout.code !== "OK") return;
+        if (!textareaRef.current || !routineTitleRef.current || !isValid)
+          return;
 
-      const newWorkout: Schema<"UpdateFullWorkoutRequestDTO"> = {
-        isPublic: isPublic,
-        name: routineTitleRef.current.value,
-        description: textareaRef.current.value,
-        sets: createdSetsRef.current
-          .flatMap((routineItem) =>
-            routineItem.sets.map((set) => ({
-              exerciseId: routineItem.exercise.id,
-              set: set,
-            }))
-          )
-          .map((x) => {
-            let repRange = x.set.repRange
-              .trim()
-              .split("-")
-              .map((x) => parseInt(x));
-
-            if (repRange.length === 1)
-              repRange = x.set.repRange
+        const updatedWorkout: Schema<"UpdateFullWorkoutRequestDTO"> = {
+          isPublic: isPublic,
+          name: routineTitleRef.current.value,
+          description: textareaRef.current.value,
+          sets: createdSetsRef.current
+            .flatMap((routineItem) =>
+              routineItem.sets.map((set) => ({
+                exerciseId: routineItem.exercise.id,
+                set: set,
+              }))
+            )
+            .map((x) => {
+              let repRange = x.set.repRange
                 .trim()
-                .split(" ")
+                .split("-")
                 .map((x) => parseInt(x));
 
-            if (repRange.length === 1) repRange = [repRange[0], repRange[0]];
+              if (repRange.length === 1)
+                repRange = x.set.repRange
+                  .trim()
+                  .split(" ")
+                  .map((x) => parseInt(x));
 
-            const enumValue = ["1", "w", "d", "f"].indexOf(
-              x.set.selectedIcon ?? "1"
-            );
+              if (repRange.length === 1) repRange = [repRange[0], repRange[0]];
 
-            const rir =
-              !x.set.selectedIcon || x.set.selectedIcon === "1"
-                ? x.set.rir
-                : x.set.selectedIcon === "w"
-                ? -1
-                : 0;
+              const enumValue = ["1", "w", "d", "f"].indexOf(
+                x.set.selectedIcon ?? "1"
+              );
 
-            return {
-              exerciseId: x.exerciseId,
-              bottomRepRange: repRange[0],
-              topRepRange: repRange[1],
-              riR: rir,
-              type: enumValue as Schema<"SetType">,
-            };
-          }),
-      };
+              const rir =
+                !x.set.selectedIcon || x.set.selectedIcon === "1"
+                  ? x.set.rir
+                  : x.set.selectedIcon === "w"
+                  ? -1
+                  : 0;
 
-      textareaRef.current.value = "";
-      textareaRef.current.blur();
-      sendAPIRequest("/api/workout", {
-        method: "post",
-        payload: newWorkout,
-      }).then((newWorkout) => {
-        if (newWorkout.code !== "Created") return;
+              return {
+                exerciseId: x.exerciseId,
+                bottomRepRange: repRange[0],
+                topRepRange: repRange[1],
+                riR: rir,
+                type: enumValue as Schema<"SetType">,
+              };
+            }),
+        };
 
-        // const profileCache = getProfileCache();
-        /*         setProfileCache({
+        textareaRef.current.value = "";
+        textareaRef.current.blur();
+        sendAPIRequest("/api/workout/{id}", {
+          method: "put",
+          payload: updatedWorkout,
+          parameters: {
+            id: originalWorkout.content.id,
+          },
+        });
+
+        const profileCache = getProfileCache();
+        setProfileCache({
           streak: profileCache!.streak,
           user: profileCache!.user,
           workouts: profileCache!.workouts.then((x) => {
             if (x?.code !== "OK") return x;
 
-            x.content = [
-              ...x.content,
-              {
-                id: newWorkout.content.id,
-                name: newWorkout.content.name,
-                isPublic: newWorkout.content.isPublic,
-                creator: {
-                  id: user.id,
-                  name: user.name,
-                  image: user.image,
-                },
-              },
-            ];
+            const index = x.content.findIndex(
+              (x) => x.id === originalWorkout.content.id
+            );
+
+            x.content[index] = {
+              id: originalWorkout.content.id,
+              name: updatedWorkout.name,
+              isPublic: updatedWorkout.isPublic,
+              creator: originalWorkout.content.creator,
+            };
 
             return x;
           }),
-        }); */
+        });
 
         onClose();
       });
@@ -140,8 +146,9 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
     );
 
     useEffect(() => {
-      loaderData.routine.then((x) => {
+      loaderData?.routine.then((x) => {
         setCreatedSets(x.code === "OK" ? extractSets(x.content) : []);
+        setIsPublic(x.code === "OK" ? x.content.isPublic : false);
       });
     }, [loaderData]);
 
@@ -156,6 +163,7 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
             <div ref={wrapperRef} className="edit-routine-window">
               <div className="edit-routine-header">
                 <input
+                  defaultValue={originalWorkout.content.name}
                   ref={routineTitleRef}
                   type="text"
                   id="routine-title"
@@ -169,35 +177,18 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
                   >
                     {isPublic ? "Public" : "Private"}
                   </div>
-                  {isPublic ? (
-                    <Icon
-                      className="lock"
-                      name="unlock"
-                      onClick={() => setIsPublic(false)}
-                      onMouseEnter={() =>
-                        publicOrPrivatePopupRef.current?.classList.add("show")
-                      }
-                      onMouseLeave={() =>
-                        publicOrPrivatePopupRef.current?.classList.remove(
-                          "show"
-                        )
-                      }
-                    />
-                  ) : (
-                    <Icon
-                      className="lock"
-                      name="lock"
-                      onClick={() => setIsPublic(true)}
-                      onMouseEnter={() =>
-                        publicOrPrivatePopupRef.current?.classList.add("show")
-                      }
-                      onMouseLeave={() =>
-                        publicOrPrivatePopupRef.current?.classList.remove(
-                          "show"
-                        )
-                      }
-                    />
-                  )}
+
+                  <Icon
+                    className="lock"
+                    name={isPublic ? "unlock" : "lock"}
+                    onClick={() => setIsPublic((x) => !x)}
+                    onMouseEnter={() =>
+                      publicOrPrivatePopupRef.current?.classList.add("show")
+                    }
+                    onMouseLeave={() =>
+                      publicOrPrivatePopupRef.current?.classList.remove("show")
+                    }
+                  />
                 </div>
 
                 <button onClick={handleSaveClick} className="edit-routine-save">
@@ -208,10 +199,9 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
               <RoutineSetCreator
                 setCreatedSets={setCreatedSets}
                 createdSets={createdSets ?? []}
-                onSetsChange={(newSets) => {
-                  console.log(createdSetsRef);
-                  createdSetsRef.current = newSets;
-                }}
+                onSetsChange={(newSets) =>
+                  void (createdSetsRef.current = newSets)
+                }
                 onStartChoosingExercise={() => {
                   if (!wrapperRef.current) return;
 
@@ -231,6 +221,9 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
               <div className="edit-routine-description">
                 <textarea
                   id="routine-description"
+                  defaultValue={
+                    originalWorkout.content.description ?? undefined
+                  }
                   ref={textareaRef}
                   onChange={(e) => {
                     e.target.style.height = "auto";

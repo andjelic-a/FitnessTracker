@@ -196,8 +196,13 @@ export default function RoutineSetCreator({
     fuckYou();
     // setCreatedSets(createdSetsRef.current);
   }
-  const handleDeleteExercise = (id: string) =>
-    void setCreatedSets((prev) => prev?.filter((item) => item.id !== id) ?? []);
+  const handleDeleteExercise = (id: string) => {
+    createdSetsRef.current = createdSetsRef.current.filter(
+      (item) => item.id !== id
+    );
+    fuckYou();
+    setCreatedSets(createdSetsRef.current);
+  };
 
   //#region Routine item drag and drop logic / animations
   const handleTouchMove = useCallback(
