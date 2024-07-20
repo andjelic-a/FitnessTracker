@@ -1,5 +1,5 @@
 import "./CreateRoutine.scss";
-import { useRef, useEffect, useState, useCallback } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import RoutineItem, { RoutineItemData } from "./RoutineItem/RoutineItem";
 import gsap from "gsap";
 import Flip from "gsap/Flip";
@@ -25,7 +25,10 @@ type RoutineSetCreatorProps = {
   onConfirmExerciseSelection?: () => void;
   animationLength?: number;
   safeGuard?: number;
-  setsOnStart?: RoutineItemData[];
+  createdSets: ChooseExerciseData[];
+  setCreatedSets: React.Dispatch<
+    React.SetStateAction<ChooseExerciseData[] | null>
+  >;
 };
 
 export default function RoutineSetCreator({
@@ -34,11 +37,12 @@ export default function RoutineSetCreator({
   onConfirmExerciseSelection,
   onStartChoosingExercise,
   onSetsChange,
-  setsOnStart,
+  createdSets,
+  setCreatedSets,
 }: RoutineSetCreatorProps) {
   const { contextSafe } = useGSAP();
 
-  useEffect(() => {
+  /*   useEffect(() => {
     defaultSetsRef.current = setsOnStart ?? [];
     setDefaultSets(
       setsOnStart?.map((x) => ({
@@ -46,12 +50,8 @@ export default function RoutineSetCreator({
         exercise: x.exercise,
       })) ?? []
     );
-  }, [setsOnStart]);
+  }, [setsOnStart]); */
 
-  const [defaultSets, setDefaultSets] = useState<ChooseExerciseData[]>([]);
-  const defaultSetsRef = useRef<RoutineItemData[]>([]);
-
-  const [createdSets, setCreatedSets] = useState<ChooseExerciseData[]>([]);
   const createdSetsRef = useRef<RoutineItemData[]>([]);
 
   const [isChoosingExercise, setIsChoosingExercise] = useState<boolean>(false);
@@ -110,7 +110,7 @@ export default function RoutineSetCreator({
   ) => {
     if (!replacingExerciseId && Array.isArray(selected)) {
       setCreatedSets((prevState) => [
-        ...prevState,
+        ...(prevState ?? []),
         ...selected.map((x) => ({ exercise: x, id: v4() })),
       ]);
       return;
@@ -118,6 +118,8 @@ export default function RoutineSetCreator({
 
     setReplacingExerciseId(null);
     setCreatedSets((prev) => {
+      if (!prev) return prev;
+
       const index = prev.findIndex((x) => x.id === replacingExerciseId);
       if (index >= 0 && !Array.isArray(selected))
         prev[index].exercise = selected;
@@ -196,7 +198,7 @@ export default function RoutineSetCreator({
     else createdSetsRef.current[index] = routineItem;
   }
   const handleDeleteExercise = (id: string) =>
-    void setCreatedSets((prev) => prev.filter((item) => item.id !== id));
+    void setCreatedSets((prev) => prev?.filter((item) => item.id !== id) ?? []);
 
   //#region Routine item drag and drop logic / animations
   const handleTouchMove = useCallback(
@@ -377,6 +379,7 @@ export default function RoutineSetCreator({
       )}
 
       <div ref={routineItemContainerRef} className="set-creator-container">
+        {/* 
         {defaultSets.map((x, i) => (
           <RoutineItem
             startingSets={
@@ -403,7 +406,7 @@ export default function RoutineSetCreator({
             onRequestExerciseReplace={handleReplaceExerciseRequest}
           />
         ))}
-
+ */}
         {createdSets.map((x) => (
           <RoutineItem
             onDrag={updateMovablePosition}

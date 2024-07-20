@@ -13,6 +13,7 @@ import createRoutineLoader from "./CreateRoutineLoader";
 import useLoaderData from "../../../BetterRouter/UseLoaderData";
 import Async from "../../Async/Async";
 import RoutineSetCreator from "./RoutineSetCreator";
+import { ChooseExerciseData } from "./ChooseExercise/ChooseExercise";
 
 type CreateRoutineWindowProps = {
   animationLength?: number;
@@ -139,6 +140,9 @@ const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
         onClose();
       });
     };
+    const [createdSets, setCreatedSets] = useState<ChooseExerciseData[] | null>(
+      []
+    );
 
     return (
       <div ref={wrapperRef} className="create-routine-window">
@@ -201,6 +205,8 @@ const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
         </div>
 
         <RoutineSetCreator
+          setCreatedSets={setCreatedSets}
+          createdSets={createdSets ?? []}
           onSetsChange={(newSets) => void (createdSetsRef.current = newSets)}
           onStartChoosingExercise={() => {
             if (!wrapperRef.current) return;

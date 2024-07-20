@@ -4,12 +4,13 @@ import Async from "../../Async/Async";
 import WindowFC from "../../WindowWrapper/WindowFC";
 import routineDisplayLoader from "../../RoutineDisplay/RoutineDisplayLoader";
 import RoutineSetCreator from "../CreateRoutine/RoutineSetCreator";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RoutineItemData } from "../CreateRoutine/RoutineItem/RoutineItem";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import Icon from "../../Icon/Icon";
 import extractSets from "./ExtractSetsFromWorkout";
+import { ChooseExerciseData } from "../CreateRoutine/ChooseExercise/ChooseExercise";
 
 type EditRoutineWindowProps = {
   animationLength?: number;
@@ -135,11 +136,22 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
         onClose();
       });
     };
+    const [createdSets, setCreatedSets] = useState<ChooseExerciseData[] | null>(
+      null
+    );
+
+    useEffect(() => {
+      loaderData.routine.then((x) => {
+        setCreatedSets(x.code === "OK" ? extractSets(x.content) : []);
+      });
+    }, [loaderData]);
 
     return (
       <Async await={loaderData?.routine}>
         {(originalWorkout) => {
           if (originalWorkout?.code !== "OK") return null;
+
+          if (createdSets === null) return null;
 
           return (
             <div ref={wrapperRef} className="edit-routine-window">
@@ -195,7 +207,8 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
               </div>
 
               <RoutineSetCreator
-                setsOnStart={extractSets(originalWorkout.content)}
+                setCreatedSets={setCreatedSets}
+                createdSets={createdSets ?? []}
                 onSetsChange={(newSets) =>
                   void (createdSetsRef.current = newSets)
                 }
