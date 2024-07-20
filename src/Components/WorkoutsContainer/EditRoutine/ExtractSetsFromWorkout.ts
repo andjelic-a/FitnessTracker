@@ -58,3 +58,43 @@ export default function extractSets(
 
   return sets;
 }
+
+export function extractSetsNoMapping(
+  originalWorkout: Schema<"DetailedWorkoutResponseDTO">
+) {
+  const sets: {
+    id: string;
+    exercise: Schema<"SimpleExerciseResponseDTO">;
+    sets: Schema<"DetailedSetResponseDTO">[];
+  }[] = [];
+
+  let currentExercise: Schema<"SimpleExerciseResponseDTO"> | undefined =
+    undefined;
+
+  for (let i = 0; i < originalWorkout.sets.length; i++) {
+    const set = originalWorkout.sets[i];
+    currentExercise = originalWorkout.exercises.find(
+      (x) => x.id === set.exerciseId
+    );
+
+    if (!currentExercise) continue;
+
+    sets.push({
+      id: v4(),
+      exercise: currentExercise,
+      sets: [set],
+    });
+
+    while (
+      i + 1 < originalWorkout.sets.length &&
+      originalWorkout.sets[i + 1].exerciseId === currentExercise.id
+    ) {
+      i++;
+      const set = originalWorkout.sets[i];
+
+      sets[sets.length - 1].sets.push(set);
+    }
+  }
+
+  return sets;
+}

@@ -2,29 +2,25 @@ import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import Icon from "../../Icon/Icon";
 import "./RoutineDisplayItem.scss";
 
-type Set = Schema<"DetailedSetResponseDTO">;
-
-interface RoutineDisplayItemProps {
-  name: string;
-  image: string;
-  sets: Set[];
-}
+type RoutineDisplayItemProps = {
+  exercise: Schema<"SimpleExerciseResponseDTO">;
+  sets: Schema<"DetailedSetResponseDTO">[];
+};
 
 export default function RoutineDisplayItem({
-  name,
-  image,
   sets,
+  exercise,
 }: RoutineDisplayItemProps) {
   const getIconByType = (type: number, index: number) => {
     switch (type) {
       case 0:
-        return index+1;
+        return index + 1;
       case 1:
-        return <Icon className="routine-display-item-icon" name="w"/>;
+        return <Icon className="routine-display-item-icon" name="w" />;
       case 2:
-        return <Icon className="routine-display-item-icon" name="d"/>;
+        return <Icon className="routine-display-item-icon" name="d" />;
       case 3:
-        return <Icon className="routine-display-item-icon" name="f"/>;
+        return <Icon className="routine-display-item-icon" name="f" />;
     }
   };
 
@@ -32,9 +28,9 @@ export default function RoutineDisplayItem({
     <div className="routine-display-item">
       <div className="routine-display-item-header">
         <div className="image-container">
-          <img src={image} />
+          <img src={exercise.image} />
         </div>
-        <p>{name}</p>
+        <p>{exercise.name}</p>
       </div>
 
       <div className="routine-display-item-body"></div>

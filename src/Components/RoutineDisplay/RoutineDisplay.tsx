@@ -7,6 +7,7 @@ import routineDisplayLoader from "./RoutineDisplayLoader";
 import Async from "../Async/Async";
 import WindowFC from "../WindowWrapper/WindowFC";
 import { useNavigate } from "react-router-dom";
+import { extractSetsNoMapping } from "../WorkoutsContainer/EditRoutine/ExtractSetsFromWorkout";
 
 const RoutineDisplay = WindowFC(({}, routineDisplayRef) => {
   const navigate = useNavigate();
@@ -58,14 +59,11 @@ const RoutineDisplay = WindowFC(({}, routineDisplayRef) => {
 
             return (
               <>
-                {routine.content.exercises.map((exercise) => (
+                {extractSetsNoMapping(routine.content).map((set) => (
                   <RoutineDisplayItem
-                    key={exercise.id}
-                    name={exercise.name}
-                    image={exercise.image}
-                    sets={routine.content.sets.filter(
-                      (set) => set.exerciseId === exercise.id
-                    )}
+                    key={set.id}
+                    exercise={set.exercise}
+                    sets={set.sets}
                   />
                 ))}
               </>
