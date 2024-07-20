@@ -6,11 +6,10 @@ import Observer from "gsap/Observer";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser.ts";
 import RoutineExerciseDisplay from "./RoutineExerciseDisplay.tsx";
 
-//TODO: Make rir field disappear when not needed, when warmup or failure is selected
 //TODO:? Make rir field or the entire routine item change color or tint based on type of set
 export type Set = {
   id: string;
-  set: number | JSX.Element;
+  idx: number;
   rir: number;
   repRange: string;
   isDropdownOpen: boolean;
@@ -28,6 +27,7 @@ export type RoutineItemData = {
 interface RoutineItemProps {
   id: string;
   exercise: Schema<"SimpleExerciseResponseDTO">;
+  startingSets?: Set[];
   onDelete: () => void;
   onRequestExerciseReplace: (id: string) => void;
   onDragStart?: (ref: HTMLDivElement) => void;
@@ -36,27 +36,6 @@ interface RoutineItemProps {
   onMouseOver?: (ref: HTMLDivElement) => void;
   onChange?: (routineItem: RoutineItemData) => void;
 }
-
-/**
- * Renders a RoutineItem component.
- *
- * @param {Object} props - The props object containing the following properties:
- *   - onDelete: A function to be called when the delete button is clicked.
- *   - id: A unique identifier for the RoutineItem.
- *   - onDragStart: A function to be called when the dragging of the RoutineItem starts.
- *   - onDrag: A function to be called when the RoutineItem is dragged.
- *   - onDragEnd: A function to be called when the dragging of the RoutineItem ends.
- *   - onMouseOver: A function to be called when the RoutineItem is hovered.
- * @return {JSX.Element} The rendered RoutineItem component.
- */
-export default function RoutineItem({
-  onDelete,
-  id,
-  onDragStart,
-  onDrag,
-  onDragEnd,
-  onMouseOver,
-}: RoutineItemProps): JSX.Element;
 
 export default function RoutineItem({
   id,
@@ -68,6 +47,7 @@ export default function RoutineItem({
   onDragStart,
   onMouseOver,
   onChange,
+  startingSets,
 }: RoutineItemProps) {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
@@ -173,6 +153,7 @@ export default function RoutineItem({
       </div>
       <div className="routine-item-body">
         <RoutineExerciseDisplay
+          startingSets={startingSets}
           onStartDraggingSet={() => observer.current?.disable()}
           onEndDraggingSet={() => observer.current?.enable()}
           onExerciseSetChanged={handleSetsChanged}

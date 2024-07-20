@@ -25,6 +25,7 @@ type RoutineSetCreatorProps = {
   onConfirmExerciseSelection?: () => void;
   animationLength?: number;
   safeGuard?: number;
+  setsOnStart?: RoutineItemData[];
 };
 
 export default function RoutineSetCreator({
@@ -33,10 +34,26 @@ export default function RoutineSetCreator({
   onConfirmExerciseSelection,
   onStartChoosingExercise,
   onSetsChange,
+  setsOnStart,
 }: RoutineSetCreatorProps) {
   const { contextSafe } = useGSAP();
 
-  const [routineItems, setRoutineItems] = useState<ChooseExerciseData[]>([]);
+  useEffect(() => {
+    defaultSetsRef.current = setsOnStart ?? [];
+    setDefaultSets(
+      setsOnStart?.map((x) => ({
+        id: x.id,
+        exercise: x.exercise,
+      })) ?? []
+    );
+  }, [setsOnStart]);
+
+  const [defaultSets, setDefaultSets] = useState<ChooseExerciseData[]>([]);
+  const defaultSetsRef = useRef<RoutineItemData[]>([]);
+
+  const [createdSets, setCreatedSets] = useState<ChooseExerciseData[]>([]);
+  const createdSetsRef = useRef<RoutineItemData[]>([]);
+
   const [isChoosingExercise, setIsChoosingExercise] = useState<boolean>(false);
   const [replacingExerciseId, setReplacingExerciseId] = useState<string | null>(
     null
@@ -48,7 +65,6 @@ export default function RoutineSetCreator({
   const loadingExercises = useRef<Promise<
     Schema<"SimpleExerciseResponseDTO">[] | null
   > | null>(null);
-  const createdRoutineItemsRef = useRef<RoutineItemData[]>([]);
   const reachedEnd = useRef(false);
   const lazyLoadedExercises = useRef<Schema<"SimpleExerciseResponseDTO">[]>([]);
   const dragging = useRef<HTMLElement | null>(null);
@@ -66,11 +82,11 @@ export default function RoutineSetCreator({
 
     //Sort data according to their respective elements
     const idToIndexMap = new Map<string, number>();
-    routineItems.forEach((item, index) => {
+    createdSets.forEach((item, index) => {
       idToIndexMap.set(item.id, index);
     });
 
-    createdRoutineItemsRef.current.sort((a, b) => {
+    createdSetsRef.current.sort((a, b) => {
       const indexA = idToIndexMap.get(a.id);
       const indexB = idToIndexMap.get(b.id);
 
@@ -80,8 +96,8 @@ export default function RoutineSetCreator({
 
       return 0;
     });
-    onSetsChange(createdRoutineItemsRef.current);
-  }, [routineItems]);
+    onSetsChange(createdSetsRef.current);
+  }, [createdSets]);
 
   function handleAddExerciseSetBtnClick() {
     setIsChoosingExercise(true);
@@ -93,7 +109,7 @@ export default function RoutineSetCreator({
       | Schema<"SimpleExerciseResponseDTO">[]
   ) => {
     if (!replacingExerciseId && Array.isArray(selected)) {
-      setRoutineItems((prevState) => [
+      setCreatedSets((prevState) => [
         ...prevState,
         ...selected.map((x) => ({ exercise: x, id: v4() })),
       ]);
@@ -101,7 +117,7 @@ export default function RoutineSetCreator({
     }
 
     setReplacingExerciseId(null);
-    setRoutineItems((prev) => {
+    setCreatedSets((prev) => {
       const index = prev.findIndex((x) => x.id === replacingExerciseId);
       if (index >= 0 && !Array.isArray(selected))
         prev[index].exercise = selected;
@@ -172,15 +188,15 @@ export default function RoutineSetCreator({
   }
 
   function handleRoutineItemChanged(routineItem: RoutineItemData) {
-    const index = createdRoutineItemsRef.current.findIndex(
+    const index = createdSetsRef.current.findIndex(
       (x) => x.id === routineItem.id
     );
 
-    if (index < 0) createdRoutineItemsRef.current.push(routineItem);
-    else createdRoutineItemsRef.current[index] = routineItem;
+    if (index < 0) createdSetsRef.current.push(routineItem);
+    else createdSetsRef.current[index] = routineItem;
   }
   const handleDeleteExercise = (id: string) =>
-    void setRoutineItems((prev) => prev.filter((item) => item.id !== id));
+    void setCreatedSets((prev) => prev.filter((item) => item.id !== id));
 
   //#region Routine item drag and drop logic / animations
   const handleTouchMove = useCallback(
@@ -232,10 +248,10 @@ export default function RoutineSetCreator({
     if (!element) return;
 
     const hoverId = element.id.replace("routine-item-", "");
-    const hoverIdx = routineItems.findIndex((x) => x.id === hoverId);
+    const hoverIdx = createdSets.findIndex((x) => x.id === hoverId);
 
     const draggingId = dragging.current!.id.replace("routine-item-", "");
-    const draggingIdx = routineItems.findIndex((x) => x.id === draggingId);
+    const draggingIdx = createdSets.findIndex((x) => x.id === draggingId);
 
     if (hoverIdx < 0 || draggingIdx < 0 || hoverIdx === draggingIdx) return;
 
@@ -245,7 +261,7 @@ export default function RoutineSetCreator({
       routineItemContainerRef.current!.children
     );
 
-    setRoutineItems(reorderArray(routineItems, draggingIdx, hoverIdx));
+    setCreatedSets(reorderArray(createdSets, draggingIdx, hoverIdx));
   }
 
   const updateMovablePosition = useCallback(
@@ -361,7 +377,34 @@ export default function RoutineSetCreator({
       )}
 
       <div ref={routineItemContainerRef} className="set-creator-container">
-        {routineItems.map((x) => (
+        {defaultSets.map((x, i) => (
+          <RoutineItem
+            startingSets={
+              defaultSetsRef.current[i]?.sets ?? [
+                {
+                  id: v4(),
+                  isDropdownOpen: false,
+                  repRange: "0",
+                  rir: 0,
+                  selectedIcon: null,
+                  idx: 1,
+                },
+              ]
+            }
+            onDrag={updateMovablePosition}
+            onDragStart={beginDragging}
+            onDragEnd={endDragging}
+            onMouseOver={handleHoverOverItem}
+            onChange={handleRoutineItemChanged}
+            key={x.id}
+            id={x.id}
+            onDelete={() => handleDeleteExercise(x.id)}
+            exercise={x.exercise}
+            onRequestExerciseReplace={handleReplaceExerciseRequest}
+          />
+        ))}
+
+        {createdSets.map((x) => (
           <RoutineItem
             onDrag={updateMovablePosition}
             onDragStart={beginDragging}
