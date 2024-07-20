@@ -107,7 +107,16 @@ export default function RoutineSetCreator({
         ...selected.map<RoutineItemData>((x) => ({
           exercise: x,
           id: v4(),
-          sets: [],
+          sets: [
+            {
+              id: v4(),
+              idx: 0,
+              isDropdownOpen: false,
+              repRange: "0",
+              rir: -1,
+              selectedIcon: "1",
+            },
+          ],
         })),
       ]);
       return;

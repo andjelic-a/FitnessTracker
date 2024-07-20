@@ -198,7 +198,7 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
 
               <RoutineSetCreator
                 setCreatedSets={setCreatedSets}
-                createdSets={createdSets ?? []}
+                createdSets={createdSets}
                 onSetsChange={(newSets) =>
                   void (createdSetsRef.current = newSets)
                 }
