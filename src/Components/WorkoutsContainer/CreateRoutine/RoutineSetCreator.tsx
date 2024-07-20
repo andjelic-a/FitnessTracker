@@ -7,7 +7,6 @@ import Observer from "gsap/Observer";
 import reorderArray from "./ReorderArray";
 import { useGSAP } from "@gsap/react";
 import ChooseExerciseWindow, {
-  ChooseExerciseData,
   ChooseExerciseFilters,
 } from "./ChooseExercise/ChooseExercise";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
@@ -25,9 +24,9 @@ type RoutineSetCreatorProps = {
   onConfirmExerciseSelection?: () => void;
   animationLength?: number;
   safeGuard?: number;
-  createdSets: ChooseExerciseData[];
+  createdSets: RoutineItemData[];
   setCreatedSets: React.Dispatch<
-    React.SetStateAction<ChooseExerciseData[] | null>
+    React.SetStateAction<RoutineItemData[] | null>
   >;
 };
 
@@ -41,16 +40,6 @@ export default function RoutineSetCreator({
   setCreatedSets,
 }: RoutineSetCreatorProps) {
   const { contextSafe } = useGSAP();
-
-  /*   useEffect(() => {
-    defaultSetsRef.current = setsOnStart ?? [];
-    setDefaultSets(
-      setsOnStart?.map((x) => ({
-        id: x.id,
-        exercise: x.exercise,
-      })) ?? []
-    );
-  }, [setsOnStart]); */
 
   const createdSetsRef = useRef<RoutineItemData[]>([]);
 
@@ -81,6 +70,10 @@ export default function RoutineSetCreator({
     playReorderAnimation();
 
     //Sort data according to their respective elements
+    fuckYou();
+  }, [createdSets]);
+
+  function fuckYou() {
     const idToIndexMap = new Map<string, number>();
     createdSets.forEach((item, index) => {
       idToIndexMap.set(item.id, index);
@@ -97,7 +90,7 @@ export default function RoutineSetCreator({
       return 0;
     });
     onSetsChange(createdSetsRef.current);
-  }, [createdSets]);
+  }
 
   function handleAddExerciseSetBtnClick() {
     setIsChoosingExercise(true);
@@ -111,7 +104,11 @@ export default function RoutineSetCreator({
     if (!replacingExerciseId && Array.isArray(selected)) {
       setCreatedSets((prevState) => [
         ...(prevState ?? []),
-        ...selected.map((x) => ({ exercise: x, id: v4() })),
+        ...selected.map<RoutineItemData>((x) => ({
+          exercise: x,
+          id: v4(),
+          sets: [],
+        })),
       ]);
       return;
     }
@@ -196,6 +193,8 @@ export default function RoutineSetCreator({
 
     if (index < 0) createdSetsRef.current.push(routineItem);
     else createdSetsRef.current[index] = routineItem;
+    fuckYou();
+    // setCreatedSets(createdSetsRef.current);
   }
   const handleDeleteExercise = (id: string) =>
     void setCreatedSets((prev) => prev?.filter((item) => item.id !== id) ?? []);
@@ -379,34 +378,6 @@ export default function RoutineSetCreator({
       )}
 
       <div ref={routineItemContainerRef} className="set-creator-container">
-        {/* 
-        {defaultSets.map((x, i) => (
-          <RoutineItem
-            startingSets={
-              defaultSetsRef.current[i]?.sets ?? [
-                {
-                  id: v4(),
-                  isDropdownOpen: false,
-                  repRange: "0",
-                  rir: 0,
-                  selectedIcon: null,
-                  idx: 1,
-                },
-              ]
-            }
-            onDrag={updateMovablePosition}
-            onDragStart={beginDragging}
-            onDragEnd={endDragging}
-            onMouseOver={handleHoverOverItem}
-            onChange={handleRoutineItemChanged}
-            key={x.id}
-            id={x.id}
-            onDelete={() => handleDeleteExercise(x.id)}
-            exercise={x.exercise}
-            onRequestExerciseReplace={handleReplaceExerciseRequest}
-          />
-        ))}
- */}
         {createdSets.map((x) => (
           <RoutineItem
             onDrag={updateMovablePosition}
@@ -415,9 +386,8 @@ export default function RoutineSetCreator({
             onMouseOver={handleHoverOverItem}
             onChange={handleRoutineItemChanged}
             key={x.id}
-            id={x.id}
+            routineItem={x}
             onDelete={() => handleDeleteExercise(x.id)}
-            exercise={x.exercise}
             onRequestExerciseReplace={handleReplaceExerciseRequest}
           />
         ))}

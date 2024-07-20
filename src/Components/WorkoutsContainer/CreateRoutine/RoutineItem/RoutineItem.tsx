@@ -25,21 +25,17 @@ export type RoutineItemData = {
 };
 
 interface RoutineItemProps {
-  id: string;
-  exercise: Schema<"SimpleExerciseResponseDTO">;
-  startingSets?: Set[];
   onDelete: () => void;
   onRequestExerciseReplace: (id: string) => void;
   onDragStart?: (ref: HTMLDivElement) => void;
   onDrag?: (xDelta: number, yDelta: number) => void;
   onDragEnd?: (ref: HTMLDivElement) => void;
   onMouseOver?: (ref: HTMLDivElement) => void;
-  onChange?: (routineItem: RoutineItemData) => void;
+  onChange: (routineItem: RoutineItemData) => void;
+  routineItem: RoutineItemData;
 }
 
 export default function RoutineItem({
-  id,
-  exercise,
   onDelete,
   onRequestExerciseReplace,
   onDrag,
@@ -47,7 +43,7 @@ export default function RoutineItem({
   onDragStart,
   onMouseOver,
   onChange,
-  startingSets,
+  routineItem,
 }: RoutineItemProps) {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
@@ -60,7 +56,7 @@ export default function RoutineItem({
 
   const handleReplaceExerciseClick = () => {
     setIsSettingsOpen(false);
-    onRequestExerciseReplace(id);
+    onRequestExerciseReplace(routineItem.id);
   };
 
   useEffect(() => {
@@ -103,39 +99,40 @@ export default function RoutineItem({
 
   const handleSettingsClick = () => void setIsSettingsOpen(!isSettingsOpen);
 
-  const handleImageScaleUp = (image: HTMLImageElement) =>
-    void image.classList.add("big");
-
-  const handleImageScaleDown = (image: HTMLImageElement) =>
-    void image.classList.remove("big");
-
   const handleImageScaleToggle = (image: HTMLImageElement) =>
     void image.classList.toggle("big");
 
   const handleSetsChanged = (newSets: Set[]) => {
-    onChange?.({
-      id,
-      exercise,
+    onChange({
+      id: routineItem.id,
+      exercise: routineItem.exercise,
       sets: newSets,
     });
   };
 
+  const [sets, setSets] = useState<Set[]>([]);
+
+  useEffect(() => {
+    setSets(routineItem.sets);
+  }, [routineItem.sets]);
+
+  useEffect(() => {
+    if (isBeingDragged.current) return;
+    handleSetsChanged(sets);
+  }, [sets]);
+
   return (
     <div
       className="routine-item"
-      id={`routine-item-${id}`}
+      id={`routine-item-${routineItem.id}`}
       ref={routineItemWrapperRef}
     >
       <div className="routine-item-header">
         <img
-          src={exercise.image}
-          onMouseOver={(e) => handleImageScaleUp(e.target as HTMLImageElement)}
-          onMouseLeave={(e) =>
-            handleImageScaleDown(e.target as HTMLImageElement)
-          }
+          src={routineItem.exercise.image}
           onClick={(e) => handleImageScaleToggle(e.target as HTMLImageElement)}
         />
-        <p>{exercise.name}</p>
+        <p>{routineItem.exercise.name}</p>
         <Icon
           onClick={handleSettingsClick}
           className="routine-settings-icon"
@@ -151,14 +148,16 @@ export default function RoutineItem({
           <p onClick={onDelete}>Delete exercise</p>
         </div>
       </div>
+
       <div className="routine-item-body">
         <RoutineExerciseDisplay
-          startingSets={startingSets}
           onStartDraggingSet={() => observer.current?.disable()}
           onEndDraggingSet={() => observer.current?.enable()}
-          onExerciseSetChanged={handleSetsChanged}
+          // onChange={handleSetsChanged}
           animationLength={0.2}
           safeGuard={20}
+          sets={sets}
+          setSets={setSets}
         />
       </div>
     </div>

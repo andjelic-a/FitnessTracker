@@ -1,5 +1,5 @@
 import "./RoutineItem.scss";
-import { useState, useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import Icon from "../../../Icon/Icon.tsx";
 import { v4 as uuidv4 } from "uuid";
 import useOutsideClick from "../../../../Hooks/UseOutsideClick.ts";
@@ -13,34 +13,22 @@ import RoutineSetDisplay from "./RoutineSetDisplay.tsx";
 type ExerciseSetProps = {
   onStartDraggingSet?: () => void;
   onEndDraggingSet?: () => void;
-  onExerciseSetChanged?: (sets: Set[]) => void;
+  // onChange?: (sets: Set[]) => void;
   safeGuard?: number;
   animationLength?: number;
-  startingSets?: Set[];
+  sets: Set[];
+  setSets: React.Dispatch<React.SetStateAction<Set[]>>;
 };
 
 export default function RoutineExerciseDisplay({
   onStartDraggingSet,
   onEndDraggingSet,
-  onExerciseSetChanged,
+  // onChange,
   animationLength,
   safeGuard,
-  startingSets,
+  sets,
+  setSets,
 }: ExerciseSetProps): JSX.Element {
-  useEffect(() => {
-    if (startingSets) setSets(startingSets);
-  }, [startingSets]);
-
-  const [sets, setSets] = useState<Set[]>([
-    {
-      id: uuidv4(),
-      idx: 1,
-      rir: 0,
-      repRange: "0",
-      isDropdownOpen: false,
-      selectedIcon: null,
-    },
-  ]);
   const excludedDivRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useOutsideClick(excludedDivRef, () => {
@@ -167,7 +155,7 @@ export default function RoutineExerciseDisplay({
   useEffect(() => {
     preAnimationRect.current = dragging.current?.getBoundingClientRect();
     playReorderAnimation();
-    onExerciseSetChanged?.(sets);
+    // onChange?.(sets);
   }, [sets]);
 
   const playReorderAnimation = contextSafe(() => {

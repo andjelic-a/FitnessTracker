@@ -10,7 +10,6 @@ import sendAPIRequest from "../../../Data/SendAPIRequest";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import Icon from "../../Icon/Icon";
 import extractSets from "./ExtractSetsFromWorkout";
-import { ChooseExerciseData } from "../CreateRoutine/ChooseExercise/ChooseExercise";
 
 type EditRoutineWindowProps = {
   animationLength?: number;
@@ -136,7 +135,7 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
         onClose();
       });
     };
-    const [createdSets, setCreatedSets] = useState<ChooseExerciseData[] | null>(
+    const [createdSets, setCreatedSets] = useState<RoutineItemData[] | null>(
       null
     );
 
@@ -209,9 +208,10 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
               <RoutineSetCreator
                 setCreatedSets={setCreatedSets}
                 createdSets={createdSets ?? []}
-                onSetsChange={(newSets) =>
-                  void (createdSetsRef.current = newSets)
-                }
+                onSetsChange={(newSets) => {
+                  console.log(createdSetsRef);
+                  createdSetsRef.current = newSets;
+                }}
                 onStartChoosingExercise={() => {
                   if (!wrapperRef.current) return;
 
