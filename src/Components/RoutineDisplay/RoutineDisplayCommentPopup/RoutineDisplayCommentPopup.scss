@@ -16,16 +16,110 @@
   align-items: center;
   justify-content: center;
 
-  padding: 2rem;
-
-  .comments-body {
+  .comment-section-wrapper {
+    padding: 2rem;
     overflow: auto;
-  }
+    width: 100%;
 
-  .workout-comment-container {
-    .workout-comment-header {
-      img {
-        width: 3rem;
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $dark-200;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $dark-500;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: $dark-600;
+    }
+
+    .workout-comments-header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1rem;
+
+      margin-bottom: 3rem;
+
+      input {
+        width: 100%;
+        border-radius: 1rem;
+        font-size: 2rem;
+      }
+
+      .workout-comment-header-button-wrapper {
+        display: flex;
+        gap: 1rem;
+
+        button {
+          font-size: 1.5rem;
+          padding: 0.5rem 1rem;
+          border-radius: 0.5rem;
+          cursor: pointer;
+
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+    }
+
+    .workout-comments-body {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+
+      .workout-comment-container {
+        display: grid;
+        grid-template-columns: 7fr 93fr;
+        column-gap: 2rem;
+
+        .image-container {
+          width: fit-content;
+
+          img {
+            max-width: 100%;
+            aspect-ratio: auto;
+          }
+        }
+
+        .main {
+          display: flex;
+          flex-direction: column;
+          gap: 0.3rem;
+
+          .header {
+            display: flex;
+            gap: 1rem;
+          }
+
+          .body {
+            font-size: 1.5rem;
+          }
+
+          .footer {
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 1rem;
+
+            button {
+              padding: 0.5rem 1rem;
+              border-radius: 0.5rem;
+              cursor: pointer;
+
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+          }
+        }
       }
     }
   }
