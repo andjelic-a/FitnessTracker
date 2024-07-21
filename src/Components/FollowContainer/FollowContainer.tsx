@@ -1,22 +1,37 @@
 import "./FollowContainer.scss";
-import { forwardRef, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
-import sendAPIRequest from "../../Data/SendAPIRequest";
 import useLazyLoading from "../../Hooks/UseLazyLoading";
 import Async from "../Async/Async";
+import useLoaderData from "../../BetterRouter/UseLoaderData";
+import profileFollowersContainerLoader from "./ProfileFollowersContainerLoader";
+import profileFollowingContainerLoader from "./ProfileFollowingContainerLoader";
+import WindowFC from "../WindowWrapper/WindowFC";
+import sendAPIRequest from "../../Data/SendAPIRequest";
+import userPageFollowersContainerLoader from "./UserPageFollowersContainerLoader";
+import userPageFollowingContainerLoader from "./UserPageFollowingContainerLoader";
 
 type FollowContainerProps = {
-  userId: string;
-  followersOrFollowing: "followers" | "following" | null;
+  followersOrFollowing: "followers" | "following";
 };
 
-const FollowContainer = forwardRef<HTMLDivElement, FollowContainerProps>(
-  ({ followersOrFollowing, userId }, ref) => {
+const FollowContainer = WindowFC<FollowContainerProps>(
+  ({ followersOrFollowing }, wrapperRef) => {
     const navigate = useNavigate();
+
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const loaderData = useLoaderData<
+      | typeof profileFollowersContainerLoader
+      | typeof profileFollowingContainerLoader
+      | typeof userPageFollowersContainerLoader
+      | typeof userPageFollowingContainerLoader
+    >();
 
     const followers = useRef<Schema<"SimpleUserResponseDTO">[]>([]);
     const following = useRef<Schema<"SimpleUserResponseDTO">[]>([]);
+    const searchBarRef = useRef<HTMLInputElement>(null);
     const waitingFor = useRef<{
       type: "followers" | "following";
       data: Promise<Schema<"SimpleUserResponseDTO">[]>;
@@ -25,14 +40,6 @@ const FollowContainer = forwardRef<HTMLDivElement, FollowContainerProps>(
       followers: boolean;
       following: boolean;
     }>({ followers: false, following: false });
-
-    useEffect(() => {
-      followers.current = [];
-      following.current = [];
-      reachedEnd.current.followers = false;
-      reachedEnd.current.following = false;
-      waitingFor.current = null;
-    }, [userId]);
 
     useLazyLoading("#followContainer", 0.75, () => void getData(true));
 
@@ -61,17 +68,17 @@ const FollowContainer = forwardRef<HTMLDivElement, FollowContainerProps>(
       waitingFor.current = {
         data: sendAPIRequest(
           followersOrFollowing === "followers"
-            ? "/api/user/{id}/followers"
-            : "/api/user/{id}/following",
+            ? "/api/user/me/followers"
+            : "/api/user/me/following",
           {
             method: "get",
             parameters: {
-              id: userId,
               offset:
                 followersOrFollowing === "followers"
                   ? followers.current.length
                   : following.current.length,
               limit: 10,
+              name: searchParams.get("search") ?? undefined,
             },
           },
           null
@@ -87,7 +94,7 @@ const FollowContainer = forwardRef<HTMLDivElement, FollowContainerProps>(
         type: followersOrFollowing,
       };
 
-      const userDTOs = await waitingFor.current?.data;
+      const userDTOs: any = []; // await waitingFor.current?.data;
 
       followersOrFollowing === "followers"
         ? followers.current.push(...userDTOs)
@@ -98,11 +105,16 @@ const FollowContainer = forwardRef<HTMLDivElement, FollowContainerProps>(
         : following.current;
     }
 
+    function handleSearch() {
+      if (!searchBarRef.current || !searchBarRef.current.value) return;
+      setSearchParams({ search: searchBarRef.current.value });
+    }
+
     return (
       <div
-        ref={ref}
         id="follow-container"
         className={`follow-container ${!followersOrFollowing ? "hidden" : ""}`}
+        ref={wrapperRef}
       >
         <div className="follow-container-header">
           {followersOrFollowing === "followers" ? "Followers" : "Following"}
@@ -113,28 +125,65 @@ const FollowContainer = forwardRef<HTMLDivElement, FollowContainerProps>(
             type="text"
             placeholder="Search"
             className="follow-container-search-input"
+            ref={searchBarRef}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSearch();
+            }}
           />
         </div>
 
-        <Async await={getData()}>
-          {(userDTOs) => {
-            return userDTOs.map((x) => (
-              <div
-                className="follow-container-user"
-                key={x.id}
-                onClick={() => void navigate(`/user/${x.id}`)}
-              >
-                <img
-                  src={x.image ?? "/DefaultProfilePicture.png"}
-                  alt={`Profile picture of a user named ${x.name}`}
-                />
-                <p>{x.name}</p>
-              </div>
-            ));
-          }}
-        </Async>
+        {loaderData && (
+          <Async
+            await={
+              loaderData.type === "followers"
+                ? loaderData.followers
+                : loaderData.following
+            }
+          >
+            {(userDTOs) => {
+              return userDTOs.map((x) => (
+                <div
+                  className="follow-container-user"
+                  key={x.id}
+                  onClick={() => void navigate(`/user/${x.id}`)}
+                >
+                  <img
+                    src={x.image ?? "/DefaultProfilePicture.png"}
+                    alt={`Profile picture of a user named ${x.name}`}
+                  />
+                  <p>{x.name}</p>
+                </div>
+              ));
+            }}
+          </Async>
+        )}
       </div>
     );
+  },
+  {
+    enter: {
+      position: "absolute",
+      top: "0",
+      left: "100%",
+      x: "-100%",
+      opacity: 1,
+      scaleY: 1,
+    },
+    exit: {
+      position: "absolute",
+      top: "0",
+      left: "100%",
+      x: "0",
+      opacity: 0.7,
+    },
+    hidden: {
+      position: "absolute",
+      top: "0",
+      left: "100%",
+      x: "0",
+      opacity: 0.7,
+      scaleY: 0.9,
+    },
   }
 );
 

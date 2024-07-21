@@ -6,11 +6,10 @@ import Observer from "gsap/Observer";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser.ts";
 import RoutineExerciseDisplay from "./RoutineExerciseDisplay.tsx";
 
-//TODO: Make rir field disappear when not needed, when warmup or failure is selected
 //TODO:? Make rir field or the entire routine item change color or tint based on type of set
 export type Set = {
   id: string;
-  set: number | JSX.Element;
+  idx: number;
   rir: number;
   repRange: string;
   isDropdownOpen: boolean;
@@ -26,41 +25,17 @@ export type RoutineItemData = {
 };
 
 interface RoutineItemProps {
-  id: string;
-  exercise: Schema<"SimpleExerciseResponseDTO">;
   onDelete: () => void;
   onRequestExerciseReplace: (id: string) => void;
   onDragStart?: (ref: HTMLDivElement) => void;
   onDrag?: (xDelta: number, yDelta: number) => void;
   onDragEnd?: (ref: HTMLDivElement) => void;
   onMouseOver?: (ref: HTMLDivElement) => void;
-  onChange?: (routineItem: RoutineItemData) => void;
+  onChange: (routineItem: RoutineItemData) => void;
+  routineItem: RoutineItemData;
 }
 
-/**
- * Renders a RoutineItem component.
- *
- * @param {Object} props - The props object containing the following properties:
- *   - onDelete: A function to be called when the delete button is clicked.
- *   - id: A unique identifier for the RoutineItem.
- *   - onDragStart: A function to be called when the dragging of the RoutineItem starts.
- *   - onDrag: A function to be called when the RoutineItem is dragged.
- *   - onDragEnd: A function to be called when the dragging of the RoutineItem ends.
- *   - onMouseOver: A function to be called when the RoutineItem is hovered.
- * @return {JSX.Element} The rendered RoutineItem component.
- */
 export default function RoutineItem({
-  onDelete,
-  id,
-  onDragStart,
-  onDrag,
-  onDragEnd,
-  onMouseOver,
-}: RoutineItemProps): JSX.Element;
-
-export default function RoutineItem({
-  id,
-  exercise,
   onDelete,
   onRequestExerciseReplace,
   onDrag,
@@ -68,6 +43,7 @@ export default function RoutineItem({
   onDragStart,
   onMouseOver,
   onChange,
+  routineItem,
 }: RoutineItemProps) {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
@@ -80,7 +56,7 @@ export default function RoutineItem({
 
   const handleReplaceExerciseClick = () => {
     setIsSettingsOpen(false);
-    onRequestExerciseReplace(id);
+    onRequestExerciseReplace(routineItem.id);
   };
 
   useEffect(() => {
@@ -123,39 +99,40 @@ export default function RoutineItem({
 
   const handleSettingsClick = () => void setIsSettingsOpen(!isSettingsOpen);
 
-  const handleImageScaleUp = (image: HTMLImageElement) =>
-    void image.classList.add("big");
-
-  const handleImageScaleDown = (image: HTMLImageElement) =>
-    void image.classList.remove("big");
-
   const handleImageScaleToggle = (image: HTMLImageElement) =>
     void image.classList.toggle("big");
 
   const handleSetsChanged = (newSets: Set[]) => {
-    onChange?.({
-      id,
-      exercise,
+    onChange({
+      id: routineItem.id,
+      exercise: routineItem.exercise,
       sets: newSets,
     });
   };
 
+  const [sets, setSets] = useState<Set[]>([]);
+
+  useEffect(() => {
+    setSets(routineItem.sets);
+  }, [routineItem.sets]);
+
+  useEffect(() => {
+    if (isBeingDragged.current) return;
+    handleSetsChanged(sets);
+  }, [sets]);
+
   return (
     <div
       className="routine-item"
-      id={`routine-item-${id}`}
+      id={`routine-item-${routineItem.id}`}
       ref={routineItemWrapperRef}
     >
       <div className="routine-item-header">
         <img
-          src={exercise.image}
-          onMouseOver={(e) => handleImageScaleUp(e.target as HTMLImageElement)}
-          onMouseLeave={(e) =>
-            handleImageScaleDown(e.target as HTMLImageElement)
-          }
+          src={routineItem.exercise.image}
           onClick={(e) => handleImageScaleToggle(e.target as HTMLImageElement)}
         />
-        <p>{exercise.name}</p>
+        <p>{routineItem.exercise.name}</p>
         <Icon
           onClick={handleSettingsClick}
           className="routine-settings-icon"
@@ -171,13 +148,16 @@ export default function RoutineItem({
           <p onClick={onDelete}>Delete exercise</p>
         </div>
       </div>
+
       <div className="routine-item-body">
         <RoutineExerciseDisplay
           onStartDraggingSet={() => observer.current?.disable()}
           onEndDraggingSet={() => observer.current?.enable()}
-          onExerciseSetChanged={handleSetsChanged}
+          // onChange={handleSetsChanged}
           animationLength={0.2}
           safeGuard={20}
+          sets={sets}
+          setSets={setSets}
         />
       </div>
     </div>

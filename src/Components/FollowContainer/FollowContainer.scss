@@ -1,8 +1,6 @@
 @import "../../Palette.scss";
 
 .follow-container {
-  align-self: flex-end;
-  position: absolute;
   z-index: 5;
   display: flex;
   flex-direction: column;
@@ -10,7 +8,6 @@
   justify-content: flex-start;
   width: 40rem;
   min-height: 100svh;
-  transform: translate(0, -10svh);
   background-color: $dark-300;
   transition: 0.2s;
 

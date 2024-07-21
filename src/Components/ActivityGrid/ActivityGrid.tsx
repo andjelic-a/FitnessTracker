@@ -132,6 +132,10 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
     }
   };
 
+  function getNumberOfWorkoutsInYear(streak: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[]): number {
+    return streak.reduce((total, week) => total + week.completedCount, 0);
+  }
+
   return (
     <div className="activity-grid-wrapper">
       <Async
@@ -141,7 +145,8 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
         {(streak) => (
           <>
             <h3 className="activity-grid-header">
-              <b>{streak.length}</b> workouts done in last year
+              <b>{getNumberOfWorkoutsInYear(streak)}</b> workouts
+              done in last year
             </h3>
             <div className="activity-grid">
               {streak.map(

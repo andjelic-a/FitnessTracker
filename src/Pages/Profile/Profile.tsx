@@ -1,10 +1,7 @@
 import "./Profile.scss";
-import { useState, useRef } from "react";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
 import WorkoutsContainer from "../../Components/WorkoutsContainer/WorkoutsContainer";
 import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
-import FollowContainer from "../../Components/FollowContainer/FollowContainer";
-import useOutsideClick from "../../Hooks/UseOutsideClick";
 import { useNavigate } from "react-router-dom";
 import AnimatedOutlet from "../../Components/WindowWrapper/AnimatedOutlet";
 import ProfileWorkoutsContainerSkeleton from "./Skeletons/ProfileWorkoutsContainerSkeleton";
@@ -22,18 +19,6 @@ export default function Profile() {
     void navigate(`workout/${workoutId}`);
 
   const toggleNewWorkoutWindow = () => void navigate(`workout/new`);
-
-  const [followersOrFollowing, setFollowersOrFollowing] = useState<
-    "followers" | "following" | null
-  >(null);
-
-  const followContainerRef = useRef<HTMLDivElement>(null);
-
-  useOutsideClick(followContainerRef, () => {
-    if (followersOrFollowing) {
-      setFollowersOrFollowing(null);
-    }
-  });
 
   return (
     <div className="profile">
@@ -62,22 +47,16 @@ export default function Profile() {
 
           return (
             <div className="profile-user-container">
-              <FollowContainer
-                userId={loadedUserData.content.id}
-                ref={followContainerRef}
-                followersOrFollowing={followersOrFollowing}
-              />
-
               <ProfileHeader
                 username={loadedUserData.content.name}
                 image={loadedUserData.content.image}
                 workouts={loadedUserData.content.totalCompletedWorkouts}
                 followers={loadedUserData.content.followers}
                 following={loadedUserData.content.following}
-                setFollowersOrFollowing={setFollowersOrFollowing}
+                setFollowersOrFollowing={(x) => {
+                  void navigate(`/me/${x}`);
+                }}
               />
-
-              <button className="profile-edit-button">Edit Profile</button>
 
               <div className="profile-body">
                 <Async await={userData.streak} skeleton={<ProfileSkeleton />}>
