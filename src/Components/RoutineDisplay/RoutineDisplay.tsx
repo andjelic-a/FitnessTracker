@@ -22,6 +22,10 @@ const RoutineDisplay = WindowFC(({}, routineDisplayRef, close) => {
   const [isCommentSectionOpen, setIsCommentSectionOpen] =
     useState<boolean>(false);
 
+  const [likeCount, setLikeCount] = useState<number>(0);
+  const [commentCount, setCommentCount] = useState<number>(0);
+  const [favoriteCount, setFavoriteCount] = useState<number>(0);
+
   const isWaitingForResponse = useRef<boolean>(false);
   const workoutId = useRef<string>("");
 
@@ -37,6 +41,10 @@ const RoutineDisplay = WindowFC(({}, routineDisplayRef, close) => {
       workoutId.current = currentWorkout.content.id;
       setIsLiked(currentWorkout.content.isLiked);
       setIsFavorited(currentWorkout.content.isFavorited);
+
+      setLikeCount(currentWorkout.content.likeCount);
+      setCommentCount(currentWorkout.content.commentCount);
+      setFavoriteCount(currentWorkout.content.favoriteCount);
     });
   }, [loaderData]);
 
@@ -51,6 +59,7 @@ const RoutineDisplay = WindowFC(({}, routineDisplayRef, close) => {
       },
     }).then(() => void (isWaitingForResponse.current = false));
 
+    setLikeCount((prevState) => prevState + (isLiked ? -1 : 1));
     setIsLiked((prevState) => !prevState);
   };
 
@@ -69,6 +78,7 @@ const RoutineDisplay = WindowFC(({}, routineDisplayRef, close) => {
       },
     }).then(() => void (isWaitingForResponse.current = false));
 
+    setFavoriteCount((prevState) => prevState + (isFavorited ? -1 : 1));
     setIsFavorited((prevState) => !prevState);
   };
 
@@ -101,6 +111,14 @@ const RoutineDisplay = WindowFC(({}, routineDisplayRef, close) => {
       close();
     });
   };
+
+  function formatCount(count: number): string {
+    if (count > 999999) return `${Math.floor(count / 100000) / 10}m`;
+
+    if (count > 999) return `${Math.floor(count / 100) / 10}k`;
+
+    return count.toString();
+  }
 
   return (
     <div ref={routineDisplayRef} className={`routine-display visible`}>
@@ -169,27 +187,41 @@ const RoutineDisplay = WindowFC(({}, routineDisplayRef, close) => {
                     </div>
                   ))}
                 <div className="icon-container">
-                  <Icon
-                    name="thumbs-up"
-                    onClick={handleThumbsUpClick}
-                    className={`routine-display-thumbs-up ${
-                      isLiked ? "active" : ""
-                    }`}
-                  />
-                  <Icon
-                    onClick={handleCommentClick}
-                    name="comment"
-                    className={`routine-display-comment ${
-                      isCommentSectionOpen ? "active" : ""
-                    }`}
-                  />
-                  <Icon
-                    name="bookmark"
-                    onClick={handleFavoriteClick}
-                    className={`routine-display-bookmark ${
-                      isFavorited ? "active" : ""
-                    }`}
-                  />
+                  <div className="routine-display-interaction-container">
+                    <Icon
+                      name="thumbs-up"
+                      onClick={handleThumbsUpClick}
+                      className={`routine-display-thumbs-up ${
+                        isLiked ? "active" : ""
+                      }`}
+                    />
+
+                    <p>{formatCount(likeCount)}</p>
+                  </div>
+
+                  <div className="routine-display-interaction-container">
+                    <Icon
+                      onClick={handleCommentClick}
+                      name="comment"
+                      className={`routine-display-comment ${
+                        isCommentSectionOpen ? "active" : ""
+                      }`}
+                    />
+
+                    <p>{formatCount(commentCount)}</p>
+                  </div>
+
+                  <div className="routine-display-interaction-container">
+                    <Icon
+                      name="bookmark"
+                      onClick={handleFavoriteClick}
+                      className={`routine-display-bookmark ${
+                        isFavorited ? "active" : ""
+                      }`}
+                    />
+
+                    <p>{formatCount(favoriteCount)}</p>
+                  </div>
                 </div>
               </>
             );
