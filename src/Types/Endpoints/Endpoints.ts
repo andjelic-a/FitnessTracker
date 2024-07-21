@@ -6093,6 +6093,22 @@ type MappedEndpoints = {
               type: "string";
               format: "uuid";
             };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
           }
         ];
         responses: {
@@ -7757,6 +7773,22 @@ type MappedEndpoints = {
             schema: {
               type: "string";
               format: "uuid";
+            };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
             };
           }
         ];

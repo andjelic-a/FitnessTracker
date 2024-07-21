@@ -1,6 +1,6 @@
 @import "../../Palette.scss";
 
-.routine-display {
+.routine-display-wrapper {
   &,
   * {
     user-select: none;
@@ -11,240 +11,231 @@
   height: 50rem;
   background-color: $dark-200;
   border-radius: 0.5rem;
-  padding: 1rem 2rem 1rem 2rem;
-  display: flex;
-  flex-direction: column;
-  opacity: 0;
-  transition: transform 0.4s, opacity 0.2s;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
 
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: $dark-200;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: $dark-500;
-    border-radius: 10px;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: $dark-600;
-  }
-
-  &.visible {
-    z-index: 10;
-    opacity: 1;
-
-    ~ * {
-      transition: 0.4s;
-      filter: blur(6px);
-      pointer-events: none;
-    }
-  }
-
-  &.no-scroll {
-    overflow: hidden;
-  }
-
-  & .routine-display-interaction-container {
+  .routine-display {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
-    height: 5rem;
-  }
-}
-
-.routine-display-header {
-  width: 100%;
-  height: 5rem;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  gap: 1rem;
-
-  & .routine-display-title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-width: 15rem;
-    width: auto;
-    height: 5rem;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    color: white;
-    cursor: pointer;
-    font-size: 2.3rem;
-    font-weight: 550;
-    border-bottom: 3px solid $dark-600;
-    padding: 0 2rem;
-    margin: 0 auto;
-  }
-
-  & .routine-display-edit {
-    width: 6rem;
-    height: 3.75rem;
-    border: none;
-    border-radius: 0.5rem;
-    outline: none;
-    background-color: $primary-300;
-    color: white;
-    cursor: pointer;
-    font-size: 1.6rem;
-    font-weight: 550;
-
-    &:hover {
-      background-color: $primary-400;
-    }
-  }
-
-  & .routine-display-delete {
-    width: 7.5rem;
-    height: 3.75rem;
-    border: none;
-    border-radius: 0.5rem;
-    outline: none;
-    background-color: $primary-100;
-    color: white;
-    cursor: pointer;
-    font-size: 1.6rem;
-    font-weight: 550;
-
-    &:hover {
-      background-color: red;
-    }
-  }
-}
-
-.routine-display-body {
-  width: 100%;
-  height: auto;
-  margin-top: 2rem;
-  margin-bottom: 5rem;
-  display: grid;
-  gap: 2rem;
-  grid-template-columns: repeat(2, 1fr);
-  align-content: start;
-
-  & > * {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-.routine-display-body {
-  width: 100%;
-  height: auto;
-  margin-top: 2rem;
-  margin-bottom: 5rem;
-  display: grid;
-  gap: 2rem;
-  grid-template-columns: repeat(2, 1fr);
-  align-content: start;
-
-  & > * {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-.routine-display-description-container {
-  position: relative;
-  margin-top: auto;
-  align-self: center;
-  width: 80%;
-  min-height: 5rem;
-  height: auto;
-  border-radius: 0.5rem;
-  border: 2px solid $dark-600;
-  margin-bottom: 1.5rem;
-  overflow: visible;
-
-  & .routine-display-description {
+    transition: transform 0.4s, opacity 0.2s;
+    overflow-y: auto;
+    overflow-x: hidden;
     position: relative;
     width: 100%;
-    height: auto;
-    font-size: 1.8rem;
-    color: rgb(231, 231, 231);
-    padding: 1rem;
-    overflow: visible;
+    height: 50rem;
+    background-color: $dark-200;
+    padding: 1rem 2rem 1rem 2rem;
 
-    & .routine-display-description-placeholder {
-      position: absolute;
-      font-size: 1.8rem;
-      font-weight: 600;
-      top: -1.5rem;
-      left: 1rem;
-      background-color: $dark-200;
-      padding: 0 0.5rem;
-      white-space: nowrap;
-      color: $dark-600;
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $dark-200;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $dark-500;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: $dark-600;
+    }
+
+    &.visible {
+      z-index: 10;
+      opacity: 1;
+
+      ~ * {
+        transition: 0.4s;
+        filter: blur(6px);
+        pointer-events: none;
+      }
+    }
+
+    &.no-scroll {
+      overflow: hidden;
+    }
+
+    & .routine-display-interaction-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      height: 5rem;
+    }
+
+    .routine-display-header {
+      width: 100%;
+      height: 5rem;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 1rem;
+
+      & .routine-display-title {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 15rem;
+        width: auto;
+        height: 5rem;
+        border: none;
+        outline: none;
+        background-color: transparent;
+        color: white;
+        cursor: pointer;
+        font-size: 2.3rem;
+        font-weight: 550;
+        border-bottom: 3px solid $dark-600;
+        padding: 0 2rem;
+        margin: 0 auto;
+      }
+
+      & .routine-display-edit {
+        width: 6rem;
+        height: 3.75rem;
+        border: none;
+        border-radius: 0.5rem;
+        outline: none;
+        background-color: $primary-300;
+        color: white;
+        cursor: pointer;
+        font-size: 1.6rem;
+        font-weight: 550;
+
+        &:hover {
+          background-color: $primary-400;
+        }
+      }
+
+      & .routine-display-delete {
+        width: 7.5rem;
+        height: 3.75rem;
+        border: none;
+        border-radius: 0.5rem;
+        outline: none;
+        background-color: $primary-100;
+        color: white;
+        cursor: pointer;
+        font-size: 1.6rem;
+        font-weight: 550;
+
+        &:hover {
+          background-color: red;
+        }
+      }
+    }
+
+    .routine-display-body {
+      width: 100%;
+      height: auto;
+      margin-top: 2rem;
+      margin-bottom: 5rem;
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: repeat(2, 1fr);
+      align-content: start;
+
+      & > * {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+
+    .routine-display-body {
+      width: 100%;
+      height: auto;
+      margin-top: 2rem;
+      margin-bottom: 5rem;
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: repeat(2, 1fr);
+      align-content: start;
+
+      & > * {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+
+    .routine-display-description-container {
+      position: relative;
+      margin-top: auto;
+      align-self: center;
+      width: 80%;
+      min-height: 5rem;
+      height: auto;
+      border-radius: 0.5rem;
+      border: 2px solid $dark-600;
+      margin-bottom: 1.5rem;
+      overflow: visible;
+
+      & .routine-display-description {
+        position: relative;
+        width: 100%;
+        height: auto;
+        font-size: 1.8rem;
+        color: rgb(231, 231, 231);
+        padding: 1rem;
+        overflow: visible;
+
+        & .routine-display-description-placeholder {
+          position: absolute;
+          font-size: 1.8rem;
+          font-weight: 600;
+          top: -1.5rem;
+          left: 1rem;
+          background-color: $dark-200;
+          padding: 0 0.5rem;
+          white-space: nowrap;
+          color: $dark-600;
+        }
+      }
+    }
+
+    .routine-display-footer {
+      margin-top: auto;
+      width: 100%;
+      height: auto;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      font-size: 3rem;
+
+      & .icon-container {
+        width: 30%;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        & .routine-display-thumbs-up {
+          cursor: pointer;
+          font-weight: normal;
+          transition: 0.2s;
+        }
+
+        & .routine-display-bookmark {
+          cursor: pointer;
+          font-weight: normal;
+          transition: 0.2s;
+        }
+
+        & .routine-display-comment {
+          cursor: pointer;
+          font-weight: normal;
+          transition: 0.2s;
+        }
+
+        & .active {
+          color: $primary-300;
+          font-weight: bold;
+        }
+      }
     }
   }
-}
-
-.routine-display-footer {
-  margin-top: auto;
-  width: 100%;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  font-size: 3rem;
-
-  & .icon-container {
-    width: 30%;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    & .routine-display-thumbs-up {
-      cursor: pointer;
-      font-weight: normal;
-      transition: 0.2s;
-    }
-
-    & .routine-display-bookmark {
-      cursor: pointer;
-      font-weight: normal;
-      transition: 0.2s;
-    }
-
-    & .routine-display-comment {
-      cursor: pointer;
-      font-weight: normal;
-      transition: 0.2s;
-    }
-
-    & .active {
-      color: $primary-300;
-      font-weight: bold;
-    }
-  }
-}
-
-.routine-display-comment-popup {
-  visibility: hidden;
-  position: absolute;
-  z-index: 10;
-  width: 100%;
-  height: 30rem;
-  transform: translate(2rem, 0);
-  bottom: 0;
-  background-color: transparent;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: red;
-  overflow: visible;
 }

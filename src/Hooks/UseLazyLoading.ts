@@ -14,7 +14,7 @@ import useScrollPosition from "./UseScrollPosition";
  * @return {void}
  */
 export default function useLazyLoading(
-  triggerElement: string,
+  triggerElement: string | HTMLElement,
   triggerPoint: number,
   callback: () => void | Promise<void>
 ): void {

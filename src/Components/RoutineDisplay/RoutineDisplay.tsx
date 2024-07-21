@@ -13,8 +13,10 @@ import {
   getProfileCache,
   setProfileCache,
 } from "../../Pages/Profile/ProfileCache";
+import RoutineDisplayCommentPopup from "./RoutineDisplayCommentPopup/RoutineDisplayCommentPopup";
+import { Schema } from "../../Types/Endpoints/SchemaParser";
 
-const RoutineDisplay = WindowFC(({}, routineDisplayRef, close) => {
+const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
   const navigate = useNavigate();
 
   const [isLiked, setIsLiked] = useState<boolean | null>(null);
@@ -30,6 +32,16 @@ const RoutineDisplay = WindowFC(({}, routineDisplayRef, close) => {
   const workoutId = useRef<string>("");
 
   const loaderData = useLoaderData<typeof routineDisplayLoader>();
+
+  const [loadedComments, setLoadedComments] = useState<Promise<
+    Schema<"SimpleWorkoutCommentResponseDTO">[]
+  > | null>(null);
+
+  const lazyLoadedComments = useRef<
+    Schema<"SimpleWorkoutCommentResponseDTO">[]
+  >([]);
+
+  const reachedEndInCommentSection = useRef<boolean>(false);
 
   useEffect(() => {
     isWaitingForResponse.current = true;
@@ -64,6 +76,7 @@ const RoutineDisplay = WindowFC(({}, routineDisplayRef, close) => {
   };
 
   const handleCommentClick = () => {
+    // routineDisplayWrapperRef.current!.scrollTop = 0;
     setIsCommentSectionOpen((prevState) => !prevState);
   };
 
@@ -120,115 +133,184 @@ const RoutineDisplay = WindowFC(({}, routineDisplayRef, close) => {
     return count.toString();
   }
 
+  async function handleCommentLazyLoadRequest(): Promise<
+    Schema<"SimpleWorkoutCommentResponseDTO">[]
+  > {
+    if (!loadedComments || reachedEndInCommentSection.current) return [];
+
+    const data = await sendAPIRequest("/api/workout/{workoutId}/comment", {
+      method: "get",
+      parameters: {
+        workoutId: workoutId.current,
+        limit: 10,
+        offset:
+          (await loadedComments).length + lazyLoadedComments.current.length,
+      },
+    });
+
+    if (data.code !== "OK") return [];
+
+    setLoadedComments(Promise.resolve(data.content));
+
+    reachedEndInCommentSection.current = data.content.length < 10;
+    return data.content;
+  }
+
+  async function getInitialComments(): Promise<
+    Schema<"SimpleWorkoutCommentResponseDTO">[]
+  > {
+    const data = await sendAPIRequest("/api/workout/{workoutId}/comment", {
+      method: "get",
+      parameters: {
+        workoutId: workoutId.current,
+        limit: 10,
+        offset: 0,
+      },
+    });
+
+    if (data.code !== "OK") return [];
+
+    setLoadedComments(Promise.resolve(data.content));
+
+    reachedEndInCommentSection.current = data.content.length < 10;
+    return data.content;
+  }
+
+  function handleCloseCommentPopup() {
+    setIsCommentSectionOpen(false);
+    setLoadedComments((prev) =>
+      prev!.then((prev) => [...prev, ...lazyLoadedComments.current])
+    );
+    lazyLoadedComments.current = [];
+  }
+
   return (
-    <div ref={routineDisplayRef} className={`routine-display visible`}>
-      <div className="routine-display-header">
-        <Async await={loaderData?.routine}>
-          {(routine) => {
-            if (!routine || routine.code !== "OK") return null;
+    <div ref={routineDisplayWrapperRef} className="routine-display-wrapper">
+      <div className="routine-display">
+        <div className="routine-display-header">
+          <Async await={loaderData?.routine}>
+            {(routine) => {
+              if (!routine || routine.code !== "OK") return null;
 
-            return (
-              <>
-                <p className="routine-display-title">{routine.content.name}</p>
-                <button
-                  className="routine-display-edit"
-                  onClick={() => void navigate("edit")}
-                >
-                  Edit
-                </button>
-                <button
-                  className="routine-display-delete"
-                  onClick={handleWorkoutDelete}
-                >
-                  Delete
-                </button>
-              </>
-            );
-          }}
-        </Async>
-      </div>
+              return (
+                <>
+                  <p className="routine-display-title">
+                    {routine.content.name}
+                  </p>
+                  <button
+                    className="routine-display-edit"
+                    onClick={() => void navigate("edit")}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="routine-display-delete"
+                    onClick={handleWorkoutDelete}
+                  >
+                    Delete
+                  </button>
+                </>
+              );
+            }}
+          </Async>
+        </div>
 
-      <div className="routine-display-body">
-        <Async await={loaderData?.routine}>
-          {(routine) => {
-            if (!routine || routine.code !== "OK") return null;
+        <div className="routine-display-body">
+          <Async await={loaderData?.routine}>
+            {(routine) => {
+              if (!routine || routine.code !== "OK") return null;
 
-            return (
-              <>
-                {extractSetsNoMapping(routine.content).map((set) => (
-                  <RoutineDisplayItem
-                    key={set.id}
-                    exercise={set.exercise}
-                    sets={set.sets}
-                  />
-                ))}
-              </>
-            );
-          }}
-        </Async>
-      </div>
-
-      <div className="routine-display-footer">
-        <Async await={loaderData?.routine}>
-          {(routine) => {
-            if (!routine || routine.code !== "OK") return null;
-
-            return (
-              <>
-                {routine.content.description?.trim() !== "" ||
-                  (routine.content.description && (
-                    <div className="routine-display-description-container">
-                      <div className="routine-display-description">
-                        <label className="routine-display-description-placeholder">
-                          Routine Description
-                        </label>
-                        {routine.content.description}
-                      </div>
-                    </div>
+              return (
+                <>
+                  {extractSetsNoMapping(routine.content).map((set) => (
+                    <RoutineDisplayItem
+                      key={set.id}
+                      exercise={set.exercise}
+                      sets={set.sets}
+                    />
                   ))}
-                <div className="icon-container">
-                  <div className="routine-display-interaction-container">
-                    <Icon
-                      name="thumbs-up"
-                      onClick={handleThumbsUpClick}
-                      className={`routine-display-thumbs-up ${
-                        isLiked ? "active" : ""
-                      }`}
-                    />
+                </>
+              );
+            }}
+          </Async>
+        </div>
 
-                    <p>{formatCount(likeCount)}</p>
+        <div className="routine-display-footer">
+          <Async await={loaderData?.routine}>
+            {(routine) => {
+              if (!routine || routine.code !== "OK") return null;
+
+              return (
+                <>
+                  {routine.content.description?.trim() !== "" ||
+                    (routine.content.description && (
+                      <div className="routine-display-description-container">
+                        <div className="routine-display-description">
+                          <label className="routine-display-description-placeholder">
+                            Routine Description
+                          </label>
+                          {routine.content.description}
+                        </div>
+                      </div>
+                    ))}
+                  <div className="icon-container">
+                    <div className="routine-display-interaction-container">
+                      <Icon
+                        name="thumbs-up"
+                        onClick={handleThumbsUpClick}
+                        className={`routine-display-thumbs-up ${
+                          isLiked ? "active" : ""
+                        }`}
+                      />
+
+                      <p>{formatCount(likeCount)}</p>
+                    </div>
+
+                    <div className="routine-display-interaction-container">
+                      <Icon
+                        onClick={handleCommentClick}
+                        name="comment"
+                        className={`routine-display-comment ${
+                          isCommentSectionOpen ? "active" : ""
+                        }`}
+                      />
+
+                      <p>{formatCount(commentCount)}</p>
+                    </div>
+
+                    <div className="routine-display-interaction-container">
+                      <Icon
+                        name="bookmark"
+                        onClick={handleFavoriteClick}
+                        className={`routine-display-bookmark ${
+                          isFavorited ? "active" : ""
+                        }`}
+                      />
+
+                      <p>{formatCount(favoriteCount)}</p>
+                    </div>
                   </div>
+                </>
+              );
+            }}
+          </Async>
+        </div>
+      </div>
 
-                  <div className="routine-display-interaction-container">
-                    <Icon
-                      onClick={handleCommentClick}
-                      name="comment"
-                      className={`routine-display-comment ${
-                        isCommentSectionOpen ? "active" : ""
-                      }`}
-                    />
-
-                    <p>{formatCount(commentCount)}</p>
-                  </div>
-
-                  <div className="routine-display-interaction-container">
-                    <Icon
-                      name="bookmark"
-                      onClick={handleFavoriteClick}
-                      className={`routine-display-bookmark ${
-                        isFavorited ? "active" : ""
-                      }`}
-                    />
-
-                    <p>{formatCount(favoriteCount)}</p>
-                  </div>
-                </div>
-              </>
+      {isCommentSectionOpen && (
+        <Async await={loadedComments ?? getInitialComments()}>
+          {(comments) => {
+            return (
+              <RoutineDisplayCommentPopup
+                workoutId={workoutId.current}
+                comments={comments}
+                onRequireClose={handleCloseCommentPopup}
+                onRequireLazyLoad={handleCommentLazyLoadRequest}
+              />
             );
           }}
         </Async>
-      </div>
-      <div className="routine-display-comment-popup">Comments</div>
+      )}
     </div>
   );
 });
