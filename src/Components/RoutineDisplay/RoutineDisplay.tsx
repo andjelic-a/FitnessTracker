@@ -1,5 +1,5 @@
 import "./RoutineDisplay.scss";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Icon from "../Icon/Icon";
 import RoutineDisplayItem from "./RoutineDisplayItem/RoutineDisplayItem";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
@@ -17,22 +17,59 @@ import {
 const RoutineDisplay = WindowFC(({}, routineDisplayRef, close) => {
   const navigate = useNavigate();
 
-  const [thumbsUpActive, setThumbsUpActive] = useState<boolean>(false);
-  const [commentActive, setCommentActive] = useState<boolean>(false);
-  const [favoriteActive, setFavoriteActive] = useState<boolean>(false);
+  const [isLiked, setIsLiked] = useState<boolean | null>(null);
+  const [isFavorited, setIsFavorited] = useState<boolean | null>(null);
+  const [isCommentSectionOpen, setIsCommentSectionOpen] =
+    useState<boolean>(false);
+
+  const isWaitingForResponse = useRef<boolean>(false);
+  const workoutId = useRef<string>("");
 
   const loaderData = useLoaderData<typeof routineDisplayLoader>();
 
+  useEffect(() => {
+    isWaitingForResponse.current = true;
+
+    loaderData?.routine?.then((currentWorkout) => {
+      if (currentWorkout.code !== "OK") return;
+
+      isWaitingForResponse.current = false;
+      workoutId.current = currentWorkout.content.id;
+      setIsLiked(currentWorkout.content.isLiked);
+      setIsFavorited(currentWorkout.content.isFavorited);
+    });
+  }, [loaderData]);
+
   const handleThumbsUpClick = () => {
-    setThumbsUpActive((prevState) => !prevState);
+    if (isWaitingForResponse.current) return;
+    isWaitingForResponse.current = true;
+
+    sendAPIRequest("/api/workout/{id}/like", {
+      method: !isLiked ? "post" : "delete",
+      parameters: {
+        id: workoutId.current,
+      },
+    }).then(() => void (isWaitingForResponse.current = false));
+
+    setIsLiked((prevState) => !prevState);
   };
 
   const handleCommentClick = () => {
-    setCommentActive((prevState) => !prevState);
+    setIsCommentSectionOpen((prevState) => !prevState);
   };
 
   const handleFavoriteClick = () => {
-    setFavoriteActive((prevState) => !prevState);
+    if (isWaitingForResponse.current) return;
+    isWaitingForResponse.current = true;
+
+    sendAPIRequest("/api/workout/{id}/favorite", {
+      method: !isFavorited ? "post" : "delete",
+      parameters: {
+        id: workoutId.current,
+      },
+    }).then(() => void (isWaitingForResponse.current = false));
+
+    setIsFavorited((prevState) => !prevState);
   };
 
   const handleWorkoutDelete = () => {
@@ -136,21 +173,21 @@ const RoutineDisplay = WindowFC(({}, routineDisplayRef, close) => {
                     name="thumbs-up"
                     onClick={handleThumbsUpClick}
                     className={`routine-display-thumbs-up ${
-                      thumbsUpActive ? "active" : ""
+                      isLiked ? "active" : ""
                     }`}
                   />
                   <Icon
                     onClick={handleCommentClick}
                     name="comment"
                     className={`routine-display-comment ${
-                      commentActive ? "active" : ""
+                      isCommentSectionOpen ? "active" : ""
                     }`}
                   />
                   <Icon
                     name="bookmark"
                     onClick={handleFavoriteClick}
                     className={`routine-display-bookmark ${
-                      favoriteActive ? "active" : ""
+                      isFavorited ? "active" : ""
                     }`}
                   />
                 </div>
