@@ -15,6 +15,7 @@ import {
 } from "../../Pages/Profile/ProfileCache";
 import WorkoutCommentSection from "./RoutineDisplayCommentPopup/WorkoutCommentSection";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
+import formatCount from "../../Utility/FormatCount";
 
 const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
   const navigate = useNavigate();
@@ -125,14 +126,6 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
     });
   };
 
-  function formatCount(count: number): string {
-    if (count > 999999) return `${Math.floor(count / 100000) / 10}m`;
-
-    if (count > 999) return `${Math.floor(count / 100) / 10}k`;
-
-    return count.toString();
-  }
-
   async function handleCommentLazyLoadRequest(): Promise<
     Schema<"SimpleWorkoutCommentResponseDTO">[]
   > {
@@ -165,21 +158,26 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
   async function getInitialComments(): Promise<
     Schema<"SimpleWorkoutCommentResponseDTO">[]
   > {
-    const data = await sendAPIRequest("/api/workout/{workoutId}/comment", {
-      method: "get",
-      parameters: {
-        workoutId: workoutId.current,
-        limit: 10,
-        offset: 0,
-      },
+    currentCommentPromiseRef.current ??= sendAPIRequest(
+      "/api/workout/{workoutId}/comment",
+      {
+        method: "get",
+        parameters: {
+          workoutId: workoutId.current,
+          limit: 10,
+          offset: 0,
+        },
+      }
+    ).then((data) => {
+      if (data.code !== "OK") return [];
+
+      setLoadedComments(Promise.resolve(data.content));
+
+      reachedEndInCommentSection.current = data.content.length < 10;
+      return data.content;
     });
 
-    if (data.code !== "OK") return [];
-
-    setLoadedComments(Promise.resolve(data.content));
-
-    reachedEndInCommentSection.current = data.content.length < 10;
-    return data.content;
+    return await currentCommentPromiseRef.current;
   }
 
   function handleCloseCommentPopup() {

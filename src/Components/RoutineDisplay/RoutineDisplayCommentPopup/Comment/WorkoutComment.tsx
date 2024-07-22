@@ -3,48 +3,33 @@ import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 import Icon from "../../../Icon/Icon";
 import { useEffect, useRef, useState } from "react";
 import sendAPIRequest from "../../../../Data/SendAPIRequest";
+import formatDateSince from "../../../../Utility/FormatDateSince";
+import WorkoutCommentReplies from "./Replies/WorkoutCommentReplies";
+import Async from "../../../Async/Async";
+
+type WorkoutCommentProps = {
+  comment: Schema<"SimpleWorkoutCommentResponseDTO">;
+  isReply?: boolean;
+};
 
 export default function WorkoutComment({
   comment,
-}: {
-  comment: Schema<"SimpleWorkoutCommentResponseDTO">;
-}) {
-  const [isLiked, setIsLiked] = useState<boolean | null>(null);
-
-  const [likeCount, setLikeCount] = useState<number>(0);
-  const [replyCount, setReplyCount] = useState<number>(0);
-
+  isReply,
+}: WorkoutCommentProps) {
   const isWaitingForResponse = useRef<boolean>(false);
 
+  const [isLiked, setIsLiked] = useState<boolean | null>(null);
+  const [likeCount, setLikeCount] = useState<number>(0);
+
+  const [replyCount, setReplyCount] = useState<number>(0);
   const [repliesExpanded, setRepliesExpanded] = useState(false);
+  const [loadedReplies, setLoadedReplies] = useState<Promise<
+    Schema<"SimpleWorkoutCommentResponseDTO">[]
+  > | null>(null);
 
-  function formatDateSince(date: Date): string {
-    const currentDate = new Date();
-    const diff = currentDate.getTime() - date.getTime();
-    const seconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-    const weeks = Math.floor(days / 7);
-    const months = Math.floor(days / 30);
-    const years = Math.floor(days / 365);
-
-    if (years > 0) {
-      return `${years} years ago`;
-    } else if (months > 0) {
-      return `${months} months ago`;
-    } else if (weeks > 0) {
-      return `${weeks} weeks ago`;
-    } else if (days > 0) {
-      return `${days} days ago`;
-    } else if (hours > 0) {
-      return `${hours} hours ago`;
-    } else if (minutes > 0) {
-      return `${minutes} minutes ago`;
-    } else {
-      return `${seconds} seconds ago`;
-    }
-  }
+  const currentRepliesPromiseRef = useRef<Promise<
+    Schema<"SimpleWorkoutCommentResponseDTO">[]
+  > | null>(null);
 
   useEffect(() => {
     setIsLiked(comment.isLiked);
@@ -69,6 +54,32 @@ export default function WorkoutComment({
 
   function handleRepliesClick() {
     setRepliesExpanded((prevState) => !prevState);
+  }
+
+  async function getInitialReplies() {
+    if (currentRepliesPromiseRef.current)
+      return await currentRepliesPromiseRef.current;
+
+    const data = sendAPIRequest(
+      "/api/workout/{workoutId}/comment/{commentId}/reply",
+      {
+        method: "get",
+        parameters: {
+          commentId: comment.id,
+          workoutId: comment.workoutId,
+          limit: 10,
+          offset: 0,
+        },
+      }
+    ).then((data) => {
+      if (data.code !== "OK") return [];
+
+      return data.content;
+    });
+
+    currentRepliesPromiseRef.current = data;
+    setLoadedReplies(data);
+    return data;
   }
 
   return (
@@ -103,11 +114,22 @@ export default function WorkoutComment({
             <button className="reply-button">Reply</button>
           </div>
 
-          {replyCount > 0 && (
-            <div className="reply-count-container" onClick={handleRepliesClick}>
-              <Icon name={`caret-${repliesExpanded ? "up" : "down"}`} />
-              <p>{replyCount} replies</p>
-            </div>
+          {!isReply && replyCount > 0 && (
+            <>
+              <div
+                className="reply-count-container"
+                onClick={handleRepliesClick}
+              >
+                <Icon name={`caret-${repliesExpanded ? "up" : "down"}`} />
+                <p>{replyCount} replies</p>
+              </div>
+
+              {repliesExpanded && (
+                <Async await={loadedReplies ?? getInitialReplies()}>
+                  {(replies) => <WorkoutCommentReplies replies={replies} />}
+                </Async>
+              )}
+            </>
           )}
         </div>
       </div>

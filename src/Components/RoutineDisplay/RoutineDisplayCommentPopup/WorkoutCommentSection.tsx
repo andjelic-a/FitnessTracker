@@ -1,6 +1,6 @@
 import "./WorkoutCommentSection.scss";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import useLazyLoading from "../../../Hooks/UseLazyLoading";
 import useOutsideClick from "../../../Hooks/UseOutsideClick";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
@@ -9,7 +9,7 @@ import WorkoutComment from "./Comment/WorkoutComment";
 type WorkoutCommentSectionProps = {
   workoutId: string;
   comments: Schema<"SimpleWorkoutCommentResponseDTO">[];
-  onRequireLazyLoad: () => Promise<Schema<"SimpleWorkoutCommentResponseDTO">[]>;
+  onRequireLazyLoad: () => void;
   onRequireClose: () => void;
 };
 
@@ -20,25 +20,16 @@ export default function WorkoutCommentSection({
   onRequireClose,
 }: WorkoutCommentSectionProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const [lazyLoaded, setLazyLoaded] = useState<
-    Schema<"SimpleWorkoutCommentResponseDTO">[]
-  >([]);
-
   const newCommentInputRef = useRef<HTMLInputElement>(null);
 
-  useLazyLoading(".comment-section-wrapper", 0.7, () => {
-    onRequireLazyLoad().then((comments) => {
-      setLazyLoaded(comments);
-    });
-  });
-
+  useLazyLoading(".comment-section-wrapper", 0.7, onRequireLazyLoad);
   useOutsideClick(wrapperRef, onRequireClose);
 
   function handleCreateComment() {
     sendAPIRequest("/api/workout/{workoutId}/comment", {
       method: "post",
       parameters: {
-        workoutId: workoutId,
+        workoutId,
       },
       payload: {
         comment: newCommentInputRef.current!.value,
@@ -47,7 +38,7 @@ export default function WorkoutCommentSection({
   }
 
   return (
-    <div className="workout-display-comment-popup" ref={wrapperRef}>
+    <div className="workout-display-comment-section" ref={wrapperRef}>
       <div className="comment-section-wrapper">
         <div className="workout-comments-header">
           <input className="new-comment-input" ref={newCommentInputRef} />
@@ -64,7 +55,7 @@ export default function WorkoutCommentSection({
         </div>
 
         <div className="workout-comments-body">
-          {[...comments, ...lazyLoaded].map((comment) => (
+          {comments.map((comment) => (
             <WorkoutComment key={comment.id} comment={comment} />
           ))}
         </div>
