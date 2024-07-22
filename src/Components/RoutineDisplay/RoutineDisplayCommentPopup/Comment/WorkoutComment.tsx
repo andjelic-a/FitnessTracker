@@ -74,6 +74,7 @@ export default function WorkoutComment({
     ).then((data) => {
       if (data.code !== "OK") return [];
 
+      currentRepliesPromiseRef.current = null;
       return data.content;
     });
 

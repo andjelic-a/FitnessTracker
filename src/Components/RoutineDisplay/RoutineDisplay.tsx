@@ -149,6 +149,7 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
       );
 
       reachedEndInCommentSection.current = data.content.length < 10;
+      currentCommentPromiseRef.current = null;
       return [];
     });
 
@@ -174,6 +175,7 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
       setLoadedComments(Promise.resolve(data.content));
 
       reachedEndInCommentSection.current = data.content.length < 10;
+      currentCommentPromiseRef.current = null;
       return data.content;
     });
 
