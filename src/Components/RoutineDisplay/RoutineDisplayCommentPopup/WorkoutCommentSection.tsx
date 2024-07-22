@@ -1,4 +1,4 @@
-import "./RoutineDisplayCommentPopup.scss";
+import "./WorkoutCommentSection.scss";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import { useRef, useState } from "react";
 import useLazyLoading from "../../../Hooks/UseLazyLoading";
@@ -6,19 +6,19 @@ import useOutsideClick from "../../../Hooks/UseOutsideClick";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import WorkoutComment from "./Comment/WorkoutComment";
 
-type RoutineDisplayCommentPopupProps = {
+type WorkoutCommentSectionProps = {
   workoutId: string;
   comments: Schema<"SimpleWorkoutCommentResponseDTO">[];
   onRequireLazyLoad: () => Promise<Schema<"SimpleWorkoutCommentResponseDTO">[]>;
   onRequireClose: () => void;
 };
 
-export default function RoutineDisplayCommentPopup({
+export default function WorkoutCommentSection({
   workoutId,
   comments,
   onRequireLazyLoad,
   onRequireClose,
-}: RoutineDisplayCommentPopupProps) {
+}: WorkoutCommentSectionProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [lazyLoaded, setLazyLoaded] = useState<
     Schema<"SimpleWorkoutCommentResponseDTO">[]
@@ -26,9 +26,9 @@ export default function RoutineDisplayCommentPopup({
 
   const newCommentInputRef = useRef<HTMLInputElement>(null);
 
-  useLazyLoading(wrapperRef.current!, 0.7, () => {
+  useLazyLoading(".comment-section-wrapper", 0.7, () => {
     onRequireLazyLoad().then((comments) => {
-      setLazyLoaded((prev) => [...prev, ...comments]);
+      setLazyLoaded(comments);
     });
   });
 

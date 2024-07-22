@@ -13,7 +13,7 @@ import {
   getProfileCache,
   setProfileCache,
 } from "../../Pages/Profile/ProfileCache";
-import RoutineDisplayCommentPopup from "./RoutineDisplayCommentPopup/RoutineDisplayCommentPopup";
+import WorkoutCommentSection from "./RoutineDisplayCommentPopup/WorkoutCommentSection";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 
 const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
@@ -37,9 +37,9 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
     Schema<"SimpleWorkoutCommentResponseDTO">[]
   > | null>(null);
 
-  const lazyLoadedComments = useRef<
+  const currentCommentPromiseRef = useRef<Promise<
     Schema<"SimpleWorkoutCommentResponseDTO">[]
-  >([]);
+  > | null>(null);
 
   const reachedEndInCommentSection = useRef<boolean>(false);
 
@@ -138,22 +138,28 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
   > {
     if (!loadedComments || reachedEndInCommentSection.current) return [];
 
-    const data = await sendAPIRequest("/api/workout/{workoutId}/comment", {
-      method: "get",
-      parameters: {
-        workoutId: workoutId.current,
-        limit: 10,
-        offset:
-          (await loadedComments).length + lazyLoadedComments.current.length,
-      },
+    currentCommentPromiseRef.current ??= sendAPIRequest(
+      "/api/workout/{workoutId}/comment",
+      {
+        method: "get",
+        parameters: {
+          workoutId: workoutId.current,
+          limit: 10,
+          offset: (await loadedComments).length,
+        },
+      }
+    ).then((data) => {
+      if (data.code !== "OK") return [];
+
+      setLoadedComments((prev) =>
+        prev!.then((prev) => [...prev, ...data.content])
+      );
+
+      reachedEndInCommentSection.current = data.content.length < 10;
+      return [];
     });
 
-    if (data.code !== "OK") return [];
-
-    setLoadedComments(Promise.resolve(data.content));
-
-    reachedEndInCommentSection.current = data.content.length < 10;
-    return data.content;
+    return await currentCommentPromiseRef.current;
   }
 
   async function getInitialComments(): Promise<
@@ -178,10 +184,6 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
 
   function handleCloseCommentPopup() {
     setIsCommentSectionOpen(false);
-    setLoadedComments((prev) =>
-      prev!.then((prev) => [...prev, ...lazyLoadedComments.current])
-    );
-    lazyLoadedComments.current = [];
   }
 
   return (
@@ -301,7 +303,7 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
         <Async await={loadedComments ?? getInitialComments()}>
           {(comments) => {
             return (
-              <RoutineDisplayCommentPopup
+              <WorkoutCommentSection
                 workoutId={workoutId.current}
                 comments={comments}
                 onRequireClose={handleCloseCommentPopup}
