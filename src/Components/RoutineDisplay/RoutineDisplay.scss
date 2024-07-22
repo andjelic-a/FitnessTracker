@@ -13,6 +13,10 @@
   border-radius: 0.5rem;
   overflow: hidden;
 
+  &:has(.workout-display-comment-popup) .routine-display{
+    overflow-y: hidden;
+  }
+
   .routine-display {
     display: flex;
     flex-direction: column;

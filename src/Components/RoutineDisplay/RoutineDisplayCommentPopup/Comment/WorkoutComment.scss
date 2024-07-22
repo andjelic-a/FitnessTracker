@@ -1,3 +1,5 @@
+@import "../../../../Palette.scss";
+
 .workout-comment-container {
   display: grid;
   grid-template-columns: 7fr 93fr;
@@ -20,10 +22,15 @@
     .header {
       display: flex;
       gap: 1rem;
-    }
 
-    .body {
-      font-size: 1.5rem;
+      .body {
+        font-size: 1.5rem;
+      }
+
+      .active {
+        color: $primary-300;
+        font-weight: bold;
+      }
     }
 
     .footer {
@@ -32,6 +39,23 @@
       align-items: center;
       justify-content: flex-start;
       gap: 1rem;
+
+      .like-container {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+
+        .like-btn {
+          cursor: pointer;
+          font-weight: normal;
+          transition: 0.2s;
+
+          &.active {
+            color: $primary-300;
+            font-weight: bold;
+          }
+        }
+      }
 
       button {
         padding: 0.5rem 1rem;

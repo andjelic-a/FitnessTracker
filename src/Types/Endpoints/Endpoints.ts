@@ -9172,6 +9172,13 @@ type MappedEndpoints = {
           isLiked: {
             type: "boolean";
           };
+          isCreator: {
+            type: "boolean";
+          };
+          replyCount: {
+            type: "integer";
+            format: "int32";
+          };
         };
         additionalProperties: false;
       };
@@ -9264,6 +9271,13 @@ type MappedEndpoints = {
           };
           isLiked: {
             type: "boolean";
+          };
+          isCreator: {
+            type: "boolean";
+          };
+          replyCount: {
+            type: "integer";
+            format: "int32";
           };
         };
         additionalProperties: false;

@@ -1,12 +1,21 @@
 import "./WorkoutComment.scss";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 import Icon from "../../../Icon/Icon";
+import { useEffect, useRef, useState } from "react";
+import sendAPIRequest from "../../../../Data/SendAPIRequest";
 
 export default function WorkoutComment({
   comment,
 }: {
   comment: Schema<"SimpleWorkoutCommentResponseDTO">;
 }) {
+  const [isLiked, setIsLiked] = useState<boolean | null>(null);
+
+  const [likeCount, setLikeCount] = useState<number>(0);
+  const [replyCount, setReplyCount] = useState<number>(0);
+
+  const isWaitingForResponse = useRef<boolean>(false);
+
   function formatDateSince(date: Date): string {
     const currentDate = new Date();
     const diff = currentDate.getTime() - date.getTime();
@@ -35,6 +44,27 @@ export default function WorkoutComment({
     }
   }
 
+  useEffect(() => {
+    setIsLiked(comment.isLiked);
+    setLikeCount(comment.likeCount);
+    setReplyCount(comment.replyCount);
+  }, [comment]);
+
+  function handleLikeClick() {
+    if (isWaitingForResponse.current) return;
+    isWaitingForResponse.current = true;
+
+    sendAPIRequest("/api/workout/comment/{id}/like", {
+      method: !isLiked ? "post" : "delete",
+      parameters: {
+        id: comment.id,
+      },
+    }).then(() => void (isWaitingForResponse.current = false));
+
+    setLikeCount((prevState) => prevState + (isLiked ? -1 : 1));
+    setIsLiked((prevState) => !prevState);
+  }
+
   return (
     <div className="workout-comment-container">
       <div className="image-container">
@@ -55,7 +85,14 @@ export default function WorkoutComment({
         </div>
 
         <div className="footer">
-          <Icon name="thumbs-up" />
+          <div className="like-container">
+            <Icon
+              name="thumbs-up"
+              onClick={handleLikeClick}
+              className={`like-btn ${isLiked ? "active" : ""}`}
+            />
+            {likeCount > 0 && <p>{likeCount}</p>}
+          </div>
           <button className="reply-button">Reply</button>
         </div>
       </div>
