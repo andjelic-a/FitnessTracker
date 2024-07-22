@@ -36,35 +36,52 @@
     .footer {
       font-size: 2rem;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: flex-start;
+      flex-direction: column;
       gap: 1rem;
 
-      .like-container {
+      .footer-interaction-container {
         display: flex;
-        gap: 0.5rem;
         align-items: center;
+        justify-content: flex-start;
+        gap: 1rem;
 
-        .like-btn {
-          cursor: pointer;
-          font-weight: normal;
-          transition: 0.2s;
+        .like-container {
+          display: flex;
+          gap: 0.5rem;
+          align-items: center;
 
-          &.active {
-            color: $primary-300;
-            font-weight: bold;
+          .like-btn {
+            cursor: pointer;
+            font-weight: normal;
+            transition: 0.2s;
+
+            &.active {
+              color: $primary-300;
+              font-weight: bold;
+            }
           }
+        }
+
+        button {
+          padding: 0.5rem 1rem;
+          border-radius: 0.5rem;
+          cursor: pointer;
+
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
       }
 
-      button {
-        padding: 0.5rem 1rem;
+      .reply-count-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
         border-radius: 0.5rem;
         cursor: pointer;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
       }
     }
   }

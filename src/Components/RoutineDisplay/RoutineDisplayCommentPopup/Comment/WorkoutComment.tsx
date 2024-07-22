@@ -16,6 +16,8 @@ export default function WorkoutComment({
 
   const isWaitingForResponse = useRef<boolean>(false);
 
+  const [repliesExpanded, setRepliesExpanded] = useState(false);
+
   function formatDateSince(date: Date): string {
     const currentDate = new Date();
     const diff = currentDate.getTime() - date.getTime();
@@ -65,6 +67,10 @@ export default function WorkoutComment({
     setIsLiked((prevState) => !prevState);
   }
 
+  function handleRepliesClick() {
+    setRepliesExpanded((prevState) => !prevState);
+  }
+
   return (
     <div className="workout-comment-container">
       <div className="image-container">
@@ -85,15 +91,24 @@ export default function WorkoutComment({
         </div>
 
         <div className="footer">
-          <div className="like-container">
-            <Icon
-              name="thumbs-up"
-              onClick={handleLikeClick}
-              className={`like-btn ${isLiked ? "active" : ""}`}
-            />
-            {likeCount > 0 && <p>{likeCount}</p>}
+          <div className="footer-interaction-container">
+            <div className="like-container">
+              <Icon
+                name="thumbs-up"
+                onClick={handleLikeClick}
+                className={`like-btn ${isLiked ? "active" : ""}`}
+              />
+              {likeCount > 0 && <p>{likeCount}</p>}
+            </div>
+            <button className="reply-button">Reply</button>
           </div>
-          <button className="reply-button">Reply</button>
+
+          {replyCount > 0 && (
+            <div className="reply-count-container" onClick={handleRepliesClick}>
+              <Icon name={`caret-${repliesExpanded ? "up" : "down"}`} />
+              <p>{replyCount} replies</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
