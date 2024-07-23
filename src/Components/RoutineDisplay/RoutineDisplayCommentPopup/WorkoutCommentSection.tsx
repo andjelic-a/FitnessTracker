@@ -1,11 +1,11 @@
 import "./WorkoutCommentSection.scss";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
-import { useRef } from "react";
-import useLazyLoading from "../../../Hooks/UseLazyLoading";
+import { useRef, useState } from "react";
 import useOutsideClick from "../../../Hooks/UseOutsideClick";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import WorkoutComment from "./Comment/WorkoutComment";
 import CommentInputField from "./CommentInputField/CommentInputField";
+import useScrollTrigger from "../../../Hooks/UseScrollTrigger";
 
 type WorkoutCommentSectionProps = {
   workoutId: string;
@@ -21,8 +21,9 @@ export default function WorkoutCommentSection({
   onRequireClose,
 }: WorkoutCommentSectionProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const scrollableWrapperRef = useRef<HTMLDivElement>(null);
 
-  useLazyLoading(".comment-section-wrapper", 0.7, onRequireLazyLoad);
+  useScrollTrigger(scrollableWrapperRef, 0.7, onRequireLazyLoad);
   useOutsideClick(wrapperRef, onRequireClose);
 
   function handleCreateComment(
@@ -37,14 +38,32 @@ export default function WorkoutCommentSection({
     });
   }
 
+  const [replies, setReplies] = useState<
+    Promise<Schema<"SimpleWorkoutCommentResponseDTO">[]>[]
+  >([]);
+
   return (
     <div className="workout-display-comment-section" ref={wrapperRef}>
-      <div className="comment-section-wrapper">
-        <CommentInputField onSubmit={handleCreateComment} />
+      <div
+        className="comment-section-wrapper"
+        id="comment-section-wrapper"
+        ref={scrollableWrapperRef}
+      >
+        <CommentInputField type="comment" onSubmit={handleCreateComment} />
 
         <div className="workout-comments-body">
-          {comments.map((comment) => (
-            <WorkoutComment key={comment.id} comment={comment} />
+          {comments.map((comment, i) => (
+            <WorkoutComment
+              key={comment.id}
+              comment={comment}
+              replies={replies[i]}
+              updateReplies={(replies) =>
+                setReplies((prev) => {
+                  prev[i] = replies;
+                  return prev;
+                })
+              }
+            />
           ))}
         </div>
       </div>

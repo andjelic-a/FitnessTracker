@@ -4,12 +4,15 @@ import Icon from "../../../Icon/Icon";
 import { useEffect, useRef, useState } from "react";
 import sendAPIRequest from "../../../../Data/SendAPIRequest";
 import formatDateSince from "../../../../Utility/FormatDateSince";
-import WorkoutCommentReplies from "./Replies/WorkoutCommentReplies";
 import Async from "../../../Async/Async";
 import CommentInputField from "../CommentInputField/CommentInputField";
 
 type WorkoutCommentProps = {
   comment: Schema<"SimpleWorkoutCommentResponseDTO">;
+  replies?: Promise<Schema<"SimpleWorkoutCommentResponseDTO">[]>;
+  updateReplies?: (
+    newReplies: Promise<Schema<"SimpleWorkoutCommentResponseDTO">[]>
+  ) => void;
   parentId?: string;
   isReply?: boolean;
 };
@@ -18,6 +21,8 @@ export default function WorkoutComment({
   comment,
   parentId,
   isReply,
+  replies,
+  updateReplies,
 }: WorkoutCommentProps) {
   const isWaitingForResponse = useRef<boolean>(false);
 
@@ -27,9 +32,6 @@ export default function WorkoutComment({
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [replyCount, setReplyCount] = useState<number>(0);
   const [repliesExpanded, setRepliesExpanded] = useState<boolean>(false);
-  const [loadedReplies, setLoadedReplies] = useState<Promise<
-    Schema<"SimpleWorkoutCommentResponseDTO">[]
-  > | null>(null);
 
   const currentRepliesPromiseRef = useRef<Promise<
     Schema<"SimpleWorkoutCommentResponseDTO">[]
@@ -64,6 +66,8 @@ export default function WorkoutComment({
     if (currentRepliesPromiseRef.current)
       return await currentRepliesPromiseRef.current;
 
+    if (replies) return replies;
+
     const data = sendAPIRequest(
       "/api/workout/{workoutId}/comment/{commentId}/reply",
       {
@@ -83,7 +87,7 @@ export default function WorkoutComment({
     });
 
     currentRepliesPromiseRef.current = data;
-    setLoadedReplies(data);
+    updateReplies?.(data);
     return data;
   }
 
@@ -141,6 +145,14 @@ export default function WorkoutComment({
             </button>
           </div>
 
+          {isReplying && (
+            <CommentInputField
+              type="reply"
+              onSubmit={handleCreateReply}
+              onCancel={() => setIsReplying(false)}
+            />
+          )}
+
           {!isReply && replyCount > 0 && (
             <>
               <div
@@ -151,15 +163,19 @@ export default function WorkoutComment({
                 <p>{replyCount} replies</p>
               </div>
 
-              {isReplying && <CommentInputField onSubmit={handleCreateReply} />}
-
               {repliesExpanded && (
-                <Async await={loadedReplies ?? getInitialReplies()}>
+                <Async await={replies ?? getInitialReplies()}>
                   {(replies) => (
-                    <WorkoutCommentReplies
-                      replies={replies}
-                      parentId={comment.id}
-                    />
+                    <div className="workout-comment-reply-container">
+                      {replies.map((reply) => (
+                        <WorkoutComment
+                          parentId={reply.id}
+                          isReply
+                          key={reply.id}
+                          comment={reply}
+                        />
+                      ))}
+                    </div>
                   )}
                 </Async>
               )}

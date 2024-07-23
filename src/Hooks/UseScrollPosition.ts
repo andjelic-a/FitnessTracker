@@ -1,13 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 
-export default function useScrollPosition(target: string | HTMLElement) {
+export default function useScrollPosition(
+  target: string | RefObject<HTMLElement>
+) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const elementRect = useRef<DOMRect | null>(null);
 
   useEffect(() => {
-    const element = typeof target === "string" ? document.querySelector(target) : target;
+    const element =
+      typeof target === "string"
+        ? document.querySelector(target)
+        : target.current;
 
-    if (!element) return;
+    if (!element) {
+      console.log("No element found with target", target);
+      return;
+    }
+
     elementRect.current = element.getBoundingClientRect();
 
     element.addEventListener("scroll", handleScroll);

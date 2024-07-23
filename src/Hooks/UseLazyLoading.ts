@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { RefObject, useEffect, useRef } from "react";
 import useScrollPosition from "./UseScrollPosition";
 
 /**
@@ -14,7 +14,7 @@ import useScrollPosition from "./UseScrollPosition";
  * @return {void}
  */
 export default function useLazyLoading(
-  triggerElement: string | HTMLElement,
+  triggerElement: string | RefObject<HTMLElement>,
   triggerPoint: number,
   callback: () => void | Promise<void>
 ): void {
