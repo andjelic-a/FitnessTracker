@@ -17,6 +17,7 @@ import WorkoutCommentSection from "./RoutineDisplayCommentPopup/WorkoutCommentSe
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import formatCount from "../../Utility/FormatCount";
 import { v4 } from "uuid";
+import { AnimatePresence } from "framer-motion";
 
 const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
   const navigate = useNavigate();
@@ -332,21 +333,23 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
         </div>
       </div>
 
-      {isCommentSectionOpen && (
-        <Async await={loadedComments ?? getInitialComments()}>
-          {(comments) => {
-            return (
-              <WorkoutCommentSection
-                workoutId={workoutId.current}
-                comments={[...createdComments, ...comments]}
-                onRequireClose={handleCloseCommentPopup}
-                onRequireLazyLoad={handleCommentLazyLoadRequest}
-                onAddNewComment={handleNewComment}
-              />
-            );
-          }}
-        </Async>
-      )}
+      <AnimatePresence>
+        {isCommentSectionOpen && (
+          <Async await={loadedComments ?? getInitialComments()}>
+            {(comments) => {
+              return (
+                <WorkoutCommentSection
+                  workoutId={workoutId.current}
+                  comments={[...createdComments, ...comments]}
+                  onRequireClose={handleCloseCommentPopup}
+                  onRequireLazyLoad={handleCommentLazyLoadRequest}
+                  onAddNewComment={handleNewComment}
+                />
+              );
+            }}
+          </Async>
+        )}
+      </AnimatePresence>
     </div>
   );
 });

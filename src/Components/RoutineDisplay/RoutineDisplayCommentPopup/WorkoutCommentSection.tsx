@@ -6,6 +6,7 @@ import sendAPIRequest from "../../../Data/SendAPIRequest";
 import WorkoutComment from "./Comment/WorkoutComment";
 import CommentInputField from "./CommentInputField/CommentInputField";
 import useScrollTrigger from "../../../Hooks/UseScrollTrigger";
+import { motion as Motion } from "framer-motion";
 
 type WorkoutCommentSectionProps = {
   workoutId: string;
@@ -49,7 +50,31 @@ export default function WorkoutCommentSection({
   >([]);
 
   return (
-    <div className="workout-display-comment-section" ref={wrapperRef}>
+    <Motion.div
+      variants={{
+        hidden: {
+          opacity: 0,
+          y: 300,
+        },
+        enter: {
+          opacity: 1,
+          y: 0,
+        },
+        exit: {
+          opacity: 0,
+          y: 300,
+        },
+      }}
+      initial="hidden"
+      animate="enter"
+      exit="exit"
+      transition={{
+        duration: 0.3,
+        type: "just",
+      }}
+      className="workout-display-comment-section"
+      ref={wrapperRef}
+    >
       <div
         className="comment-section-wrapper"
         id="comment-section-wrapper"
@@ -73,6 +98,6 @@ export default function WorkoutCommentSection({
           ))}
         </div>
       </div>
-    </div>
+    </Motion.div>
   );
 }

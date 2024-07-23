@@ -12,8 +12,10 @@
   background-color: $dark-200;
   border-radius: 0.5rem;
   overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 
-  &:has(.workout-display-comment-section) .routine-display{
+  &:has(.workout-display-comment-section) .routine-display {
     overflow-y: hidden;
   }
 
@@ -28,6 +30,9 @@
     height: 50rem;
     background-color: $dark-200;
     padding: 1rem 2rem 1rem 2rem;
+    scrollbar-gutter: stable both-edges;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 
     &::-webkit-scrollbar {
       width: 8px;

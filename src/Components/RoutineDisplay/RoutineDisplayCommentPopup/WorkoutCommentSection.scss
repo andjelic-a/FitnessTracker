@@ -10,7 +10,9 @@
   justify-content: center;
   align-items: center;
   background-color: $dark-300;
-
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  
   display: flex;
   flex-direction: column;
   align-items: center;
