@@ -57,6 +57,7 @@ export default function CommentInputField({
       <div className="comment-textarea-container">
         <textarea
           placeholder={`Add a ${type}...`}
+          className="new-comment-textarea"
           rows={1}
           ref={inputRef}
           onChange={handleInputRefHeightChange}

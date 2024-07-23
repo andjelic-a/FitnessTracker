@@ -122,8 +122,9 @@ export default function WorkoutComment({
 
       <div className="main">
         <div className="header">
-          <p>{comment.creator.name}</p>
-          <p>{formatDateSince(new Date(comment.createdAt))}</p>
+          <p className="name">@{comment.creator.name}</p>
+          <p className="dot">●</p>
+          <p className="date">{formatDateSince(new Date(comment.createdAt))}</p>
         </div>
 
         <div className="body">
@@ -140,7 +141,7 @@ export default function WorkoutComment({
               />
               {likeCount > 0 && <p>{likeCount}</p>}
             </div>
-            <button className="reply-button" onClick={handleReplyBtnClick}>
+            <button className="reply-btn" onClick={handleReplyBtnClick}>
               Reply
             </button>
           </div>
