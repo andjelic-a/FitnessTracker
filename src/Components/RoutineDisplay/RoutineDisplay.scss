@@ -12,8 +12,6 @@
   background-color: $dark-200;
   border-radius: 0.5rem;
   overflow: hidden;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 
   &:has(.workout-display-comment-section) .routine-display {
     overflow-y: hidden;
