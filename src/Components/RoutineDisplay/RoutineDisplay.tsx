@@ -16,6 +16,7 @@ import {
 import WorkoutCommentSection from "./RoutineDisplayCommentPopup/WorkoutCommentSection";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import formatCount from "../../Utility/FormatCount";
+import { v4 } from "uuid";
 
 const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
   const navigate = useNavigate();
@@ -37,6 +38,10 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
   const [loadedComments, setLoadedComments] = useState<Promise<
     Schema<"SimpleWorkoutCommentResponseDTO">[]
   > | null>(null);
+  const [createdComments, setCreatedComments] = useState<
+    Schema<"SimpleWorkoutCommentResponseDTO">[]
+  >([]);
+  const newlyCreatedCommentCount = useRef<number>(0);
 
   const currentCommentPromiseRef = useRef<Promise<
     Schema<"SimpleWorkoutCommentResponseDTO">[]
@@ -76,10 +81,37 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
     setIsLiked((prevState) => !prevState);
   };
 
-  const handleCommentClick = () => {
-    // routineDisplayWrapperRef.current!.scrollTop = 0;
-    setIsCommentSectionOpen((prevState) => !prevState);
-  };
+  const handleCommentClick = () =>
+    void setIsCommentSectionOpen((prevState) => !prevState);
+
+  function handleNewComment(
+    newCommentRequest: Schema<"CreateWorkoutCommentRequestDTO">
+  ) {
+    const userData = getProfileCache();
+    if (!userData) return;
+
+    userData.user.then((user) => {
+      if (user.code !== "OK") return;
+
+      setCommentCount((prevState) => prevState + 1);
+      newlyCreatedCommentCount.current++;
+
+      const newCommentSimulatedResponse: Schema<"SimpleWorkoutCommentResponseDTO"> =
+        {
+          id: v4(),
+          createdAt: new Date().toISOString(),
+          creator: user.content,
+          isCreator: true,
+          isLiked: false,
+          likeCount: 0,
+          replyCount: 0,
+          text: newCommentRequest.comment,
+          workoutId: workoutId.current,
+        };
+
+      setCreatedComments((prev) => [newCommentSimulatedResponse, ...prev]);
+    });
+  }
 
   const handleFavoriteClick = () => {
     if (isWaitingForResponse.current) return;
@@ -138,7 +170,8 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
         parameters: {
           workoutId: workoutId.current,
           limit: 10,
-          offset: (await loadedComments).length,
+          offset:
+            (await loadedComments).length - newlyCreatedCommentCount.current,
         },
       }
     ).then((data) => {
@@ -305,9 +338,10 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
             return (
               <WorkoutCommentSection
                 workoutId={workoutId.current}
-                comments={comments}
+                comments={[...createdComments, ...comments]}
                 onRequireClose={handleCloseCommentPopup}
                 onRequireLazyLoad={handleCommentLazyLoadRequest}
+                onAddNewComment={handleNewComment}
               />
             );
           }}

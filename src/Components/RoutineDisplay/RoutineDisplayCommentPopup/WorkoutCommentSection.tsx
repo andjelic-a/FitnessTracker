@@ -12,6 +12,9 @@ type WorkoutCommentSectionProps = {
   comments: Schema<"SimpleWorkoutCommentResponseDTO">[];
   onRequireLazyLoad: () => void;
   onRequireClose: () => void;
+  onAddNewComment: (
+    newComment: Schema<"CreateWorkoutCommentRequestDTO">
+  ) => void;
 };
 
 export default function WorkoutCommentSection({
@@ -19,6 +22,7 @@ export default function WorkoutCommentSection({
   comments,
   onRequireLazyLoad,
   onRequireClose,
+  onAddNewComment,
 }: WorkoutCommentSectionProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const scrollableWrapperRef = useRef<HTMLDivElement>(null);
@@ -36,6 +40,8 @@ export default function WorkoutCommentSection({
       },
       payload: newComment,
     });
+
+    onAddNewComment(newComment);
   }
 
   const [replies, setReplies] = useState<
