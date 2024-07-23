@@ -5,6 +5,7 @@ import useLazyLoading from "../../../Hooks/UseLazyLoading";
 import useOutsideClick from "../../../Hooks/UseOutsideClick";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import WorkoutComment from "./Comment/WorkoutComment";
+import CommentInputField from "./CommentInputField/CommentInputField";
 
 type WorkoutCommentSectionProps = {
   workoutId: string;
@@ -20,39 +21,26 @@ export default function WorkoutCommentSection({
   onRequireClose,
 }: WorkoutCommentSectionProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const newCommentInputRef = useRef<HTMLInputElement>(null);
 
   useLazyLoading(".comment-section-wrapper", 0.7, onRequireLazyLoad);
   useOutsideClick(wrapperRef, onRequireClose);
 
-  function handleCreateComment() {
+  function handleCreateComment(
+    newComment: Schema<"CreateWorkoutCommentRequestDTO">
+  ) {
     sendAPIRequest("/api/workout/{workoutId}/comment", {
       method: "post",
       parameters: {
         workoutId,
       },
-      payload: {
-        comment: newCommentInputRef.current!.value,
-      },
+      payload: newComment,
     });
   }
 
   return (
     <div className="workout-display-comment-section" ref={wrapperRef}>
       <div className="comment-section-wrapper">
-        <div className="workout-comments-header">
-          <input className="new-comment-input" ref={newCommentInputRef} />
-
-          <div className="workout-comment-header-button-wrapper">
-            <button>
-              <p>Cancel</p>
-            </button>
-
-            <button onClick={handleCreateComment}>
-              <p>Comment</p>
-            </button>
-          </div>
-        </div>
+        <CommentInputField onSubmit={handleCreateComment} />
 
         <div className="workout-comments-body">
           {comments.map((comment) => (

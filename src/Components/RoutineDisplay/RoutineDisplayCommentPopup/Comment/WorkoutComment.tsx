@@ -6,14 +6,17 @@ import sendAPIRequest from "../../../../Data/SendAPIRequest";
 import formatDateSince from "../../../../Utility/FormatDateSince";
 import WorkoutCommentReplies from "./Replies/WorkoutCommentReplies";
 import Async from "../../../Async/Async";
+import CommentInputField from "../CommentInputField/CommentInputField";
 
 type WorkoutCommentProps = {
   comment: Schema<"SimpleWorkoutCommentResponseDTO">;
+  parentId?: string;
   isReply?: boolean;
 };
 
 export default function WorkoutComment({
   comment,
+  parentId,
   isReply,
 }: WorkoutCommentProps) {
   const isWaitingForResponse = useRef<boolean>(false);
@@ -21,8 +24,9 @@ export default function WorkoutComment({
   const [isLiked, setIsLiked] = useState<boolean | null>(null);
   const [likeCount, setLikeCount] = useState<number>(0);
 
+  const [isReplying, setIsReplying] = useState<boolean>(false);
   const [replyCount, setReplyCount] = useState<number>(0);
-  const [repliesExpanded, setRepliesExpanded] = useState(false);
+  const [repliesExpanded, setRepliesExpanded] = useState<boolean>(false);
   const [loadedReplies, setLoadedReplies] = useState<Promise<
     Schema<"SimpleWorkoutCommentResponseDTO">[]
   > | null>(null);
@@ -83,6 +87,26 @@ export default function WorkoutComment({
     return data;
   }
 
+  function handleReplyBtnClick() {
+    setIsReplying(true);
+  }
+
+  function handleCreateReply(
+    newComment: Schema<"CreateWorkoutCommentRequestDTO">
+  ) {
+    sendAPIRequest("/api/workout/{workoutId}/comment/{commentId}/reply", {
+      method: "post",
+      parameters: {
+        workoutId: comment.workoutId,
+        commentId: parentId ?? comment.id,
+      },
+      payload: newComment,
+    }).then(() => {
+      setReplyCount((prevState) => prevState + 1);
+      setIsReplying(false);
+    });
+  }
+
   return (
     <div className="workout-comment-container">
       <div className="image-container">
@@ -112,7 +136,9 @@ export default function WorkoutComment({
               />
               {likeCount > 0 && <p>{likeCount}</p>}
             </div>
-            <button className="reply-button">Reply</button>
+            <button className="reply-button" onClick={handleReplyBtnClick}>
+              Reply
+            </button>
           </div>
 
           {!isReply && replyCount > 0 && (
@@ -125,9 +151,16 @@ export default function WorkoutComment({
                 <p>{replyCount} replies</p>
               </div>
 
+              {isReplying && <CommentInputField onSubmit={handleCreateReply} />}
+
               {repliesExpanded && (
                 <Async await={loadedReplies ?? getInitialReplies()}>
-                  {(replies) => <WorkoutCommentReplies replies={replies} />}
+                  {(replies) => (
+                    <WorkoutCommentReplies
+                      replies={replies}
+                      parentId={comment.id}
+                    />
+                  )}
                 </Async>
               )}
             </>
