@@ -7,6 +7,8 @@ import WorkoutComment from "./Comment/WorkoutComment";
 import CommentInputField from "./CommentInputField/CommentInputField";
 import useScrollTrigger from "../../../Hooks/UseScrollTrigger";
 import { motion as Motion } from "framer-motion";
+import { getProfileCache } from "../../../Pages/Profile/ProfileCache";
+import { v4 } from "uuid";
 
 type WorkoutCommentSectionProps = {
   workoutId: string;
@@ -84,9 +86,42 @@ export default function WorkoutCommentSection({
 
     setReplies((prev) => {
       prev[i] = data;
-      return prev;
+      return prev.slice();
     });
     return data;
+  }
+
+  function handleNewReply(
+    i: number,
+    newReply: Schema<"CreateWorkoutCommentRequestDTO">
+  ) {
+    const userData = getProfileCache();
+    if (!userData) return;
+
+    userData.user.then((user) => {
+      if (user.code !== "OK") return;
+
+      const newCommentSimulatedResponse: Schema<"SimpleWorkoutCommentResponseDTO"> =
+        {
+          id: v4(),
+          createdAt: new Date().toISOString(),
+          creator: user.content,
+          isCreator: true,
+          isLiked: false,
+          likeCount: 0,
+          replyCount: 0,
+          text: newReply.comment,
+          workoutId: workoutId,
+        };
+
+      setReplies((prev) => {
+        prev[i] = prev[i]
+          ? prev[i].then((replies) => [...replies, newCommentSimulatedResponse])
+          : Promise.resolve([newCommentSimulatedResponse]);
+
+        return prev;
+      });
+    });
   }
 
   return (
@@ -130,6 +165,7 @@ export default function WorkoutCommentSection({
               replies={replies[i]}
               requestReplies={getInitialReplies}
               index={i}
+              onReply={handleNewReply}
             />
           ))}
         </div>

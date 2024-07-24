@@ -1,7 +1,7 @@
 import "./WorkoutComment.scss";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 import Icon from "../../../Icon/Icon";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import sendAPIRequest from "../../../../Data/SendAPIRequest";
 import formatDateSince from "../../../../Utility/FormatDateSince";
 import Async from "../../../Async/Async";
@@ -18,11 +18,16 @@ type ParentProps = {
   requestReplies: (
     i: number
   ) => Promise<Schema<"SimpleWorkoutCommentResponseDTO">[]>;
+  onReply: (
+    i: number,
+    newReply: Schema<"CreateWorkoutCommentRequestDTO">
+  ) => void;
 };
 
 type ReplyProps = {
   isReply: true;
   parentId: string;
+  onReply: (newReply: Schema<"CreateWorkoutCommentRequestDTO">) => void;
 };
 
 export default function WorkoutComment({
@@ -77,17 +82,28 @@ export default function WorkoutComment({
         commentId: props.isReply ? props.parentId : comment.id,
       },
       payload: newComment,
-    }).then(() => {
-      setReplyCount((prevState) => prevState + 1);
-      setIsReplying(false);
     });
+
+    setIsReplying(false);
+    if (!props.isReply) {
+      setReplyCount((prevState) => prevState + 1);
+      props.onReply(props.index, newComment);
+    } else props.onReply(newComment);
   }
 
-  async function getReplies() {
-    return props.isReply
-      ? Promise.resolve([])
-      : props.replies ?? props.requestReplies(props.index);
-  }
+  const getReplies = useCallback(async () => {
+    if (props.isReply) return [];
+
+    if (props.replies) return props.replies;
+
+    return [];
+  }, [props]);
+
+  useEffect(() => {
+    if (!repliesExpanded || props.isReply || props.replies) return;
+
+    props.requestReplies(props.index);
+  }, [repliesExpanded]);
 
   return (
     <div className="workout-comment-container">
@@ -151,6 +167,12 @@ export default function WorkoutComment({
                           key={reply.id}
                           isReply
                           parentId={comment.id}
+                          onReply={(newReply) => {
+                            if (props.isReply) return;
+
+                            setReplyCount((prevState) => prevState + 1);
+                            props.onReply(props.index, newReply);
+                          }}
                           comment={reply}
                         />
                       ))}

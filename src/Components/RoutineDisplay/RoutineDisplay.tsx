@@ -42,7 +42,6 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
   const [createdComments, setCreatedComments] = useState<
     Schema<"SimpleWorkoutCommentResponseDTO">[]
   >([]);
-  const newlyCreatedCommentCount = useRef<number>(0);
 
   const currentCommentPromiseRef = useRef<Promise<
     Schema<"SimpleWorkoutCommentResponseDTO">[]
@@ -95,7 +94,6 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
       if (user.code !== "OK") return;
 
       setCommentCount((prevState) => prevState + 1);
-      newlyCreatedCommentCount.current++;
 
       const newCommentSimulatedResponse: Schema<"SimpleWorkoutCommentResponseDTO"> =
         {
@@ -171,8 +169,7 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
         parameters: {
           workoutId: workoutId.current,
           limit: 10,
-          offset:
-            (await loadedComments).length - newlyCreatedCommentCount.current,
+          offset: (await loadedComments).length,
         },
       }
     ).then((data) => {
