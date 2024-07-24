@@ -41,7 +41,7 @@ export default function WorkoutCommentSection({
         prev[i] = null;
       }
 
-      return prev;
+      return prev.slice();
     });
   }, [comments]);
 
@@ -119,7 +119,7 @@ export default function WorkoutCommentSection({
           ? prev[i].then((replies) => [...replies, newCommentSimulatedResponse])
           : Promise.resolve([newCommentSimulatedResponse]);
 
-        return prev;
+        return prev.slice();
       });
     });
   }
