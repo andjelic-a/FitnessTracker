@@ -9,22 +9,25 @@ import CommentInputField from "../CommentInputField/CommentInputField";
 
 type WorkoutCommentProps = {
   comment: Schema<"SimpleWorkoutCommentResponseDTO">;
-  replies?: Promise<Schema<"SimpleWorkoutCommentResponseDTO">[]>;
-  onLoadReplies?: (
+} & (ParentProps | ReplyProps);
+
+type ParentProps = {
+  isReply?: false;
+  replies: Promise<Schema<"SimpleWorkoutCommentResponseDTO">[]> | null;
+  index: number;
+  requestReplies: (
     i: number
   ) => Promise<Schema<"SimpleWorkoutCommentResponseDTO">[]>;
-  parentId?: string;
-  isReply?: boolean;
-  i?: number;
+};
+
+type ReplyProps = {
+  isReply: true;
+  parentId: string;
 };
 
 export default function WorkoutComment({
   comment,
-  parentId,
-  isReply,
-  replies,
-  onLoadReplies,
-  i,
+  ...props
 }: WorkoutCommentProps) {
   const isWaitingForResponse = useRef<boolean>(false);
 
@@ -67,28 +70,23 @@ export default function WorkoutComment({
   function handleCreateReply(
     newComment: Schema<"CreateWorkoutCommentRequestDTO">
   ) {
-    console.log(parentId, comment.id, isReply);
-
     sendAPIRequest("/api/workout/{workoutId}/comment/{commentId}/reply", {
       method: "post",
       parameters: {
         workoutId: comment.workoutId,
-        commentId: parentId ?? comment.id,
+        commentId: props.isReply ? props.parentId : comment.id,
       },
       payload: newComment,
     }).then(() => {
-      // setReplyCount((prevState) => prevState + 1);
-      // setIsReplying(false);
+      setReplyCount((prevState) => prevState + 1);
+      setIsReplying(false);
     });
   }
 
   async function getReplies() {
-    return (
-      replies ??
-      (i !== undefined
-        ? onLoadReplies?.(i) ?? Promise.resolve([])
-        : Promise.resolve([]))
-    );
+    return props.isReply
+      ? Promise.resolve([])
+      : props.replies ?? props.requestReplies(props.index);
   }
 
   return (
@@ -134,7 +132,7 @@ export default function WorkoutComment({
             />
           )}
 
-          {!isReply && replyCount > 0 && (
+          {!props.isReply && replyCount > 0 && (
             <>
               <div
                 className="reply-count-container"
@@ -150,9 +148,9 @@ export default function WorkoutComment({
                     <div className="workout-comment-reply-container">
                       {replies.map((reply) => (
                         <WorkoutComment
-                          parentId={comment.id}
-                          isReply
                           key={reply.id}
+                          isReply
+                          parentId={comment.id}
                           comment={reply}
                         />
                       ))}

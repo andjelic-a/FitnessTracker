@@ -127,9 +127,9 @@ export default function WorkoutCommentSection({
             <WorkoutComment
               key={comment.id}
               comment={comment}
-              replies={replies[i] ?? undefined}
-              onLoadReplies={getInitialReplies}
-              i={i}
+              replies={replies[i]}
+              requestReplies={getInitialReplies}
+              index={i}
             />
           ))}
         </div>
