@@ -1,6 +1,6 @@
 import "./WorkoutCommentSection.scss";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useOutsideClick from "../../../Hooks/UseOutsideClick";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import WorkoutComment from "./Comment/WorkoutComment";
@@ -31,6 +31,18 @@ export default function WorkoutCommentSection({
   useScrollTrigger(scrollableWrapperRef, 0.7, onRequireLazyLoad);
   useOutsideClick(wrapperRef, onRequireClose);
 
+  useEffect(() => {
+    setReplies((prev) => {
+      for (let i = 0; i < comments.length; i++) {
+        if (prev[i]) continue;
+
+        prev[i] = null;
+      }
+
+      return prev;
+    });
+  }, [comments]);
+
   function handleCreateComment(
     newComment: Schema<"CreateWorkoutCommentRequestDTO">
   ) {
@@ -46,8 +58,36 @@ export default function WorkoutCommentSection({
   }
 
   const [replies, setReplies] = useState<
-    Promise<Schema<"SimpleWorkoutCommentResponseDTO">[]>[]
+    (Promise<Schema<"SimpleWorkoutCommentResponseDTO">[]> | null)[]
   >([]);
+
+  async function getInitialReplies(i: number) {
+    if (replies[i]) return await replies[i];
+
+    const data = sendAPIRequest(
+      "/api/workout/{workoutId}/comment/{commentId}/reply",
+      {
+        method: "get",
+        parameters: {
+          commentId: comments[i].id,
+          workoutId: workoutId,
+          limit: 10,
+          offset: 0,
+        },
+      }
+    ).then((data) => {
+      if (data.code !== "OK") return [];
+
+      // currentRepliesPromiseRef.current = null;
+      return data.content;
+    });
+
+    setReplies((prev) => {
+      prev[i] = data;
+      return prev;
+    });
+    return data;
+  }
 
   return (
     <Motion.div
@@ -87,13 +127,9 @@ export default function WorkoutCommentSection({
             <WorkoutComment
               key={comment.id}
               comment={comment}
-              replies={replies[i]}
-              updateReplies={(replies) =>
-                setReplies((prev) => {
-                  prev[i] = replies;
-                  return prev;
-                })
-              }
+              replies={replies[i] ?? undefined}
+              onLoadReplies={getInitialReplies}
+              i={i}
             />
           ))}
         </div>

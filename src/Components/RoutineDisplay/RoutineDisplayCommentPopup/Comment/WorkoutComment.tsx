@@ -10,11 +10,12 @@ import CommentInputField from "../CommentInputField/CommentInputField";
 type WorkoutCommentProps = {
   comment: Schema<"SimpleWorkoutCommentResponseDTO">;
   replies?: Promise<Schema<"SimpleWorkoutCommentResponseDTO">[]>;
-  updateReplies?: (
-    newReplies: Promise<Schema<"SimpleWorkoutCommentResponseDTO">[]>
-  ) => void;
+  onLoadReplies?: (
+    i: number
+  ) => Promise<Schema<"SimpleWorkoutCommentResponseDTO">[]>;
   parentId?: string;
   isReply?: boolean;
+  i?: number;
 };
 
 export default function WorkoutComment({
@@ -22,7 +23,8 @@ export default function WorkoutComment({
   parentId,
   isReply,
   replies,
-  updateReplies,
+  onLoadReplies,
+  i,
 }: WorkoutCommentProps) {
   const isWaitingForResponse = useRef<boolean>(false);
 
@@ -32,10 +34,6 @@ export default function WorkoutComment({
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [replyCount, setReplyCount] = useState<number>(0);
   const [repliesExpanded, setRepliesExpanded] = useState<boolean>(false);
-
-  const currentRepliesPromiseRef = useRef<Promise<
-    Schema<"SimpleWorkoutCommentResponseDTO">[]
-  > | null>(null);
 
   useEffect(() => {
     setIsLiked(comment.isLiked);
@@ -62,35 +60,6 @@ export default function WorkoutComment({
     setRepliesExpanded((prevState) => !prevState);
   }
 
-  async function getInitialReplies() {
-    if (currentRepliesPromiseRef.current)
-      return await currentRepliesPromiseRef.current;
-
-    if (replies) return replies;
-
-    const data = sendAPIRequest(
-      "/api/workout/{workoutId}/comment/{commentId}/reply",
-      {
-        method: "get",
-        parameters: {
-          commentId: comment.id,
-          workoutId: comment.workoutId,
-          limit: 10,
-          offset: 0,
-        },
-      }
-    ).then((data) => {
-      if (data.code !== "OK") return [];
-
-      currentRepliesPromiseRef.current = null;
-      return data.content;
-    });
-
-    currentRepliesPromiseRef.current = data;
-    updateReplies?.(data);
-    return data;
-  }
-
   function handleReplyBtnClick() {
     setIsReplying(true);
   }
@@ -98,6 +67,8 @@ export default function WorkoutComment({
   function handleCreateReply(
     newComment: Schema<"CreateWorkoutCommentRequestDTO">
   ) {
+    console.log(parentId, comment.id, isReply);
+
     sendAPIRequest("/api/workout/{workoutId}/comment/{commentId}/reply", {
       method: "post",
       parameters: {
@@ -106,9 +77,18 @@ export default function WorkoutComment({
       },
       payload: newComment,
     }).then(() => {
-      setReplyCount((prevState) => prevState + 1);
-      setIsReplying(false);
+      // setReplyCount((prevState) => prevState + 1);
+      // setIsReplying(false);
     });
+  }
+
+  async function getReplies() {
+    return (
+      replies ??
+      (i !== undefined
+        ? onLoadReplies?.(i) ?? Promise.resolve([])
+        : Promise.resolve([]))
+    );
   }
 
   return (
@@ -165,12 +145,12 @@ export default function WorkoutComment({
               </div>
 
               {repliesExpanded && (
-                <Async await={replies ?? getInitialReplies()}>
+                <Async await={getReplies()}>
                   {(replies) => (
                     <div className="workout-comment-reply-container">
                       {replies.map((reply) => (
                         <WorkoutComment
-                          parentId={reply.id}
+                          parentId={comment.id}
                           isReply
                           key={reply.id}
                           comment={reply}
