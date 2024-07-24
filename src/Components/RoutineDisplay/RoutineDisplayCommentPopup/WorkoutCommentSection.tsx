@@ -60,7 +60,10 @@ export default function WorkoutCommentSection({
   }
 
   const [replies, setReplies] = useState<
-    (Promise<Schema<"SimpleWorkoutCommentResponseDTO">[]> | null)[]
+    (Promise<{
+      replies: Schema<"SimpleWorkoutCommentResponseDTO">[];
+      reachedEnd: boolean;
+    }> | null)[]
   >([]);
 
   async function getInitialReplies(i: number) {
@@ -85,10 +88,12 @@ export default function WorkoutCommentSection({
     });
 
     setReplies((prev) => {
-      prev[i] = data;
+      prev[i] = data.then((x) => ({
+        replies: x,
+        reachedEnd: x.length < 10,
+      }));
       return prev.slice();
     });
-    return data;
   }
 
   function handleNewReply(
@@ -116,8 +121,14 @@ export default function WorkoutCommentSection({
 
       setReplies((prev) => {
         prev[i] = prev[i]
-          ? prev[i].then((replies) => [...replies, newCommentSimulatedResponse])
-          : Promise.resolve([newCommentSimulatedResponse]);
+          ? prev[i].then((x) => ({
+              replies: [...x.replies, newCommentSimulatedResponse],
+              reachedEnd: x.reachedEnd,
+            }))
+          : Promise.resolve({
+              replies: [newCommentSimulatedResponse],
+              reachedEnd: true,
+            });
 
         return prev.slice();
       });

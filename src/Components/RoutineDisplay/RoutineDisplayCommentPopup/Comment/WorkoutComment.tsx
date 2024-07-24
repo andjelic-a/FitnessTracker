@@ -13,11 +13,12 @@ type WorkoutCommentProps = {
 
 type ParentProps = {
   isReply?: false;
-  replies: Promise<Schema<"SimpleWorkoutCommentResponseDTO">[]> | null;
+  replies: Promise<{
+    replies: Schema<"SimpleWorkoutCommentResponseDTO">[];
+    reachedEnd: boolean;
+  }> | null;
   index: number;
-  requestReplies: (
-    i: number
-  ) => Promise<Schema<"SimpleWorkoutCommentResponseDTO">[]>;
+  requestReplies: (i: number) => void;
   onReply: (
     i: number,
     newReply: Schema<"CreateWorkoutCommentRequestDTO">
@@ -92,11 +93,12 @@ export default function WorkoutComment({
   }
 
   const getReplies = useCallback(async () => {
-    if (props.isReply) return [];
+    if (!props.isReply && props.replies) return props.replies;
 
-    if (props.replies) return props.replies;
-
-    return [];
+    return Promise.resolve({
+      replies: [],
+      reachedEnd: false,
+    });
   }, [props]);
 
   useEffect(() => {
@@ -104,6 +106,8 @@ export default function WorkoutComment({
 
     props.requestReplies(props.index);
   }, [repliesExpanded]);
+
+  function handleShowMoreRepliesClick() {}
 
   return (
     <div className="workout-comment-container">
@@ -161,8 +165,8 @@ export default function WorkoutComment({
               {repliesExpanded && (
                 <Async await={getReplies()}>
                   {(replies) => (
-                    <div className="workout-comment-reply-container">
-                      {replies.map((reply) => (
+                    <div className="comment-replies-container">
+                      {replies.replies.map((reply) => (
                         <WorkoutComment
                           key={reply.id}
                           isReply
@@ -176,6 +180,16 @@ export default function WorkoutComment({
                           comment={reply}
                         />
                       ))}
+
+                      {!replies.reachedEnd && (
+                        <div
+                          className="show-more"
+                          onClick={handleShowMoreRepliesClick}
+                        >
+                          <Icon name="long-arrow-down" />
+                          <p>Show more replies</p>
+                        </div>
+                      )}
                     </div>
                   )}
                 </Async>
