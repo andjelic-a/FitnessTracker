@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 import "./CommentInputField.scss";
+import Async from "../../../Async/Async";
+import { getProfileCache } from "../../../../Pages/Profile/ProfileCache";
 
 type CommentInputFieldProps = {
   type: "reply" | "comment";
@@ -54,30 +56,47 @@ export default function CommentInputField({
 
   return (
     <div className="comment-input-container">
-      <div className="comment-textarea-container">
-        <textarea
-          placeholder={`Add a ${type}...`}
-          className="new-comment-textarea"
-          rows={1}
-          ref={inputRef}
-          onChange={handleInputRefHeightChange}
-          onFocus={() => {
-            if (type === "comment") setIsButtonContainerVisible(true);
+      <div className="image-container">
+        <Async await={getProfileCache()?.user!}>
+          {(user) => {
+            if (user.code !== "OK") return null;
+
+            return (
+              <img
+                src={user.content.image ?? "/DefaultProfilePicture.png"}
+                alt={`Profile picture of a user named ${user.content.name}`}
+              />
+            );
           }}
-        />
+        </Async>
       </div>
 
-      {isButtonContainerVisible && (
-        <div className="workout-comment-header-button-wrapper">
-          <button onClick={handleCancel}>
-            <p>Cancel</p>
-          </button>
-
-          <button onClick={handleSubmit}>
-            <p>Comment</p>
-          </button>
+      <div className="main">
+        <div className="comment-textarea-container">
+          <textarea
+            placeholder={`Add a ${type}...`}
+            className="new-comment-textarea"
+            rows={1}
+            ref={inputRef}
+            onChange={handleInputRefHeightChange}
+            onFocus={() => {
+              if (type === "comment") setIsButtonContainerVisible(true);
+            }}
+          />
         </div>
-      )}
+
+        {isButtonContainerVisible && (
+          <div className="workout-comment-header-button-wrapper">
+            <button onClick={handleCancel}>
+              <p>Cancel</p>
+            </button>
+
+            <button onClick={handleSubmit}>
+              <p>Comment</p>
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
