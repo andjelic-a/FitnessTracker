@@ -16,9 +16,11 @@ type ParentProps = {
   replies: Promise<{
     replies: Schema<"SimpleWorkoutCommentResponseDTO">[];
     reachedEnd: boolean;
+    newRepliesCount: number;
   }> | null;
   index: number;
   requestReplies: (i: number) => void;
+  requestMoreReplies: (i: number) => Promise<void>;
   onReply: (
     i: number,
     newReply: Schema<"CreateWorkoutCommentRequestDTO">
@@ -93,21 +95,38 @@ export default function WorkoutComment({
   }
 
   const getReplies = useCallback(async () => {
-    if (!props.isReply && props.replies) return props.replies;
+    if (!props.isReply && props.replies) {
+      const reply = await props.replies;
+
+      if (
+        reply.replies.length !== 0 &&
+        reply.replies.length !== reply.newRepliesCount
+      )
+        return props.replies;
+    }
 
     return Promise.resolve({
       replies: [],
       reachedEnd: false,
+      newRepliesCount: 0,
     });
   }, [props]);
 
   useEffect(() => {
-    if (!repliesExpanded || props.isReply || props.replies) return;
+    if (!repliesExpanded || props.isReply) return;
 
     props.requestReplies(props.index);
   }, [repliesExpanded]);
 
-  function handleShowMoreRepliesClick() {}
+  function handleShowMoreRepliesClick() {
+    if (props.isReply || isWaitingForResponse.current) return;
+
+    isWaitingForResponse.current = true;
+
+    props
+      .requestMoreReplies(props.index)
+      .then(() => void (isWaitingForResponse.current = false));
+  }
 
   return (
     <div className="workout-comment-container">
