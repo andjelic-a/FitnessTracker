@@ -281,14 +281,23 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
               </button>
             </div>
 
-            {isReplying && (
-              <CommentInputField
-                type="reply"
-                textAreaRef={commentInputFieldRef}
-                onSubmit={handleCreateReply}
-                onCancel={() => setIsReplying(false)}
-              />
-            )}
+            {isReplying &&
+              (!props.isReply ? (
+                <CommentInputField
+                  type="reply"
+                  textAreaRef={commentInputFieldRef}
+                  onSubmit={handleCreateReply}
+                  onCancel={() => setIsReplying(false)}
+                />
+              ) : (
+                <CommentInputField
+                  type="nested-reply"
+                  replyingTo={comment.creator}
+                  textAreaRef={commentInputFieldRef}
+                  onSubmit={handleCreateReply}
+                  onCancel={() => setIsReplying(false)}
+                />
+              ))}
 
             {!props.isReply && replyCount > 0 && (
               <>

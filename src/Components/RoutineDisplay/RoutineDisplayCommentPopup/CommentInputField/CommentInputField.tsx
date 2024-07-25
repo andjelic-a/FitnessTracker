@@ -5,26 +5,39 @@ import Async from "../../../Async/Async";
 import { getProfileCache } from "../../../../Pages/Profile/ProfileCache";
 
 type CommentInputFieldProps = {
-  type: "reply" | "comment";
   textAreaRef: RefObject<HTMLTextAreaElement>;
   onSubmit: (comment: Schema<"CreateWorkoutCommentRequestDTO">) => void;
   onCancel?: () => void;
-};
+} & (
+  | {
+      type: "reply" | "comment";
+    }
+  | {
+      type: "nested-reply";
+      replyingTo: Schema<"SimpleUserResponseDTO">;
+    }
+);
 
 export default function CommentInputField({
-  type,
   onSubmit,
   onCancel,
   textAreaRef: inputRef,
+  ...props
 }: CommentInputFieldProps) {
   const [isButtonContainerVisible, setIsButtonContainerVisible] =
     useState(true);
 
   useEffect(() => {
-    setIsButtonContainerVisible(type === "reply");
+    if (props.type !== "comment") {
+      setIsButtonContainerVisible(true);
+      inputRef.current?.focus();
+    } else setIsButtonContainerVisible(false);
 
-    if (type === "reply") inputRef.current?.focus();
-  }, [inputRef, type]);
+    inputRef.current?.setSelectionRange(
+      inputRef.current?.value.length,
+      inputRef.current?.value.length
+    );
+  }, [inputRef, props.type]);
 
   function handleInputRefHeightChange() {
     if (!inputRef.current) return;
@@ -50,7 +63,7 @@ export default function CommentInputField({
       inputRef.current.blur();
     }
 
-    if (type === "comment") setIsButtonContainerVisible(false);
+    if (props.type === "comment") setIsButtonContainerVisible(false);
 
     onCancel?.();
   }
@@ -75,13 +88,28 @@ export default function CommentInputField({
       <div className="main">
         <div className="comment-textarea-container">
           <textarea
-            placeholder={`Add a ${type}...`}
+            placeholder={`Add a ${
+              props.type === "comment" ? "comment" : "reply"
+            }...`}
             className="new-comment-textarea"
             rows={1}
             ref={inputRef}
             onChange={handleInputRefHeightChange}
+            onKeyDown={(e) => {
+              if (
+                props.type === "nested-reply" &&
+                e.key === "Backspace" &&
+                inputRef.current?.value === `@${props.replyingTo.name}`
+              ) {
+                e.preventDefault();
+                inputRef.current.value = "";
+              }
+            }}
+            defaultValue={
+              props.type === "nested-reply" ? `@${props.replyingTo.name} ` : ""
+            }
             onFocus={() => {
-              if (type === "comment") setIsButtonContainerVisible(true);
+              if (props.type === "comment") setIsButtonContainerVisible(true);
             }}
           />
         </div>
