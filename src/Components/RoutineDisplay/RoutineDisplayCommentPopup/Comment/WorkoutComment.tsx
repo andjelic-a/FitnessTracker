@@ -7,6 +7,7 @@ import formatDateSince from "../../../../Utility/FormatDateSince";
 import CommentInputField from "../CommentInputField/CommentInputField";
 import { v4 } from "uuid";
 import { getProfileCache } from "../../../../Pages/Profile/ProfileCache";
+import { AnimatePresence, motion } from "framer-motion";
 
 type WorkoutCommentProps = {
   comment: Schema<"SimpleWorkoutCommentResponseDTO">;
@@ -245,7 +246,26 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
     }, [replies]);
 
     return (
-      <div
+      <motion.div
+        initial={{
+          top: -33,
+          opacity: 0,
+        }}
+        animate={{
+          top: 0,
+          opacity: 1,
+        }}
+        exit={{
+          top: -33,
+          opacity: 0,
+        }}
+        transition={{
+          duration: 0.2,
+          ease: "easeInOut",
+        }}
+        style={{
+          position: "relative",
+        }}
         className={`workout-comment-container ${props.isReply ? "reply" : ""}`}
       >
         <div className="image-container">
@@ -311,12 +331,14 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
                   <p>{replyCount} replies</p>
                 </div>
 
-                {repliesExpanded && <>{replyElements}</>}
+                <AnimatePresence>
+                  {repliesExpanded && <>{replyElements}</>}
+                </AnimatePresence>
               </>
             )}
           </div>
         </div>
-      </div>
+      </motion.div>
     );
   }
 );
