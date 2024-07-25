@@ -29,10 +29,19 @@
       color: #aaa;
 
       .name {
+        user-select: text;
         font-size: 1.5rem;
         color: #fff;
         font-weight: bold;
       }
+
+      .date {
+        user-select: text;
+      }
+    }
+
+    .body * {
+      user-select: text;
     }
 
     .footer {
@@ -48,10 +57,6 @@
         align-items: center;
         justify-content: flex-start;
         gap: 1rem;
-
-        // &:has(+ .comment-input-container) .reply-btn {
-        //   display: none;
-        // }
 
         .like-container {
           display: flex;

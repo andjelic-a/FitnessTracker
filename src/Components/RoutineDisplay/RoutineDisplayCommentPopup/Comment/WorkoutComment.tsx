@@ -26,6 +26,7 @@ type ReplyProps = {
 const WorkoutComment = React.memo<WorkoutCommentProps>(
   ({ comment, ...props }) => {
     const isWaitingForResponse = useRef<boolean>(false);
+    const commentInputFieldRef = useRef<HTMLTextAreaElement>(null);
 
     const [isLiked, setIsLiked] = useState<boolean | null>(null);
     const [likeCount, setLikeCount] = useState<number>(0);
@@ -139,7 +140,8 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
     }
 
     function handleReplyBtnClick() {
-      setIsReplying(true);
+      if (isReplying) commentInputFieldRef.current?.focus();
+      else setIsReplying(true);
     }
 
     function handleCreateReply(
@@ -282,6 +284,7 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
             {isReplying && (
               <CommentInputField
                 type="reply"
+                textAreaRef={commentInputFieldRef}
                 onSubmit={handleCreateReply}
                 onCancel={() => setIsReplying(false)}
               />

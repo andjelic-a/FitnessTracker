@@ -27,6 +27,7 @@ export default function WorkoutCommentSection({
 }: WorkoutCommentSectionProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const scrollableWrapperRef = useRef<HTMLDivElement>(null);
+  const commentInputFieldRef = useRef<HTMLTextAreaElement>(null);
 
   useScrollTrigger(scrollableWrapperRef, 0.7, onRequireLazyLoad);
   useOutsideClick(wrapperRef, onRequireClose);
@@ -98,7 +99,11 @@ export default function WorkoutCommentSection({
         id="comment-section-wrapper"
         ref={scrollableWrapperRef}
       >
-        <CommentInputField type="comment" onSubmit={handleCreateComment} />
+        <CommentInputField
+          textAreaRef={commentInputFieldRef}
+          type="comment"
+          onSubmit={handleCreateComment}
+        />
 
         <div className="workout-comments-body">
           <AnimatePresence>{commentELements}</AnimatePresence>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useState } from "react";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 import "./CommentInputField.scss";
 import Async from "../../../Async/Async";
@@ -6,6 +6,7 @@ import { getProfileCache } from "../../../../Pages/Profile/ProfileCache";
 
 type CommentInputFieldProps = {
   type: "reply" | "comment";
+  textAreaRef: RefObject<HTMLTextAreaElement>;
   onSubmit: (comment: Schema<"CreateWorkoutCommentRequestDTO">) => void;
   onCancel?: () => void;
 };
@@ -14,8 +15,8 @@ export default function CommentInputField({
   type,
   onSubmit,
   onCancel,
+  textAreaRef: inputRef,
 }: CommentInputFieldProps) {
-  const inputRef = useRef<HTMLTextAreaElement>(null);
   const [isButtonContainerVisible, setIsButtonContainerVisible] =
     useState(true);
 
