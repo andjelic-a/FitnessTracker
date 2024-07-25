@@ -245,7 +245,9 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
     }, [replies]);
 
     return (
-      <div className="workout-comment-container">
+      <div
+        className={`workout-comment-container ${props.isReply ? "reply" : ""}`}
+      >
         <div className="image-container">
           <img
             src={comment.creator.image ?? "/DefaultProfilePicture.png"}
