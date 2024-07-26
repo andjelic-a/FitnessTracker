@@ -1,5 +1,5 @@
 import "./RoutineItem.scss";
-import { useState, useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import Icon from "../../../Icon/Icon.tsx";
 import { v4 as uuidv4 } from "uuid";
 import useOutsideClick from "../../../../Hooks/UseOutsideClick.ts";
@@ -13,38 +13,22 @@ import RoutineSetDisplay from "./RoutineSetDisplay.tsx";
 type ExerciseSetProps = {
   onStartDraggingSet?: () => void;
   onEndDraggingSet?: () => void;
-  onExerciseSetChanged?: (sets: Set[]) => void;
+  // onChange?: (sets: Set[]) => void;
   safeGuard?: number;
   animationLength?: number;
+  sets: Set[];
+  setSets: React.Dispatch<React.SetStateAction<Set[]>>;
 };
 
-/**
- * Renders an exercise set component with a list of sets and options to add, delete, and reorder sets.
- *
- * @param {Object} props - The component props.
- * @param {Function} props.onStartDraggingSet - Callback function to be called when the set is being dragged.
- * @param {Function} props.onEndDraggingSet - Callback function to be called when the set dragging ends.
- * @param {number} props.safeGuard - Represents duration of a safe guard which gets activated when a user begins dragging, this prevents sets from teleporting.
- * @param {number} props.animationLength - Represents length of each animation triggered when dragging a set.
- * @return {JSX.Element} Exercise set component.
- */
 export default function RoutineExerciseDisplay({
   onStartDraggingSet,
   onEndDraggingSet,
-  onExerciseSetChanged,
+  // onChange,
   animationLength,
   safeGuard,
+  sets,
+  setSets,
 }: ExerciseSetProps): JSX.Element {
-  const [sets, setSets] = useState<Set[]>([
-    {
-      id: uuidv4(),
-      set: 1,
-      rir: 0,
-      repRange: "0",
-      isDropdownOpen: false,
-      selectedIcon: null,
-    },
-  ]);
   const excludedDivRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useOutsideClick(excludedDivRef, () => {
@@ -56,7 +40,7 @@ export default function RoutineExerciseDisplay({
   const addSet = () => {
     const newSet: Set = {
       id: uuidv4(),
-      set: sets.length + 1,
+      idx: sets.length + 1,
       rir: 0,
       repRange: "0",
       isDropdownOpen: false,
@@ -108,7 +92,7 @@ export default function RoutineExerciseDisplay({
             return {
               ...set,
               selectedIcon: null,
-              set: findPositionOfElement(id) + 1,
+              idx: findPositionOfElement(id) + 1,
               isDropdownOpen: false,
             };
           } else {
@@ -171,7 +155,7 @@ export default function RoutineExerciseDisplay({
   useEffect(() => {
     preAnimationRect.current = dragging.current?.getBoundingClientRect();
     playReorderAnimation();
-    onExerciseSetChanged?.(sets);
+    // onChange?.(sets);
   }, [sets]);
 
   const playReorderAnimation = contextSafe(() => {
@@ -190,6 +174,10 @@ export default function RoutineExerciseDisplay({
       onComplete: () => {
         currentFlipState.current = null;
         currentFlipTimeline.current = null;
+
+        setContainerRef.current!.childNodes.forEach(
+          (x) => void ((x as HTMLElement).style.transform = "")
+        );
       },
     });
 
@@ -234,11 +222,16 @@ export default function RoutineExerciseDisplay({
       currentFlipTimeline.current.kill();
       currentFlipTimeline.current = null;
     }
-    currentFlipState.current = Flip.getState(
-      ".exercise-set-item:not(.temporary)"
-    );
+    currentFlipState.current = Flip.getState(setContainerRef.current!.children);
 
-    setSets(reorderArray(sets, draggingIdx, hoverIdx));
+    setSets((prev) => {
+      prev = reorderArray(prev, draggingIdx, hoverIdx);
+      prev.forEach((x, i) => {
+        if (!x.selectedIcon || x.selectedIcon === "1") x.idx = i + 1;
+      });
+
+      return prev;
+    });
   }
 
   const beginDragging = contextSafe((element: HTMLElement) => {

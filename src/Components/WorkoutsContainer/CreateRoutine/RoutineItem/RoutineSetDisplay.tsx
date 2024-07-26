@@ -17,21 +17,6 @@ type SingleExerciseSetProps = {
   onMouseOver?: (ref: HTMLDivElement) => void;
 };
 
-/**
- * Renders a single exercise set component with options to click, delete, and change the set icon.
- *
- * @param {Object} props - The component props.
- * @param {Object} props.set - The exercise set object containing the set data.
- * @param {number} props.index - The index of the set in the list of sets.
- * @param {MutableRefObject<(HTMLDivElement | null)[]>} props.dropDownMenuWrapper - Optional reference to the react RefObject of HTMLDivElement[] which represents the dropdown menus of all sets.
- * @param {Function} props.onSetClick - Optional callback function to be called when the set is clicked.
- * @param {Function} props.onDeleteSet - Optional callback function to be called when the set is deleted.
- * @param {Function} props.onChangeSetIcon - Optional callback function to be called when the set icon is changed.
- * @param {Function} props.onDragEnd - Optional callback function to be called when the set dragging ends.
- * @param {Function} props.onDragStart - Optional callback function to be called when the set is dragging starts.
- * @param {Function} props.onMouseOver - Optional callback function to be called when the mouse hovers over the set.
- * @return {JSX.Element} The single exercise set component.
- */
 export default function RoutineSetDisplay({
   set,
   index,
@@ -86,7 +71,7 @@ export default function RoutineSetDisplay({
           {set.selectedIcon ? (
             <Icon className="set-icon" name={set.selectedIcon} />
           ) : (
-            set.set
+            set.idx
           )}
         </p>
         <div
@@ -124,8 +109,8 @@ export default function RoutineSetDisplay({
         {!set.selectedIcon || set.selectedIcon === "1" ? (
           <input
             type="text"
-            value={set.rir === 0 ? "" : set.rir}
-            placeholder={set.rir.toString()}
+            value={set.rir <= 0 ? "" : set.rir}
+            placeholder={set.rir <= 0 ? "0" : set.rir.toString()}
             maxLength={4}
             onChange={(e) => onSetChanged?.({ ...set, rir: +e.target.value })}
           />
@@ -133,15 +118,16 @@ export default function RoutineSetDisplay({
           <input
             type="text"
             disabled
-            value={set.selectedIcon === "w" ? "∞" : "0"}
+            value={set.selectedIcon === "w" ? "-" : "0"}
           />
         )}
       </div>
       <div>
         <input
           type="text"
+          defaultValue={set.repRange === "0" ? "" : set.repRange}
           placeholder={set.repRange}
-          maxLength={4}
+          maxLength={5}
           onChange={(e) => onSetChanged?.({ ...set, repRange: e.target.value })}
         />
       </div>

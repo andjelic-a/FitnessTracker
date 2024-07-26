@@ -19,6 +19,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: filter 0.4s;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
@@ -26,7 +28,7 @@ body {
 }
 
 @media screen and (max-width: 425px) {
-  :root{
+  :root {
     font-size: 8px;
   }
 }

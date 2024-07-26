@@ -1,19 +1,19 @@
-import { defer } from "react-router-dom";
 import sendAPIRequest from "../../../../Data/SendAPIRequest";
+import createLoader from "../../../../BetterRouter/CreateLoader";
 
-export async function newExerciseLoader() {
-  return defer({
-    muscleGroups: sendAPIRequest("/api/musclegroup/detailed", {
-      method: "get",
-      parameters: {
-        limit: -1,
-      },
-    }),
-    equipment: sendAPIRequest("/api/equipment", {
-      method: "get",
-      parameters: {
-        limit: -1,
-      },
-    }),
-  });
-}
+const adminNewExerciseLoader = createLoader("/admin/exercises/new", () => ({
+  muscleGroups: sendAPIRequest("/api/musclegroup/detailed", {
+    method: "get",
+    parameters: {
+      limit: -1,
+    },
+  }),
+  equipment: sendAPIRequest("/api/equipment", {
+    method: "get",
+    parameters: {
+      limit: -1,
+    },
+  }),
+}));
+
+export default adminNewExerciseLoader;
