@@ -45,12 +45,3 @@ export default function createLoader<
     }
   };
 }
-
-export const a = createLoader("/exercises/:exerciseId", ({ params }) => {
-  return {
-    exercises: sendAPIRequest("/api/exercise/{id}/detailed", {
-      method: "get",
-      parameters: { id: +params.exerciseId! },
-    }),
-  };
-});

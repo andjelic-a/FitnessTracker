@@ -1,5 +1,6 @@
 import "./ProfileHeader.scss";
 import Icon from "../Icon/Icon";
+import { useNavigate } from "react-router-dom";
 
 type ProfileHeaderProps = {
   username: string;
@@ -18,9 +19,9 @@ function ProfileHeader({
   following,
   setFollowersOrFollowing,
 }: ProfileHeaderProps) {
-  const handleFollowersOrFollowingClick = (type: "followers" | "following") => {
-    setFollowersOrFollowing(type);
-  };
+  const handleFollowersOrFollowingClick = (type: "followers" | "following") =>
+    void setFollowersOrFollowing(type);
+  const navigate = useNavigate();
 
   return (
     <div className="profile-header">
@@ -33,7 +34,11 @@ function ProfileHeader({
       <div className="profile-user-information">
         <div className="profile-user-username">
           <p>{username}</p>
-          <Icon className="profile-user-settings" name="gear" />
+          <Icon
+            className="profile-user-settings"
+            name="gear"
+            onClick={() => void navigate("settings")}
+          />
         </div>
         <div className="profile-user-stats">
           <div className="profile-user-stats-stat">

@@ -1,6 +1,6 @@
 @import "../../../Palette.scss";
 
-.create-routine-window {
+.edit-routine-window {
   &,
   * {
     user-select: none;
@@ -47,12 +47,12 @@
     pointer-events: none;
   }
 
-  &.routine-item-error-button .create-routine-add-exercise {
+  &.routine-item-error-button .edit-routine-add-exercise {
     background-color: red;
   }
 }
 
-.create-routine-header {
+.edit-routine-header {
   width: 100%;
   height: 5rem;
   display: flex;
@@ -81,11 +81,11 @@
       transition: 0.2s ease-in;
     }
     &:focus::placeholder {
-      color: rgb(199, 199, 198);
+      color: rgb(199, 199, 199);
     }
   }
 
-  & .create-routine-public-or-private {
+  & .edit-routine-public-or-private {
     position: relative;
     display: flex;
     justify-content: center;
@@ -101,7 +101,7 @@
       cursor: pointer;
     }
 
-    & .create-routine-public-or-private-popup {
+    & .edit-routine-public-or-private-popup {
       position: absolute;
       left: 0;
       z-index: -1;
@@ -139,7 +139,7 @@
     }
   }
 
-  & .create-routine-save {
+  & .edit-routine-save {
     width: 5.5rem;
     height: 3.75rem;
     border: none;
@@ -173,7 +173,7 @@
   }
 }
 
-.create-routine-add-exercise {
+.edit-routine-add-exercise {
   justify-self: center;
   align-self: flex-start;
   display: flex;
@@ -193,7 +193,7 @@
   }
 }
 
-.create-routine-description {
+.edit-routine-description {
   position: relative;
   margin-top: auto;
   align-self: center;

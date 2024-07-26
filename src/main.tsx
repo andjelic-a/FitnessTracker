@@ -43,6 +43,8 @@ import userPageFollowingContainerLoader from "./Components/FollowContainer/UserP
 import userPageFollowersContainerLoader from "./Components/FollowContainer/UserPageFollowersContainerLoader.ts";
 import EquipmentAdminPanel from "./Pages/AdminPanel/Equipment/EquipmentAdminPanel.tsx";
 import adminEquipmentLoader from "./Pages/AdminPanel/Equipment/EquipmentAdminPanelLoader.ts";
+import Settings from "./Pages/Settings/Settings.tsx";
+import EditRoutine from "./Components/WorkoutsContainer/EditRoutine/EditRoutine.tsx";
 
 const routes: RouteObject[] = [
   {
@@ -84,6 +86,11 @@ const routes: RouteObject[] = [
             loader: routineDisplayLoader,
           },
           {
+            path: "workout/:id/edit",
+            element: <EditRoutine />,
+            loader: routineDisplayLoader,
+          },
+          {
             path: "workout/new",
             element: <CreateRoutineWindow />,
             loader: createRoutineLoader,
@@ -97,6 +104,10 @@ const routes: RouteObject[] = [
             path: "following",
             element: <FollowContainer followersOrFollowing="following" />,
             loader: profileFollowingContainerLoader,
+          },
+          {
+            path: "settings",
+            element: <Settings />,
           },
         ],
       },
@@ -200,6 +211,11 @@ export type RoutePathObjects = [
           },
           {
             path: "workout/:id";
+            children: [
+              {
+                path: "edit";
+              }
+            ];
           },
           {
             path: "workout/new";
