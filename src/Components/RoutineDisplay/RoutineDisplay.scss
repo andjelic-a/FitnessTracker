@@ -228,29 +228,67 @@
         }
 
         & .routine-display-thumbs-up {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 4rem;
+          width: 4rem;
+          border-radius: 50%;
           cursor: pointer;
           font-weight: normal;
-          transition: 0.2s;
-          color: $dark-600;
+          transition: 0.3s;
+          color: $dark-500;
+
+          &:hover {
+            background-color: $dark-600;
+            color: $dark-200;
+          }
         }
 
         & .routine-display-bookmark {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 4rem;
+          width: 4rem;
+          border-radius: 50%;
           cursor: pointer;
           font-weight: normal;
           transition: 0.2s;
           color: $dark-600;
+          
+          &:hover {
+            background-color: $dark-600;
+            color: $dark-200;
+          }
         }
 
         & .routine-display-comment {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 4rem;
+          width: 4rem;
+          border-radius: 50%;
           cursor: pointer;
           font-weight: normal;
           transition: 0.2s;
           color: $dark-600;
+          
+          &:hover {
+            background-color: $dark-600;
+            color: $dark-200;
+          }
         }
 
         & .active {
           color: $primary-300;
           font-weight: bold;
+
+          &:hover {
+            background-color: $dark-400;
+            color: $primary-200;
+          }
         }
       }
     }
