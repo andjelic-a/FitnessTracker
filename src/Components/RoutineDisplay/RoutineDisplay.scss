@@ -238,10 +238,9 @@
           font-weight: normal;
           transition: 0.3s;
           color: $dark-500;
-
+          
           &:hover {
-            background-color: $dark-600;
-            color: $dark-200;
+            color: $primary-300;
           }
         }
 
@@ -258,8 +257,7 @@
           color: $dark-600;
           
           &:hover {
-            background-color: $dark-600;
-            color: $dark-200;
+            color: $primary-300;
           }
         }
 
@@ -276,19 +274,13 @@
           color: $dark-600;
           
           &:hover {
-            background-color: $dark-600;
-            color: $dark-200;
+            color: $primary-300;
           }
         }
 
         & .active {
           color: $primary-300;
           font-weight: bold;
-
-          &:hover {
-            background-color: $dark-400;
-            color: $primary-200;
-          }
         }
       }
     }

@@ -24,6 +24,7 @@ export default function CommentInputField({
   textAreaRef: inputRef,
   ...props
 }: CommentInputFieldProps) {
+  const [comment, setComment] = useState("");
   const [isButtonContainerVisible, setIsButtonContainerVisible] =
     useState(true);
 
@@ -94,7 +95,11 @@ export default function CommentInputField({
             className="new-comment-textarea"
             rows={1}
             ref={inputRef}
-            onChange={handleInputRefHeightChange}
+            value={comment}
+            onChange={(e) => {
+              setComment(e.target.value);
+              handleInputRefHeightChange();
+            }}
             onKeyDown={(e) => {
               if (
                 props.type === "nested-reply" &&
@@ -120,7 +125,13 @@ export default function CommentInputField({
               <p>Cancel</p>
             </button>
 
-            <button onClick={handleSubmit}>
+            <button
+              className={
+                !comment ? "workout-comment-header-button-disabled" : ""
+              }
+              disabled={!comment}
+              onClick={handleSubmit}
+            >
               <p>Comment</p>
             </button>
           </div>
