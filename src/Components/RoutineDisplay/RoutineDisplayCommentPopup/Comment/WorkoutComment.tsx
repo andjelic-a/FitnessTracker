@@ -42,7 +42,13 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
       reachedEnd: boolean;
     } | null>(null);
 
-    async function requestReplies() {
+    useEffect(() => {
+      setIsLiked(comment.isLiked);
+      setLikeCount(comment.likeCount);
+      setReplyCount(comment.replyCount);
+    }, [comment]);
+
+    async function getInitialReplies() {
       if (props.isReply) return;
 
       const awaitedReplies = replies;
@@ -84,7 +90,7 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
       );
     }
 
-    async function requestMoreReplies() {
+    async function getMoreReplies() {
       if (props.isReply || !replies) return;
 
       const awaitReplies = replies;
@@ -114,12 +120,6 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
         return prev;
       });
     }
-
-    useEffect(() => {
-      setIsLiked(comment.isLiked);
-      setLikeCount(comment.likeCount);
-      setReplyCount(comment.replyCount);
-    }, [comment]);
 
     function handleLikeClick() {
       if (isWaitingForResponse.current) return;
@@ -203,7 +203,7 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
     useEffect(() => {
       if (!repliesExpanded || props.isReply) return;
 
-      requestReplies();
+      getInitialReplies();
     }, [repliesExpanded]);
 
     function handleShowMoreRepliesClick() {
@@ -211,9 +211,7 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
 
       isWaitingForResponse.current = true;
 
-      requestMoreReplies().then(
-        () => void (isWaitingForResponse.current = false)
-      );
+      getMoreReplies().then(() => void (isWaitingForResponse.current = false));
     }
 
     const replyElements = useMemo(() => {
@@ -250,18 +248,21 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
         initial={{
           top: -33,
           opacity: 0,
+          pointerEvents: "none",
         }}
         animate={{
           top: 0,
           opacity: 1,
+          pointerEvents: "all",
         }}
         exit={{
-          top: -33,
+          top: -25,
           opacity: 0,
+          pointerEvents: "none",
         }}
         transition={{
-          duration: 0.2,
-          ease: "easeInOut",
+          duration: 0.25,
+          ease: "easeOut",
         }}
         style={{
           position: "relative",
