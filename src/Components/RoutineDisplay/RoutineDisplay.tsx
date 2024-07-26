@@ -275,8 +275,8 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
 
               return (
                 <>
-                  {routine.content.description?.trim() !== "" ||
-                    (routine.content.description && (
+                  {routine.content.description?.trim() !== "" &&
+                    routine.content.description && (
                       <div className="routine-display-description-container">
                         <div className="routine-display-description">
                           <label className="routine-display-description-placeholder">
@@ -285,7 +285,7 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
                           {routine.content.description}
                         </div>
                       </div>
-                    ))}
+                    )}
                   <div className="icon-container">
                     <div className="routine-display-interaction-container">
                       <Icon
@@ -296,7 +296,7 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
                         }`}
                       />
 
-                      <p>{formatCount(likeCount)}</p>
+                      <p className="routine-display-interaction-count">{formatCount(likeCount)}</p>
                     </div>
 
                     <div className="routine-display-interaction-container">
@@ -308,7 +308,7 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
                         }`}
                       />
 
-                      <p>{formatCount(commentCount)}</p>
+                      <p className="routine-display-interaction-count">{formatCount(commentCount)}</p>
                     </div>
 
                     <div className="routine-display-interaction-container">
@@ -320,7 +320,7 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
                         }`}
                       />
 
-                      <p>{formatCount(favoriteCount)}</p>
+                      <p className="routine-display-interaction-count">{formatCount(favoriteCount)}</p>
                     </div>
                   </div>
                 </>
