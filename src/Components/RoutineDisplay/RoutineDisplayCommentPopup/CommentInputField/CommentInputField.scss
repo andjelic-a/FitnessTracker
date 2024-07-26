@@ -1,0 +1,93 @@
+@import "../../../../Palette.scss";
+
+.comment-input-container {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 7fr 93fr;
+  column-gap: 1.5rem;
+
+  .image-container {
+    width: fit-content;
+
+    img {
+      max-width: 100%;
+      aspect-ratio: auto;
+    }
+  }
+
+  .main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1rem;
+    margin-bottom: 3rem;
+
+    .comment-textarea-container {
+      width: 100%;
+      height: fit-content;
+      display: grid;
+      grid-template-rows: 1fr;
+      grid-template-columns: 1fr;
+      position: relative;
+
+      textarea {
+        resize: none;
+        min-width: 100%;
+        max-width: 100%;
+        width: 100%;
+
+        font-size: 1.5rem;
+        font-family: sans-serif;
+        color: rgb(231, 231, 231);
+
+        background-color: transparent;
+        outline: none;
+        border: none;
+        border-bottom: 2px solid $dark-600;
+
+        padding: 1.15rem 1rem;
+        overflow: hidden;
+      }
+
+      &::before {
+        content: "";
+        display: block;
+        box-sizing: border-box;
+
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        width: 0%;
+        height: 0px;
+        transform: translate(-50%, -100%);
+
+        border-bottom: 2px solid #fff;
+
+        transition: 200ms;
+        transition-timing-function: ease-in-out;
+      }
+
+      &:has(textarea:focus)::before {
+        width: 100%;
+        transition: 300ms;
+      }
+    }
+
+    .workout-comment-header-button-wrapper {
+      display: flex;
+      gap: 1rem;
+
+      button {
+        font-size: 1.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+}
