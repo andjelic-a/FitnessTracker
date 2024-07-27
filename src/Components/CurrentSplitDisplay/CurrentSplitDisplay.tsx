@@ -2,6 +2,7 @@ import "./CurrentSplitDisplay.scss";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import { v4 } from "uuid";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 type CurrentSplitDisplayProps = {
   split: Schema<"DetailedUserSplitResponseDTO">;
@@ -17,19 +18,24 @@ type SplitWorkout = {
     }
   | {
       splitWorkout: null;
+      status: RestStatus;
     }
 );
 
-//Completed means that the user completed the workout
-//Not-completed means that the user did not complete the workout YET (meaning tomorrows workouts will always be not-completed)
+//Done means that the user done the workout
+//Pending means that the user did not complete the workout YET (meaning tomorrows workouts will always be pending)
 //Skipped means that the user skipped the workout (if they didn't go to the gym yesterday but they were supposed to).
-//Today not completed yet but still has time (until the end of the day before it's marked as skipped)
-type WorkoutStatus = "completed" | "not-completed" | "skipped" | "today";
+//Pending-today not done yet but still has time (until the end of the day before it's marked as skipped)
+type WorkoutStatus = "done" | "skipped" | "pending" | "pending-today";
+
+type RestStatus = "passed" | "scheduled" | "scheduled-today";
 
 export default function CurrentSplitDisplay({
   split,
   latestActivity,
 }: CurrentSplitDisplayProps) {
+  const navigate = useNavigate();
+
   const [workouts, setWorkouts] = useState<SplitWorkout[]>([]);
 
   useEffect(() => void setWorkouts(extractWorkouts(split)), [split]);
@@ -42,33 +48,48 @@ export default function CurrentSplitDisplay({
     for (let i = 0; i < 7; i++)
       workouts.push(split.workouts.find((x) => x.day === i) ?? null);
 
-    return workouts.map((x) => ({
+    return workouts.map((x, i) => ({
       key: v4(),
       splitWorkout: x,
-      status: !x ? "completed" : getStatusForWorkout(x),
-    }));
+      status: !x ? getStatusForRest(i) : getStatusForWorkout(x),
+    })) as SplitWorkout[];
   }
 
   function getStatusForWorkout(
     workout: Schema<"SimpleSplitWorkoutResponseDTO">
   ): WorkoutStatus {
-    if (workout.day > new Date().getUTCDay() - 1) return "not-completed";
+    if (workout.day > new Date().getUTCDay() - 1) return "pending";
 
-    if (latestActivity.completedWorkouts.includes(workout.day))
-      return "completed";
+    if (latestActivity.completedWorkouts.includes(workout.day)) return "done";
 
-    if (workout.day === new Date().getUTCDay() - 1) return "today";
+    if (workout.day === new Date().getUTCDay() - 1) return "pending-today";
 
     return "skipped";
+  }
+
+  function getStatusForRest(day: number): RestStatus {
+    const today = new Date().getUTCDay() - 1;
+    if (day === today) return "scheduled-today";
+    if (day < today) return "passed";
+    return "scheduled";
   }
 
   return (
     <div className="current-split-display-container">
       {workouts.map((x) => {
-        if (!x.splitWorkout) return <p key={x.key}>Rest</p>;
+        if (!x.splitWorkout)
+          return (
+            <p className={"workout rest " + x.status} key={x.key}>
+              Rest
+            </p>
+          );
 
         return (
-          <p key={x.key} className={"workout " + x.status}>
+          <p
+            key={x.key}
+            className={"workout " + x.status}
+            onClick={() => navigate(`workout/${x.splitWorkout.workout.id}`)}
+          >
             {x.splitWorkout.workout.name}
           </p>
         );

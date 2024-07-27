@@ -12,20 +12,40 @@
   .workout {
     font-size: 1rem;
 
-    &.skipped {
-      color: red;
+    &:not(.rest) {
+      cursor: pointer;
+
+      &.done {
+        color: green;
+      }
+
+      &.skipped {
+        color: red;
+      }
+
+      &.pending {
+        color: $dark-200;
+      }
+
+      &.pending-today {
+        color: blue;
+      }
     }
 
-    &.completed {
-      color: green;
-    }
+    &.rest {
+      cursor: default;
 
-    &.not-completed {
-      color: $dark-200;
-    }
+      &.passed {
+        color: green;
+      }
 
-    &.today {
-      color: blue;
+      &.scheduled {
+        color: $dark-200;
+      }
+
+      &.scheduled-today {
+        color: blue;
+      }
     }
   }
 }
