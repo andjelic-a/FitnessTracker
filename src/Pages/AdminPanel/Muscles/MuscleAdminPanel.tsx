@@ -68,7 +68,7 @@ export default function MuscleAdminPanel() {
                 {muscles.content.map((muscleGroup) => (
                   <li key={"muscle-group" + muscleGroup.id}>
                     <h1>
-                      {muscleGroup.name}{" "}
+                      {muscleGroup.name}
                       <Icon
                         name="trash"
                         onClick={() =>
@@ -79,7 +79,7 @@ export default function MuscleAdminPanel() {
                     <ul>
                       {muscleGroup.muscles.map((muscle) => (
                         <li key={"muscle" + muscle.id}>
-                          {muscle.name}{" "}
+                          {muscle.name}
                           <Icon
                             name="trash"
                             onClick={() =>

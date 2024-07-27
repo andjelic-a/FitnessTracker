@@ -1,12 +1,31 @@
 @import "../../Palette.scss";
 
-.current-split-display-container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    font-size: 2rem;
-    color: $dark-200;
+.current-split-display-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 2rem;
+  gap: 2rem;
+
+  .workout {
+    font-size: 1rem;
+
+    &.skipped {
+      color: red;
+    }
+
+    &.completed {
+      color: green;
+    }
+
+    &.not-completed {
+      color: $dark-200;
+    }
+
+    &.today {
+      color: blue;
+    }
+  }
 }
