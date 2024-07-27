@@ -9,6 +9,7 @@ import ProfileSkeleton from "./Skeletons/ProfileSkeleton";
 import profileLoader from "./ProfileLoader";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
 import Async from "../../Components/Async/Async";
+import CurrentSplitDisplay from "../../Components/CurrentSplitDisplay/CurrentSplitDisplay";
 
 export default function Profile() {
   const userData = useLoaderData<typeof profileLoader>();
@@ -72,6 +73,10 @@ export default function Profile() {
                     );
                   }}
                 </Async>
+
+                <CurrentSplitDisplay
+                  split={loadedUserData.content.currentSplit}
+                />
               </div>
             </div>
           );
