@@ -1,0 +1,37 @@
+@import "../../Palette.scss";
+
+.exercise {
+    position: absolute;
+    width: 80rem;
+    min-height: 50rem;
+    height: auto;
+    top: 0;
+    left: 0;
+    background-color: red;
+    border-radius: 0.5rem;
+    overflow-y: auto;
+    z-index: 0;
+    visibility: 0;
+
+    &::-webkit-scrollbar {
+        width: 8px;
+      }
+    
+      &::-webkit-scrollbar-track {
+        background: $dark-200;
+      }
+    
+      &::-webkit-scrollbar-thumb {
+        background: $dark-500;
+        border-radius: 10px;
+      }
+    
+      &::-webkit-scrollbar-thumb:hover {
+        background: $dark-600;
+      }
+}
+
+.exercise-open {
+    visibility: 1;
+    z-index: 2;
+}

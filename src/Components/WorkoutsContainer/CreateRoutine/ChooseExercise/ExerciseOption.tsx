@@ -7,12 +7,14 @@ type ExerciseOptionProps = {
   exercise: Schema<"SimpleExerciseResponseDTO">;
   onSelectExercise: (exercise: Schema<"SimpleExerciseResponseDTO">) => void;
   isSelected: boolean;
+  handleLinkClick: (isLinkClicked: boolean) => void;
 };
 
 export function ExerciseOption({
   exercise,
   onSelectExercise,
   isSelected,
+  handleLinkClick,
 }: ExerciseOptionProps) {
   const [isLinkHovered, setIsLinkHovered] = useState<boolean>(false);
 
@@ -26,8 +28,8 @@ export function ExerciseOption({
 
   const handleLinkContainerClick = () => {
     setIsLinkHovered(false);
-    console.log("link");
-  }
+    handleLinkClick(true);
+  };
 
   return (
     <div

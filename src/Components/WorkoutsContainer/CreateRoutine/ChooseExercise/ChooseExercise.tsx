@@ -5,6 +5,7 @@ import { ExerciseOption } from "./ExerciseOption";
 import Icon from "../../../Icon/Icon";
 import "./ChooseExercise.scss";
 import AsyncDropdown from "../../../DropdownMenu/AsyncDropdown/AsyncDropdown";
+import Exercise from "../../../Exercise/Exercise";
 
 export type ChooseExerciseData = {
   id: string;
@@ -49,6 +50,8 @@ export default function ChooseExerciseWindow({
   const [selected, setSelectedExercises] = useState<
     Schema<"SimpleExerciseResponseDTO"> | Schema<"SimpleExerciseResponseDTO">[]
   >([]);
+
+  const [isLinkClicked, setIsLinkClicked] = useState<boolean>(false);
 
   const handleConfirm = () => {
     onConfirmSelection(selected);
@@ -109,77 +112,85 @@ export default function ChooseExerciseWindow({
     muscleGroupFilter.current = +newSelectionKey.replace(".$", "");
   }
 
-  return (
-    <div className="choose-exercise" id="choose-exercise">
-      <div className="choose-exercise-header">
-        <h3>Choose Exercise</h3>
-      </div>
-      <div className="choose-exercise-body">
-        <div className="choose-exercise-search-container">
-          <div className="choose-exercise-search-bar-container">
-            <Icon className="choose-exercise-search-bar-icon" name="search" />
-            <input
-              type="text"
-              className="choose-exercise-search-bar"
-              ref={searchBarRef}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleSearch();
-              }}
-            />
-            <Icon
-              onClick={handleSearch}
-              className="choose-exercise-search-bar-icon arrow-right-icon"
-              name="arrow-right"
-            />
-          </div>
-          <div className="choose-exercise-filter">
-            <AsyncDropdown<"SimpleMuscleGroupResponseDTO">
-              onRequest={onRequestMuscleGroups}
-              placeholder="All muscles"
-              className="choose-exercise-filter-muscles-dropdown"
-              onSelectionChanged={handleMuscleGroupFilterChange}
-            />
+  function handleLinkClick(isLinkClicked: boolean) {
+    setIsLinkClicked(isLinkClicked);
+  }
 
-            <AsyncDropdown<"SimpleEquipmentResponseDTO">
-              onRequest={onRequestEquipment}
-              placeholder="All equipment"
-              className="choose-exercise-filter-equipment-dropdown"
-              onSelectionChanged={handleEquipmentFilterChange}
-            />
-          </div>
+  return (
+    <>
+      <Exercise isOpen={isLinkClicked} />
+      <div className="choose-exercise" id="choose-exercise">
+        <div className="choose-exercise-header">
+          <h3>Choose Exercise</h3>
         </div>
-        {[...preLoadedExercises, ...lazyLoaded].map((exercise) => (
-          <ExerciseOption
-            key={exercise.id}
-            exercise={exercise}
-            onSelectExercise={handleSelectExercise}
-            isSelected={
-              Array.isArray(selected)
-                ? selected.includes(exercise)
-                : selected === exercise
+        <div className="choose-exercise-body">
+          <div className="choose-exercise-search-container">
+            <div className="choose-exercise-search-bar-container">
+              <Icon className="choose-exercise-search-bar-icon" name="search" />
+              <input
+                type="text"
+                className="choose-exercise-search-bar"
+                ref={searchBarRef}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSearch();
+                }}
+              />
+              <Icon
+                onClick={handleSearch}
+                className="choose-exercise-search-bar-icon arrow-right-icon"
+                name="arrow-right"
+              />
+            </div>
+            <div className="choose-exercise-filter">
+              <AsyncDropdown<"SimpleMuscleGroupResponseDTO">
+                onRequest={onRequestMuscleGroups}
+                placeholder="All muscles"
+                className="choose-exercise-filter-muscles-dropdown"
+                onSelectionChanged={handleMuscleGroupFilterChange}
+              />
+
+              <AsyncDropdown<"SimpleEquipmentResponseDTO">
+                onRequest={onRequestEquipment}
+                placeholder="All equipment"
+                className="choose-exercise-filter-equipment-dropdown"
+                onSelectionChanged={handleEquipmentFilterChange}
+              />
+            </div>
+          </div>
+          {[...preLoadedExercises, ...lazyLoaded].map((exercise) => (
+            <ExerciseOption
+              key={exercise.id}
+              exercise={exercise}
+              onSelectExercise={handleSelectExercise}
+              isSelected={
+                Array.isArray(selected)
+                  ? selected.includes(exercise)
+                  : selected === exercise
+              }
+              handleLinkClick={handleLinkClick}
+            />
+          ))}
+        </div>
+        <div className="choose-exercise-footer">
+          <button className="choose-exercise-button" onClick={handleConfirm}>
+            {replaceMode ? "Replace" : "Add"}
+          </button>
+          <button
+            className={"choose-exercise-button"}
+            ref={requireLazyLoadBtnRef}
+            onClick={requireLazyLoad}
+            disabled={
+              lazyLoaded.length + preLoadedExercises.length > 0 &&
+              (lazyLoaded.length + preLoadedExercises.length) % 10 !== 0
             }
-          />
-        ))}
+          >
+            More
+          </button>
+          <button className="choose-exercise-button" onClick={onClose}>
+            Cancel
+          </button>
+        </div>
       </div>
-      <div className="choose-exercise-footer">
-        <button className="choose-exercise-button" onClick={handleConfirm}>
-          {replaceMode ? "Replace" : "Add"}
-        </button>
-        <button
-          className={"choose-exercise-button"}
-          ref={requireLazyLoadBtnRef}
-          onClick={requireLazyLoad}
-          disabled={
-            lazyLoaded.length + preLoadedExercises.length > 0 &&
-            (lazyLoaded.length + preLoadedExercises.length) % 10 !== 0
-          }
-        >
-          More
-        </button>
-        <button className="choose-exercise-button" onClick={onClose}>
-          Cancel
-        </button>
-      </div>
-    </div>
+    </>
   );
 }
