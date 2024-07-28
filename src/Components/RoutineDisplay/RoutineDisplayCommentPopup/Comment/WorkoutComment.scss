@@ -89,6 +89,10 @@
               color: $primary-300;
               font-weight: bold;
             }
+
+            &:hover {
+              color: $primary-300;
+            }
           }
         }
 
@@ -104,6 +108,10 @@
           border: none;
           outline: none;
           color: #fff;
+
+          &:hover {
+            color: $primary-300;
+          }
         }
       }
 

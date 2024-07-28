@@ -56,13 +56,11 @@ export default function CommentInputField({
       comment: inputRef.current.value,
     });
     inputRef.current.value = "";
-    setComment("");
   }
 
   function handleCancel() {
     if (inputRef.current) {
       inputRef.current.value = "";
-      setComment("");
       inputRef.current.blur();
     }
 
