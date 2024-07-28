@@ -74,7 +74,7 @@
       }
     }
 
-    .workout-comment-header-button-wrapper {
+    .comment-input-button-container {
       display: flex;
       gap: 1rem;
 
@@ -106,14 +106,13 @@
           &:hover {
             background-color: $primary-400;
           }
+
+          &:disabled {
+            background-color: $dark-400 !important;
+            opacity: 0.6;
+          }
         }
       }
     }
   }
-}
-
-
-.workout-comment-header-button-disabled {
-  background-color: $dark-400 !important;
-  opacity: 0.6;
 }

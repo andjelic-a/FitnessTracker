@@ -7190,12 +7190,21 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/workout/comment/{id}/like": {
+    "/api/workout/{workoutId}/comment/{id}/like": {
       post: {
         tags: ["Workout"];
         parameters: [
           {
             name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+              format: "uuid";
+            };
+          },
+          {
+            name: "workoutId";
             in: "path";
             required: true;
             schema: {
@@ -7290,6 +7299,8 @@ type MappedEndpoints = {
           };
         };
       };
+    };
+    "/api/workout/comment/{id}/like": {
       delete: {
         tags: ["Workout"];
         parameters: [
