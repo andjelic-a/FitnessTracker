@@ -3,7 +3,6 @@ import { useRef, useState } from "react";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 import { ExerciseOption } from "./ExerciseOption";
 import Icon from "../../../Icon/Icon";
-import "./ChooseExercise.scss";
 import AsyncDropdown from "../../../DropdownMenu/AsyncDropdown/AsyncDropdown";
 import Exercise from "../../../Exercise/Exercise";
 
@@ -118,7 +117,7 @@ export default function ChooseExerciseWindow({
 
   return (
     <>
-      <Exercise isOpen={isLinkClicked} />
+      <Exercise setIsOpen={setIsLinkClicked} isOpen={isLinkClicked} />
       <div className="choose-exercise" id="choose-exercise">
         <div className="choose-exercise-header">
           <h3>Choose Exercise</h3>
