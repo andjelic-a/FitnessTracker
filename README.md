@@ -49,8 +49,7 @@ To set up the Fitness Tracker locally, follow these steps:
    npm run dev
 
 5. **Backend Setup**:
-   
-Refer to the backend repository for setup instructions.
+   Refer to the [backend repository](https://github.com/andrej235/fitnesstrackerbackend) for setup instructions.
 
 ## Usage:
    - Navigate to the website and sign up or log in.
