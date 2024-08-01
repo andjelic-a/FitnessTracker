@@ -1,0 +1,10 @@
+@import "../../Palette.scss";
+
+.settings-menu {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 30%;
+    border-right: 2px solid $dark-300;
+}
