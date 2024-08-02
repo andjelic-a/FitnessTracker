@@ -20,7 +20,7 @@
   - [TypeScript](https://www.typescriptlang.org/)
 
 - **Backend:** 
-  - The backend is developed as a separate project and hosted in a different GitHub repository.
+  - The backend is developed as a separate project and hosted in a [*different* GitHub repository](https://github.com/andrej235/fitnesstrackerbackend).
 
 ## Installation
 
