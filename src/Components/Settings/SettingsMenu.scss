@@ -10,6 +10,7 @@
 }
 
 .settings-menu-item {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,6 +18,10 @@
     width: 100%;
     font-size: 1.8rem;
     font-weight: normal;
-    transition: background 0.2s;
+    transition: 0.2s;
     cursor: pointer;
+
+    &:first-child {
+        border-radius: 0.5rem 0 0 0;
+    }
 }
