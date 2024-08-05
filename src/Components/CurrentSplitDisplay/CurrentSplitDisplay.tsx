@@ -2,7 +2,7 @@ import "./CurrentSplitDisplay.scss";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import { v4 } from "uuid";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import CurrentSplitDayDisplay from "./CurrentSplitDayDisplay";
 
 type CurrentSplitDisplayProps = {
   split: Schema<"DetailedUserSplitResponseDTO">;
@@ -26,16 +26,17 @@ type SplitWorkout = {
 //Pending means that the user did not complete the workout YET (meaning tomorrows workouts will always be pending)
 //Skipped means that the user skipped the workout (if they didn't go to the gym yesterday but they were supposed to).
 //Pending-today not done yet but still has time (until the end of the day before it's marked as skipped)
-type WorkoutStatus = "done" | "skipped" | "pending" | "pending-today";
+export type WorkoutStatus = "done" | "skipped" | "pending" | "pending-today";
 
-type RestStatus = "passed" | "scheduled" | "scheduled-today";
+//Passed means that the rest day already passed
+//Scheduled means that the rest day is scheduled (supposed to happen in future)
+//Scheduled-today means that the rest day is scheduled for today (supposed to happen today)
+export type RestStatus = "passed" | "scheduled" | "scheduled-today";
 
 export default function CurrentSplitDisplay({
   split,
   latestActivity,
 }: CurrentSplitDisplayProps) {
-  const navigate = useNavigate();
-
   const [workouts, setWorkouts] = useState<SplitWorkout[]>([]);
 
   useEffect(() => void setWorkouts(extractWorkouts(split)), [split]);
@@ -76,24 +77,24 @@ export default function CurrentSplitDisplay({
 
   return (
     <div className="current-split-display-container">
-      {workouts.map((x) => {
-        if (!x.splitWorkout)
-          return (
-            <p className={"workout rest " + x.status} key={x.key}>
-              Rest
-            </p>
-          );
-
-        return (
-          <p
+      {workouts.map((x, i) =>
+        x.splitWorkout ? (
+          <CurrentSplitDayDisplay
+            type="workout"
             key={x.key}
-            className={"workout " + x.status}
-            onClick={() => navigate(`workout/${x.splitWorkout.workout.id}`)}
-          >
-            {x.splitWorkout.workout.name}
-          </p>
-        );
-      })}
+            day={x.splitWorkout.day}
+            status={x.status}
+            workout={x.splitWorkout.workout}
+          />
+        ) : (
+          <CurrentSplitDayDisplay
+            type="rest"
+            key={x.key}
+            status={x.status}
+            day={i}
+          />
+        )
+      )}
     </div>
   );
 }
