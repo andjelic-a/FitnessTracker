@@ -9215,8 +9215,22 @@ type MappedEndpoints = {
       SimpleSplitWorkoutResponseDTO: {
         type: "object";
         properties: {
-          workout: {
-            $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
+          id: {
+            type: "string";
+            format: "uuid";
+          };
+          name: {
+            type: "string";
+          };
+          description: {
+            type: "string";
+            nullable: true;
+          };
+          isPublic: {
+            type: "boolean";
+          };
+          creator: {
+            $ref: "#/components/schemas/SimpleUserResponseDTO";
           };
           day: {
             $ref: "#/components/schemas/DayOfWeek";

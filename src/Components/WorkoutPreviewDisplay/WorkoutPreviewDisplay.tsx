@@ -5,7 +5,7 @@ import User from "../User/User";
 import { useNavigate } from "react-router-dom";
 
 type WorkoutPreviewDisplayProps = {
-  workout: Schema<"SimpleWorkoutResponseDTO">;
+  workout: Schema<"SimpleSplitWorkoutResponseDTO">;
 } & DetailedHTMLProps<HtmlHTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
 export default function WorkoutPreviewDisplay({
@@ -22,7 +22,7 @@ export default function WorkoutPreviewDisplay({
         {!workout.isPublic && <p className="private-label">Private</p>}
       </div>
       <div className="body">
-        <p>Description</p>
+        <p>{workout.description}</p>
       </div>
       <div className="footer">
         <User user={workout.creator} />
