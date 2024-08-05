@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import WindowFC from "../../Components/WindowWrapper/WindowFC";
 import EditProfile from "../../Components/Settings/EditProfile/EditProfile";
@@ -9,6 +9,8 @@ const Settings = WindowFC(({}, wrapperRef) => {
 
   const [isEditProfileOpen, setIsEditProfileOpen] = useState<boolean>(false);
 
+  const menuItemsRef = useRef<(HTMLDivElement | null)[]>([]);
+
   const handleCancel = () => {
     navigate(-1);
   };
@@ -17,15 +19,51 @@ const Settings = WindowFC(({}, wrapperRef) => {
     setIsEditProfileOpen(false);
   };
 
+  const setMenuItemRef = useCallback((element: HTMLDivElement | null) => {
+    if (element && !menuItemsRef.current.includes(element)) {
+      menuItemsRef.current.push(element);
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const { left, top, width, height } = target.getBoundingClientRect();
+      const xPos = ((event.clientX - left) / width) * 100;
+      const yPos = ((event.clientY - top) / height) * 100;
+      target.style.background = `radial-gradient(circle at ${xPos}% ${yPos}%, #444444, #2e2e2e 125%)`;
+    };
+
+    const handleMouseLeave = (event: MouseEvent) => {
+      (event.target as HTMLElement).style.background = "";
+    };
+
+    menuItemsRef.current.forEach(item => {
+      if (item) {
+        item.addEventListener("mousemove", handleMouseMove);
+        item.addEventListener("mouseleave", handleMouseLeave);
+      }
+    });
+
+    return () => {
+      menuItemsRef.current.forEach(item => {
+        if (item) {
+          item.removeEventListener("mousemove", handleMouseMove);
+          item.removeEventListener("mouseleave", handleMouseLeave);
+        }
+      });
+    };
+  }, []);
+
   return (
     <div ref={wrapperRef}>
       <EditProfile visible={isEditProfileOpen} onClose={handleCloseEditProfile} />
       <div className="settings">
-        <div onClick={() => setIsEditProfileOpen(prevState => !prevState)} className="settings-item">Edit profile</div>
-        <div className="settings-item">Authentication</div>
-        <div className="settings-item">Privacy</div>
-        <div className="settings-item">Log out</div>
-        <div className="settings-item" onClick={handleCancel}>Cancel</div>
+        <div ref={setMenuItemRef} onClick={() => setIsEditProfileOpen(prevState => !prevState)} className="settings-item">Edit profile</div>
+        <div ref={setMenuItemRef} className="settings-item">Authentication</div>
+        <div ref={setMenuItemRef} className="settings-item">Privacy</div>
+        <div ref={setMenuItemRef} className="settings-item">Log out</div>
+        <div ref={setMenuItemRef} className="settings-item" onClick={handleCancel}>Cancel</div>
       </div>
     </div>
   );
