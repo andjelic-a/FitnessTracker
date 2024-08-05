@@ -1,6 +1,6 @@
-import { useNavigate } from "react-router-dom";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import { RestStatus, WorkoutStatus } from "./CurrentSplitDisplay";
+import WorkoutPreviewDisplay from "../WorkoutPreviewDisplay/WorkoutPreviewDisplay";
 
 type CurrentSplitDayDisplayProps = {
   day: number;
@@ -20,19 +20,15 @@ export default function CurrentSplitDayDisplay({
   day,
   ...props
 }: CurrentSplitDayDisplayProps) {
-  const navigate = useNavigate();
-
   return (
     <>
       {props.type === "rest" ? (
         <p className={"workout rest " + props.status}>Rest</p>
       ) : (
-        <p
+        <WorkoutPreviewDisplay
+          workout={props.workout}
           className={"workout " + props.status}
-          onClick={() => navigate(`workout/${props.workout.id}`)}
-        >
-          {props.workout.name}
-        </p>
+        />
       )}
     </>
   );

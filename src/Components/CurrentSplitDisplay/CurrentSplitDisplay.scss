@@ -13,8 +13,6 @@
     font-size: 1rem;
 
     &:not(.rest) {
-      cursor: pointer;
-
       &.done {
         color: green;
       }
@@ -47,5 +45,7 @@
         color: blue;
       }
     }
+
+    color: #fff !important; //TODO: Remove
   }
 }

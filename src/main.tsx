@@ -29,7 +29,7 @@ import EmailVerification from "./Pages/EmailVerification/EmailVerification.tsx";
 import emailVerificationLoader from "./Pages/EmailVerification/EmailVerificationLoader.ts";
 import LandingPage from "./Pages/LandingPage/LandingPage.tsx";
 import ForgotPassword from "./Pages/ForgotPasswordPage/ForgotPassword.tsx";
-import User from "./Pages/User/User.tsx";
+import UserPage from "./Pages/User/User.tsx";
 import userLoader from "./Pages/User/UserLoader.ts";
 import RoutineDisplay from "./Components/RoutineDisplay/RoutineDisplay.tsx";
 import routineDisplayLoader from "./Components/RoutineDisplay/RoutineDisplayLoader.ts";
@@ -122,7 +122,7 @@ const routes: RouteObject[] = [
       },
       {
         path: "user/:userId",
-        element: <User />,
+        element: <UserPage />,
         loader: userLoader,
         children: [
           {
