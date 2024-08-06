@@ -1,5 +1,17 @@
 @import "../../Palette.scss";
 
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --from {
+  syntax: "<angle>";
+  initial-value: 300deg;
+  inherits: false;
+}
+
 .current-split-display-container {
   width: fit-content;
   height: fit-content;
@@ -34,6 +46,7 @@
     .workout {
       position: relative;
       font-size: 1rem;
+      background-color: $dark-100;
 
       &:not(.rest) {
         &.done {
@@ -92,6 +105,65 @@
 
         &.pending-today {
           color: blue;
+
+          &::after,
+          &::before {
+            transition: --from 0.4s ease-in-out;
+            content: "";
+            position: absolute;
+            height: 100%;
+            width: 100%;
+
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            padding: 3px;
+
+            border-radius: 0.5rem;
+
+            background-image: conic-gradient(
+              from var(--angle),
+              transparent,
+              var(--from),
+              rgb(125, 125, 228)
+            );
+
+            animation: 3s spin linear infinite;
+
+            @keyframes spin {
+              0% {
+                --angle: 0deg;
+              }
+
+              25% {
+                --angle: 90deg;
+              }
+
+              50% {
+                --angle: 220deg;
+              }
+
+              90% {
+                --angle: 310deg;
+              }
+
+              100% {
+                --angle: 360deg;
+              }
+            }
+          }
+
+          &::before {
+            filter: blur(1rem);
+            opacity: 0.8;
+          }
+
+          &:hover::before,
+          &:hover::after {
+            animation-play-state: paused;
+            --from: 0deg;
+          }
         }
       }
 

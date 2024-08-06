@@ -27,7 +27,7 @@ export default function CurrentSplitDayDisplay({
       ) : (
         <WorkoutPreviewDisplay
           workout={props.workout}
-          className={"workout " + "skipped"}
+          className={"workout " + props.status}
         />
       )}
     </>
