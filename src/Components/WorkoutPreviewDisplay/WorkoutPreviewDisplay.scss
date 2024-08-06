@@ -1,33 +1,42 @@
 @import "../../Palette.scss";
 
 .workout-preview-display {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
   gap: 0.5rem;
 
   border: 2px solid $dark-200;
   border-radius: 0.5rem;
   padding: 1rem;
 
+  width: fit-content;
+  min-width: 100rem;
+
   .header {
+    grid-row: 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 0.5rem;
     font-size: 1.25em;
     font-weight: bold;
-    cursor: pointer;
+
+    .name {
+      cursor: pointer;
+    }
 
     .private-label {
       font-size: 0.85em;
       color: #aaa;
-      padding: 1em 0.7em;
+      padding: 0.7em 0.75em;
       border-radius: 10rem;
       border: 1px solid $dark-200;
+      font-weight: lighter;
     }
   }
 
   .body {
+    grid-row: 2;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -36,6 +45,7 @@
   }
 
   .footer {
+    grid-row: 3;
     display: flex;
     justify-content: flex-start;
     align-items: center;

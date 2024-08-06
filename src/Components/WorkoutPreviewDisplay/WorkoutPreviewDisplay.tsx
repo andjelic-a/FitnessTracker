@@ -17,12 +17,20 @@ export default function WorkoutPreviewDisplay({
 
   return (
     <div className={"workout-preview-display " + className} {...attr}>
-      <div className="header" onClick={() => navigate(`workout/${workout.id}`)}>
-        <p>{workout.name}</p>
+      <div className="header">
+        <p className="name" onClick={() => navigate(`workout/${workout.id}`)}>
+          {workout.name}
+        </p>
         {!workout.isPublic && <p className="private-label">Private</p>}
       </div>
       <div className="body">
-        <p>{workout.description}</p>
+        <p>
+          {workout.description
+            ? workout.description.length > 150
+              ? workout.description.slice(0, 150) + "..."
+              : workout.description
+            : ""}
+        </p>
       </div>
       <div className="footer">
         <User user={workout.creator} />

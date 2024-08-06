@@ -1,7 +1,7 @@
 import "./CurrentSplitDisplay.scss";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import { v4 } from "uuid";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CurrentSplitDayDisplay from "./CurrentSplitDayDisplay";
 
 type CurrentSplitDisplayProps = {
@@ -38,6 +38,7 @@ export default function CurrentSplitDisplay({
   latestActivity,
 }: CurrentSplitDisplayProps) {
   const [workouts, setWorkouts] = useState<SplitWorkout[]>([]);
+  const innerWrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => void setWorkouts(extractWorkouts(split)), [split]);
 
@@ -77,24 +78,26 @@ export default function CurrentSplitDisplay({
 
   return (
     <div className="current-split-display-container">
-      {workouts.map((x, i) =>
-        x.splitWorkout ? (
-          <CurrentSplitDayDisplay
-            type="workout"
-            key={x.key}
-            day={x.splitWorkout.day}
-            status={x.status}
-            workout={x.splitWorkout}
-          />
-        ) : (
-          <CurrentSplitDayDisplay
-            type="rest"
-            key={x.key}
-            status={x.status}
-            day={i}
-          />
-        )
-      )}
+      <div className="inner-container" ref={innerWrapperRef}>
+        {workouts.map((x, i) =>
+          x.splitWorkout ? (
+            <CurrentSplitDayDisplay
+              type="workout"
+              key={x.key}
+              day={x.splitWorkout.day}
+              status={x.status}
+              workout={x.splitWorkout}
+            />
+          ) : (
+            <CurrentSplitDayDisplay
+              type="rest"
+              key={x.key}
+              status={x.status}
+              day={i}
+            />
+          )
+        )}
+      </div>
     </div>
   );
 }
