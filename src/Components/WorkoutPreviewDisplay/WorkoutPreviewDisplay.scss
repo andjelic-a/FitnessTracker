@@ -10,7 +10,7 @@
   padding: 1rem;
 
   width: fit-content;
-  min-width: 100rem;
+  min-width: 30rem;
 
   .header {
     grid-row: 1;
@@ -20,6 +20,7 @@
     gap: 0.5rem;
     font-size: 1.25em;
     font-weight: bold;
+    height: 3rem;
 
     .name {
       cursor: pointer;
