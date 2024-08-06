@@ -31,7 +31,7 @@ const Settings = WindowFC(({}, wrapperRef) => {
       const { left, top, width, height } = target.getBoundingClientRect();
       const xPos = ((event.clientX - left) / width) * 100;
       const yPos = ((event.clientY - top) / height) * 100;
-      target.style.background = `radial-gradient(circle at ${xPos}% ${yPos}%, #444444, #2e2e2e 125%)`;
+      target.style.background = `radial-gradient(circle at ${xPos}% ${yPos}%, #444444, #2e2e2e 100%)`;
     };
 
     const handleMouseLeave = (event: MouseEvent) => {
@@ -63,7 +63,7 @@ const Settings = WindowFC(({}, wrapperRef) => {
         <div ref={setMenuItemRef} className="settings-item">Authentication</div>
         <div ref={setMenuItemRef} className="settings-item">Privacy</div>
         <div ref={setMenuItemRef} className="settings-item">Log out</div>
-        <div ref={setMenuItemRef} className="settings-item" onClick={handleCancel}>Cancel</div>
+        <div ref={setMenuItemRef} onClick={handleCancel} className="settings-item">Cancel</div>
       </div>
     </div>
   );

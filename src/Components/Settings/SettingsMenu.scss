@@ -1,12 +1,18 @@
 @import "../../Palette.scss";
 
 .settings-menu {
-    position: relative;
     display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 32.5%;
-    border-right: 2px solid $dark-300;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 80%;
+    height: 10rem;
+    border-bottom: 2px solid $dark-300;
+    border-radius: 10rem;
+    transition: 0.5s;
+
+    &:hover {
+        border-color: $dark-400;
+    }
 }
 
 .settings-menu-item {
@@ -14,14 +20,24 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 5rem;
-    width: 100%;
-    font-size: 1.8rem;
+    height: 4.5rem;
+    width: 13rem;
+    font-size: 1.6rem;
     font-weight: normal;
     transition: 0.2s;
+    background-color: $dark-300;
+    border-radius: 2rem;
     cursor: pointer;
 
-    &:first-child {
-        border-radius: 0.5rem 0 0 0;
+    &:hover {
+        background-color: $dark-400;
     }
 }
+
+.edit-profile-close-icon {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 2.8rem;
+    cursor: pointer;
+  }
