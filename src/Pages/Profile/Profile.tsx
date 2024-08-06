@@ -60,6 +60,19 @@ export default function Profile() {
               />
 
               <div className="profile-body">
+                <Async await={loaderData.latestWeekOfActivity}>
+                  {(loadedActivityData) => {
+                    if (loadedActivityData.code !== "OK") return null;
+
+                    return (
+                      <CurrentSplitDisplay
+                        split={loadedUserData.content.currentSplit}
+                        latestActivity={loadedActivityData.content}
+                      />
+                    );
+                  }}
+                </Async>
+
                 <Async await={loaderData.streak} skeleton={<ProfileSkeleton />}>
                   {(loadedStreakData) => {
                     if (loadedStreakData.code !== "OK") return null;
@@ -72,19 +85,6 @@ export default function Profile() {
                           joinedAt={new Date(loadedUserData.content.joinedAt)}
                         />
                       </>
-                    );
-                  }}
-                </Async>
-
-                <Async await={loaderData.latestWeekOfActivity}>
-                  {(loadedActivityData) => {
-                    if (loadedActivityData.code !== "OK") return null;
-
-                    return (
-                      <CurrentSplitDisplay
-                        split={loadedUserData.content.currentSplit}
-                        latestActivity={loadedActivityData.content}
-                      />
                     );
                   }}
                 </Async>

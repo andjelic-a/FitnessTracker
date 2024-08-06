@@ -8917,6 +8917,9 @@ type MappedEndpoints = {
               $ref: "#/components/schemas/SimpleSplitWorkoutResponseDTO";
             };
           };
+          creator: {
+            $ref: "#/components/schemas/SimpleUserResponseDTO";
+          };
         };
         additionalProperties: false;
       };

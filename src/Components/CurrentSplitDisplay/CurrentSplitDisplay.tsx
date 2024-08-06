@@ -3,6 +3,8 @@ import { Schema } from "../../Types/Endpoints/SchemaParser";
 import { v4 } from "uuid";
 import { useEffect, useRef, useState } from "react";
 import CurrentSplitDayDisplay from "./CurrentSplitDayDisplay";
+import User from "../User/User";
+import { useNavigate } from "react-router-dom";
 
 type CurrentSplitDisplayProps = {
   split: Schema<"DetailedUserSplitResponseDTO">;
@@ -39,6 +41,7 @@ export default function CurrentSplitDisplay({
 }: CurrentSplitDisplayProps) {
   const [workouts, setWorkouts] = useState<SplitWorkout[]>([]);
   const innerWrapperRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => void setWorkouts(extractWorkouts(split)), [split]);
 
@@ -78,7 +81,15 @@ export default function CurrentSplitDisplay({
 
   return (
     <div className="current-split-display-container">
-      <div className="inner-container" ref={innerWrapperRef}>
+      <div className="header">
+        <p className="area-title">Split:</p>
+        <p className="name" onClick={() => void navigate(`/split/${split.id}`)}>
+          {split.name}
+        </p>
+        <User user={split.creator} />
+      </div>
+
+      <div className="workouts-container" ref={innerWrapperRef}>
         {workouts.map((x, i) =>
           x.splitWorkout ? (
             <CurrentSplitDayDisplay
