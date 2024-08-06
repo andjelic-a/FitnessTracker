@@ -1,4 +1,6 @@
+import { useState } from "react";
 import SettingsMenu from "../SettingsMenu";
+import Icon from "../../Icon/Icon";
 import "./EditProfile.scss";
 
 type EditProfileProps = {
@@ -7,10 +9,21 @@ type EditProfileProps = {
 };
 
 export default function EditProfile({ visible, onClose }: EditProfileProps) {
+  const [isImageHovered, setIsImageHovered] = useState(false);
+
   return (
     <div className={`edit-profile ${visible ? "edit-profile-show" : ""}`}>
       <SettingsMenu onClose={onClose} />
       <div className="edit-profile-content">
+        <h3>Edit profile</h3>
+        <div className={`edit-profile-image`}>
+          <div
+            className={`edit-profile-image-trigger`}
+            onMouseEnter={() => setIsImageHovered(true)}
+            onMouseLeave={() => setIsImageHovered(false)}
+          ><Icon className={`edit-profile-image-icon ${isImageHovered ? "edit-profile-image-icon-hovered" : ""}`} name="pen-to-square"/></div>
+          <img className={`${isImageHovered ? "edit-profile-image-hovered" : ""}`} src="../../../../public/DefaultProfilePicture.png" />
+        </div>
       </div>
     </div>
   );
