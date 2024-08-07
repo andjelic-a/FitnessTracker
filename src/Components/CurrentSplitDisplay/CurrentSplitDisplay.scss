@@ -16,7 +16,6 @@
   width: fit-content;
   height: fit-content;
   max-width: 73rem;
-  // overflow: hidden;
 
   display: flex;
   flex-direction: column;
@@ -84,11 +83,6 @@
           transition: 150ms;
         }
 
-        // & .footer:hover::after {
-        //   color: #fff;
-        //   font-weight: 300;
-        // }
-
         &.done {
           color: green;
         }
@@ -150,64 +144,19 @@
         }
 
         &.pending-today {
-          &::after,
-          &::before {
-            transition: --breakpoint-angle 0.4s ease-in-out;
-            content: "";
-            position: absolute;
-            height: 100%;
-            width: 100%;
+          $color1: rgb(235, 251, 255);
+          $color2: rgba(168, 239, 255, 0.1);
 
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: -1;
-            padding: 3px;
-
-            border-radius: 0.5rem;
-
-            background-image: conic-gradient(
+          border-image: conic-gradient(
               from var(--start-angle),
-              transparent,
-              var(--breakpoint-angle),
-              rgb(125, 125, 228)
-            );
+              $color2,
+              $color1 0.1turn,
+              $color1 0.15turn,
+              $color2 0.25turn
+            )
+            30;
 
-            animation: 3s spin linear infinite;
-
-            @keyframes spin {
-              0% {
-                --start-angle: 0deg;
-              }
-
-              25% {
-                --start-angle: 90deg;
-              }
-
-              50% {
-                --start-angle: 220deg;
-              }
-
-              90% {
-                --start-angle: 310deg;
-              }
-
-              100% {
-                --start-angle: 360deg;
-              }
-            }
-          }
-
-          &::before {
-            filter: blur(1rem);
-            opacity: 0.8;
-          }
-
-          &:hover::before,
-          &:hover::after {
-            animation-play-state: paused;
-            --breakpoint-angle: 0deg;
-          }
+          animation: spin-clockwise 2.5s linear infinite forwards;
         }
       }
 
@@ -272,43 +221,23 @@
           }
 
           &::before {
-            animation: 5s spin-2 linear infinite;
+            animation: 5s spin-clockwise linear infinite;
             background-image: conic-gradient(
               from var(--start-angle),
               transparent,
               calc(var(--breakpoint-angle) + 30deg),
               rgb(71, 161, 64)
             );
-
-            @keyframes spin-2 {
-              from {
-                --start-angle: 0deg;
-              }
-
-              to {
-                --start-angle: 360deg;
-              }
-            }
           }
 
           &::after {
-            animation: 5s spin-3 linear infinite;
+            animation: 5s spin-counter-clockwise linear infinite;
             background-image: conic-gradient(
               from var(--start-angle),
               rgb(86, 86, 196),
               calc(330deg - var(--breakpoint-angle)),
               transparent
             );
-
-            @keyframes spin-3 {
-              from {
-                --start-angle: 360deg;
-              }
-
-              to {
-                --start-angle: 0deg;
-              }
-            }
           }
 
           &:hover::before,
@@ -342,17 +271,7 @@
               rgb(125, 125, 228)
             );
 
-            animation: 3s spin-4 linear infinite;
-
-            @keyframes spin-4 {
-              0% {
-                --start-angle: 0deg;
-              }
-
-              100% {
-                --start-angle: 360deg;
-              }
-            }
+            animation: 3s spin-clockwise linear infinite;
           }
 
           &::before {
@@ -456,5 +375,25 @@
         }
       }
     }
+  }
+}
+
+@keyframes spin-clockwise {
+  0% {
+    --start-angle: 0deg;
+  }
+
+  100% {
+    --start-angle: 360deg;
+  }
+}
+
+@keyframes spin-counter-clockwise {
+  from {
+    --start-angle: 360deg;
+  }
+
+  to {
+    --start-angle: 0deg;
   }
 }

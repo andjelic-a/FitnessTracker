@@ -1,4 +1,5 @@
 import "./WorkoutPreviewDisplay.scss";
+import './PendingTodayWorkout.scss'
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import User from "../User/User";
 import { useNavigate } from "react-router-dom";
