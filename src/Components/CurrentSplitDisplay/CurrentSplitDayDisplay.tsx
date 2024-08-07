@@ -28,6 +28,17 @@ export default function CurrentSplitDayDisplay({
         </div>
       ) : (
         <WorkoutPreviewDisplay
+          footerProps={{
+            "data-day": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+              "Sunday",
+            ][day],
+          }}
           workout={props.workout}
           className={"workout " + props.status}
         />

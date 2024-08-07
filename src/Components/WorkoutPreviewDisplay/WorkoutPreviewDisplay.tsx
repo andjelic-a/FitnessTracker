@@ -1,29 +1,36 @@
 import "./WorkoutPreviewDisplay.scss";
-import { DetailedHTMLProps, HtmlHTMLAttributes } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import User from "../User/User";
 import { useNavigate } from "react-router-dom";
+import { HTMLProps } from "../../Types/Utility/HTMLProps";
 
 type WorkoutPreviewDisplayProps = {
   workout: Schema<"SimpleSplitWorkoutResponseDTO">;
-} & DetailedHTMLProps<HtmlHTMLAttributes<HTMLDivElement>, HTMLDivElement>;
+  headerProps?: HTMLProps<HTMLDivElement>;
+  bodyProps?: HTMLProps<HTMLDivElement>;
+  footerProps?: HTMLProps<HTMLDivElement>;
+} & HTMLProps<HTMLDivElement>;
 
 export default function WorkoutPreviewDisplay({
   workout,
   className,
+  headerProps,
+  bodyProps,
+  footerProps,
   ...attr
 }: WorkoutPreviewDisplayProps) {
   const navigate = useNavigate();
 
   return (
     <div className={"workout-preview-display " + className} {...attr}>
-      <div className="header">
+      <div className="header" {...headerProps}>
         <p className="name" onClick={() => navigate(`workout/${workout.id}`)}>
           {workout.name}
         </p>
         {!workout.isPublic && <p className="private-label">Private</p>}
       </div>
-      <div className="body">
+
+      <div className="body" {...bodyProps}>
         <p>
           {workout.description
             ? workout.description.length > 150
@@ -32,7 +39,8 @@ export default function WorkoutPreviewDisplay({
             : ""}
         </p>
       </div>
-      <div className="footer">
+
+      <div className="footer" {...footerProps}>
         <User user={workout.creator} />
       </div>
     </div>
