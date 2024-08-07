@@ -12,6 +12,12 @@
   inherits: false;
 }
 
+@property --border-tail-opacity {
+  syntax: "<number>";
+  initial-value: 0.1;
+  inherits: false;
+}
+
 .current-split-display-container {
   width: fit-content;
   height: fit-content;
@@ -144,8 +150,9 @@
         }
 
         &.pending-today {
+          transition: --border-tail-opacity 0.75s ease-in-out;
           $color1: rgb(235, 251, 255);
-          $color2: rgba(168, 239, 255, 0.1);
+          $color2: rgba(235, 251, 255, var(--border-tail-opacity));
 
           border-image: conic-gradient(
               from var(--start-angle),
@@ -157,6 +164,10 @@
             30;
 
           animation: spin-clockwise 2.5s linear infinite forwards;
+
+          &:hover {
+            --border-tail-opacity: 1;
+          }
         }
       }
 
