@@ -1,12 +1,12 @@
 @import "../../Palette.scss";
 
-@property --angle {
+@property --start-angle {
   syntax: "<angle>";
   initial-value: 0deg;
   inherits: false;
 }
 
-@property --from {
+@property --breakpoint-angle {
   syntax: "<angle>";
   initial-value: 300deg;
   inherits: false;
@@ -126,15 +126,18 @@
         }
 
         &.pending {
-          color: $dark-200;
+          color: #aaa;
+          transition: 100ms ease-out;
+
+          &:hover {
+            color: #fff;
+          }
         }
 
         &.pending-today {
-          color: blue;
-
           &::after,
           &::before {
-            transition: --from 0.4s ease-in-out;
+            transition: --breakpoint-angle 0.4s ease-in-out;
             content: "";
             position: absolute;
             height: 100%;
@@ -149,9 +152,9 @@
             border-radius: 0.5rem;
 
             background-image: conic-gradient(
-              from var(--angle),
+              from var(--start-angle),
               transparent,
-              var(--from),
+              var(--breakpoint-angle),
               rgb(125, 125, 228)
             );
 
@@ -159,23 +162,23 @@
 
             @keyframes spin {
               0% {
-                --angle: 0deg;
+                --start-angle: 0deg;
               }
 
               25% {
-                --angle: 90deg;
+                --start-angle: 90deg;
               }
 
               50% {
-                --angle: 220deg;
+                --start-angle: 220deg;
               }
 
               90% {
-                --angle: 310deg;
+                --start-angle: 310deg;
               }
 
               100% {
-                --angle: 360deg;
+                --start-angle: 360deg;
               }
             }
           }
@@ -188,28 +191,145 @@
           &:hover::before,
           &:hover::after {
             animation-play-state: paused;
-            --from: 0deg;
+            --breakpoint-angle: 0deg;
           }
         }
       }
 
       &.rest {
         cursor: default;
+        height: 100%;
+        aspect-ratio: 1;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        font-size: 2rem;
+        border: 2px solid $dark-200;
+        border-radius: 0.5rem;
+        padding: 1rem;
 
         &.passed {
-          color: green;
+          color: #aaa;
         }
 
         &.scheduled {
-          color: $dark-200;
+          &::after,
+          &::before {
+            transition: --breakpoint-angle 0.4s ease-in-out 0s, filter 1.5s 0.2s;
+            content: "";
+            position: absolute;
+            height: 100%;
+            width: 100%;
+
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            padding: 3px;
+
+            border-radius: 0.5rem;
+          }
+
+          &::before {
+            animation: 5s spin-2 linear infinite;
+            background-image: conic-gradient(
+              from var(--start-angle),
+              transparent,
+              calc(var(--breakpoint-angle) + 30deg),
+              rgb(71, 161, 64)
+            );
+
+            @keyframes spin-2 {
+              from {
+                --start-angle: 0deg;
+              }
+
+              to {
+                --start-angle: 360deg;
+              }
+            }
+          }
+
+          &::after {
+            animation: 5s spin-3 linear infinite;
+            background-image: conic-gradient(
+              from var(--start-angle),
+              rgb(86, 86, 196),
+              calc(330deg - var(--breakpoint-angle)),
+              transparent
+            );
+
+            @keyframes spin-3 {
+              from {
+                --start-angle: 360deg;
+              }
+
+              to {
+                --start-angle: 0deg;
+              }
+            }
+          }
+
+          &:hover::before,
+          &:hover::after {
+            --breakpoint-angle: 180deg;
+            filter: blur(1rem);
+          }
         }
 
         &.scheduled-today {
-          color: blue;
+          &::after,
+          &::before {
+            transition: --breakpoint-angle 0.4s ease-in-out;
+            content: "";
+            position: absolute;
+            height: 100%;
+            width: 100%;
+
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            padding: 3px;
+
+            border-radius: 0.5rem;
+
+            background-image: conic-gradient(
+              from var(--start-angle),
+              transparent,
+              var(--breakpoint-angle),
+              rgb(125, 125, 228)
+            );
+
+            animation: 3s spin-4 linear infinite;
+
+            @keyframes spin-4 {
+              0% {
+                --start-angle: 0deg;
+              }
+
+              100% {
+                --start-angle: 360deg;
+              }
+            }
+          }
+
+          &::before {
+            filter: blur(1rem);
+            opacity: 0.8;
+          }
+
+          &:hover::before,
+          &:hover::after {
+            animation-play-state: paused;
+            --breakpoint-angle: 0deg;
+          }
         }
       }
 
-      color: #fff !important; //TODO: Remove
+      // color: #fff !important; //TODO: Remove
     }
   }
 }
