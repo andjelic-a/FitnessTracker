@@ -24,7 +24,21 @@ export default function CurrentSplitDayDisplay({
     <>
       {props.type === "rest" ? (
         <div className={"workout rest " + props.status}>
-          <p>Rest</p>
+          <p
+            data-day={
+              [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday",
+              ][day]
+            }
+          >
+            Rest
+          </p>
         </div>
       ) : (
         <WorkoutPreviewDisplay

@@ -74,20 +74,20 @@
       font-size: 1rem;
       background-color: $dark-100;
 
-      & .footer::after {
-        content: attr(data-day);
-        font-size: 1.25rem;
-        font-weight: 100;
-        color: #aaa;
-        transition: 150ms;
-      }
-
-      // & .footer:hover::after {
-      //   color: #fff;
-      //   font-weight: 300;
-      // }
-
       &:not(.rest) {
+        .footer::after {
+          content: attr(data-day);
+          font-size: 1.25rem;
+          font-weight: 100;
+          color: #aaa;
+          transition: 150ms;
+        }
+
+        // & .footer:hover::after {
+        //   color: #fff;
+        //   font-weight: 300;
+        // }
+
         &.done {
           color: green;
         }
@@ -223,6 +223,25 @@
         border: 2px solid $dark-200;
         border-radius: 0.5rem;
         padding: 1rem;
+
+        p {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          gap: 0.5rem;
+
+          &::after {
+            content: attr(data-day);
+            display: block;
+
+            font-size: 1.25rem;
+            font-weight: 100;
+            color: #aaa;
+            transition: 150ms;
+          }
+        }
 
         &.passed {
           color: #aaa;
