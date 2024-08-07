@@ -74,6 +74,19 @@
       font-size: 1rem;
       background-color: $dark-100;
 
+      & .footer::after {
+        content: attr(data-day);
+        font-size: 1.25rem;
+        font-weight: 100;
+        color: #aaa;
+        transition: 150ms;
+      }
+
+      // & .footer:hover::after {
+      //   color: #fff;
+      //   font-weight: 300;
+      // }
+
       &:not(.rest) {
         &.done {
           color: green;
@@ -103,6 +116,7 @@
             display: block;
             background-color: rgba($color: #733, $alpha: 0.25);
             border: 3px solid rgba($color: #f00, $alpha: 0.1);
+            border-radius: 0.5rem;
             width: 100%;
             height: 100%;
             pointer-events: none;
@@ -212,6 +226,11 @@
 
         &.passed {
           color: #aaa;
+          transition: 150ms;
+
+          &:hover {
+            color: #fff;
+          }
         }
 
         &.scheduled {
@@ -328,8 +347,6 @@
           }
         }
       }
-
-      // color: #fff !important; //TODO: Remove
     }
   }
 }
