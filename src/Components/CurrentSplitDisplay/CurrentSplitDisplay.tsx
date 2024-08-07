@@ -81,7 +81,7 @@ export default function CurrentSplitDisplay({
 
   return (
     <div className="current-split-display-container">
-      <div className="header">
+      <div className="split-header">
         <p className="area-title">Split:</p>
         <p className="name" onClick={() => void navigate(`/split/${split.id}`)}>
           {split.name}
@@ -113,10 +113,7 @@ export default function CurrentSplitDisplay({
       <div className="start-btn-container">
         {split.workouts.find((x) => x.day === new Date().getUTCDay() - 1) && (
           <div className="start-btn">
-            <p>
-              Start today's workout
-              <span className="outline-container"></span>
-            </p>
+            <p>Start today's workout</p>
           </div>
         )}
       </div>
