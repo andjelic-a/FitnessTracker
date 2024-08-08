@@ -29,7 +29,7 @@ export function getExerciseQueryString(
   return query;
 }
 
-const exerciseLoader = createLoader("/exercises", ({ request }) => {
+const exerciseLoader = createLoader(({ request }) => {
   const url = new URL(request.url).searchParams;
   const query = getExerciseQueryString(url);
 
@@ -43,6 +43,6 @@ const exerciseLoader = createLoader("/exercises", ({ request }) => {
       },
     }),
   };
-});
+}, "/exercises");
 
 export default exerciseLoader;

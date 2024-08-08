@@ -4,7 +4,7 @@ import sendAPIRequest from "../../Data/SendAPIRequest";
 import { getProfileCache, ProfileData, setProfileCache } from "./ProfileCache";
 import createLoader from "../../BetterRouter/CreateLoader";
 
-const profileLoader = createLoader("/me", async () => {
+const profileLoader = createLoader(async () => {
   if (!(await getJWT())) {
     setProfileCache(null);
     return redirect("/authentication");
@@ -43,6 +43,6 @@ const profileLoader = createLoader("/me", async () => {
 
   setProfileCache(newData);
   return newData;
-});
+}, "/me");
 
 export default profileLoader;

@@ -110,7 +110,10 @@ export default function CurrentSplitDisplay({
         )}
       </div>
 
-      <div className="start-btn-container">
+      <div
+        className="start-btn-container"
+        onClick={() => void navigate("started-workout")}
+      >
         {split.workouts.find((x) => x.day === new Date().getUTCDay() - 1) && (
           <div className="start-btn">
             <p>Start today's workout</p>

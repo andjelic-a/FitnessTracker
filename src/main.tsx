@@ -45,6 +45,8 @@ import EquipmentAdminPanel from "./Pages/AdminPanel/Equipment/EquipmentAdminPane
 import adminEquipmentLoader from "./Pages/AdminPanel/Equipment/EquipmentAdminPanelLoader.ts";
 import Settings from "./Pages/Settings/Settings.tsx";
 import EditRoutine from "./Components/WorkoutsContainer/EditRoutine/EditRoutine.tsx";
+import StartedWorkout from "./Pages/StartedWorkout/StartedWorkout.tsx";
+import startedWorkoutLoader from "./Pages/StartedWorkout/StartedWorkoutLoader.ts";
 
 const routes: RouteObject[] = [
   {
@@ -80,6 +82,11 @@ const routes: RouteObject[] = [
         element: <Profile />,
         loader: profileLoader,
         children: [
+          {
+            path: "started-workout",
+            element: <StartedWorkout />,
+            loader: startedWorkoutLoader,
+          },
           {
             path: "workout/:id",
             element: <RoutineDisplay />,
@@ -182,100 +189,6 @@ const routes: RouteObject[] = [
       },
     ],
   },
-];
-
-export type RoutePathObjects = [
-  {
-    path: "/";
-    children: [
-      {
-        path: "/";
-      },
-      {
-        path: "exercises";
-      },
-      {
-        path: "exercises/:exerciseId";
-      },
-      {
-        path: "workouts";
-      },
-      {
-        path: "workouts/:workoutId";
-      },
-      {
-        path: "me";
-        children: [
-          {
-            path: ".";
-          },
-          {
-            path: "workout/:id";
-            children: [
-              {
-                path: "edit";
-              }
-            ];
-          },
-          {
-            path: "workout/new";
-          },
-          {
-            path: "followers";
-          },
-          {
-            path: "following";
-          }
-        ];
-      },
-      {
-        path: "authentication";
-      },
-      {
-        path: "nutrition";
-      },
-      {
-        path: "user/:userId";
-        children: [
-          {
-            path: "followers";
-          },
-          {
-            path: "following";
-          }
-        ];
-      },
-      {
-        path: "email-verification/:code";
-      },
-      {
-        path: "reset-password/:code";
-      },
-      {
-        path: "admin";
-        children: [
-          {
-            path: "";
-          },
-          {
-            path: "exercises";
-          },
-          {
-            path: "exercises/new";
-          },
-          {
-            path: "exercises/:exerciseId";
-          },
-          {
-            path: "muscles";
-          },
-          {
-            path: "equipment";
-          }
-        ];
-      }
-    ];
-  }
 ];
 
 export type RouteObjects = typeof routes;

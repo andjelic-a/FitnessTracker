@@ -1,15 +1,15 @@
 import { LoaderFunctionArgs, ParamParseKey, Params } from "react-router-dom";
-import { RoutePathObjects } from "../main";
+// import { RoutePathObjects } from "../main";
 
-export type Routes = UnwrappedRoutes<RoutePathObjects>;
+// export type Routes = UnwrappedRoutes<RoutePathObjects>;
 
-interface LoaderArgsInterface<Route extends Routes> extends LoaderFunctionArgs {
+interface LoaderArgsInterface<Route extends string> extends LoaderFunctionArgs {
   params: Params<ParamParseKey<Route>>;
 }
 
-type LoaderArguments<Route extends Routes> = LoaderArgsInterface<Route>;
+type LoaderArguments<Route extends string> = LoaderArgsInterface<Route>;
 
-export type LoaderParams<Route extends Routes> =
+export type LoaderParams<Route extends string> =
   LoaderArguments<Route>["params"];
 
 type UnwrappedRoutes<RouteObjects> = RouteObjects extends readonly [
