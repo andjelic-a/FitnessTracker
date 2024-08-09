@@ -22,7 +22,7 @@ const profileLoader = createLoader(async () => {
       parameters: {
         limit: -1,
       },
-    }),
+    }).then((x) => (x.code === "OK" ? x.content : [])),
     streak: sendAPIRequest("/api/user/me/streak", {
       method: "get",
       parameters: {},

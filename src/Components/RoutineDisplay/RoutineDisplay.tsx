@@ -144,11 +144,7 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
       const profileCache = getProfileCache();
       if (profileCache) {
         profileCache.workouts.then((workouts) => {
-          if (workouts.code !== "OK") return;
-
-          workouts.content = workouts.content.filter(
-            (x) => x.id !== currentWorkout.content.id
-          );
+          workouts = workouts.filter((x) => x.id !== currentWorkout.content.id);
           setProfileCache(profileCache);
         });
       }
@@ -296,7 +292,9 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
                         }`}
                       />
 
-                      <p className="routine-display-interaction-count">{formatCount(likeCount)}</p>
+                      <p className="routine-display-interaction-count">
+                        {formatCount(likeCount)}
+                      </p>
                     </div>
 
                     <div className="routine-display-interaction-container">
@@ -308,7 +306,9 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
                         }`}
                       />
 
-                      <p className="routine-display-interaction-count">{formatCount(commentCount)}</p>
+                      <p className="routine-display-interaction-count">
+                        {formatCount(commentCount)}
+                      </p>
                     </div>
 
                     <div className="routine-display-interaction-container">
@@ -320,7 +320,9 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
                         }`}
                       />
 
-                      <p className="routine-display-interaction-count">{formatCount(favoriteCount)}</p>
+                      <p className="routine-display-interaction-count">
+                        {formatCount(favoriteCount)}
+                      </p>
                     </div>
                   </div>
                 </>

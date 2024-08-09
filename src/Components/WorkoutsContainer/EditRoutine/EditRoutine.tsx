@@ -122,17 +122,16 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
           user: profileCache!.user,
           latestWeekOfActivity: profileCache!.latestWeekOfActivity,
           workouts: profileCache!.workouts.then((x) => {
-            if (x?.code !== "OK") return x;
-
-            const index = x.content.findIndex(
+            const index = x.findIndex(
               (x) => x.id === originalWorkout.content.id
             );
 
-            x.content[index] = {
+            x[index] = {
               id: originalWorkout.content.id,
               name: updatedWorkout.name,
               isPublic: updatedWorkout.isPublic,
               creator: originalWorkout.content.creator,
+              description: textareaRef.current!.value,
             };
 
             return x;

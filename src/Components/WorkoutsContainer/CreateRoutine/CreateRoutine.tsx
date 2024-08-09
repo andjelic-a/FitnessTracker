@@ -117,10 +117,8 @@ const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
           user: profileCache!.user,
           latestWeekOfActivity: profileCache!.latestWeekOfActivity,
           workouts: profileCache!.workouts.then((x) => {
-            if (x?.code !== "OK") return x;
-
-            x.content = [
-              ...x.content,
+            x = [
+              ...x,
               {
                 id: newWorkout.content.id,
                 name: newWorkout.content.name,
@@ -130,6 +128,7 @@ const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
                   name: user.name,
                   image: user.image,
                 },
+                description: "",
               },
             ];
 
