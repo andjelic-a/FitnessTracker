@@ -37,7 +37,22 @@ export default function EditProfile({ visible, onClose }: EditProfileProps) {
         </div>
         <div className="edit-profile-username">
           <p>Username</p>
-          <InputField className="edit-profile-username-input" placeholder="Username" />
+          <InputField
+            className="edit-profile-username-input"
+            placeholder="Username"
+          />
+        </div>
+        <div className="edit-profile-bio">
+          <p>Bio</p>
+          <textarea
+            placeholder="Bio"
+            onChange={(e) => {
+              e.target.style.height = "auto";
+              e.target.style.height = `${e.target.scrollHeight}px`;
+            }}
+            maxLength={250}
+            className="edit-profile-bio-textarea"
+          ></textarea>
         </div>
       </div>
     </div>
