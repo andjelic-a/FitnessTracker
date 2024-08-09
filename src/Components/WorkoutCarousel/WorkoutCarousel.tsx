@@ -15,7 +15,9 @@ export default function WorkoutCarousel({
 }: WorkoutCarouselProps) {
   return (
     <OverlayScrollbarsComponent
-      className="workout-carousel-scroll-container"
+      className={
+        "workout-carousel-scroll-container" + (className ? " " + className : "")
+      }
       options={{
         scrollbars: {
           autoHide: "leave",
@@ -28,9 +30,7 @@ export default function WorkoutCarousel({
         },
       }}
     >
-      <div className={"workout-carousel" + (className ? ` ${className}` : "")}>
-        {children}
-      </div>
+      {children}
     </OverlayScrollbarsComponent>
   );
 }

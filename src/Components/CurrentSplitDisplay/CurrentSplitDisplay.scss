@@ -65,7 +65,28 @@
       }
 
       &.done {
-        color: green;
+        transition: --border-tail-opacity 0.75s ease-in-out;
+        $color1: rgb(16, 156, 3);
+        $color2: rgba(16, 156, 3, var(--border-tail-opacity));
+
+        border-image: conic-gradient(
+            from var(--start-angle),
+            $color2,
+            $color1 0.1turn,
+            $color1 0.15turn,
+            $color2 0.25turn
+          )
+          30;
+
+        animation: spin-counter-clockwise 2s linear infinite forwards;
+
+        &:not(:hover) {
+          --border-tail-opacity: 1;
+        }
+
+        &:hover {
+          --border-tail-opacity: 0.1;
+        }
       }
 
       &.skipped {
