@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 import "./CommentInputField.scss";
 import Async from "../../../Async/Async";
@@ -24,20 +24,21 @@ export default function CommentInputField({
   textAreaRef: inputRef,
   ...props
 }: CommentInputFieldProps) {
+  const submitBtnRef = useRef<HTMLButtonElement>(null);
   const [isButtonContainerVisible, setIsButtonContainerVisible] =
     useState(true);
 
   useEffect(() => {
-    if (props.type !== "comment") {
-      setIsButtonContainerVisible(true);
-      inputRef.current?.focus();
-    } else setIsButtonContainerVisible(false);
+    setIsButtonContainerVisible(props.type !== "comment");
+    if (props.type !== "comment") inputRef.current?.focus();
 
     inputRef.current?.setSelectionRange(
       inputRef.current?.value.length,
       inputRef.current?.value.length
     );
   }, [inputRef, props.type]);
+
+  useEffect(updateSubmitBtnDisabledState, [isButtonContainerVisible]);
 
   function handleInputRefHeightChange() {
     if (!inputRef.current) return;
@@ -68,6 +69,14 @@ export default function CommentInputField({
     onCancel?.();
   }
 
+  function updateSubmitBtnDisabledState() {
+    if (!submitBtnRef.current || !inputRef.current) return;
+
+    submitBtnRef.current.disabled =
+      inputRef.current.value.trim().length <= 0 ||
+      inputRef.current.value.trim() === inputRef.current.defaultValue.trim();
+  }
+
   return (
     <div className="comment-input-container">
       <div className="image-container">
@@ -94,7 +103,10 @@ export default function CommentInputField({
             className="new-comment-textarea"
             rows={1}
             ref={inputRef}
-            onChange={handleInputRefHeightChange}
+            onChange={() => {
+              handleInputRefHeightChange();
+              updateSubmitBtnDisabledState();
+            }}
             onKeyDown={(e) => {
               if (
                 props.type === "nested-reply" &&
@@ -115,12 +127,12 @@ export default function CommentInputField({
         </div>
 
         {isButtonContainerVisible && (
-          <div className="workout-comment-header-button-wrapper">
+          <div className="comment-input-button-container">
             <button onClick={handleCancel}>
               <p>Cancel</p>
             </button>
 
-            <button onClick={handleSubmit}>
+            <button ref={submitBtnRef} onClick={handleSubmit}>
               <p>Comment</p>
             </button>
           </div>

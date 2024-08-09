@@ -1,7 +1,7 @@
 import { getProfileCache } from "../../../Pages/Profile/ProfileCache";
 import createLoader from "../../../BetterRouter/CreateLoader";
 
-const createRoutineLoader = createLoader("/me/workout/new", () => {
+const createRoutineLoader = createLoader(() => {
   const cache = getProfileCache();
   if (cache)
     return {
@@ -9,6 +9,6 @@ const createRoutineLoader = createLoader("/me/workout/new", () => {
     };
 
   return null;
-});
+}, "/me/workout/new");
 
 export default createRoutineLoader;

@@ -9,9 +9,10 @@ import ProfileSkeleton from "./Skeletons/ProfileSkeleton";
 import profileLoader from "./ProfileLoader";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
 import Async from "../../Components/Async/Async";
+import CurrentSplitDisplay from "../../Components/CurrentSplitDisplay/CurrentSplitDisplay";
 
 export default function Profile() {
-  const userData = useLoaderData<typeof profileLoader>();
+  const loaderData = useLoaderData<typeof profileLoader>();
 
   const navigate = useNavigate();
 
@@ -25,7 +26,7 @@ export default function Profile() {
       <AnimatedOutlet />
 
       <Async
-        await={userData.workouts}
+        await={loaderData.workouts}
         skeleton={<ProfileWorkoutsContainerSkeleton />}
       >
         {(loadedWorkoutData) => {
@@ -41,8 +42,8 @@ export default function Profile() {
         }}
       </Async>
 
-      <Async await={userData.user} skeleton={<ProfileSkeleton />}>
-        {(loadedUserData: Awaited<typeof userData.user>) => {
+      <Async await={loaderData.user} skeleton={<ProfileSkeleton />}>
+        {(loadedUserData: Awaited<typeof loaderData.user>) => {
           if (loadedUserData.code !== "OK") return null;
 
           return (
@@ -59,16 +60,31 @@ export default function Profile() {
               />
 
               <div className="profile-body">
-                <Async await={userData.streak} skeleton={<ProfileSkeleton />}>
+                <Async await={loaderData.latestWeekOfActivity}>
+                  {(loadedActivityData) => {
+                    if (loadedActivityData.code !== "OK") return null;
+
+                    return (
+                      <CurrentSplitDisplay
+                        split={loadedUserData.content.currentSplit}
+                        latestActivity={loadedActivityData.content}
+                      />
+                    );
+                  }}
+                </Async>
+
+                <Async await={loaderData.streak} skeleton={<ProfileSkeleton />}>
                   {(loadedStreakData) => {
                     if (loadedStreakData.code !== "OK") return null;
 
                     return (
-                      <ActivityGrid
-                        userId={loadedUserData.content.id}
-                        latestActivity={loadedStreakData.content}
-                        joinedAt={new Date(loadedUserData.content.joinedAt)}
-                      />
+                      <>
+                        <ActivityGrid
+                          userId={loadedUserData.content.id}
+                          latestActivity={loadedStreakData.content}
+                          joinedAt={new Date(loadedUserData.content.joinedAt)}
+                        />
+                      </>
                     );
                   }}
                 </Async>

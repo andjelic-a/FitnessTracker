@@ -9,7 +9,7 @@ import Async from "../../Components/Async/Async";
 import AnimatedOutlet from "../../Components/WindowWrapper/AnimatedOutlet";
 import { useNavigate } from "react-router-dom";
 
-export default function User() {
+export default function UserPage() {
   const data = useLoaderData<typeof userLoader>();
 
   const [isFollowing, setIsFollowing] = useState<boolean | null>(null);

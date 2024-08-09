@@ -5,6 +5,7 @@ import sendAPIRequest from "../../Data/SendAPIRequest";
 import Async from "../Async/Async";
 import ActivityGridSkeleton from "./ActivityGridSkeleton";
 import "./ActivityGrid.scss";
+import { addDays, getStartOfWeek } from "../../Utility/DateUtils";
 
 type ActivityGrid = {
   latestActivity: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[];
@@ -22,17 +23,6 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
   function getFillClass(completed: number, total: number) {
     if (completed >= total) return "fill-red";
     return `fill-${completed}-of-${total}`;
-  }
-
-  function addDays(date: Date, days: number) {
-    const newDate = new Date(date.valueOf());
-    newDate.setDate(date.getDate() + days);
-    return newDate;
-  }
-
-  function getStartOfWeek(date: Date): Date {
-    const diff = (7 + (date.getDay() - 1)) % 7;
-    return new Date(date.getTime() - diff * 24 * 60 * 60 * 1000);
   }
 
   async function getStreak(): Promise<
@@ -132,7 +122,9 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
     }
   };
 
-  function getNumberOfWorkoutsInYear(streak: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[]): number {
+  function getNumberOfWorkoutsInYear(
+    streak: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[]
+  ): number {
     return streak.reduce((total, week) => total + week.completedCount, 0);
   }
 
@@ -145,8 +137,8 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
         {(streak) => (
           <>
             <h3 className="activity-grid-header">
-              <b>{getNumberOfWorkoutsInYear(streak)}</b> workouts
-              done in last year
+              <b>{getNumberOfWorkoutsInYear(streak)}</b> workouts done in last
+              year
             </h3>
             <div className="activity-grid">
               {streak.map(

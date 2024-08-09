@@ -125,12 +125,21 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
       if (isWaitingForResponse.current) return;
       isWaitingForResponse.current = true;
 
-      sendAPIRequest("/api/workout/comment/{id}/like", {
-        method: !isLiked ? "post" : "delete",
-        parameters: {
-          id: comment.id,
-        },
-      }).then(() => void (isWaitingForResponse.current = false));
+      if (!isLiked)
+        sendAPIRequest("/api/workout/{workoutId}/comment/{id}/like", {
+          method: "post",
+          parameters: {
+            id: comment.id,
+            workoutId: comment.workoutId,
+          },
+        }).then(() => void (isWaitingForResponse.current = false));
+      else
+        sendAPIRequest("/api/workout/comment/{id}/like", {
+          method: "delete",
+          parameters: {
+            id: comment.id,
+          },
+        }).then(() => void (isWaitingForResponse.current = false));
 
       setLikeCount((prevState) => prevState + (isLiked ? -1 : 1));
       setIsLiked((prevState) => !prevState);

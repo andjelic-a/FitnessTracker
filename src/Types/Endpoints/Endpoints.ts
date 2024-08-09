@@ -5617,6 +5617,93 @@ type MappedEndpoints = {
         };
       };
     };
+    "/api/user/me/split/today": {
+      get: {
+        tags: ["User"];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedWorkoutResponseDTO";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedWorkoutResponseDTO";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedWorkoutResponseDTO";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "404": {
+            description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
     "/api/user/me/changepassword": {
       patch: {
         tags: ["User"];
@@ -7190,12 +7277,21 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/workout/comment/{id}/like": {
+    "/api/workout/{workoutId}/comment/{id}/like": {
       post: {
         tags: ["Workout"];
         parameters: [
           {
             name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+              format: "uuid";
+            };
+          },
+          {
+            name: "workoutId";
             in: "path";
             required: true;
             schema: {
@@ -7290,6 +7386,8 @@ type MappedEndpoints = {
           };
         };
       };
+    };
+    "/api/workout/comment/{id}/like": {
       delete: {
         tags: ["Workout"];
         parameters: [
@@ -8906,6 +9004,9 @@ type MappedEndpoints = {
               $ref: "#/components/schemas/SimpleSplitWorkoutResponseDTO";
             };
           };
+          creator: {
+            $ref: "#/components/schemas/SimpleUserResponseDTO";
+          };
         };
         additionalProperties: false;
       };
@@ -9204,8 +9305,22 @@ type MappedEndpoints = {
       SimpleSplitWorkoutResponseDTO: {
         type: "object";
         properties: {
-          workout: {
-            $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
+          id: {
+            type: "string";
+            format: "uuid";
+          };
+          name: {
+            type: "string";
+          };
+          description: {
+            type: "string";
+            nullable: true;
+          };
+          isPublic: {
+            type: "boolean";
+          };
+          creator: {
+            $ref: "#/components/schemas/SimpleUserResponseDTO";
           };
           day: {
             $ref: "#/components/schemas/DayOfWeek";

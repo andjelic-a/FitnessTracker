@@ -81,7 +81,7 @@
       transition: 0.2s ease-in;
     }
     &:focus::placeholder {
-      color: rgb(199, 199, 199);
+      color: rgb(199, 199, 198);
     }
   }
 
@@ -203,6 +203,17 @@
   border: 2px solid $dark-600;
   margin-bottom: 1rem;
   overflow: visible;
+  transition: 0.2s;
+
+  &:focus-within {
+    border: 2px solid rgb(231, 231, 231);
+
+    & .routine-description-placeholder {
+      top: -1.75rem;
+      font-size: 1.7rem;
+      color: rgb(231, 231, 231);
+    }
+  }
 
   #routine-description {
     position: relative;
@@ -229,6 +240,6 @@
     padding: 0 0.5rem;
     white-space: nowrap;
     color: $dark-600;
-    transition: top 0.2s ease-in-out, font-size 0.2s ease-in-out;
+    transition: 0.2s;
   }
 }

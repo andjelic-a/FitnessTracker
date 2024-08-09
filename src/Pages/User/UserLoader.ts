@@ -2,7 +2,7 @@ import { redirect } from "react-router-dom";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import createLoader from "../../BetterRouter/CreateLoader";
 
-const userLoader = createLoader("/user/:userId", ({ params: { userId } }) => {
+const userLoader = createLoader(({ params: { userId } }) => {
   if (!userId) return redirect("/me");
 
   return {
@@ -19,6 +19,6 @@ const userLoader = createLoader("/user/:userId", ({ params: { userId } }) => {
       },
     }),
   };
-});
+}, "/user/:userId");
 
 export default userLoader;

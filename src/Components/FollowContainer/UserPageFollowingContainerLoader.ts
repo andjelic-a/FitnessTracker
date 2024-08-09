@@ -3,7 +3,6 @@ import createLoader from "../../BetterRouter/CreateLoader";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 
 const userPageFollowingContainerLoader = createLoader(
-  "/user/:userId/following",
   ({ params: { userId }, request }) => {
     if (!userId) return redirect("/");
 
@@ -21,7 +20,8 @@ const userPageFollowingContainerLoader = createLoader(
         },
       }).then((x) => (x.code === "OK" ? x.content : [])),
     };
-  }
+  },
+  "/user/:userId/following"
 );
 
 export default userPageFollowingContainerLoader;

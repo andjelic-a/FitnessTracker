@@ -120,6 +120,7 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
         setProfileCache({
           streak: profileCache!.streak,
           user: profileCache!.user,
+          latestWeekOfActivity: profileCache!.latestWeekOfActivity,
           workouts: profileCache!.workouts.then((x) => {
             if (x?.code !== "OK") return x;
 
