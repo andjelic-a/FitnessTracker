@@ -48,7 +48,8 @@
   border-radius: 50%;
   width: 25.3rem;
   height: 25.3rem;
-  transition: 0.5s;
+  transition: 0.2s;
+  cursor: pointer;
 
   & .edit-profile-image-trigger {
     z-index: 1;
@@ -64,10 +65,10 @@
       font-size: 4rem;
       opacity: 0;
       filter: blur(5px);
-      transition: 0.5s;
+      transition: 0.2s;
     }
 
-    & .edit-profile-image-icon-hovered{
+    & .edit-profile-image-icon-hovered {
       opacity: 1;
       filter: none;
     }
@@ -84,4 +85,32 @@
 .edit-profile-image-hovered {
   filter: blur(5px);
   cursor: pointer;
+}
+
+.edit-profile-username {
+  margin-top: 3rem;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 2.2rem;
+  font-weight: 450;
+
+  & p {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    margin-left: 0.6rem;
+  }
+
+  & .edit-profile-username-input {
+    width: 100%;
+    height: 5rem;
+
+    & input {
+      font-size: 1.8rem;
+      &::placeholder {
+        font-size: 1.8rem;
+      }
+    }
+  }
 }

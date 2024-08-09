@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SettingsMenu from "../SettingsMenu";
 import Icon from "../../Icon/Icon";
+import InputField from "../../InputField/InputField";
 import "./EditProfile.scss";
 
 type EditProfileProps = {
@@ -21,8 +22,22 @@ export default function EditProfile({ visible, onClose }: EditProfileProps) {
             className={`edit-profile-image-trigger`}
             onMouseEnter={() => setIsImageHovered(true)}
             onMouseLeave={() => setIsImageHovered(false)}
-          ><Icon className={`edit-profile-image-icon ${isImageHovered ? "edit-profile-image-icon-hovered" : ""}`} name="pen-to-square"/></div>
-          <img className={`${isImageHovered ? "edit-profile-image-hovered" : ""}`} src="../../../../public/DefaultProfilePicture.png" />
+          >
+            <Icon
+              className={`edit-profile-image-icon ${
+                isImageHovered ? "edit-profile-image-icon-hovered" : ""
+              }`}
+              name="pen-to-square"
+            />
+          </div>
+          <img
+            className={`${isImageHovered ? "edit-profile-image-hovered" : ""}`}
+            src="../../../../public/DefaultProfilePicture.png"
+          />
+        </div>
+        <div className="edit-profile-username">
+          <p>Username</p>
+          <InputField className="edit-profile-username-input" placeholder="Username" />
         </div>
       </div>
     </div>
