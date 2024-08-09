@@ -1,4 +1,4 @@
-import "./WorkoutPreviewDisplay.scss";
+import "./WorkoutPreview.scss";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import User from "../User/User";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,7 @@ type WorkoutPreviewDisplayProps = {
   footerProps?: HTMLProps<HTMLDivElement>;
 } & HTMLProps<HTMLDivElement>;
 
-export default function WorkoutPreviewDisplay({
+export default function WorkoutPreview({
   workout,
   className,
   headerProps,
@@ -23,7 +23,7 @@ export default function WorkoutPreviewDisplay({
 
   return (
     <div
-      className={"workout-preview-display " + (className ? className : "")}
+      className={"workout-preview " + (className ? className : "")}
       {...attr}
     >
       <div className="header" {...headerProps}>

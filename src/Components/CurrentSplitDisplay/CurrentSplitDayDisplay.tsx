@@ -1,6 +1,6 @@
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import { RestStatus, WorkoutStatus } from "./CurrentSplitDisplay";
-import WorkoutPreviewDisplay from "../WorkoutPreviewDisplay/WorkoutPreviewDisplay";
+import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
 
 type CurrentSplitDayDisplayProps = {
   day: number;
@@ -41,7 +41,7 @@ export default function CurrentSplitDayDisplay({
           </p>
         </div>
       ) : (
-        <WorkoutPreviewDisplay
+        <WorkoutPreview
           footerProps={{
             "data-day": [
               "Monday",

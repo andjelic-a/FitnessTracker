@@ -9,7 +9,7 @@ import useLoaderData from "../../BetterRouter/UseLoaderData";
 import Async from "../../Components/Async/Async";
 import CurrentSplitDisplay from "../../Components/CurrentSplitDisplay/CurrentSplitDisplay";
 import WorkoutCarousel from "../../Components/WorkoutCarousel/WorkoutCarousel";
-import WorkoutPreviewDisplay from "../../Components/WorkoutPreviewDisplay/WorkoutPreviewDisplay";
+import WorkoutPreview from "../../Components/WorkoutPreview/WorkoutPreview";
 
 export default function Profile() {
   const loaderData = useLoaderData<typeof profileLoader>();
@@ -80,7 +80,7 @@ export default function Profile() {
                       return (
                         <>
                           {workouts.content.map((x) => (
-                            <WorkoutPreviewDisplay key={x.id} workout={x} />
+                            <WorkoutPreview key={x.id} workout={x} />
                           ))}
                         </>
                       );
