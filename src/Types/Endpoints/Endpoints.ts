@@ -9035,6 +9035,9 @@ type MappedEndpoints = {
           name: {
             type: "string";
           };
+          description: {
+            type: "string";
+          };
           isPublic: {
             type: "boolean";
           };
@@ -9052,10 +9055,6 @@ type MappedEndpoints = {
             items: {
               $ref: "#/components/schemas/SimpleExerciseResponseDTO";
             };
-          };
-          description: {
-            type: "string";
-            nullable: true;
           };
           likeCount: {
             type: "integer";
@@ -9409,6 +9408,9 @@ type MappedEndpoints = {
             format: "uuid";
           };
           name: {
+            type: "string";
+          };
+          description: {
             type: "string";
           };
           isPublic: {

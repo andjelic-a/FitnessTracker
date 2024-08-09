@@ -1,12 +1,12 @@
 import "./WorkoutPreviewDisplay.scss";
-import './PendingTodayWorkout.scss'
+import "./PendingTodayWorkout.scss";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import User from "../User/User";
 import { useNavigate } from "react-router-dom";
 import { HTMLProps } from "../../Types/Utility/HTMLProps";
 
 type WorkoutPreviewDisplayProps = {
-  workout: Schema<"SimpleSplitWorkoutResponseDTO">;
+  workout: Schema<"SimpleWorkoutResponseDTO">;
   headerProps?: HTMLProps<HTMLDivElement>;
   bodyProps?: HTMLProps<HTMLDivElement>;
   footerProps?: HTMLProps<HTMLDivElement>;
