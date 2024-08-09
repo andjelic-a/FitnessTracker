@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import SettingsMenu from "../SettingsMenu";
 import Icon from "../../Icon/Icon";
 import InputField from "../../InputField/InputField";
@@ -11,6 +11,17 @@ type EditProfileProps = {
 
 export default function EditProfile({ visible, onClose }: EditProfileProps) {
   const [isImageHovered, setIsImageHovered] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const imageInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setSelectedImage(imageUrl);
+    }
+  };
 
   return (
     <div className={`edit-profile ${visible ? "edit-profile-show" : ""}`}>
@@ -23,6 +34,13 @@ export default function EditProfile({ visible, onClose }: EditProfileProps) {
             onMouseEnter={() => setIsImageHovered(true)}
             onMouseLeave={() => setIsImageHovered(false)}
           >
+            <input
+             ref={imageInputRef}
+              className="edit-profile-image-input"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
             <Icon
               className={`edit-profile-image-icon ${
                 isImageHovered ? "edit-profile-image-icon-hovered" : ""
@@ -32,7 +50,8 @@ export default function EditProfile({ visible, onClose }: EditProfileProps) {
           </div>
           <img
             className={`${isImageHovered ? "edit-profile-image-hovered" : ""}`}
-            src="../../../../public/DefaultProfilePicture.png"
+            src={selectedImage || "../../../../public/DefaultProfilePicture.png"}
+            alt="Profile"
           />
         </div>
         <div className="edit-profile-username">

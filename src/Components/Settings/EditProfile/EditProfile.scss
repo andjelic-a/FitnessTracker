@@ -67,7 +67,6 @@
   width: 25.3rem;
   height: 25.3rem;
   transition: 0.2s;
-  cursor: pointer;
 
   & .edit-profile-image-trigger {
     z-index: 1;
@@ -78,6 +77,15 @@
     width: 24.5rem;
     height: 24.5rem;
     border-radius: 50%;
+
+    & .edit-profile-image-input {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      border-radius: 50%;
+      cursor: pointer;
+    }
 
     & .edit-profile-image-icon {
       font-size: 4rem;
