@@ -1,5 +1,4 @@
 import "./LandingPage.scss";
-import InfoCard from "../../Components/InfoCard/InfoCard";
 
 function LandingPage() {
   return (
@@ -11,7 +10,6 @@ function LandingPage() {
         }}
       >
         Landing Page
-        <InfoCard>{`##Hello\nThis is a landing /*page*/`}</InfoCard>
       </h1>
     </>
   );
