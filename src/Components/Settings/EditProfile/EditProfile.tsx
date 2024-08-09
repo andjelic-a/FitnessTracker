@@ -38,6 +38,7 @@ export default function EditProfile({ visible, onClose }: EditProfileProps) {
         <div className="edit-profile-username">
           <p>Username</p>
           <InputField
+            maxLength={25}
             className="edit-profile-username-input"
             placeholder="Username"
           />
