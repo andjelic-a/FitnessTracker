@@ -1,10 +1,11 @@
 import "./CurrentSplitDisplay.scss";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import { v4 } from "uuid";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import CurrentSplitDayDisplay from "./CurrentSplitDayDisplay";
 import User from "../User/User";
 import { useNavigate } from "react-router-dom";
+import WorkoutCarousel from "../WorkoutCarousel/WorkoutCarousel";
 
 type CurrentSplitDisplayProps = {
   split: Schema<"DetailedUserSplitResponseDTO">;
@@ -40,7 +41,6 @@ export default function CurrentSplitDisplay({
   latestActivity,
 }: CurrentSplitDisplayProps) {
   const [workouts, setWorkouts] = useState<SplitWorkout[]>([]);
-  const innerWrapperRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   useEffect(() => void setWorkouts(extractWorkouts(split)), [split]);
@@ -89,7 +89,7 @@ export default function CurrentSplitDisplay({
         <User user={split.creator} />
       </div>
 
-      <div className="workouts-container" ref={innerWrapperRef}>
+      <WorkoutCarousel className="workouts-container">
         {workouts.map((x, i) =>
           x.splitWorkout ? (
             <CurrentSplitDayDisplay
@@ -108,7 +108,7 @@ export default function CurrentSplitDisplay({
             />
           )
         )}
-      </div>
+      </WorkoutCarousel>
 
       <div
         className="start-btn-container"

@@ -1,0 +1,17 @@
+@import "../../Palette.scss";
+
+.workout-carousel-scroll-container {
+  border: 4px solid $dark-200;
+  border-radius: 5px;
+
+  .workout-carousel {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 2rem;
+    gap: 2rem;
+    padding: 1rem;
+    max-width: fit-content;
+    height: max-content;
+  }
+}
