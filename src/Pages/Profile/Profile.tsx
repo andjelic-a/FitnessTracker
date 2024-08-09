@@ -1,10 +1,8 @@
 import "./Profile.scss";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
-import WorkoutsContainer from "../../Components/WorkoutsContainer/WorkoutsContainer";
 import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
 import { useNavigate } from "react-router-dom";
 import AnimatedOutlet from "../../Components/WindowWrapper/AnimatedOutlet";
-import ProfileWorkoutsContainerSkeleton from "./Skeletons/ProfileWorkoutsContainerSkeleton";
 import ProfileSkeleton from "./Skeletons/ProfileSkeleton";
 import profileLoader from "./ProfileLoader";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
@@ -16,31 +14,14 @@ export default function Profile() {
 
   const navigate = useNavigate();
 
-  const toggleRoutineDisplay = (workoutId: string) =>
-    void navigate(`workout/${workoutId}`);
+  // const toggleRoutineDisplay = (workoutId: string) =>
+  //   void navigate(`workout/${workoutId}`);
 
-  const toggleNewWorkoutWindow = () => void navigate(`workout/new`);
+  // const toggleNewWorkoutWindow = () => void navigate(`workout/new`);
 
   return (
     <div className="profile">
       <AnimatedOutlet />
-
-      <Async
-        await={loaderData.workouts}
-        skeleton={<ProfileWorkoutsContainerSkeleton />}
-      >
-        {(loadedWorkoutData) => {
-          if (loadedWorkoutData.code !== "OK") return null;
-
-          return (
-            <WorkoutsContainer
-              workouts={loadedWorkoutData.content}
-              toggleNewWorkoutWindow={toggleNewWorkoutWindow}
-              toggleRoutineDisplay={toggleRoutineDisplay}
-            />
-          );
-        }}
-      </Async>
 
       <Async await={loaderData.user} skeleton={<ProfileSkeleton />}>
         {(loadedUserData: Awaited<typeof loaderData.user>) => {
