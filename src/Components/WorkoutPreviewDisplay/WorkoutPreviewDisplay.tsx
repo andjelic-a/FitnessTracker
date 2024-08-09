@@ -1,5 +1,4 @@
 import "./WorkoutPreviewDisplay.scss";
-import "./PendingTodayWorkout.scss";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import User from "../User/User";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +22,10 @@ export default function WorkoutPreviewDisplay({
   const navigate = useNavigate();
 
   return (
-    <div className={"workout-preview-display " + className} {...attr}>
+    <div
+      className={"workout-preview-display " + (className ? className : "")}
+      {...attr}
+    >
       <div className="header" {...headerProps}>
         <p className="name" onClick={() => navigate(`workout/${workout.id}`)}>
           {workout.name}

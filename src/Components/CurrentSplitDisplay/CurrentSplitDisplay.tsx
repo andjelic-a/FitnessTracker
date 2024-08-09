@@ -103,7 +103,7 @@ export default function CurrentSplitDisplay({
               key={x.key}
               day={x.splitWorkout.day}
               status={x.status}
-              workout={x.splitWorkout}
+              workout={x.splitWorkout as Schema<"SimpleWorkoutResponseDTO">}
             />
           ) : (
             <CurrentSplitDayDisplay

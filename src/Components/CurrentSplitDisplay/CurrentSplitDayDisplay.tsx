@@ -7,7 +7,7 @@ type CurrentSplitDayDisplayProps = {
 } & (
   | {
       type: "workout";
-      workout: Schema<"SimpleSplitWorkoutResponseDTO">;
+      workout: Schema<"SimpleWorkoutResponseDTO">;
       status: WorkoutStatus;
     }
   | {
