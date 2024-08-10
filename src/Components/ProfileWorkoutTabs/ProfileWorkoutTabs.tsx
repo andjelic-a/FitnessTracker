@@ -1,13 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
-import Async from "../Async/Async";
-import WorkoutCarousel from "../WorkoutCarousel/WorkoutCarousel";
-import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
 import "./ProfileWorkoutTabs.scss";
 import * as portals from "react-reverse-portal";
 
 import gsap from "gsap";
 import Flip from "gsap/dist/Flip";
+import WorkoutTab from "./WorkoutTab";
 gsap.registerPlugin(Flip);
 
 type ProfileWorkoutTabsProps = {
@@ -20,8 +18,9 @@ export default function ProfileWorkoutTabs({
   initialCreatedWorkouts,
 }: ProfileWorkoutTabsProps) {
   const [openTab, setOpenTab] = useState<Tab>("created");
-  const stateRef = useRef<Flip.FlipState | null>(null);
-  const portalNode = useMemo(
+
+  const flipStateRef = useRef<Flip.FlipState | null>(null);
+  const activeIndicatorPortalNode = useMemo(
     () =>
       portals.createHtmlPortalNode({
         attributes: {
@@ -32,10 +31,32 @@ export default function ProfileWorkoutTabs({
     []
   );
 
-  useEffect(() => {
-    if (!stateRef.current) return;
+  const tabPortalNodes = useMemo<{
+    [key in Tab]: portals.HtmlPortalNode;
+  }>(
+    () => ({
+      created: portals.createHtmlPortalNode(),
+      favorite: portals.createHtmlPortalNode(),
+      liked: portals.createHtmlPortalNode(),
+    }),
+    []
+  );
 
-    Flip.from(stateRef.current, {
+  const memoizedTabs = useMemo<{
+    [key in Tab]: JSX.Element;
+  }>(
+    () => ({
+      created: <WorkoutTab initialWorkouts={initialCreatedWorkouts} />,
+      favorite: <WorkoutTab initialWorkouts={Promise.resolve([])} />,
+      liked: <WorkoutTab initialWorkouts={Promise.resolve([])} />,
+    }),
+    []
+  );
+
+  useEffect(() => {
+    if (!flipStateRef.current) return;
+
+    Flip.from(flipStateRef.current, {
       scale: true,
       duration: 0.25,
       ease: "sine.inOut",
@@ -43,43 +64,51 @@ export default function ProfileWorkoutTabs({
   }, [openTab]);
 
   function handleOpenTab(tab: Tab) {
-    stateRef.current = Flip.getState(".active-indicator");
+    flipStateRef.current = Flip.getState(".active-indicator");
     setOpenTab(tab);
   }
 
   return (
     <div className="profile-workout-tabs-container">
+      <portals.InPortal node={tabPortalNodes.created}>
+        {memoizedTabs.created}
+      </portals.InPortal>
+
+      <portals.InPortal node={tabPortalNodes.favorite}>
+        {memoizedTabs.favorite}
+      </portals.InPortal>
+
+      <portals.InPortal node={tabPortalNodes.liked}>
+        {memoizedTabs.liked}
+      </portals.InPortal>
+
       <div className="tabs-header">
         <div className="tab">
           <button onClick={() => handleOpenTab("created")}>Created</button>
-          {openTab === "created" && <portals.OutPortal node={portalNode} />}
+          {openTab === "created" && (
+            <portals.OutPortal node={activeIndicatorPortalNode} />
+          )}
         </div>
 
         <div className="tab">
           <button onClick={() => handleOpenTab("favorite")}>Favorite</button>
 
-          {openTab === "favorite" && <portals.OutPortal node={portalNode} />}
+          {openTab === "favorite" && (
+            <portals.OutPortal node={activeIndicatorPortalNode} />
+          )}
         </div>
 
         <div className="tab">
           <button onClick={() => handleOpenTab("liked")}>Liked</button>
 
-          {openTab === "liked" && <portals.OutPortal node={portalNode} />}
+          {openTab === "liked" && (
+            <portals.OutPortal node={activeIndicatorPortalNode} />
+          )}
         </div>
       </div>
 
       <div className="tabs-body">
-        <WorkoutCarousel>
-          <Async await={initialCreatedWorkouts}>
-            {(workouts) => (
-              <>
-                {workouts.map((x) => (
-                  <WorkoutPreview key={x.id} workout={x} />
-                ))}
-              </>
-            )}
-          </Async>
-        </WorkoutCarousel>
+        <portals.OutPortal node={tabPortalNodes[openTab]} />
       </div>
     </div>
   );
