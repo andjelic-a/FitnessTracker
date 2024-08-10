@@ -58,16 +58,55 @@
   }
 }
 
-.edit-profile-image {
+.edit-profile-user-details {
+  position: relative;
+  display: flex;
+  align-items: center;
   margin-top: 4rem;
+  width: 80%;
+  height: 10rem;
+  background-color: $dark-300;
+  border-radius: 1rem;
+  font-weight: 450;
+  padding: 0 2rem;
+  font-size: 2.2rem;
+
+  & .edit-profile-user-details-info-name {
+    font-size: 2rem;
+    color: $dark-600;
+  }
+
+  & button {
+    position: relative;
+    margin-left: auto;
+    width: 12rem;
+    height: 3.5rem;
+    border-radius: 0.5rem;
+    font-size: 1.4rem;
+    outline: none;
+    border: none;
+    background-color: $primary-300;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    
+    &:hover {
+      background-color: $primary-400;
+    }
+  }
+}
+
+.edit-profile-image {
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  width: 25.3rem;
-  height: 25.3rem;
+  min-width: 10rem;
+  min-height: 10rem;
   transition: 0.2s;
   overflow: hidden;
+  cursor: pointer;
+  margin-right: 1rem;
 
   & .edit-profile-image-trigger {
     z-index: 1;
@@ -75,8 +114,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 24.5rem;
-    height: 24.5rem;
+    width: 7.5rem;
+    height: 7.5rem;
     border-radius: 50%;
 
     & .edit-profile-image-input {
@@ -89,10 +128,11 @@
     }
 
     & .edit-profile-image-icon {
-      font-size: 4rem;
+      font-size: 2rem;
       opacity: 0;
       filter: blur(5px);
       transition: 0.2s;
+      color: $primary-300;
     }
 
     & .edit-profile-image-icon-hovered {
@@ -102,23 +142,24 @@
   }
 
   & img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;  // Ensures image covers the entire circle while maintaining aspect ratio
+    width: 8rem;
+    height: 8rem;
+    object-fit: cover;
     background-color: white;
     border-radius: 50%;
-    border: 3px solid $dark-400;
+    outline: 3px solid $dark-400;
   }
 }
 
 .edit-profile-image-hovered {
-  filter: blur(5px);
+  filter: blur(5px) brightness(50%);
   cursor: pointer;
 }
 
 .edit-profile-username {
   margin-top: 3rem;
   width: 80%;
+  height: 10rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -134,6 +175,14 @@
   & .edit-profile-username-input {
     width: 100%;
     height: 5rem;
+    background-color: transparent;
+    outline: 1px solid $dark-400;
+    border: none;
+
+    &:has(:focus) {
+      background-color: transparent;
+      outline: 3px solid $dark-400;
+    }
 
     & input {
       font-size: 1.8rem;
@@ -167,7 +216,8 @@
     padding: 1rem 1rem;
     font-size: 1.8rem;
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-    background-color: $dark-300;
+    background-color: transparent;
+    outline: 1px solid $dark-400;
     resize: none;
     color: white;
     overflow: hidden;

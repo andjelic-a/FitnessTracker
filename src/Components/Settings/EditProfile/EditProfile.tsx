@@ -28,31 +28,42 @@ export default function EditProfile({ visible, onClose }: EditProfileProps) {
       <SettingsMenu onClose={onClose} />
       <div className="edit-profile-content">
         <h3>Edit profile</h3>
-        <div className={`edit-profile-image`}>
-          <div
-            className={`edit-profile-image-trigger`}
-            onMouseEnter={() => setIsImageHovered(true)}
-            onMouseLeave={() => setIsImageHovered(false)}
-          >
-            <input
-             ref={imageInputRef}
-              className="edit-profile-image-input"
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-            />
-            <Icon
-              className={`edit-profile-image-icon ${
-                isImageHovered ? "edit-profile-image-icon-hovered" : ""
+        <div className="edit-profile-user-details">
+          <div className={`edit-profile-image`}>
+            <div
+              className={`edit-profile-image-trigger`}
+              onMouseEnter={() => setIsImageHovered(true)}
+              onMouseLeave={() => setIsImageHovered(false)}
+            >
+              <input
+                ref={imageInputRef}
+                className="edit-profile-image-input"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+              <Icon
+                className={`edit-profile-image-icon ${
+                  isImageHovered ? "edit-profile-image-icon-hovered" : ""
+                }`}
+                name="pen-to-square"
+              />
+            </div>
+            <img
+              className={`${
+                isImageHovered ? "edit-profile-image-hovered" : ""
               }`}
-              name="pen-to-square"
+              src={
+                selectedImage || "../../../../public/DefaultProfilePicture.png"
+              }
+              alt="Profile"
             />
           </div>
-          <img
-            className={`${isImageHovered ? "edit-profile-image-hovered" : ""}`}
-            src={selectedImage || "../../../../public/DefaultProfilePicture.png"}
-            alt="Profile"
-          />
+          <div className="edit-profile-user-details-info">
+            <p>@username</p>
+            <p className="edit-profile-user-details-info-name">name</p>
+          </div>
+          <button onClick={() => imageInputRef.current?.click()}>Change image</button>
         </div>
         <div className="edit-profile-username">
           <p>Username</p>
