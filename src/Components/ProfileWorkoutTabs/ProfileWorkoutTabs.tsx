@@ -21,7 +21,16 @@ export default function ProfileWorkoutTabs({
 }: ProfileWorkoutTabsProps) {
   const [openTab, setOpenTab] = useState<Tab>("created");
   const stateRef = useRef<Flip.FlipState | null>(null);
-  const portalNode = useMemo(() => portals.createHtmlPortalNode(), []);
+  const portalNode = useMemo(
+    () =>
+      portals.createHtmlPortalNode({
+        attributes: {
+          class: "active-indicator",
+          "data-flip-id": "active-indicator",
+        },
+      }),
+    []
+  );
 
   useEffect(() => {
     if (!stateRef.current) return;
@@ -40,10 +49,6 @@ export default function ProfileWorkoutTabs({
 
   return (
     <div className="profile-workout-tabs-container">
-      <portals.InPortal node={portalNode}>
-        <div className="active-indicator" data-flip-id="1" />
-      </portals.InPortal>
-
       <div className="tabs-header">
         <div className="tab">
           <button onClick={() => handleOpenTab("created")}>Created</button>

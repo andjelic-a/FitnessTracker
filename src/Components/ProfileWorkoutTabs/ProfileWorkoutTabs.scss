@@ -16,6 +16,8 @@
 
     .tab {
       width: fit-content;
+      display: flex;
+      flex-direction: column;
 
       button {
         outline: none;
@@ -25,12 +27,17 @@
         font-size: 1.5rem;
         color: #fff;
         cursor: pointer;
+        transition: all 150ms ease-in-out;
+
+        &:has(~ .active-indicator) {
+          transform: translateY(-0.7rem);
+        }
       }
 
       .active-indicator {
         width: 100%;
         height: 3px;
-        background-color: $primary-300;
+        background-color: #fff;
 
         &.hidden {
           display: none;
