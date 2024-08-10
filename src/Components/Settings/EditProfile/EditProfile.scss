@@ -181,13 +181,17 @@
 
     &:has(:focus) {
       background-color: transparent;
-      outline: 3px solid $dark-400;
+      outline: 2px solid $dark-600;
     }
 
     & input {
       font-size: 1.8rem;
       &::placeholder {
         font-size: 1.8rem;
+      }
+
+      &:focus::placeholder {
+        color: $dark-600;
       }
     }
   }
@@ -225,11 +229,15 @@
 
     &:focus {
       background-color: transparent;
-      outline: 3px solid $dark-400;
+      outline: 2px solid $dark-600;
     }
 
     &::placeholder {
       font-size: 1.8rem;
+    }
+
+    &:focus::placeholder {
+      color: $dark-600;
     }
   }
 }
