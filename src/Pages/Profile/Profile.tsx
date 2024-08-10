@@ -7,7 +7,6 @@ import ProfileSkeleton from "./Skeletons/ProfileSkeleton";
 import profileLoader from "./ProfileLoader";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
 import Async from "../../Components/Async/Async";
-import CurrentSplitDisplay from "../../Components/CurrentSplitDisplay/CurrentSplitDisplay";
 import ProfileWorkoutTabs from "../../Components/ProfileWorkoutTabs/ProfileWorkoutTabs";
 
 export default function Profile() {
@@ -42,18 +41,12 @@ export default function Profile() {
               />
 
               <div className="profile-body">
-                <Async await={loaderData.latestWeekOfActivity}>
-                  {(loadedActivityData) => {
-                    if (loadedActivityData.code !== "OK") return null;
-
-                    return (
-                      <CurrentSplitDisplay
-                        split={loadedUserData.content.currentSplit}
-                        latestActivity={loadedActivityData.content}
-                      />
-                    );
-                  }}
-                </Async>
+                <ProfileWorkoutTabs
+                  latestActivity={loaderData.latestWeekOfActivity.then(
+                    (x) => (x.code === "OK" ? x.content : null)!
+                  )}
+                  initialCreatedWorkouts={loaderData.workouts}
+                />
 
                 <Async await={loaderData.streak} skeleton={<ProfileSkeleton />}>
                   {(loadedStreakData) => {
@@ -70,10 +63,6 @@ export default function Profile() {
                     );
                   }}
                 </Async>
-
-                <ProfileWorkoutTabs
-                  initialCreatedWorkouts={loaderData.workouts}
-                />
               </div>
             </div>
           );

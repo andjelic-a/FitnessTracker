@@ -3,8 +3,6 @@ import { Schema } from "../../Types/Endpoints/SchemaParser";
 import { v4 } from "uuid";
 import { useEffect, useState } from "react";
 import CurrentSplitDayDisplay from "./CurrentSplitDayDisplay";
-import User from "../User/User";
-import { useNavigate } from "react-router-dom";
 import WorkoutCarousel from "../WorkoutCarousel/WorkoutCarousel";
 
 type CurrentSplitDisplayProps = {
@@ -46,7 +44,6 @@ export default function CurrentSplitDisplay({
   latestActivity,
 }: CurrentSplitDisplayProps) {
   const [workouts, setWorkouts] = useState<SplitWorkout[]>([]);
-  const navigate = useNavigate();
 
   useEffect(() => void setWorkouts(extractWorkouts(split)), [split]);
 
@@ -86,46 +83,25 @@ export default function CurrentSplitDisplay({
   }
 
   return (
-    <div className="current-split-display-container">
-      <div className="split-header">
-        <p className="area-title">Split:</p>
-        <p className="name" onClick={() => void navigate(`/split/${split.id}`)}>
-          {split.name}
-        </p>
-        <User user={split.creator} />
-      </div>
-
-      <WorkoutCarousel className="workouts-container">
-        {workouts.map((x, i) =>
-          x.splitWorkout ? (
-            <CurrentSplitDayDisplay
-              type="workout"
-              key={x.key}
-              day={x.splitWorkout.day}
-              status={x.status}
-              workout={x.splitWorkout as Schema<"SimpleWorkoutResponseDTO">}
-            />
-          ) : (
-            <CurrentSplitDayDisplay
-              type="rest"
-              key={x.key}
-              status={x.status}
-              day={i}
-            />
-          )
-        )}
-      </WorkoutCarousel>
-
-      <div
-        className="start-btn-container"
-        onClick={() => void navigate("started-workout")}
-      >
-        {split.workouts.find((x) => x.day === new Date().getUTCDay() - 1) && (
-          <div className="start-btn">
-            <p>Start today's workout</p>
-          </div>
-        )}
-      </div>
-    </div>
+    <WorkoutCarousel className="workouts-container">
+      {workouts.map((x, i) =>
+        x.splitWorkout ? (
+          <CurrentSplitDayDisplay
+            type="workout"
+            key={x.key}
+            day={x.splitWorkout.day}
+            status={x.status}
+            workout={x.splitWorkout as Schema<"SimpleWorkoutResponseDTO">}
+          />
+        ) : (
+          <CurrentSplitDayDisplay
+            type="rest"
+            key={x.key}
+            status={x.status}
+            day={i}
+          />
+        )
+      )}
+    </WorkoutCarousel>
   );
 }

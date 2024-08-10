@@ -9,8 +9,6 @@ type WorkoutTabProps = {
 };
 
 const WorkoutTab = memo<WorkoutTabProps>(({ initialWorkouts }) => {
-  console.log("rerender");
-
   return (
     <>
       <WorkoutCarousel>
