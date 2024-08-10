@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import WindowFC from "../../Components/WindowWrapper/WindowFC";
 import EditProfile from "../../Components/Settings/EditProfile/EditProfile";
+import { logout } from "../../Data/User";
 import "./Settings.scss";
 
 const Settings = WindowFC(({}, wrapperRef) => {
@@ -62,7 +63,7 @@ const Settings = WindowFC(({}, wrapperRef) => {
         <div ref={setMenuItemRef} onClick={() => setIsEditProfileOpen(prevState => !prevState)} className="settings-item">Edit profile</div>
         <div ref={setMenuItemRef} className="settings-item">Authentication</div>
         <div ref={setMenuItemRef} className="settings-item">Privacy</div>
-        <div ref={setMenuItemRef} className="settings-item">Log out</div>
+        <div ref={setMenuItemRef} onClick={logout} className="settings-item">Log out</div>
         <div ref={setMenuItemRef} onClick={handleCancel} className="settings-item">Cancel</div>
       </div>
     </div>

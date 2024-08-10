@@ -96,4 +96,6 @@ export async function logout(): Promise<void> {
   );
 
   localStorage.removeItem("token");
+
+  window.location.reload();
 }
