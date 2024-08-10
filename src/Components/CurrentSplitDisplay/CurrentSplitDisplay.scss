@@ -18,7 +18,8 @@
   inherits: false;
 }
 
-.current-split-display-container {
+//#region OBSOLETE, REPLACED WITH WORKOUT CAROUSEL
+/* .current-split-display-container {
   width: fit-content;
   height: fit-content;
   max-width: 100%;
@@ -137,9 +138,26 @@
       }
     }
   }
+} */
+//#endregion
+
+.workout-container {
+  position: relative;
+
+  .badge {
+    position: absolute;
+    top: 0%;
+    left: 100%;
+    transform: translate(-75%, -25%);
+
+    i {
+      font-size: 1.5rem;
+      font-weight: 900;
+    }
+  }
 }
 
-.workouts-container .workout {
+.current-split-workouts .workout {
   position: relative;
   font-size: 1rem;
   background-color: $dark-100;
@@ -153,75 +171,17 @@
       transition: 150ms;
     }
 
-    &.done {
-      transition: --border-tail-opacity 0.75s ease-in-out;
-      $color1: rgb(16, 156, 3);
-      $color2: rgba(16, 156, 3, var(--border-tail-opacity));
-
-      border-image: conic-gradient(
-          from var(--start-angle),
-          $color2,
-          $color1 0.1turn,
-          $color1 0.15turn,
-          $color2 0.25turn
-        )
-        30;
-
-      animation: spin-counter-clockwise 2s linear infinite forwards;
-
-      &:not(:hover) {
-        --border-tail-opacity: 1;
-      }
-
-      &:hover {
-        --border-tail-opacity: 0.1;
-      }
+    &.done + .badge {
+      color: #ffbf00;
     }
 
     &.skipped {
-      &::before {
-        content: "skipped";
-        text-transform: uppercase;
-        font-weight: 900;
-        font-size: 5rem;
-        color: #f00;
-        display: block;
-        pointer-events: none;
-
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) rotate(-15deg);
-
-        backdrop-filter: blur(0.3px);
-        transition: 250ms;
+      & + .badge {
+        color: rgb(207, 90, 90);
       }
 
-      &::after {
-        content: "";
-        display: block;
-        background-color: rgba($color: #733, $alpha: 0.25);
-        border: 3px solid rgba($color: #f00, $alpha: 0.1);
-        border-radius: 0.5rem;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        transition: 150ms;
-      }
-
-      &:hover {
-        &::before {
-          opacity: 0;
-        }
-
-        &::after {
-          opacity: 0.5;
-        }
+      .footer::after {
+        text-decoration: line-through;
       }
     }
 

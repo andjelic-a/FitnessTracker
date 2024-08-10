@@ -83,7 +83,7 @@ export default function CurrentSplitDisplay({
   }
 
   return (
-    <WorkoutCarousel className="workouts-container">
+    <WorkoutCarousel className="current-split-workouts">
       {workouts.map((x, i) =>
         x.splitWorkout ? (
           <CurrentSplitDayDisplay
