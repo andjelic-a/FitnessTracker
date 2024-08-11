@@ -1,4 +1,4 @@
-import { RefObject, useRef } from "react";
+import React, { RefObject, useRef } from "react";
 import WindowWrapper from "./WindowWrapper";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
 import { useIsPresent } from "framer-motion";
@@ -11,7 +11,7 @@ const WindowFC =
       props: T,
       wrapperRef: RefObject<HTMLDivElement>,
       close: () => void
-    ) => JSX.Element,
+    ) => React.JSX.Element,
     animationTriggers?: AnimatedLayoutVariants
   ) =>
   (props: T) => {

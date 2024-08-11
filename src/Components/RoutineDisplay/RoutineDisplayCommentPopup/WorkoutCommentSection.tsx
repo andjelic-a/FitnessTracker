@@ -29,7 +29,7 @@ export default function WorkoutCommentSection({
   const scrollableWrapperRef = useRef<HTMLDivElement>(null);
   const commentInputFieldRef = useRef<HTMLTextAreaElement>(null);
 
-  useScrollTrigger(scrollableWrapperRef, 0.7, onRequireLazyLoad);
+  useScrollTrigger(scrollableWrapperRef, 0.7, "y", onRequireLazyLoad);
   useOutsideClick(wrapperRef, onRequireClose);
 
   function handleCreateComment(

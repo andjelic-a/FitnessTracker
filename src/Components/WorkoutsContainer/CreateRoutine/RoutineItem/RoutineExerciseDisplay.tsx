@@ -28,7 +28,7 @@ export default function RoutineExerciseDisplay({
   safeGuard,
   sets,
   setSets,
-}: ExerciseSetProps): JSX.Element {
+}: ExerciseSetProps): React.JSX.Element {
   const excludedDivRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useOutsideClick(excludedDivRef, () => {

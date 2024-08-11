@@ -1,5 +1,5 @@
 import "./RoutineItem.scss";
-import { useEffect, useRef, MutableRefObject } from "react";
+import React, { useEffect, useRef, MutableRefObject } from "react";
 import Icon from "../../../Icon/Icon.tsx";
 import Observer from "gsap/Observer";
 import { PossibleSetIcon, Set } from "./RoutineItem.tsx";
@@ -28,7 +28,7 @@ export default function RoutineSetDisplay({
   onDragStart,
   onMouseOver,
   onSetChanged,
-}: SingleExerciseSetProps): JSX.Element {
+}: SingleExerciseSetProps): React.JSX.Element {
   const setWrapperRef = useRef<HTMLDivElement>(null);
 
   const onMouseOverCallbackRef = useRef<

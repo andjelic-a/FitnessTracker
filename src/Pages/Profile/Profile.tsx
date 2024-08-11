@@ -9,6 +9,7 @@ import useLoaderData from "../../BetterRouter/UseLoaderData";
 import Async from "../../Components/Async/Async";
 import ProfileWorkoutTabs from "../../Components/ProfileWorkoutTabs/ProfileWorkoutTabs";
 import LazyLoadingContainer from "../../Components/LazyLoadingContainer/LazyLoadingContainer";
+import WorkoutCarousel from "../../Components/WorkoutCarousel/WorkoutCarousel";
 
 export default function Profile() {
   const loaderData = useLoaderData<typeof profileLoader>();
@@ -23,16 +24,6 @@ export default function Profile() {
   return (
     <div className="profile">
       <AnimatedOutlet />
-
-      <LazyLoadingContainer<"/api/equipment">
-        baseAPIRequest={{
-          method: "get",
-          parameters: {
-            limit: 10,
-            offset: 0,
-          },
-        }}
-      />
 
       <Async await={loaderData.user} skeleton={<ProfileSkeleton />}>
         {(loadedUserData: Awaited<typeof loaderData.user>) => {
@@ -52,6 +43,38 @@ export default function Profile() {
               />
 
               <div className="profile-body">
+                <WorkoutCarousel>
+                  <LazyLoadingContainer
+                    endpoint="/api/exercise"
+                    baseAPIRequest={{
+                      method: "get",
+                      parameters: {
+                        limit: 10,
+                        offset: 0,
+                      },
+                    }}
+                    onSegmentLoad={(response) => {
+                      if (response.code !== "OK") return null;
+
+                      return response.content.map((x) => (
+                        <div
+                          key={x.id}
+                          style={{
+                            margin: "10px",
+                            minWidth: "200px",
+                            border: "1px solid white",
+                          }}
+                        >
+                          {x.name}
+                        </div>
+                      ));
+                    }}
+                    stopCondition={(response) =>
+                      response.code !== "OK" || response.content.length < 10
+                    }
+                  />
+                </WorkoutCarousel>
+
                 <Async await={loaderData.streak} skeleton={<ProfileSkeleton />}>
                   {(loadedStreakData) => {
                     if (loadedStreakData.code !== "OK") return null;

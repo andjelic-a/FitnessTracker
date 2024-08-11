@@ -1,0 +1,15 @@
+.lazy-segment {
+  display: flex;
+  width: fit-content;
+
+  .lazy-loading-threshold-marker {
+    width: 0px;
+    opacity: 0;
+    visibility: hidden;
+
+    position: relative;
+    left: 70%;
+    top: 0;
+    z-index: 1;
+  }
+}

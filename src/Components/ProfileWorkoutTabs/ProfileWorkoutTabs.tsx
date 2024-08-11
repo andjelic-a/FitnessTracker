@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import "./ProfileWorkoutTabs.scss";
 import * as portals from "react-reverse-portal";
@@ -48,7 +48,7 @@ export default function ProfileWorkoutTabs({
   );
 
   const memoizedTabs = useMemo<{
-    [key in Tab]: JSX.Element;
+    [key in Tab]: React.JSX.Element;
   }>(
     () => ({
       split: (

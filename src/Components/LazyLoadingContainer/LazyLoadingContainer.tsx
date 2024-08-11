@@ -1,9 +1,26 @@
-import { useEffect, useRef } from "react";
+import "./LazyContainer.scss";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { Endpoints } from "../../Types/Endpoints/Endpoints";
 import { Request } from "../../Types/Endpoints/RequestParser";
+import sendAPIRequest from "../../Data/SendAPIRequest";
+import LazySegment from "./LazySegment";
 
-type LazyLoadingContainerProps<T extends Endpoints> = {
-  baseAPIRequest: Request<T>;
+type LazyLoadingContainerProps<
+  Endpoint extends Endpoints,
+  BaseRequest extends Request<Endpoint>
+> = {
+  endpoint: Endpoint;
+  baseAPIRequest: BaseRequest extends {
+    method: "get";
+  }
+    ? BaseRequest
+    : never;
+  onSegmentLoad: (
+    response: Awaited<ReturnType<typeof sendAPIRequest<BaseRequest, Endpoint>>>
+  ) => ReactNode;
+  stopCondition: (
+    response: Awaited<ReturnType<typeof sendAPIRequest<BaseRequest, Endpoint>>>
+  ) => boolean;
 };
 
 type RequestIsh = {
@@ -14,13 +31,39 @@ type RequestIsh = {
   };
 };
 
-export default function LazyLoadingContainer<T extends Endpoints>({
+export default function LazyLoadingContainer<
+  Endpoint extends Endpoints,
+  BaseRequest extends Request<Endpoint>
+>({
+  endpoint,
   baseAPIRequest,
-}: LazyLoadingContainerProps<T>) {
+  onSegmentLoad,
+  stopCondition,
+}: LazyLoadingContainerProps<Endpoint, BaseRequest>) {
+  const [segments, setSegments] = useState<ReactNode[]>([]);
   const currentRequest = useRef<RequestIsh | null>(null);
+  const isWaiting = useRef<boolean>(false);
 
   useEffect(() => {
-    if (isValidRequest(baseAPIRequest)) currentRequest.current = baseAPIRequest;
+    if (!isValidRequest(baseAPIRequest) || isWaiting.current) return;
+
+    currentRequest.current = baseAPIRequest;
+    isWaiting.current = true;
+
+    const response = sendAPIRequest(endpoint, baseAPIRequest as any).then(
+      (x) => {
+        isWaiting.current = false;
+        return x;
+      }
+    );
+
+    setSegments((oldSegments) => [
+      <LazySegment
+        key={"segment-" + oldSegments.length}
+        onSegmentLoad={onSegmentLoad}
+        promise={response}
+      />,
+    ]);
   }, [baseAPIRequest]);
 
   function isValidRequest(request: {}): request is RequestIsh {
@@ -62,5 +105,49 @@ export default function LazyLoadingContainer<T extends Endpoints>({
     };
   }
 
-  return <div>LazyLoadingContainer</div>;
+  function handleNewSegmentLoad(): void {
+    if (!currentRequest.current || isWaiting.current) return;
+
+    function isResponse(response: {}): response is {
+      code: string;
+    } {
+      return "code" in response && typeof response.code === "string";
+    }
+
+    isWaiting.current = true;
+    const newRequest = incrementRequest();
+    const response = sendAPIRequest(endpoint, newRequest as any).then((x) => {
+      if (!isResponse(x) || (x as any).code !== "Too Many Requests")
+        currentRequest.current = newRequest;
+
+      if (!stopCondition(x)) isWaiting.current = false;
+      return x;
+    });
+
+    setSegments((oldSegments) => [
+      ...oldSegments,
+      <LazySegment
+        key={"segment-" + oldSegments.length}
+        onSegmentLoad={(x) => {
+          return onSegmentLoad(x);
+        }}
+        promise={response}
+      />,
+    ]);
+  }
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        width: "100%",
+        gap: "10px",
+      }}
+    >
+      {segments}
+      <button key={"load-button"} onClick={handleNewSegmentLoad}>
+        load
+      </button>
+    </div>
+  );
 }
