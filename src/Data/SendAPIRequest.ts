@@ -86,3 +86,11 @@ export default async function sendAPIRequest<
     } as any;
   }
 }
+
+
+sendAPIRequest("/api/equipment", {
+  method: "get",
+  parameters: {
+    
+  }
+})

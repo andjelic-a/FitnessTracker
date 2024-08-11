@@ -8,6 +8,7 @@ import profileLoader from "./ProfileLoader";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
 import Async from "../../Components/Async/Async";
 import ProfileWorkoutTabs from "../../Components/ProfileWorkoutTabs/ProfileWorkoutTabs";
+import LazyLoadingContainer from "../../Components/LazyLoadingContainer/LazyLoadingContainer";
 
 export default function Profile() {
   const loaderData = useLoaderData<typeof profileLoader>();
@@ -22,6 +23,16 @@ export default function Profile() {
   return (
     <div className="profile">
       <AnimatedOutlet />
+
+      <LazyLoadingContainer<"/api/equipment">
+        baseAPIRequest={{
+          method: "get",
+          parameters: {
+            limit: 10,
+            offset: 0,
+          },
+        }}
+      />
 
       <Async await={loaderData.user} skeleton={<ProfileSkeleton />}>
         {(loadedUserData: Awaited<typeof loaderData.user>) => {
