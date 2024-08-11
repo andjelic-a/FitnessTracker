@@ -59,6 +59,7 @@ export default function LazyLoadingContainer<
 
     setSegments((oldSegments) => [
       <LazySegment
+        onReachLoadThreshold={handleNewSegmentLoad}
         key={"segment-" + oldSegments.length}
         onSegmentLoad={onSegmentLoad}
         promise={response}
@@ -105,8 +106,8 @@ export default function LazyLoadingContainer<
     };
   }
 
-  function handleNewSegmentLoad(): void {
-    if (!currentRequest.current || isWaiting.current) return;
+  function handleNewSegmentLoad(): boolean {
+    if (!currentRequest.current || isWaiting.current) return false;
 
     function isResponse(response: {}): response is {
       code: string;
@@ -127,6 +128,7 @@ export default function LazyLoadingContainer<
     setSegments((oldSegments) => [
       ...oldSegments,
       <LazySegment
+        onReachLoadThreshold={handleNewSegmentLoad}
         key={"segment-" + oldSegments.length}
         onSegmentLoad={(x) => {
           return onSegmentLoad(x);
@@ -134,6 +136,8 @@ export default function LazyLoadingContainer<
         promise={response}
       />,
     ]);
+
+    return true;
   }
 
   return (
@@ -145,9 +149,6 @@ export default function LazyLoadingContainer<
       }}
     >
       {segments}
-      <button key={"load-button"} onClick={handleNewSegmentLoad}>
-        load
-      </button>
     </div>
   );
 }
