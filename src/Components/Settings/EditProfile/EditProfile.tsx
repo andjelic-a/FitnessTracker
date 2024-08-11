@@ -12,6 +12,7 @@ type EditProfileProps = {
 export default function EditProfile({ visible, onClose }: EditProfileProps) {
   const [isImageHovered, setIsImageHovered] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedGender, setSelectedGender] = useState<"male" | "none" | "female">("none");
 
   const imageInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -94,6 +95,29 @@ export default function EditProfile({ visible, onClose }: EditProfileProps) {
             maxLength={250}
             className="edit-profile-bio-textarea"
           ></textarea>
+        </div>
+        <div className="edit-profile-gender">
+          <div
+            className={`edit-profile-gender-background ${selectedGender}`}
+          ></div>
+          <div
+            className={`edit-profile-gender-option`}
+            onClick={() => setSelectedGender("male")}
+          >
+            <p>Male</p>
+          </div>
+          <div
+            className={`edit-profile-gender-option`}
+            onClick={() => setSelectedGender("none")}
+          >
+            <p>None</p>
+          </div>
+          <div
+            className={`edit-profile-gender-option`}
+            onClick={() => setSelectedGender("female")}
+          >
+            <p>Female</p>
+          </div>
         </div>
         <div className="edit-profile-save-container">
           <button className="edit-profile-save">Save</button>

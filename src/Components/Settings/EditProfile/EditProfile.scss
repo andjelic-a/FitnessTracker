@@ -167,6 +167,7 @@
   font-weight: 450;
 
   & p {
+    user-select: none;
     font-size: 2.2rem;
     margin-bottom: 0.5rem;
     margin-left: 0.6rem;
@@ -207,6 +208,7 @@
   font-weight: 450;
 
   & p {
+    user-select: none;
     font-size: 2.2rem;
     margin-bottom: 0.5rem;
     margin-left: 0.6rem;
@@ -242,13 +244,67 @@
   }
 }
 
+.edit-profile-gender {
+  position: relative;
+  width: 25rem;
+  min-height: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20rem;
+  background-color: $dark-400;
+  overflow: hidden;
+
+  & .edit-profile-gender-option {
+    width: calc(100%/3);
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+    border-left: 2px solid $dark-300;
+    cursor: pointer;
+
+    & p {
+      user-select: none;
+      position: absolute;
+      z-index: 10;
+    }
+
+    &:first-child {
+      border: none;
+    }
+  }
+}
+
+.edit-profile-gender-background {
+  position: absolute;
+  height: 100%;
+  width: calc(100%/3);
+  background-color: $dark-300;
+  z-index: 0;
+  transition: left 0.3s ease;
+}
+
+.edit-profile-gender-background.male {
+  left: 0;
+}
+
+.edit-profile-gender-background.none {
+  left: calc(100%/3);
+}
+
+.edit-profile-gender-background.female {
+  left: calc(100%/3*2);
+}
+
 .edit-profile-save {
   margin-top: 4rem;
   margin-bottom: 4rem;
-  width: 12rem;
-  min-height: 3.5rem;
+  width: 14rem;
+  min-height: 4rem;
   border-radius: 0.5rem;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   outline: none;
   border: none;
   background-color: $primary-300;
