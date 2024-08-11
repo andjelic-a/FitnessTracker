@@ -63,7 +63,9 @@ export default function EditProfile({ visible, onClose }: EditProfileProps) {
             <p>@username</p>
             <p className="edit-profile-user-details-info-name">name</p>
           </div>
-          <button onClick={() => imageInputRef.current?.click()}>Change image</button>
+          <button onClick={() => imageInputRef.current?.click()}>
+            Change image
+          </button>
         </div>
         <div className="edit-profile-username">
           <p>Username</p>
@@ -71,6 +73,14 @@ export default function EditProfile({ visible, onClose }: EditProfileProps) {
             maxLength={25}
             className="edit-profile-username-input"
             placeholder="Username"
+          />
+        </div>
+        <div className="edit-profile-username">
+          <p>Name</p>
+          <InputField
+            maxLength={25}
+            className="edit-profile-username-input"
+            placeholder="Name"
           />
         </div>
         <div className="edit-profile-bio">
@@ -84,6 +94,9 @@ export default function EditProfile({ visible, onClose }: EditProfileProps) {
             maxLength={250}
             className="edit-profile-bio-textarea"
           ></textarea>
+        </div>
+        <div className="edit-profile-save-container">
+          <button className="edit-profile-save">Save</button>
         </div>
       </div>
     </div>

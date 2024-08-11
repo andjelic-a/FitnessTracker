@@ -89,7 +89,7 @@
     color: white;
     font-weight: 600;
     cursor: pointer;
-    
+
     &:hover {
       background-color: $primary-400;
     }
@@ -239,5 +239,24 @@
     &:focus::placeholder {
       color: $dark-600;
     }
+  }
+}
+
+.edit-profile-save {
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+  width: 12rem;
+  min-height: 3.5rem;
+  border-radius: 0.5rem;
+  font-size: 1.6rem;
+  outline: none;
+  border: none;
+  background-color: $primary-300;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $primary-400;
   }
 }
