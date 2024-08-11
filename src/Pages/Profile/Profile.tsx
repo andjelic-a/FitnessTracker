@@ -10,6 +10,7 @@ import Async from "../../Components/Async/Async";
 import ProfileWorkoutTabs from "../../Components/ProfileWorkoutTabs/ProfileWorkoutTabs";
 import LazyLoadingContainer from "../../Components/LazyLoadingContainer/LazyLoadingContainer";
 import WorkoutCarousel from "../../Components/WorkoutCarousel/WorkoutCarousel";
+import { useMemo } from "react";
 
 export default function Profile() {
   const loaderData = useLoaderData<typeof profileLoader>();
@@ -20,6 +21,42 @@ export default function Profile() {
   //   void navigate(`workout/${workoutId}`);
 
   // const toggleNewWorkoutWindow = () => void navigate(`workout/new`);
+
+  //LLC = LazyLoadingContainer
+  const memoizedLLC = useMemo(
+    () => (
+      <LazyLoadingContainer
+        endpoint="/api/exercise"
+        baseAPIRequest={{
+          method: "get",
+          parameters: {
+            limit: 10,
+            offset: 0,
+          },
+        }}
+        onSegmentLoad={(response) => {
+          if (response.code !== "OK") return null;
+
+          return response.content.map((x) => (
+            <div
+              key={x.id}
+              style={{
+                margin: "10px",
+                minWidth: "200px",
+                border: "1px solid white",
+              }}
+            >
+              {x.name}
+            </div>
+          ));
+        }}
+        stopCondition={(response) =>
+          response.code !== "OK" || response.content.length < 10
+        }
+      />
+    ),
+    []
+  );
 
   return (
     <div className="profile">
@@ -43,37 +80,7 @@ export default function Profile() {
               />
 
               <div className="profile-body">
-                <WorkoutCarousel>
-                  <LazyLoadingContainer
-                    endpoint="/api/exercise"
-                    baseAPIRequest={{
-                      method: "get",
-                      parameters: {
-                        limit: 10,
-                        offset: 0,
-                      },
-                    }}
-                    onSegmentLoad={(response) => {
-                      if (response.code !== "OK") return null;
-
-                      return response.content.map((x) => (
-                        <div
-                          key={x.id}
-                          style={{
-                            margin: "10px",
-                            minWidth: "200px",
-                            border: "1px solid white",
-                          }}
-                        >
-                          {x.name}
-                        </div>
-                      ));
-                    }}
-                    stopCondition={(response) =>
-                      response.code !== "OK" || response.content.length < 10
-                    }
-                  />
-                </WorkoutCarousel>
+                <WorkoutCarousel>{memoizedLLC}</WorkoutCarousel>
 
                 <Async await={loaderData.streak} skeleton={<ProfileSkeleton />}>
                   {(loadedStreakData) => {

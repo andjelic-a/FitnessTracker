@@ -1,15 +1,18 @@
-.lazy-segment {
+.lazy-loading-container {
   display: flex;
-  width: fit-content;
 
-  .lazy-loading-threshold-marker {
-    width: 0px;
-    opacity: 0;
-    visibility: hidden;
+  .lazy-segment {
+    display: flex;
 
-    position: relative;
-    left: 70%;
-    top: 0;
-    z-index: 1;
+    .lazy-loading-threshold-marker {
+      width: 0px !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+
+      position: relative !important;
+      left: 70% !important;
+      top: 0 !important;
+      z-index: -1 !important;
+    }
   }
 }

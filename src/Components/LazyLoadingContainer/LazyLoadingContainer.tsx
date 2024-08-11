@@ -1,5 +1,5 @@
 import "./LazyContainer.scss";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { memo, ReactNode, useEffect, useRef, useState } from "react";
 import { Endpoints } from "../../Types/Endpoints/Endpoints";
 import { Request } from "../../Types/Endpoints/RequestParser";
 import sendAPIRequest from "../../Data/SendAPIRequest";
@@ -31,7 +31,7 @@ type RequestIsh = {
   };
 };
 
-export default function LazyLoadingContainer<
+function LazyLoadingContainer<
   Endpoint extends Endpoints,
   BaseRequest extends Request<Endpoint>
 >({
@@ -47,6 +47,8 @@ export default function LazyLoadingContainer<
   useEffect(() => {
     if (!isValidRequest(baseAPIRequest) || isWaiting.current) return;
 
+    console.log("a");
+
     currentRequest.current = baseAPIRequest;
     isWaiting.current = true;
 
@@ -57,10 +59,10 @@ export default function LazyLoadingContainer<
       }
     );
 
-    setSegments((oldSegments) => [
+    setSegments(() => [
       <LazySegment
         onReachLoadThreshold={handleNewSegmentLoad}
-        key={"segment-" + oldSegments.length}
+        key={"segment-0"}
         onSegmentLoad={onSegmentLoad}
         promise={response}
       />,
@@ -140,15 +142,9 @@ export default function LazyLoadingContainer<
     return true;
   }
 
-  return (
-    <div
-      style={{
-        display: "flex",
-        width: "100%",
-        gap: "10px",
-      }}
-    >
-      {segments}
-    </div>
-  );
+  return <div className="lazy-loading-container">{segments}</div>;
 }
+
+const genericMemo: <T>(component: T) => T = memo;
+
+export default genericMemo(LazyLoadingContainer);
