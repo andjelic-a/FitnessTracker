@@ -151,7 +151,7 @@
     transform: translate(-75%, -25%);
 
     i {
-      font-size: 1.5rem;
+      font-size: 1.7rem;
       font-weight: 900;
     }
   }
@@ -172,7 +172,7 @@
     }
 
     &.done + .badge {
-      color: #ffbf00;
+      color: #0f0;
     }
 
     &.skipped {
@@ -191,52 +191,6 @@
 
       &:hover {
         color: #fff;
-      }
-    }
-
-    &.pending-today {
-      transition: --border-tail-opacity 0.75s ease-in-out;
-      $color1: rgb(235, 251, 255);
-      $color2: rgba(235, 251, 255, var(--border-tail-opacity));
-
-      border-image: conic-gradient(
-          from var(--start-angle),
-          $color2,
-          $color1 0.1turn,
-          $color1 0.15turn,
-          $color2 0.25turn
-        )
-        30;
-
-      animation: spin-clockwise 2.5s linear infinite forwards;
-
-      &:hover {
-        --border-tail-opacity: 1;
-      }
-    }
-
-    &.done-today {
-      transition: --border-tail-opacity 0.75s ease-in-out;
-      $color1: rgb(235, 251, 255);
-      $color2: rgba(16, 156, 3, var(--border-tail-opacity));
-
-      border-image: conic-gradient(
-          from var(--start-angle),
-          $color2,
-          $color1 0.1turn,
-          $color1 0.15turn,
-          $color2 0.25turn
-        )
-        30;
-
-      animation: spin-clockwise 2.5s linear infinite forwards;
-
-      &:not(:hover) {
-        --border-tail-opacity: 0.5;
-      }
-
-      &:hover {
-        --border-tail-opacity: 1;
       }
     }
   }
@@ -274,97 +228,31 @@
       }
     }
 
-    &.passed {
-      color: #aaa;
-      transition: 150ms;
-
-      &:hover {
-        color: #fff;
-      }
-    }
-
+    &.passed,
     &.scheduled {
-      &::after,
-      &::before {
-        transition: --breakpoint-angle 0.4s ease-in-out 0s, filter 1.5s 0.2s;
-        content: "";
-        position: absolute;
-        height: 100%;
-        width: 100%;
-
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: -1;
-        padding: 3px;
-
-        border-radius: 0.5rem;
-      }
-
-      &::before {
-        animation: 5s spin-clockwise linear infinite;
-        background-image: conic-gradient(
-          from var(--start-angle),
-          transparent,
-          calc(var(--breakpoint-angle) + 30deg),
-          rgb(71, 161, 64)
-        );
-      }
-
-      &::after {
-        animation: 5s spin-counter-clockwise linear infinite;
-        background-image: conic-gradient(
-          from var(--start-angle),
-          rgb(86, 86, 196),
-          calc(330deg - var(--breakpoint-angle)),
-          transparent
-        );
-      }
-
-      &:hover::before,
-      &:hover::after {
-        --breakpoint-angle: 180deg;
-        filter: blur(1rem);
-      }
+      color: #aaa;
     }
+  }
 
-    &.scheduled-today {
-      &::after,
-      &::before {
-        transition: --breakpoint-angle 0.4s ease-in-out;
-        content: "";
-        position: absolute;
-        height: 100%;
-        width: 100%;
+  &:not(.rest).pending-today,
+  &.rest.scheduled-today {
+    transition: --border-tail-opacity 0.75s ease-in-out;
+    $color1: rgb(235, 251, 255);
+    $color2: rgba(235, 251, 255, var(--border-tail-opacity));
 
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: -1;
-        padding: 3px;
+    border-image: conic-gradient(
+        from var(--start-angle),
+        $color2,
+        $color1 0.1turn,
+        $color1 0.15turn,
+        $color2 0.25turn
+      )
+      30;
 
-        border-radius: 0.5rem;
+    animation: spin-clockwise 2.5s linear infinite forwards;
 
-        background-image: conic-gradient(
-          from var(--start-angle),
-          transparent,
-          var(--breakpoint-angle),
-          rgb(125, 125, 228)
-        );
-
-        animation: 3s spin-clockwise linear infinite;
-      }
-
-      &::before {
-        filter: blur(1rem);
-        opacity: 0.8;
-      }
-
-      &:hover::before,
-      &:hover::after {
-        animation-play-state: paused;
-        --breakpoint-angle: 0deg;
-      }
+    &:hover {
+      --border-tail-opacity: 1;
     }
   }
 }

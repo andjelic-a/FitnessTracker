@@ -27,12 +27,7 @@ type SplitWorkout = {
 //Pending means that the user did not complete the workout YET (meaning tomorrows workouts will always be pending)
 //Skipped means that the user skipped the workout (if they didn't go to the gym yesterday but they were supposed to).
 //Pending-today means user still hasn't completed the workout but they still have time (until the end of the day before it's marked as skipped)
-export type WorkoutStatus =
-  | "done"
-  | "done-today"
-  | "skipped"
-  | "pending"
-  | "pending-today";
+export type WorkoutStatus = "done" | "skipped" | "pending" | "pending-today";
 
 //Passed means that the rest day already passed
 //Scheduled means that the rest day is scheduled (supposed to happen in future)
@@ -65,18 +60,22 @@ export default function CurrentSplitDisplay({
   function getStatusForWorkout(
     workout: Schema<"SimpleSplitWorkoutResponseDTO">
   ): WorkoutStatus {
-    if (workout.day > new Date().getUTCDay() - 1) return "pending";
+    let today = new Date().getUTCDay() - 1;
+    if (today === -1) today = 6;
 
-    if (latestActivity.completedWorkouts.includes(workout.day))
-      return workout.day === new Date().getUTCDay() - 1 ? "done-today" : "done";
+    if (workout.day > today) return "pending";
 
-    if (workout.day === new Date().getUTCDay() - 1) return "pending-today";
+    if (latestActivity.completedWorkouts.includes(workout.day)) return "done";
+
+    if (workout.day === today) return "pending-today";
 
     return "skipped";
   }
 
   function getStatusForRest(day: number): RestStatus {
-    const today = new Date().getUTCDay() - 1;
+    let today = new Date().getUTCDay() - 1;
+    if (today === -1) today = 6;
+    
     if (day === today) return "scheduled-today";
     if (day < today) return "passed";
     return "scheduled";

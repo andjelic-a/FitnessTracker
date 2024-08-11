@@ -63,7 +63,7 @@ export default function CurrentSplitDayDisplay({
 
           {props.status === "done" && (
             <div className="badge">
-              <Icon name="trophy" />
+              <Icon name="circle-check" />
             </div>
           )}
 

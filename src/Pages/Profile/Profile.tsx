@@ -41,13 +41,6 @@ export default function Profile() {
               />
 
               <div className="profile-body">
-                <ProfileWorkoutTabs
-                  latestActivity={loaderData.latestWeekOfActivity.then(
-                    (x) => (x.code === "OK" ? x.content : null)!
-                  )}
-                  initialCreatedWorkouts={loaderData.workouts}
-                />
-
                 <Async await={loaderData.streak} skeleton={<ProfileSkeleton />}>
                   {(loadedStreakData) => {
                     if (loadedStreakData.code !== "OK") return null;
@@ -63,6 +56,13 @@ export default function Profile() {
                     );
                   }}
                 </Async>
+
+                <ProfileWorkoutTabs
+                  latestActivity={loaderData.latestWeekOfActivity.then(
+                    (x) => (x.code === "OK" ? x.content : null)!
+                  )}
+                  initialCreatedWorkouts={loaderData.workouts}
+                />
               </div>
             </div>
           );
