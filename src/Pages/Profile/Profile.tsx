@@ -102,6 +102,9 @@ export default function Profile() {
                   latestActivity={loaderData.latestWeekOfActivity.then(
                     (x) => (x.code === "OK" ? x.content : null)!
                   )}
+                  split={loaderData.user.then((x) =>
+                    x.code === "OK" ? x.content.currentSplit : null
+                  )}
                   initialCreatedWorkouts={loaderData.workouts}
                 />
               </div>

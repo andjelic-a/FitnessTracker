@@ -13,6 +13,7 @@ gsap.registerPlugin(Flip);
 type ProfileWorkoutTabsProps = {
   latestActivity: Promise<Schema<"DetailedWeekOfCompletedWorkoutsResponseDTO">>;
   initialCreatedWorkouts: Promise<Schema<"SimpleWorkoutResponseDTO">[]>;
+  split: Promise<Schema<"DetailedUserSplitResponseDTO"> | null>;
 };
 
 type Tab = "split" | "created" | "favorite" | "liked";
@@ -20,6 +21,7 @@ type Tab = "split" | "created" | "favorite" | "liked";
 export default function ProfileWorkoutTabs({
   initialCreatedWorkouts,
   latestActivity,
+  split,
 }: ProfileWorkoutTabsProps) {
   const [openTab, setOpenTab] = useState<Tab>("split");
 
@@ -52,13 +54,10 @@ export default function ProfileWorkoutTabs({
   }>(
     () => ({
       split: (
-        <Async await={latestActivity}>
-          {(activity) => {
-            return activity.split ? (
-              <CurrentSplitDisplay
-                latestActivity={activity}
-                split={activity.split}
-              />
+        <Async await={Promise.all([latestActivity, split])}>
+          {([activity, split]) => {
+            return split ? (
+              <CurrentSplitDisplay latestActivity={activity} split={split} />
             ) : (
               <WorkoutCarousel>
                 <div className="empty">
