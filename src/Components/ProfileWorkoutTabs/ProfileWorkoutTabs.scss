@@ -48,5 +48,32 @@
 
   .tabs-body {
     width: 100%;
+
+    .new-workout-btn {
+      height: 13rem;
+      min-height: 13rem;
+      max-height: 13rem;
+      aspect-ratio: 1;
+
+      display: grid;
+      place-items: center;
+
+      border: 2px solid $dark-200;
+      outline: none;
+      border-radius: 0.5rem;
+      padding: 1rem;
+
+      cursor: pointer;
+      background-color: transparent;
+
+      color: #aaa;
+      // transition: all 200ms ease-out;
+      font-size: 3.5rem;
+      font-weight: 100;
+
+      &:hover {
+        color: #fff;
+      }
+    }
   }
 }

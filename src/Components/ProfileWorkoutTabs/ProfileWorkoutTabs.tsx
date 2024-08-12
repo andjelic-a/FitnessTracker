@@ -8,6 +8,8 @@ import WorkoutTab from "./WorkoutTab";
 import CurrentSplitDisplay from "../CurrentSplitDisplay/CurrentSplitDisplay";
 import Async from "../Async/Async";
 import WorkoutCarousel from "../WorkoutCarousel/WorkoutCarousel";
+import { useNavigate } from "react-router-dom";
+import Icon from "../Icon/Icon";
 gsap.registerPlugin(Flip);
 
 type ProfileWorkoutTabsProps = {
@@ -23,6 +25,7 @@ export default function ProfileWorkoutTabs({
   latestActivity,
   split,
 }: ProfileWorkoutTabsProps) {
+  const navigate = useNavigate();
   const [openTab, setOpenTab] = useState<Tab>("split");
 
   const flipStateRef = useRef<Flip.FlipState | null>(null);
@@ -75,7 +78,20 @@ export default function ProfileWorkoutTabs({
           }}
         </Async>
       ),
-      created: <WorkoutTab initialWorkouts={initialCreatedWorkouts} />,
+      created: (
+        <WorkoutTab initialWorkouts={initialCreatedWorkouts}>
+          <button
+            className="new-workout-btn"
+            onClick={() => void navigate("workout/new")}
+          >
+            <p aria-hidden={false} className="accessibility-only">
+              Create a new workout
+            </p>
+
+            <Icon aria-hidden={true} name="plus" />
+          </button>
+        </WorkoutTab>
+      ),
       favorite: <WorkoutTab initialWorkouts={Promise.resolve([])} />,
       liked: <WorkoutTab initialWorkouts={Promise.resolve([])} />,
     }),

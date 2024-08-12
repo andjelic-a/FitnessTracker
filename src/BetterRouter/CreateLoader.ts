@@ -39,7 +39,7 @@ export default function createLoader<
         ? data
         : (defer(data) as unknown as T);
     } catch (error) {
-      console.log(
+      console.error(
         `Error occurred in loader${route ? ` on route "${route}"` : ""}.`,
         error
       );

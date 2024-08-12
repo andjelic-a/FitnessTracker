@@ -6,9 +6,10 @@ import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
 
 type WorkoutTabProps = {
   initialWorkouts: Promise<Schema<"SimpleWorkoutResponseDTO">[]>;
+  children?: React.ReactNode;
 };
 
-const WorkoutTab = memo<WorkoutTabProps>(({ initialWorkouts }) => {
+const WorkoutTab = memo<WorkoutTabProps>(({ initialWorkouts, children }) => {
   return (
     <>
       <WorkoutCarousel>
@@ -19,6 +20,7 @@ const WorkoutTab = memo<WorkoutTabProps>(({ initialWorkouts }) => {
 
             return (
               <>
+                {children}
                 {workouts.map((x) => (
                   <WorkoutPreview key={x.id} workout={x} />
                 ))}

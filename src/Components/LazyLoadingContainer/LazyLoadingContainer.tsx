@@ -47,8 +47,6 @@ function LazyLoadingContainer<
   useEffect(() => {
     if (!isValidRequest(baseAPIRequest) || isWaiting.current) return;
 
-    console.log("a");
-
     currentRequest.current = baseAPIRequest;
     isWaiting.current = true;
 

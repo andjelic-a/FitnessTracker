@@ -23,7 +23,6 @@ const LazySegment = memo<LazySegmentProps>(
 
     useEffect(() => {
       if (!thresholdMarker.current) return;
-      console.log("observing");
 
       const observer = new IntersectionObserver(
         ([marker], self) => {
@@ -32,7 +31,6 @@ const LazySegment = memo<LazySegmentProps>(
             marker.isIntersecting &&
             marker.intersectionRatio >= 0.5
           ) {
-            console.log("intersecting");
             if (!onReachLoadThreshold()) return;
 
             self.unobserve(marker.target);
@@ -52,7 +50,6 @@ const LazySegment = memo<LazySegmentProps>(
       observer.observe(thresholdMarker.current);
 
       return () => {
-        console.log("unobserving", !!thresholdMarker.current);
         if (thresholdMarker.current)
           observer.unobserve(thresholdMarker.current);
       };
