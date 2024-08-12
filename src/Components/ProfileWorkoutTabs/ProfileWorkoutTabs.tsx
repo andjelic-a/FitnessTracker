@@ -40,6 +40,16 @@ export default function ProfileWorkoutTabs({
     []
   );
 
+  const searchBarPortalNode = useMemo(
+    () =>
+      portals.createHtmlPortalNode({
+        attributes: {
+          class: "search-bar-container",
+        },
+      }),
+    []
+  );
+
   const tabPortalNodes = useMemo<{
     [key in Tab]: portals.HtmlPortalNode;
   }>(
@@ -123,6 +133,18 @@ export default function ProfileWorkoutTabs({
         <WorkoutCarousel>{memoizedTabs.liked}</WorkoutCarousel>
       </portals.InPortal>
 
+      <portals.InPortal node={searchBarPortalNode}>
+        <input
+          name="profile-workouts-search-bar"
+          type="text"
+          className="search-bar"
+          placeholder="Search"
+          ref={searchBarRef}
+          onKeyDown={(e) => e.key === "Enter" && void handleSearch()}
+        />
+        <Icon name="search" className="search-icon" onClick={handleSearch} />
+      </portals.InPortal>
+
       <div className="tabs-header">
         <div className="tabs">
           <div className="tab">
@@ -156,17 +178,9 @@ export default function ProfileWorkoutTabs({
           </div>
         </div>
 
-        <div className="search-bar-container">
-          <input
-            name="profile-workouts-search-bar"
-            type="text"
-            className="search-bar"
-            placeholder="Search"
-            ref={searchBarRef}
-            onKeyDown={(e) => e.key === "Enter" && void handleSearch()}
-          />
-          <Icon name="search" className="search-icon" onClick={handleSearch} />
-        </div>
+        {openTab !== "split" && (
+          <portals.OutPortal node={searchBarPortalNode} />
+        )}
       </div>
 
       <div className="tabs-body">
