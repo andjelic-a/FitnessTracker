@@ -6,7 +6,11 @@ import Icon from "../Icon/Icon";
 import { Request } from "../../Types/Endpoints/RequestParser";
 import { NewWorkoutsContext } from "../WorkoutsContainer/CreateRoutine/NewWorkoutsContext";
 
-const CreatedWorkoutsTab = memo(() => {
+type CreatedWorkoutsTabProps = {
+  searchTerm: string;
+};
+
+const CreatedWorkoutsTab = memo<CreatedWorkoutsTabProps>(({ searchTerm }) => {
   const navigate = useNavigate();
   const newWorkoutsContext = useContext(NewWorkoutsContext);
 
@@ -16,9 +20,10 @@ const CreatedWorkoutsTab = memo(() => {
       parameters: {
         limit: 10,
         offset: 0,
+        name: searchTerm !== "" ? searchTerm : undefined,
       },
     }),
-    []
+    [searchTerm]
   );
 
   const tab = useMemo(
@@ -63,7 +68,7 @@ const CreatedWorkoutsTab = memo(() => {
         }
       />
     ),
-    [newWorkoutsContext.createdWorkouts]
+    [newWorkoutsContext.createdWorkouts, request]
   );
 
   return <>{tab}</>;

@@ -49,16 +49,19 @@ function LazyLoadingContainer<
   const [segments, setSegments] = useState<ReactNode[]>([]);
   const currentRequest = useRef<RequestIsh | null>(null);
   const isWaiting = useRef<boolean>(false);
+  const isWaitingForInitial = useRef<boolean>(false);
 
   useEffect(() => {
-    if (!isValidRequest(baseAPIRequest) || isWaiting.current) return;
+    if (!isValidRequest(baseAPIRequest) || isWaitingForInitial.current) return;
 
     currentRequest.current = baseAPIRequest;
     isWaiting.current = true;
+    isWaitingForInitial.current = true;
 
     const response = sendAPIRequest(endpoint, baseAPIRequest as any).then(
       (x) => {
         if (!stopCondition(x)) isWaiting.current = false;
+        isWaitingForInitial.current = false;
         return x;
       }
     );

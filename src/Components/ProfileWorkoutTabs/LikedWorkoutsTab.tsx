@@ -3,16 +3,21 @@ import LazyLoadingContainer from "../LazyLoadingContainer/LazyLoadingContainer";
 import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
 import { Request } from "../../Types/Endpoints/RequestParser";
 
-const LikedWorkoutsTab = memo(() => {
+type LikedWorkoutsTabProps = {
+  searchTerm: string;
+};
+
+const LikedWorkoutsTab = memo<LikedWorkoutsTabProps>(({ searchTerm }) => {
   const request = useMemo<Request<"/api/workout/liked/simple">>(
     () => ({
       method: "get",
       parameters: {
         limit: 10,
         offset: 0,
+        name: searchTerm !== "" ? searchTerm : undefined,
       },
     }),
-    []
+    [searchTerm]
   );
 
   const tab = useMemo(
@@ -21,8 +26,6 @@ const LikedWorkoutsTab = memo(() => {
         endpoint={"/api/workout/liked/simple"}
         baseAPIRequest={request}
         onSegmentLoad={(workouts) => {
-          console.log(workouts);
-
           if (workouts.code !== "OK" || workouts.content.length === 0)
             return <p className="empty">Nothing to see here...</p>;
 
@@ -41,7 +44,7 @@ const LikedWorkoutsTab = memo(() => {
         }
       />
     ),
-    []
+    [request]
   );
 
   return <>{tab}</>;

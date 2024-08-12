@@ -25,6 +25,8 @@ export default function ProfileWorkoutTabs({
   split,
 }: ProfileWorkoutTabsProps) {
   const [openTab, setOpenTab] = useState<Tab>("split");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const searchBarRef = useRef<HTMLInputElement>(null);
 
   const flipStateRef = useRef<Flip.FlipState | null>(null);
   const activeIndicatorPortalNode = useMemo(
@@ -76,12 +78,17 @@ export default function ProfileWorkoutTabs({
           }}
         </Async>
       ),
-      created: <CreatedWorkoutsTab />,
-      favorite: <FavoriteWorkoutsTab />,
-      liked: <LikedWorkoutsTab />,
+      created: <CreatedWorkoutsTab searchTerm={searchTerm} />,
+      favorite: <FavoriteWorkoutsTab searchTerm={searchTerm} />,
+      liked: <LikedWorkoutsTab searchTerm={searchTerm} />,
     }),
-    []
+    [searchTerm]
   );
+
+  function handleSearch() {
+    if (!searchBarRef.current) return;
+    setSearchTerm(searchBarRef.current.value.trim());
+  }
 
   useEffect(() => {
     if (!flipStateRef.current) return;
@@ -150,8 +157,15 @@ export default function ProfileWorkoutTabs({
         </div>
 
         <div className="search-bar-container">
-          <input type="text" className="search-bar" placeholder="Search" />
-          <Icon name="search" className="search-icon" />
+          <input
+            name="profile-workouts-search-bar"
+            type="text"
+            className="search-bar"
+            placeholder="Search"
+            ref={searchBarRef}
+            onKeyDown={(e) => e.key === "Enter" && void handleSearch()}
+          />
+          <Icon name="search" className="search-icon" onClick={handleSearch} />
         </div>
       </div>
 
