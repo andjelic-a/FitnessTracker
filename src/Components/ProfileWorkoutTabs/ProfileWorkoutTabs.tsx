@@ -8,6 +8,7 @@ import CurrentSplitDisplay from "../CurrentSplitDisplay/CurrentSplitDisplay";
 import Async from "../Async/Async";
 import WorkoutCarousel from "../WorkoutCarousel/WorkoutCarousel";
 import CreatedWorkoutsTab from "./CreatedWorkoutsTab";
+import FavoriteWorkoutsTab from "./FavoriteWorkoutsTab";
 gsap.registerPlugin(Flip);
 
 type ProfileWorkoutTabsProps = {
@@ -74,7 +75,7 @@ export default function ProfileWorkoutTabs({
         </Async>
       ),
       created: <CreatedWorkoutsTab />,
-      favorite: <div className="empty">Nothing to see here...</div>,
+      favorite: <FavoriteWorkoutsTab />,
       liked: <div className="empty">Nothing to see here...</div>,
     }),
     []

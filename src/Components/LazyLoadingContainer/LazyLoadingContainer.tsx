@@ -58,7 +58,7 @@ function LazyLoadingContainer<
 
     const response = sendAPIRequest(endpoint, baseAPIRequest as any).then(
       (x) => {
-        isWaiting.current = false;
+        if (!stopCondition(x)) isWaiting.current = false;
         return x;
       }
     );
