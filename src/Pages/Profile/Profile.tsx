@@ -121,7 +121,6 @@ export default function Profile() {
                     split={loaderData.user.then((x) =>
                       x.code === "OK" ? x.content.currentSplit : null
                     )}
-                    initialCreatedWorkouts={loaderData.workouts}
                   />
                 </div>
               </div>

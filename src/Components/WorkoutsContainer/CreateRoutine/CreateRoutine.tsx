@@ -4,10 +4,6 @@ import { RoutineItemData } from "./RoutineItem/RoutineItem";
 import Icon from "../../Icon/Icon";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
-import {
-  getProfileCache,
-  setProfileCache,
-} from "../../../Pages/Profile/ProfileCache";
 import WindowFC from "../../WindowWrapper/WindowFC";
 import createRoutineLoader from "./CreateRoutineLoader";
 import useLoaderData from "../../../BetterRouter/UseLoaderData";
@@ -124,18 +120,6 @@ const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
           },
           description: "",
         };
-
-        const profileCache = getProfileCache();
-        setProfileCache({
-          streak: profileCache!.streak,
-          user: profileCache!.user,
-          latestWeekOfActivity: profileCache!.latestWeekOfActivity,
-          workouts: profileCache!.workouts.then((x) => {
-            x = [...x, simulatedResponse];
-
-            return x;
-          }),
-        });
 
         onClose();
         newWorkoutsContext.addWorkout(simulatedResponse);

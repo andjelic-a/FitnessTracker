@@ -1,9 +1,10 @@
 import "./LazyContainer.scss";
-import { memo, ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { Endpoints } from "../../Types/Endpoints/Endpoints";
 import { Request } from "../../Types/Endpoints/RequestParser";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import LazySegment from "./LazySegment";
+import genericMemo from "../../Utility/GenericMemo";
 
 type LazyLoadingContainerProps<
   Endpoint extends Endpoints,
@@ -21,6 +22,9 @@ type LazyLoadingContainerProps<
   stopCondition: (
     response: Awaited<ReturnType<typeof sendAPIRequest<BaseRequest, Endpoint>>>
   ) => boolean;
+
+  before?: ReactNode;
+  after?: ReactNode;
 };
 
 type RequestIsh = {
@@ -39,6 +43,8 @@ function LazyLoadingContainer<
   baseAPIRequest,
   onSegmentLoad,
   stopCondition,
+  before,
+  after,
 }: LazyLoadingContainerProps<Endpoint, BaseRequest>) {
   const [segments, setSegments] = useState<ReactNode[]>([]);
   const currentRequest = useRef<RequestIsh | null>(null);
@@ -140,9 +146,13 @@ function LazyLoadingContainer<
     return true;
   }
 
-  return <div className="lazy-loading-container">{segments}</div>;
+  return (
+    <div className="lazy-container">
+      {before && <div className="lazy-segment before">{before}</div>}
+      {segments}
+      {after && <div className="lazy-segment after">{after}</div>}
+    </div>
+  );
 }
-
-const genericMemo: <T>(component: T) => T = memo;
 
 export default genericMemo(LazyLoadingContainer);

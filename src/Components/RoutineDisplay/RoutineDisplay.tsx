@@ -9,10 +9,7 @@ import WindowFC from "../WindowWrapper/WindowFC";
 import { useNavigate } from "react-router-dom";
 import { extractSetsNoMapping } from "../WorkoutsContainer/EditRoutine/ExtractSetsFromWorkout";
 import sendAPIRequest from "../../Data/SendAPIRequest";
-import {
-  getProfileCache,
-  setProfileCache,
-} from "../../Pages/Profile/ProfileCache";
+import { getProfileCache } from "../../Pages/Profile/ProfileCache";
 import WorkoutCommentSection from "./RoutineDisplayCommentPopup/WorkoutCommentSection";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import formatCount from "../../Utility/FormatCount";
@@ -141,13 +138,7 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
         },
       });
 
-      const profileCache = getProfileCache();
-      if (profileCache) {
-        profileCache.workouts.then((workouts) => {
-          workouts = workouts.filter((x) => x.id !== currentWorkout.content.id);
-          setProfileCache(profileCache);
-        });
-      }
+      //TODO: Update cache
 
       close();
     });

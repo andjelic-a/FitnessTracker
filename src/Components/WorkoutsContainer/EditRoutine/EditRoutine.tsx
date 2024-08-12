@@ -10,10 +10,6 @@ import sendAPIRequest from "../../../Data/SendAPIRequest";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import Icon from "../../Icon/Icon";
 import extractSets from "./ExtractSetsFromWorkout";
-import {
-  getProfileCache,
-  setProfileCache,
-} from "../../../Pages/Profile/ProfileCache";
 
 type EditRoutineWindowProps = {
   animationLength?: number;
@@ -116,7 +112,8 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
           },
         });
 
-        const profileCache = getProfileCache();
+        //TODO: Update cache
+        /*         const profileCache = getProfileCache();
         setProfileCache({
           streak: profileCache!.streak,
           user: profileCache!.user,
@@ -136,7 +133,7 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
 
             return x;
           }),
-        });
+        }); */
 
         onClose();
       });

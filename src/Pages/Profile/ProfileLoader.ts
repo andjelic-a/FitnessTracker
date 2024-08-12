@@ -17,12 +17,6 @@ const profileLoader = createLoader(async () => {
     user: sendAPIRequest("/api/user/me/detailed", {
       method: "get",
     }),
-    workouts: sendAPIRequest("/api/workout/personal/simple", {
-      method: "get",
-      parameters: {
-        limit: -1,
-      },
-    }).then((x) => (x.code === "OK" ? x.content : [])),
     streak: sendAPIRequest("/api/user/me/streak", {
       method: "get",
       parameters: {},

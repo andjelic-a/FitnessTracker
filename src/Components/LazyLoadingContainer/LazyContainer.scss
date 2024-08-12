@@ -1,8 +1,10 @@
-.lazy-loading-container {
+.lazy-container {
   display: flex;
+  justify-content: flex-start;
 
   .lazy-segment {
     display: flex;
+    justify-content: flex-start;
 
     .lazy-loading-threshold-marker {
       width: 0px !important;

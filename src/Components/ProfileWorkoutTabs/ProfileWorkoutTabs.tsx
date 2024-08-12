@@ -1,33 +1,26 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { Schema } from "../../Types/Endpoints/SchemaParser";
 import "./ProfileWorkoutTabs.scss";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Schema } from "../../Types/Endpoints/SchemaParser";
 import * as portals from "react-reverse-portal";
 import gsap from "gsap";
 import Flip from "gsap/dist/Flip";
-import WorkoutTab from "./WorkoutTab";
 import CurrentSplitDisplay from "../CurrentSplitDisplay/CurrentSplitDisplay";
 import Async from "../Async/Async";
 import WorkoutCarousel from "../WorkoutCarousel/WorkoutCarousel";
-import { useNavigate } from "react-router-dom";
-import Icon from "../Icon/Icon";
-import { NewWorkoutsContext } from "../WorkoutsContainer/CreateRoutine/NewWorkoutsContext";
+import CreatedWorkoutsTab from "./CreatedWorkoutsTab";
 gsap.registerPlugin(Flip);
 
 type ProfileWorkoutTabsProps = {
   latestActivity: Promise<Schema<"DetailedWeekOfCompletedWorkoutsResponseDTO">>;
-  initialCreatedWorkouts: Promise<Schema<"SimpleWorkoutResponseDTO">[]>;
   split: Promise<Schema<"DetailedUserSplitResponseDTO"> | null>;
 };
 
 type Tab = "split" | "created" | "favorite" | "liked";
 
 export default function ProfileWorkoutTabs({
-  initialCreatedWorkouts,
   latestActivity,
   split,
 }: ProfileWorkoutTabsProps) {
-  const navigate = useNavigate();
-  const newWorkoutsContext = useContext(NewWorkoutsContext);
   const [openTab, setOpenTab] = useState<Tab>("split");
 
   const flipStateRef = useRef<Flip.FlipState | null>(null);
@@ -80,29 +73,11 @@ export default function ProfileWorkoutTabs({
           }}
         </Async>
       ),
-      created: (
-        <WorkoutTab
-          initialWorkouts={initialCreatedWorkouts.then((x) => [
-            ...newWorkoutsContext.createdWorkouts,
-            ...x,
-          ])}
-        >
-          <button
-            className="new-workout-btn"
-            onClick={() => void navigate("workout/new")}
-          >
-            <p aria-hidden={false} className="accessibility-only">
-              Create a new workout
-            </p>
-
-            <Icon aria-hidden={true} name="plus" />
-          </button>
-        </WorkoutTab>
-      ),
-      favorite: <WorkoutTab initialWorkouts={Promise.resolve([])} />,
-      liked: <WorkoutTab initialWorkouts={Promise.resolve([])} />,
+      created: <CreatedWorkoutsTab />,
+      favorite: <div className="empty">Nothing to see here...</div>,
+      liked: <div className="empty">Nothing to see here...</div>,
     }),
-    [newWorkoutsContext]
+    []
   );
 
   useEffect(() => {
@@ -127,15 +102,15 @@ export default function ProfileWorkoutTabs({
       </portals.InPortal>
 
       <portals.InPortal node={tabPortalNodes.created}>
-        {memoizedTabs.created}
+        <WorkoutCarousel>{memoizedTabs.created}</WorkoutCarousel>
       </portals.InPortal>
 
       <portals.InPortal node={tabPortalNodes.favorite}>
-        {memoizedTabs.favorite}
+        <WorkoutCarousel>{memoizedTabs.favorite}</WorkoutCarousel>
       </portals.InPortal>
 
       <portals.InPortal node={tabPortalNodes.liked}>
-        {memoizedTabs.liked}
+        <WorkoutCarousel>{memoizedTabs.liked}</WorkoutCarousel>
       </portals.InPortal>
 
       <div className="tabs-header">

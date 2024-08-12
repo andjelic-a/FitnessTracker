@@ -49,6 +49,10 @@
   .tabs-body {
     width: 100%;
 
+    .lazy-segment {
+      gap: 1rem;
+    }
+
     .new-workout-btn {
       height: 13rem;
       min-height: 13rem;
