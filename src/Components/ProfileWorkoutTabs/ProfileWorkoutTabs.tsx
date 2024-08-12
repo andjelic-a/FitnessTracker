@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import "./ProfileWorkoutTabs.scss";
 import * as portals from "react-reverse-portal";
@@ -10,6 +10,7 @@ import Async from "../Async/Async";
 import WorkoutCarousel from "../WorkoutCarousel/WorkoutCarousel";
 import { useNavigate } from "react-router-dom";
 import Icon from "../Icon/Icon";
+import { NewWorkoutsContext } from "../WorkoutsContainer/CreateRoutine/NewWorkoutsContext";
 gsap.registerPlugin(Flip);
 
 type ProfileWorkoutTabsProps = {
@@ -26,6 +27,7 @@ export default function ProfileWorkoutTabs({
   split,
 }: ProfileWorkoutTabsProps) {
   const navigate = useNavigate();
+  const newWorkoutsContext = useContext(NewWorkoutsContext);
   const [openTab, setOpenTab] = useState<Tab>("split");
 
   const flipStateRef = useRef<Flip.FlipState | null>(null);
@@ -79,7 +81,12 @@ export default function ProfileWorkoutTabs({
         </Async>
       ),
       created: (
-        <WorkoutTab initialWorkouts={initialCreatedWorkouts}>
+        <WorkoutTab
+          initialWorkouts={initialCreatedWorkouts.then((x) => [
+            ...newWorkoutsContext.createdWorkouts,
+            ...x,
+          ])}
+        >
           <button
             className="new-workout-btn"
             onClick={() => void navigate("workout/new")}
@@ -95,7 +102,7 @@ export default function ProfileWorkoutTabs({
       favorite: <WorkoutTab initialWorkouts={Promise.resolve([])} />,
       liked: <WorkoutTab initialWorkouts={Promise.resolve([])} />,
     }),
-    []
+    [newWorkoutsContext]
   );
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import "./CreateRoutine.scss";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { RoutineItemData } from "./RoutineItem/RoutineItem";
 import Icon from "../../Icon/Icon";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
@@ -13,6 +13,7 @@ import createRoutineLoader from "./CreateRoutineLoader";
 import useLoaderData from "../../../BetterRouter/UseLoaderData";
 import Async from "../../Async/Async";
 import RoutineSetCreator from "./RoutineSetCreator";
+import { NewWorkoutsContext } from "./NewWorkoutsContext";
 
 type CreateRoutineWindowProps = {
   animationLength?: number;
@@ -22,6 +23,7 @@ type CreateRoutineWindowProps = {
 const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
   ({ animationLength, safeGuard }, wrapperRef, onClose) => {
     const loaderData = useLoaderData<typeof createRoutineLoader>();
+    const newWorkoutsContext = useContext(NewWorkoutsContext);
 
     const [isPublic, setIsPublic] = useState<boolean>(false);
 
@@ -111,32 +113,32 @@ const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
       }).then((newWorkout) => {
         if (newWorkout.code !== "Created") return;
 
+        const simulatedResponse: Schema<"SimpleWorkoutResponseDTO"> = {
+          id: newWorkout.content.id,
+          name: newWorkout.content.name,
+          isPublic: newWorkout.content.isPublic,
+          creator: {
+            id: user.id,
+            name: user.name,
+            image: user.image,
+          },
+          description: "",
+        };
+
         const profileCache = getProfileCache();
         setProfileCache({
           streak: profileCache!.streak,
           user: profileCache!.user,
           latestWeekOfActivity: profileCache!.latestWeekOfActivity,
           workouts: profileCache!.workouts.then((x) => {
-            x = [
-              ...x,
-              {
-                id: newWorkout.content.id,
-                name: newWorkout.content.name,
-                isPublic: newWorkout.content.isPublic,
-                creator: {
-                  id: user.id,
-                  name: user.name,
-                  image: user.image,
-                },
-                description: "",
-              },
-            ];
+            x = [...x, simulatedResponse];
 
             return x;
           }),
         });
 
         onClose();
+        newWorkoutsContext.addWorkout(simulatedResponse);
       });
     };
     const [createdSets, setCreatedSets] = useState<RoutineItemData[] | null>(
