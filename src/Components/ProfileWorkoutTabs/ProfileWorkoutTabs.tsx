@@ -9,6 +9,8 @@ import Async from "../Async/Async";
 import WorkoutCarousel from "../WorkoutCarousel/WorkoutCarousel";
 import CreatedWorkoutsTab from "./CreatedWorkoutsTab";
 import FavoriteWorkoutsTab from "./FavoriteWorkoutsTab";
+import LikedWorkoutsTab from "./LikedWorkoutsTab";
+import Icon from "../Icon/Icon";
 gsap.registerPlugin(Flip);
 
 type ProfileWorkoutTabsProps = {
@@ -76,7 +78,7 @@ export default function ProfileWorkoutTabs({
       ),
       created: <CreatedWorkoutsTab />,
       favorite: <FavoriteWorkoutsTab />,
-      liked: <div className="empty">Nothing to see here...</div>,
+      liked: <LikedWorkoutsTab />,
     }),
     []
   );
@@ -115,34 +117,41 @@ export default function ProfileWorkoutTabs({
       </portals.InPortal>
 
       <div className="tabs-header">
-        <div className="tab">
-          <button onClick={() => handleOpenTab("split")}>Split</button>
-          {openTab === "split" && (
-            <portals.OutPortal node={activeIndicatorPortalNode} />
-          )}
+        <div className="tabs">
+          <div className="tab">
+            <button onClick={() => handleOpenTab("split")}>Split</button>
+            {openTab === "split" && (
+              <portals.OutPortal node={activeIndicatorPortalNode} />
+            )}
+          </div>
+
+          <div className="tab">
+            <button onClick={() => handleOpenTab("created")}>Created</button>
+            {openTab === "created" && (
+              <portals.OutPortal node={activeIndicatorPortalNode} />
+            )}
+          </div>
+
+          <div className="tab">
+            <button onClick={() => handleOpenTab("favorite")}>Favorite</button>
+
+            {openTab === "favorite" && (
+              <portals.OutPortal node={activeIndicatorPortalNode} />
+            )}
+          </div>
+
+          <div className="tab">
+            <button onClick={() => handleOpenTab("liked")}>Liked</button>
+
+            {openTab === "liked" && (
+              <portals.OutPortal node={activeIndicatorPortalNode} />
+            )}
+          </div>
         </div>
 
-        <div className="tab">
-          <button onClick={() => handleOpenTab("created")}>Created</button>
-          {openTab === "created" && (
-            <portals.OutPortal node={activeIndicatorPortalNode} />
-          )}
-        </div>
-
-        <div className="tab">
-          <button onClick={() => handleOpenTab("favorite")}>Favorite</button>
-
-          {openTab === "favorite" && (
-            <portals.OutPortal node={activeIndicatorPortalNode} />
-          )}
-        </div>
-
-        <div className="tab">
-          <button onClick={() => handleOpenTab("liked")}>Liked</button>
-
-          {openTab === "liked" && (
-            <portals.OutPortal node={activeIndicatorPortalNode} />
-          )}
+        <div className="search-bar-container">
+          <input type="text" className="search-bar" placeholder="Search" />
+          <Icon name="search" className="search-icon" />
         </div>
       </div>
 

@@ -3,8 +3,8 @@ import LazyLoadingContainer from "../LazyLoadingContainer/LazyLoadingContainer";
 import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
 import { Request } from "../../Types/Endpoints/RequestParser";
 
-const FavoriteWorkoutsTab = memo(() => {
-  const request = useMemo<Request<"/api/workout/favorite/simple">>(
+const LikedWorkoutsTab = memo(() => {
+  const request = useMemo<Request<"/api/workout/liked/simple">>(
     () => ({
       method: "get",
       parameters: {
@@ -18,7 +18,7 @@ const FavoriteWorkoutsTab = memo(() => {
   const tab = useMemo(
     () => (
       <LazyLoadingContainer
-        endpoint={"/api/workout/favorite/simple"}
+        endpoint={"/api/workout/liked/simple"}
         baseAPIRequest={request}
         onSegmentLoad={(workouts) => {
           console.log(workouts);
@@ -47,4 +47,4 @@ const FavoriteWorkoutsTab = memo(() => {
   return <>{tab}</>;
 });
 
-export default FavoriteWorkoutsTab;
+export default LikedWorkoutsTab;
