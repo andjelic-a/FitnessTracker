@@ -1,0 +1,181 @@
+@import "../../Palette.scss";
+
+.profile-workout-tabs-container {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  .tabs-header {
+    width: 100%;
+    height: 3.5rem;
+    display: flex;
+    padding: 0 1rem;
+    justify-content: space-between;
+    align-items: center;
+
+    .tabs {
+      display: flex;
+      gap: 1.5rem;
+
+      .tab {
+        width: fit-content;
+        display: flex;
+        flex-direction: column;
+
+        button {
+          outline: none;
+          border: none;
+          background: none;
+
+          font-size: 1.5rem;
+          color: #fff;
+          cursor: pointer;
+          transition: all 150ms ease-in-out;
+
+          &:has(~ .active-indicator) {
+            transform: translateY(-0.7rem);
+          }
+        }
+
+        .active-indicator {
+          width: 100%;
+          height: 3px;
+          background-color: #fff;
+
+          &.hidden {
+            display: none;
+          }
+        }
+      }
+    }
+
+    .search-bar-container {
+      width: 30rem;
+      height: fit-content;
+      display: grid;
+      grid-template-rows: 1fr;
+      grid-template-columns: 1fr auto;
+      place-items: center;
+      position: relative;
+      border-bottom: 2px solid $dark-600;
+      padding-right: 0.5rem;
+
+      input {
+        min-width: 100%;
+        max-width: 100%;
+        width: 100%;
+
+        font-size: 1.5rem;
+        font-family: sans-serif;
+        color: rgb(231, 231, 231);
+
+        background-color: transparent;
+        outline: none;
+        border: none;
+
+        padding: 0.7rem 1rem;
+        overflow: hidden;
+      }
+
+      &::before {
+        content: "";
+        display: block;
+        box-sizing: border-box;
+
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        width: 0%;
+        height: 0px;
+        transform: translate(-50%, 0%);
+
+        border-bottom: 2px solid #fff;
+
+        transition: 200ms;
+        transition-timing-function: ease-in-out;
+      }
+
+      &:has(input:focus)::before {
+        width: 100%;
+        transition: 300ms;
+      }
+
+      input:focus + .search-icon {
+        color: #fff;
+      }
+
+      .search-icon {
+        color: #aaa;
+        font-size: 1.75rem;
+        transition: all 175ms ease-out;
+        cursor: pointer;
+      }
+    }
+
+    .change-split-btn-container {
+      outline: none;
+      height: 100%;
+      width: fit-content;
+
+      button {
+        height: 90%;
+        width: 100%;
+
+        border: none;
+        outline: none;
+        border-radius: 0.5rem;
+
+        background-color: $primary-300;
+        color: white;
+        cursor: pointer;
+
+        font-size: 1.6rem;
+        font-weight: 550;
+        right: 0;
+        padding: 0.5rem 1rem;
+
+        &:hover {
+          background-color: $primary-400;
+        }
+      }
+    }
+  }
+
+  .tabs-body {
+    width: 100%;
+
+    .lazy-segment {
+      gap: 1rem;
+    }
+
+    .new-workout-btn {
+      height: 13rem;
+      min-height: 13rem;
+      max-height: 13rem;
+      aspect-ratio: 1;
+
+      display: grid;
+      place-items: center;
+
+      border: 2px solid $dark-200;
+      outline: none;
+      border-radius: 0.5rem;
+      padding: 1rem;
+
+      cursor: pointer;
+      background-color: transparent;
+
+      color: #aaa;
+      // transition: all 200ms ease-out;
+      font-size: 3.5rem;
+      font-weight: 100;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+}

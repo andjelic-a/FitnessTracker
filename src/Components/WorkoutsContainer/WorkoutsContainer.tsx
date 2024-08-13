@@ -8,13 +8,13 @@ import useSearch from "../../Hooks/UseSearch";
 type WorkoutsContainerProps = {
   workouts: Schema<"SimpleWorkoutResponseDTO">[];
   toggleNewWorkoutWindow: () => void;
-  toggleRoutineDisplay: (workoutId: string) => void;
+  toggleWorkoutDisplay: (workoutId: string) => void;
 };
 
 function WorkoutsContainer({
   workouts,
   toggleNewWorkoutWindow,
-  toggleRoutineDisplay,
+  toggleWorkoutDisplay,
 }: WorkoutsContainerProps) {
   const [showAll, setShowAll] = useState<boolean>(false);
 
@@ -52,7 +52,7 @@ function WorkoutsContainer({
           {(searchResults ?? (showAll ? workouts : workouts.slice(0, 8))).map(
             (workout) => (
               <div
-                onClick={() => toggleRoutineDisplay(workout.id)}
+                onClick={() => toggleWorkoutDisplay(workout.id)}
                 key={workout.id}
               >
                 <img

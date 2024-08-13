@@ -18,10 +18,11 @@
   inherits: false;
 }
 
-.current-split-display-container {
+//#region OBSOLETE, REPLACED WITH WORKOUT CAROUSEL
+/* .current-split-display-container {
   width: fit-content;
   height: fit-content;
-  max-width: 73rem;
+  max-width: 100%;
 
   display: flex;
   flex-direction: column;
@@ -47,276 +48,6 @@
 
     .user-container {
       font-size: 1rem;
-    }
-  }
-
-  .workouts-container .workout {
-    position: relative;
-    font-size: 1rem;
-    background-color: $dark-100;
-
-    &:not(.rest) {
-      .footer::after {
-        content: attr(data-day);
-        font-size: 1.25rem;
-        font-weight: 100;
-        color: #aaa;
-        transition: 150ms;
-      }
-
-      &.done {
-        transition: --border-tail-opacity 0.75s ease-in-out;
-        $color1: rgb(16, 156, 3);
-        $color2: rgba(16, 156, 3, var(--border-tail-opacity));
-
-        border-image: conic-gradient(
-            from var(--start-angle),
-            $color2,
-            $color1 0.1turn,
-            $color1 0.15turn,
-            $color2 0.25turn
-          )
-          30;
-
-        animation: spin-counter-clockwise 2s linear infinite forwards;
-
-        &:not(:hover) {
-          --border-tail-opacity: 1;
-        }
-
-        &:hover {
-          --border-tail-opacity: 0.1;
-        }
-      }
-
-      &.skipped {
-        &::before {
-          content: "skipped";
-          text-transform: uppercase;
-          font-weight: 900;
-          font-size: 5rem;
-          color: #f00;
-          display: block;
-          pointer-events: none;
-
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%) rotate(-15deg);
-
-          backdrop-filter: blur(0.3px);
-          transition: 250ms;
-        }
-
-        &::after {
-          content: "";
-          display: block;
-          background-color: rgba($color: #733, $alpha: 0.25);
-          border: 3px solid rgba($color: #f00, $alpha: 0.1);
-          border-radius: 0.5rem;
-          width: 100%;
-          height: 100%;
-          pointer-events: none;
-
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          transition: 150ms;
-        }
-
-        &:hover {
-          &::before {
-            opacity: 0;
-          }
-
-          &::after {
-            opacity: 0.5;
-          }
-        }
-      }
-
-      &.pending {
-        color: #aaa;
-        transition: 100ms ease-out;
-
-        &:hover {
-          color: #fff;
-        }
-      }
-
-      &.pending-today {
-        transition: --border-tail-opacity 0.75s ease-in-out;
-        $color1: rgb(235, 251, 255);
-        $color2: rgba(235, 251, 255, var(--border-tail-opacity));
-
-        border-image: conic-gradient(
-            from var(--start-angle),
-            $color2,
-            $color1 0.1turn,
-            $color1 0.15turn,
-            $color2 0.25turn
-          )
-          30;
-
-        animation: spin-clockwise 2.5s linear infinite forwards;
-
-        &:hover {
-          --border-tail-opacity: 1;
-        }
-      }
-
-      &.done-today {
-        transition: --border-tail-opacity 0.75s ease-in-out;
-        $color1: rgb(235, 251, 255);
-        $color2: rgba(16, 156, 3, var(--border-tail-opacity));
-
-        border-image: conic-gradient(
-            from var(--start-angle),
-            $color2,
-            $color1 0.1turn,
-            $color1 0.15turn,
-            $color2 0.25turn
-          )
-          30;
-
-        animation: spin-clockwise 2.5s linear infinite forwards;
-
-        &:not(:hover) {
-          --border-tail-opacity: 0.5;
-        }
-
-        &:hover {
-          --border-tail-opacity: 1;
-        }
-      }
-    }
-
-    &.rest {
-      cursor: default;
-      height: 100%;
-      aspect-ratio: 1;
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      font-size: 2rem;
-      border: 2px solid $dark-200;
-      border-radius: 0.5rem;
-      padding: 1rem;
-
-      p {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        gap: 0.5rem;
-
-        &::after {
-          content: attr(data-day);
-          display: block;
-
-          font-size: 1.25rem;
-          font-weight: 100;
-          color: #aaa;
-          transition: 150ms;
-        }
-      }
-
-      &.passed {
-        color: #aaa;
-        transition: 150ms;
-
-        &:hover {
-          color: #fff;
-        }
-      }
-
-      &.scheduled {
-        &::after,
-        &::before {
-          transition: --breakpoint-angle 0.4s ease-in-out 0s, filter 1.5s 0.2s;
-          content: "";
-          position: absolute;
-          height: 100%;
-          width: 100%;
-
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          z-index: -1;
-          padding: 3px;
-
-          border-radius: 0.5rem;
-        }
-
-        &::before {
-          animation: 5s spin-clockwise linear infinite;
-          background-image: conic-gradient(
-            from var(--start-angle),
-            transparent,
-            calc(var(--breakpoint-angle) + 30deg),
-            rgb(71, 161, 64)
-          );
-        }
-
-        &::after {
-          animation: 5s spin-counter-clockwise linear infinite;
-          background-image: conic-gradient(
-            from var(--start-angle),
-            rgb(86, 86, 196),
-            calc(330deg - var(--breakpoint-angle)),
-            transparent
-          );
-        }
-
-        &:hover::before,
-        &:hover::after {
-          --breakpoint-angle: 180deg;
-          filter: blur(1rem);
-        }
-      }
-
-      &.scheduled-today {
-        &::after,
-        &::before {
-          transition: --breakpoint-angle 0.4s ease-in-out;
-          content: "";
-          position: absolute;
-          height: 100%;
-          width: 100%;
-
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          z-index: -1;
-          padding: 3px;
-
-          border-radius: 0.5rem;
-
-          background-image: conic-gradient(
-            from var(--start-angle),
-            transparent,
-            var(--breakpoint-angle),
-            rgb(125, 125, 228)
-          );
-
-          animation: 3s spin-clockwise linear infinite;
-        }
-
-        &::before {
-          filter: blur(1rem);
-          opacity: 0.8;
-        }
-
-        &:hover::before,
-        &:hover::after {
-          animation-play-state: paused;
-          --breakpoint-angle: 0deg;
-        }
-      }
     }
   }
 
@@ -405,6 +136,123 @@
           background: rgb(0, 135, 162);
         }
       }
+    }
+  }
+} */
+//#endregion
+
+.workout-container {
+  position: relative;
+
+  .badge {
+    position: absolute;
+    top: 0%;
+    left: 100%;
+    transform: translate(-75%, -25%);
+
+    i {
+      font-size: 1.7rem;
+      font-weight: 900;
+    }
+  }
+}
+
+.current-split-workouts .workout {
+  position: relative;
+  font-size: 1rem;
+  background-color: $dark-100;
+
+  &:not(.rest) {
+    .footer::after {
+      content: attr(data-day);
+      font-size: 1.25rem;
+      font-weight: 100;
+      color: #aaa;
+      transition: 150ms;
+    }
+
+    &.done + .badge {
+      color: #0f0;
+    }
+
+    &.skipped {
+      & + .badge {
+        color: rgb(207, 90, 90);
+      }
+
+      .footer::after {
+        text-decoration: line-through;
+      }
+    }
+
+    &.pending {
+      color: #aaa;
+      transition: 100ms ease-out;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+
+  &.rest {
+    cursor: default;
+    height: 13rem;
+    aspect-ratio: 1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 2rem;
+    border: 2px solid $dark-200;
+    border-radius: 0.5rem;
+    padding: 1rem;
+
+    p {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 0.5rem;
+
+      &::after {
+        content: attr(data-day);
+        display: block;
+
+        font-size: 1.25rem;
+        font-weight: 100;
+        color: #aaa;
+        transition: 150ms;
+      }
+    }
+
+    &.passed,
+    &.scheduled {
+      color: #aaa;
+    }
+  }
+
+  &:not(.rest).pending-today,
+  &.rest.scheduled-today {
+    transition: --border-tail-opacity 0.75s ease-in-out;
+    $color1: rgb(235, 251, 255);
+    $color2: rgba(235, 251, 255, var(--border-tail-opacity));
+
+    border-image: conic-gradient(
+        from var(--start-angle),
+        $color2,
+        $color1 0.1turn,
+        $color1 0.15turn,
+        $color2 0.25turn
+      )
+      30;
+
+    animation: spin-clockwise 2.5s linear infinite forwards;
+
+    &:hover {
+      --border-tail-opacity: 1;
     }
   }
 }

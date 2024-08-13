@@ -1,1 +1,32 @@
 @import "../../Palette.scss";
+
+.profile {
+  width: 100%;
+  height: max-content;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .profile-user-container {
+    width: 100%;
+    max-width: 73rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+
+    .profile-body {
+      width: 100%;
+      max-width: 100%;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5rem;
+    }
+  }
+
+  padding-bottom: 5rem;
+}

@@ -1,0 +1,311 @@
+@import "../../../../Palette.scss";
+
+.workout-item {
+  position: relative;
+  background-color: $dark-400;
+  border-radius: 1.5rem;
+  min-height: 19rem;
+  height: fit-content;
+  max-height: fit-content;
+
+  &.dragging {
+    opacity: 0.25;
+    pointer-events: none;
+    transition: opacity 0.1ms;
+  }
+
+  &.temporary {
+    position: absolute;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    z-index: 10000000000;
+  }
+}
+
+.workout-item-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 6rem;
+  padding: 0.5rem;
+
+  & img {
+    margin-top: 1rem;
+    height: 6rem;
+    border-radius: 50%;
+  }
+
+  & p {
+    margin-left: 1.5rem;
+    font-size: 1.8rem;
+    transition: 0.2s;
+    cursor: pointer;
+
+    &:hover {
+      color: $primary-500;
+    }
+  }
+
+  & .workout-settings-popup {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 14rem;
+    height: 4rem;
+    transform: translate(-5px, 5px);
+    background-color: $dark-200;
+    border-radius: 1rem;
+    box-shadow: 4px 8px 10px rgba(0, 0, 0, 0.1);
+    opacity: 1;
+    visibility: visible;
+    transition: 0.2s;
+
+    & p {
+      height: 2rem;
+      margin-left: 0;
+      font-size: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      &:hover {
+        background-color: $dark-300;
+        color: white;
+      }
+    }
+
+    & :first-child {
+      border-radius: 1rem 1rem 0 0;
+    }
+
+    & :last-child {
+      border-radius: 0 0 1rem 1rem;
+    }
+  }
+
+  & .hidden {
+    font-size: 0px;
+    width: 7rem;
+    height: 2rem;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  & .workout-settings-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 1.8rem;
+    height: 1.8rem;
+    margin-left: auto;
+    margin-right: 1.5rem;
+    cursor: pointer;
+    font-size: 2rem;
+    transition: 0.2s;
+
+    &:hover {
+      color: $primary-500;
+    }
+  }
+}
+
+.exercise-set {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 13rem;
+  height: auto;
+
+  & * {
+    height: 4rem;
+    width: 100%;
+
+    &:nth-child(even) {
+      background-color: $dark-300;
+    }
+  }
+
+  & .exercise-set-placeholder {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 4rem;
+
+    & *:nth-child(even) {
+      background-color: initial;
+    }
+
+    & p {
+      font-size: 1.6rem;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+  }
+
+  & .icon-wrapper {
+    margin-top: auto;
+    align-self: flex-end;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 0 0 1.5rem 1.5rem;
+    background-color: initial;
+
+    & .add-set-icon {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      background-color: $primary-300;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: $dark-400;
+      font-size: 2rem;
+      cursor: pointer;
+      border: none;
+
+      &:hover {
+        background-color: $primary-400;
+      }
+    }
+  }
+
+  & .exercise-set-item {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    transition: opacity 150ms;
+    transition: background-color 150ms;
+
+    &.dragging {
+      opacity: 0.5;
+      background-color: $dark-mixed-600;
+    }
+
+    & *:nth-child(even) {
+      background-color: initial;
+    }
+
+    & .set-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 4rem;
+
+      & p {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 3rem;
+        height: 4rem;
+        font-size: 2rem;
+        font-weight: 600;
+        cursor: pointer;
+        margin: 0;
+        padding: 0;
+      }
+    }
+
+    & div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 4rem;
+      width: 100%;
+      background-color: initial;
+      color: white;
+
+      & input {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 5rem;
+        text-align: center;
+        color: white;
+        border: none;
+        background-color: initial;
+        outline: none;
+        cursor: pointer;
+        font-size: 2rem;
+        margin: 0;
+        padding: 0;
+      }
+
+      & .set-icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.8rem;
+      }
+    }
+  }
+
+  & .set-button {
+    position: relative;
+
+    & .set-dropdown-menu {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      position: absolute;
+      z-index: 10000;
+      top: 0.5rem;
+      background-color: $dark-400;
+      box-shadow: 8px 16px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 0.5rem;
+      width: 8rem;
+      height: 15rem;
+      transition: 0.2s;
+      white-space: nowrap;
+
+      & span {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 3rem;
+        font-size: 1.8rem;
+        cursor: pointer;
+
+        &:first-child {
+          border-radius: 0.5rem 0.5rem 0 0;
+        }
+
+        &:last-child {
+          border-radius: 0 0 0.5rem 0.5rem;
+        }
+
+        &:hover {
+          background-color: $dark-500;
+        }
+
+        & .set-icon {
+          font-size: 1.6rem;
+        }
+
+        & .x {
+          font-size: 2.5rem;
+          color: rgb(255, 0, 0);
+
+          &:hover {
+            color: rgb(255, 75, 75);
+          }
+        }
+      }
+    }
+
+    & .hidden {
+      height: 5rem;
+      visibility: 0;
+      opacity: 0;
+      z-index: -100;
+    }
+  }
+}

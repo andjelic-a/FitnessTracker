@@ -23,6 +23,11 @@
   -webkit-font-smoothing: antialiased;
 }
 
+.accessibility-only {
+  display: none !important;
+  position: absolute !important;
+}
+
 body {
   overflow: hidden;
 }
