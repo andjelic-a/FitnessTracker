@@ -19,47 +19,6 @@ export default function Profile() {
 
   const navigate = useNavigate();
 
-  // const toggleRoutineDisplay = (workoutId: string) =>
-  //   void navigate(`workout/${workoutId}`);
-
-  // const toggleNewWorkoutWindow = () => void navigate(`workout/new`);
-
-  //LLC = LazyLoadingContainer
-  const memoizedLLC = useMemo(
-    () => (
-      <LazyLoadingContainer
-        endpoint="/api/exercise"
-        baseAPIRequest={{
-          method: "get",
-          parameters: {
-            limit: 10,
-            offset: 0,
-          },
-        }}
-        onSegmentLoad={(response) => {
-          if (response.code !== "OK") return null;
-
-          return response.content.map((x) => (
-            <div
-              key={x.id}
-              style={{
-                margin: "10px",
-                minWidth: "200px",
-                border: "1px solid white",
-              }}
-            >
-              {x.name}
-            </div>
-          ));
-        }}
-        stopCondition={(response) =>
-          response.code !== "OK" || response.content.length < 10
-        }
-      />
-    ),
-    []
-  );
-
   const [newWorkouts, setNewWorkouts] = useState<
     Schema<"SimpleWorkoutResponseDTO">[]
   >([]);
@@ -93,8 +52,6 @@ export default function Profile() {
                 />
 
                 <div className="profile-body">
-                  <WorkoutCarousel>{memoizedLLC}</WorkoutCarousel>
-
                   <Async
                     await={loaderData.streak}
                     skeleton={<ProfileSkeleton />}
