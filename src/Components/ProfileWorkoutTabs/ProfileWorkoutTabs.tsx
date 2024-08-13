@@ -1,5 +1,11 @@
 import "./ProfileWorkoutTabs.scss";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import * as portals from "react-reverse-portal";
 import gsap from "gsap";
@@ -50,6 +56,16 @@ export default function ProfileWorkoutTabs({
     []
   );
 
+  const changeSplitBtnPortalNode = useMemo(
+    () =>
+      portals.createHtmlPortalNode({
+        attributes: {
+          class: "change-split-btn-container",
+        },
+      }),
+    []
+  );
+
   const tabPortalNodes = useMemo<{
     [key in Tab]: portals.HtmlPortalNode;
   }>(
@@ -75,13 +91,6 @@ export default function ProfileWorkoutTabs({
               <WorkoutCarousel>
                 <div className="empty">
                   <p>No split currently in use</p>
-                  <p>
-                    Press
-                    <button onClick={() => console.log("Select split")}>
-                      here
-                    </button>
-                    to select one
-                  </p>
                 </div>
               </WorkoutCarousel>
             );
@@ -94,6 +103,10 @@ export default function ProfileWorkoutTabs({
     }),
     [searchTerm]
   );
+
+  const handleChangeSplit = useCallback(() => {
+    console.log("change split");
+  }, []);
 
   function handleSearch() {
     if (!searchBarRef.current) return;
@@ -145,6 +158,10 @@ export default function ProfileWorkoutTabs({
         <Icon name="search" className="search-icon" onClick={handleSearch} />
       </portals.InPortal>
 
+      <portals.InPortal node={changeSplitBtnPortalNode}>
+        <button onClick={handleChangeSplit}>Change Split</button>
+      </portals.InPortal>
+
       <div className="tabs-header">
         <div className="tabs">
           <div className="tab">
@@ -178,7 +195,9 @@ export default function ProfileWorkoutTabs({
           </div>
         </div>
 
-        {openTab !== "split" && (
+        {openTab === "split" ? (
+          <portals.OutPortal node={changeSplitBtnPortalNode} />
+        ) : (
           <portals.OutPortal node={searchBarPortalNode} />
         )}
       </div>

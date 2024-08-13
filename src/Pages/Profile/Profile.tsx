@@ -8,9 +8,7 @@ import profileLoader from "./ProfileLoader";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
 import Async from "../../Components/Async/Async";
 import ProfileWorkoutTabs from "../../Components/ProfileWorkoutTabs/ProfileWorkoutTabs";
-import LazyLoadingContainer from "../../Components/LazyLoadingContainer/LazyLoadingContainer";
-import WorkoutCarousel from "../../Components/WorkoutCarousel/WorkoutCarousel";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { NewWorkoutsContext } from "../../Components/WorkoutsContainer/CreateRoutine/NewWorkoutsContext";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 

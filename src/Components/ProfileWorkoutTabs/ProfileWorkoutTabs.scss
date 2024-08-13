@@ -114,6 +114,34 @@
         cursor: pointer;
       }
     }
+
+    .change-split-btn-container {
+      outline: none;
+      height: 100%;
+      width: fit-content;
+
+      button {
+        height: 90%;
+        width: 100%;
+
+        border: none;
+        outline: none;
+        border-radius: 0.5rem;
+
+        background-color: $primary-300;
+        color: white;
+        cursor: pointer;
+
+        font-size: 1.6rem;
+        font-weight: 550;
+        right: 0;
+        padding: 0.5rem 1rem;
+
+        &:hover {
+          background-color: $primary-400;
+        }
+      }
+    }
   }
 
   .tabs-body {
