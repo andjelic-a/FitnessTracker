@@ -31,10 +31,10 @@ import LandingPage from "./Pages/LandingPage/LandingPage.tsx";
 import ForgotPassword from "./Pages/ForgotPasswordPage/ForgotPassword.tsx";
 import UserPage from "./Pages/User/User.tsx";
 import userLoader from "./Pages/User/UserLoader.ts";
-import RoutineDisplay from "./Components/RoutineDisplay/RoutineDisplay.tsx";
-import routineDisplayLoader from "./Components/RoutineDisplay/RoutineDisplayLoader.ts";
-import CreateRoutineWindow from "./Components/WorkoutsContainer/CreateRoutine/CreateRoutine.tsx";
-import createRoutineLoader from "./Components/WorkoutsContainer/CreateRoutine/CreateRoutineLoader.ts";
+import WorkoutDisplay from "./Components/WorkoutDisplay/WorkoutDisplay.tsx";
+import workoutDisplayLoader from "./Components/WorkoutDisplay/WorkoutDisplayLoader.ts";
+import CreateWorkoutWindow from "./Components/WorkoutsContainer/CreateWorkout/CreateWorkout.tsx";
+import createWorkoutLoader from "./Components/WorkoutsContainer/CreateWorkout/CreateWorkoutLoader.ts";
 import landingPageLoader from "./Pages/LandingPage/LandingPageLoader.ts";
 import FollowContainer from "./Components/FollowContainer/FollowContainer.tsx";
 import profileFollowersContainerLoader from "./Components/FollowContainer/ProfileFollowersContainerLoader.ts";
@@ -44,7 +44,7 @@ import userPageFollowersContainerLoader from "./Components/FollowContainer/UserP
 import EquipmentAdminPanel from "./Pages/AdminPanel/Equipment/EquipmentAdminPanel.tsx";
 import adminEquipmentLoader from "./Pages/AdminPanel/Equipment/EquipmentAdminPanelLoader.ts";
 import Settings from "./Pages/Settings/Settings.tsx";
-import EditRoutine from "./Components/WorkoutsContainer/EditRoutine/EditRoutine.tsx";
+import EditWorkout from "./Components/WorkoutsContainer/EditWorkout/EditWorkout.tsx";
 import StartedWorkout from "./Pages/StartedWorkout/StartedWorkout.tsx";
 import startedWorkoutLoader from "./Pages/StartedWorkout/StartedWorkoutLoader.ts";
 
@@ -89,18 +89,18 @@ const routes: RouteObject[] = [
           },
           {
             path: "workout/:id",
-            element: <RoutineDisplay />,
-            loader: routineDisplayLoader,
+            element: <WorkoutDisplay />,
+            loader: workoutDisplayLoader,
           },
           {
             path: "workout/:id/edit",
-            element: <EditRoutine />,
-            loader: routineDisplayLoader,
+            element: <EditWorkout />,
+            loader: workoutDisplayLoader,
           },
           {
             path: "workout/new",
-            element: <CreateRoutineWindow />,
-            loader: createRoutineLoader,
+            element: <CreateWorkoutWindow />,
+            loader: createWorkoutLoader,
           },
           {
             path: "followers",

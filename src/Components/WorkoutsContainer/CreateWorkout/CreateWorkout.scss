@@ -1,6 +1,6 @@
 @import "../../../Palette.scss";
 
-.create-routine-window {
+.create-workout-window {
   &,
   * {
     user-select: none;
@@ -47,19 +47,19 @@
     pointer-events: none;
   }
 
-  &.routine-item-error-button .create-routine-add-exercise {
+  &.workout-item-error-button .create-workout-add-exercise {
     background-color: red;
   }
 }
 
-.create-routine-header {
+.create-workout-header {
   width: 100%;
   height: 5rem;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
 
-  & #routine-title {
+  & #workout-title {
     width: 36rem;
     height: 5rem;
     border: none;
@@ -85,7 +85,7 @@
     }
   }
 
-  & .create-routine-public-or-private {
+  & .create-workout-public-or-private {
     position: relative;
     display: flex;
     justify-content: center;
@@ -101,7 +101,7 @@
       cursor: pointer;
     }
 
-    & .create-routine-public-or-private-popup {
+    & .create-workout-public-or-private-popup {
       position: absolute;
       left: 0;
       z-index: -1;
@@ -131,7 +131,7 @@
     }
   }
 
-  .routine-item-error-title {
+  .workout-item-error-title {
     border-color: rgb(255, 0, 0) !important;
 
     &::placeholder {
@@ -139,7 +139,7 @@
     }
   }
 
-  & .create-routine-save {
+  & .create-workout-save {
     width: 5.5rem;
     height: 3.75rem;
     border: none;
@@ -173,7 +173,7 @@
   }
 }
 
-.create-routine-add-exercise {
+.create-workout-add-exercise {
   justify-self: center;
   align-self: flex-start;
   display: flex;
@@ -193,7 +193,7 @@
   }
 }
 
-.create-routine-description {
+.create-workout-description {
   position: relative;
   margin-top: auto;
   align-self: center;
@@ -208,14 +208,14 @@
   &:focus-within {
     border: 2px solid rgb(231, 231, 231);
 
-    & .routine-description-placeholder {
+    & .workout-description-placeholder {
       top: -1.75rem;
       font-size: 1.7rem;
       color: rgb(231, 231, 231);
     }
   }
 
-  #routine-description {
+  #workout-description {
     position: relative;
     font-family: sans-serif;
     width: 100%;
@@ -230,7 +230,7 @@
     overflow: hidden;
   }
 
-  .routine-description-placeholder {
+  .workout-description-placeholder {
     position: absolute;
     font-size: 1.8rem;
     font-weight: 600;

@@ -1,22 +1,22 @@
-import "./RoutineDisplay.scss";
+import "./WorkoutDisplay.scss";
 import { useEffect, useRef, useState } from "react";
 import Icon from "../Icon/Icon";
-import RoutineDisplayItem from "./RoutineDisplayItem/RoutineDisplayItem";
+import WorkoutDisplayItem from "./WorkoutDisplayItem/WorkoutDisplayItem";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
-import routineDisplayLoader from "./RoutineDisplayLoader";
+import workoutDisplayLoader from "./WorkoutDisplayLoader";
 import Async from "../Async/Async";
 import WindowFC from "../WindowWrapper/WindowFC";
 import { useNavigate } from "react-router-dom";
-import { extractSetsNoMapping } from "../WorkoutsContainer/EditRoutine/ExtractSetsFromWorkout";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import { getProfileCache } from "../../Pages/Profile/ProfileCache";
-import WorkoutCommentSection from "./RoutineDisplayCommentPopup/WorkoutCommentSection";
+import WorkoutCommentSection from "./WorkoutDisplayCommentPopup/WorkoutCommentSection";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import formatCount from "../../Utility/FormatCount";
 import { v4 } from "uuid";
 import { AnimatePresence } from "framer-motion";
+import { extractSetsNoMapping } from "../WorkoutsContainer/EditWorkout/ExtractSetsFromWorkout";
 
-const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
+const WorkoutDisplay = WindowFC(({}, workoutDisplayWrapperRef, close) => {
   const navigate = useNavigate();
 
   const [isLiked, setIsLiked] = useState<boolean | null>(null);
@@ -31,7 +31,7 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
   const isWaitingForResponse = useRef<boolean>(false);
   const workoutId = useRef<string>("");
 
-  const loaderData = useLoaderData<typeof routineDisplayLoader>();
+  const loaderData = useLoaderData<typeof workoutDisplayLoader>();
 
   const [loadedComments, setLoadedComments] = useState<Promise<
     Schema<"SimpleWorkoutCommentResponseDTO">[]
@@ -49,7 +49,7 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
   useEffect(() => {
     isWaitingForResponse.current = true;
 
-    loaderData?.routine?.then((currentWorkout) => {
+    loaderData?.workout?.then((currentWorkout) => {
       if (currentWorkout.code !== "OK") return;
 
       isWaitingForResponse.current = false;
@@ -125,7 +125,7 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
   };
 
   const handleWorkoutDelete = () => {
-    loaderData?.routine?.then((currentWorkout) => {
+    loaderData?.workout?.then((currentWorkout) => {
       if (currentWorkout.code !== "OK") {
         close();
         return;
@@ -205,26 +205,26 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
   }
 
   return (
-    <div ref={routineDisplayWrapperRef} className="routine-display-wrapper">
-      <div className="routine-display">
-        <div className="routine-display-header">
-          <Async await={loaderData?.routine}>
-            {(routine) => {
-              if (!routine || routine.code !== "OK") return null;
+    <div ref={workoutDisplayWrapperRef} className="workout-display-wrapper">
+      <div className="workout-display">
+        <div className="workout-display-header">
+          <Async await={loaderData?.workout}>
+            {(workout) => {
+              if (!workout || workout.code !== "OK") return null;
 
               return (
                 <>
-                  <p className="routine-display-title">
-                    {routine.content.name}
+                  <p className="workout-display-title">
+                    {workout.content.name}
                   </p>
                   <button
-                    className="routine-display-edit"
+                    className="workout-display-edit"
                     onClick={() => void navigate("edit")}
                   >
                     Edit
                   </button>
                   <button
-                    className="routine-display-delete"
+                    className="workout-display-delete"
                     onClick={handleWorkoutDelete}
                   >
                     Delete
@@ -235,15 +235,15 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
           </Async>
         </div>
 
-        <div className="routine-display-body">
-          <Async await={loaderData?.routine}>
-            {(routine) => {
-              if (!routine || routine.code !== "OK") return null;
+        <div className="workout-display-body">
+          <Async await={loaderData?.workout}>
+            {(workout) => {
+              if (!workout || workout.code !== "OK") return null;
 
               return (
                 <>
-                  {extractSetsNoMapping(routine.content).map((set) => (
-                    <RoutineDisplayItem
+                  {extractSetsNoMapping(workout.content).map((set) => (
+                    <WorkoutDisplayItem
                       key={set.id}
                       exercise={set.exercise}
                       sets={set.sets}
@@ -255,63 +255,63 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
           </Async>
         </div>
 
-        <div className="routine-display-footer">
-          <Async await={loaderData?.routine}>
-            {(routine) => {
-              if (!routine || routine.code !== "OK") return null;
+        <div className="workout-display-footer">
+          <Async await={loaderData?.workout}>
+            {(workout) => {
+              if (!workout || workout.code !== "OK") return null;
 
               return (
                 <>
-                  {routine.content.description?.trim() !== "" &&
-                    routine.content.description && (
-                      <div className="routine-display-description-container">
-                        <div className="routine-display-description">
-                          <label className="routine-display-description-placeholder">
-                            Routine Description
+                  {workout.content.description?.trim() !== "" &&
+                    workout.content.description && (
+                      <div className="workout-display-description-container">
+                        <div className="workout-display-description">
+                          <label className="workout-display-description-placeholder">
+                            Workout Description
                           </label>
-                          {routine.content.description}
+                          {workout.content.description}
                         </div>
                       </div>
                     )}
                   <div className="icon-container">
-                    <div className="routine-display-interaction-container">
+                    <div className="workout-display-interaction-container">
                       <Icon
                         name="thumbs-up"
                         onClick={handleThumbsUpClick}
-                        className={`routine-display-thumbs-up ${
+                        className={`workout-display-thumbs-up ${
                           isLiked ? "active" : ""
                         }`}
                       />
 
-                      <p className="routine-display-interaction-count">
+                      <p className="workout-display-interaction-count">
                         {formatCount(likeCount)}
                       </p>
                     </div>
 
-                    <div className="routine-display-interaction-container">
+                    <div className="workout-display-interaction-container">
                       <Icon
                         onClick={handleCommentClick}
                         name="comment"
-                        className={`routine-display-comment ${
+                        className={`workout-display-comment ${
                           isCommentSectionOpen ? "active" : ""
                         }`}
                       />
 
-                      <p className="routine-display-interaction-count">
+                      <p className="workout-display-interaction-count">
                         {formatCount(commentCount)}
                       </p>
                     </div>
 
-                    <div className="routine-display-interaction-container">
+                    <div className="workout-display-interaction-container">
                       <Icon
                         name="bookmark"
                         onClick={handleFavoriteClick}
-                        className={`routine-display-bookmark ${
+                        className={`workout-display-bookmark ${
                           isFavorited ? "active" : ""
                         }`}
                       />
 
-                      <p className="routine-display-interaction-count">
+                      <p className="workout-display-interaction-count">
                         {formatCount(favoriteCount)}
                       </p>
                     </div>
@@ -344,4 +344,4 @@ const RoutineDisplay = WindowFC(({}, routineDisplayWrapperRef, close) => {
   );
 });
 
-export default RoutineDisplay;
+export default WorkoutDisplay;

@@ -1,4 +1,4 @@
-import "./RoutineItem.scss";
+import "./WorkoutItem.scss";
 import React, { useEffect, useRef, useCallback } from "react";
 import Icon from "../../../Icon/Icon.tsx";
 import { v4 as uuidv4 } from "uuid";
@@ -7,8 +7,8 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Flip from "gsap/Flip";
 import reorderArray from "../ReorderArray.ts";
-import { PossibleSetIcon, Set } from "./RoutineItem.tsx";
-import RoutineSetDisplay from "./RoutineSetDisplay.tsx";
+import { PossibleSetIcon, Set } from "./WorkoutItem.tsx";
+import WorkoutSetDisplay from "./WorkoutSetDisplay.tsx";
 
 type ExerciseSetProps = {
   onStartDraggingSet?: () => void;
@@ -20,7 +20,7 @@ type ExerciseSetProps = {
   setSets: React.Dispatch<React.SetStateAction<Set[]>>;
 };
 
-export default function RoutineExerciseDisplay({
+export default function WorkoutExerciseDisplay({
   onStartDraggingSet,
   onEndDraggingSet,
   // onChange,
@@ -261,7 +261,7 @@ export default function RoutineExerciseDisplay({
         <p>VOLUME</p>
       </div>
       {sets.map((set, index) => (
-        <RoutineSetDisplay
+        <WorkoutSetDisplay
           key={set.id}
           set={set}
           onSetChanged={handleSetChanged}

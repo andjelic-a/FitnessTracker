@@ -1,68 +1,68 @@
-import "./CreateRoutine.scss";
+import "./CreateWorkout.scss";
 import { useContext, useRef, useState } from "react";
-import { RoutineItemData } from "./RoutineItem/RoutineItem";
+import { WorkoutItemData } from "./WorkoutItem/WorkoutItem";
 import Icon from "../../Icon/Icon";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import WindowFC from "../../WindowWrapper/WindowFC";
-import createRoutineLoader from "./CreateRoutineLoader";
+import createWorkoutLoader from "./CreateWorkoutLoader";
 import useLoaderData from "../../../BetterRouter/UseLoaderData";
 import Async from "../../Async/Async";
-import RoutineSetCreator from "./RoutineSetCreator";
+import WorkoutSetCreator from "./WorkoutSetCreator";
 import { NewWorkoutsContext } from "./NewWorkoutsContext";
 
-type CreateRoutineWindowProps = {
+type CreateWorkoutWindowProps = {
   animationLength?: number;
   safeGuard?: number;
 };
 
-const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
+const CreateWorkoutWindow = WindowFC<CreateWorkoutWindowProps>(
   ({ animationLength, safeGuard }, wrapperRef, onClose) => {
-    const loaderData = useLoaderData<typeof createRoutineLoader>();
+    const loaderData = useLoaderData<typeof createWorkoutLoader>();
     const newWorkoutsContext = useContext(NewWorkoutsContext);
 
     const [isPublic, setIsPublic] = useState<boolean>(false);
 
-    const createdSetsRef = useRef<RoutineItemData[]>([]);
-    const routineTitleRef = useRef<HTMLInputElement | null>(null);
+    const createdSetsRef = useRef<WorkoutItemData[]>([]);
+    const workoutTitleRef = useRef<HTMLInputElement | null>(null);
     const publicOrPrivatePopupRef = useRef<HTMLDivElement | null>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-    const isRoutineTitleValid = (): boolean => {
-      if (!routineTitleRef.current?.value) {
-        routineTitleRef.current?.classList.add("routine-item-error-title");
+    const isWorkoutTitleValid = (): boolean => {
+      if (!workoutTitleRef.current?.value) {
+        workoutTitleRef.current?.classList.add("workout-item-error-title");
         return false;
       }
 
-      routineTitleRef.current?.classList.remove("routine-item-error-title");
+      workoutTitleRef.current?.classList.remove("workout-item-error-title");
       return true;
     };
 
     const isSetSelectionValid = (): boolean => {
       if (createdSetsRef.current.length <= 0) {
-        wrapperRef.current?.classList.add("routine-item-error-button");
+        wrapperRef.current?.classList.add("workout-item-error-button");
         return false;
       }
 
-      wrapperRef.current?.classList.remove("routine-item-error-button");
+      wrapperRef.current?.classList.remove("workout-item-error-button");
       return true;
     };
 
     const handleSaveClick = (user: Schema<"SimpleUserResponseDTO"> | null) => {
-      let isValid = isRoutineTitleValid();
+      let isValid = isWorkoutTitleValid();
       isValid = isSetSelectionValid() && isValid;
 
-      if (!user || !textareaRef.current || !routineTitleRef.current || !isValid)
+      if (!user || !textareaRef.current || !workoutTitleRef.current || !isValid)
         return;
 
       const newWorkout: Schema<"CreateWorkoutRequestDTO"> = {
         isPublic: isPublic,
-        name: routineTitleRef.current.value,
+        name: workoutTitleRef.current.value,
         description: textareaRef.current.value,
         sets: createdSetsRef.current
-          .flatMap((routineItem) =>
-            routineItem.sets.map((set) => ({
-              exerciseId: routineItem.exercise.id,
+          .flatMap((workoutItem) =>
+            workoutItem.sets.map((set) => ({
+              exerciseId: workoutItem.exercise.id,
               set: set,
             }))
           )
@@ -125,24 +125,24 @@ const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
         newWorkoutsContext.addWorkout(simulatedResponse);
       });
     };
-    const [createdSets, setCreatedSets] = useState<RoutineItemData[] | null>(
+    const [createdSets, setCreatedSets] = useState<WorkoutItemData[] | null>(
       []
     );
 
     return (
-      <div ref={wrapperRef} className="create-routine-window">
-        <div className="create-routine-header">
+      <div ref={wrapperRef} className="create-workout-window">
+        <div className="create-workout-header">
           <input
-            ref={routineTitleRef}
+            ref={workoutTitleRef}
             type="text"
-            id="routine-title"
-            placeholder="Routine title"
+            id="workout-title"
+            placeholder="Workout title"
             maxLength={25}
           />
-          <div className="create-routine-public-or-private">
+          <div className="create-workout-public-or-private">
             <div
               ref={publicOrPrivatePopupRef}
-              className="create-routine-public-or-private-popup"
+              className="create-workout-public-or-private-popup"
             >
               {isPublic ? "Public" : "Private"}
             </div>
@@ -180,7 +180,7 @@ const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
               return (
                 <button
                   onClick={() => handleSaveClick(user)}
-                  className="create-routine-save"
+                  className="create-workout-save"
                 >
                   Save
                 </button>
@@ -189,7 +189,7 @@ const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
           </Async>
         </div>
 
-        <RoutineSetCreator
+        <WorkoutSetCreator
           setCreatedSets={setCreatedSets}
           createdSets={createdSets ?? []}
           onSetsChange={(newSets) => void (createdSetsRef.current = newSets)}
@@ -209,9 +209,9 @@ const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
           safeGuard={safeGuard}
         />
 
-        <div className="create-routine-description">
+        <div className="create-workout-description">
           <textarea
-            id="routine-description"
+            id="workout-description"
             ref={textareaRef}
             onChange={(e) => {
               e.target.style.height = "auto";
@@ -219,10 +219,10 @@ const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
             }}
           />
           <label
-            htmlFor="routine-description"
-            className="routine-description-placeholder"
+            htmlFor="workout-description"
+            className="workout-description-placeholder"
           >
-            Routine description
+            Workout description
           </label>
         </div>
       </div>
@@ -230,4 +230,4 @@ const CreateRoutineWindow = WindowFC<CreateRoutineWindowProps>(
   }
 );
 
-export default CreateRoutineWindow;
+export default CreateWorkoutWindow;

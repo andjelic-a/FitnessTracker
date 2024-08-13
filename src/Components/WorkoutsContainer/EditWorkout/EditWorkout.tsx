@@ -1,69 +1,69 @@
-import "./EditRoutine.scss";
+import "./EditWorkout.scss";
 import useLoaderData from "../../../BetterRouter/UseLoaderData";
 import Async from "../../Async/Async";
 import WindowFC from "../../WindowWrapper/WindowFC";
-import routineDisplayLoader from "../../RoutineDisplay/RoutineDisplayLoader";
-import RoutineSetCreator from "../CreateRoutine/RoutineSetCreator";
+import workoutDisplayLoader from "../../WorkoutDisplay/WorkoutDisplayLoader";
+import WorkoutSetCreator from "../CreateWorkout/WorkoutSetCreator";
 import { useEffect, useRef, useState } from "react";
-import { RoutineItemData } from "../CreateRoutine/RoutineItem/RoutineItem";
+import { WorkoutItemData } from "../CreateWorkout/WorkoutItem/WorkoutItem";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import Icon from "../../Icon/Icon";
 import extractSets from "./ExtractSetsFromWorkout";
 
-type EditRoutineWindowProps = {
+type EditWorkoutWindowProps = {
   animationLength?: number;
   safeGuard?: number;
 };
 
-const EditRoutine = WindowFC<EditRoutineWindowProps>(
+const EditWorkout = WindowFC<EditWorkoutWindowProps>(
   ({ animationLength, safeGuard }, wrapperRef, onClose) => {
-    const loaderData = useLoaderData<typeof routineDisplayLoader>();
+    const loaderData = useLoaderData<typeof workoutDisplayLoader>();
 
     const [isPublic, setIsPublic] = useState<boolean>(false);
 
-    const createdSetsRef = useRef<RoutineItemData[]>([]);
-    const routineTitleRef = useRef<HTMLInputElement | null>(null);
+    const createdSetsRef = useRef<WorkoutItemData[]>([]);
+    const workoutTitleRef = useRef<HTMLInputElement | null>(null);
     const publicOrPrivatePopupRef = useRef<HTMLDivElement | null>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-    const isRoutineTitleValid = (): boolean => {
-      if (!routineTitleRef.current?.value) {
-        routineTitleRef.current?.classList.add("routine-item-error-title");
+    const isWorkoutTitleValid = (): boolean => {
+      if (!workoutTitleRef.current?.value) {
+        workoutTitleRef.current?.classList.add("workout-item-error-title");
         return false;
       }
 
-      routineTitleRef.current?.classList.remove("routine-item-error-title");
+      workoutTitleRef.current?.classList.remove("workout-item-error-title");
       return true;
     };
 
     const isSetSelectionValid = (): boolean => {
       if (createdSetsRef.current.length <= 0) {
-        wrapperRef.current?.classList.add("routine-item-error-button");
+        wrapperRef.current?.classList.add("workout-item-error-button");
         return false;
       }
 
-      wrapperRef.current?.classList.remove("routine-item-error-button");
+      wrapperRef.current?.classList.remove("workout-item-error-button");
       return true;
     };
 
     const handleSaveClick = () => {
-      loaderData?.routine.then((originalWorkout) => {
-        let isValid = isRoutineTitleValid();
+      loaderData?.workout.then((originalWorkout) => {
+        let isValid = isWorkoutTitleValid();
         isValid = isSetSelectionValid() && isValid;
 
         if (originalWorkout.code !== "OK") return;
-        if (!textareaRef.current || !routineTitleRef.current || !isValid)
+        if (!textareaRef.current || !workoutTitleRef.current || !isValid)
           return;
 
         const updatedWorkout: Schema<"UpdateFullWorkoutRequestDTO"> = {
           isPublic: isPublic,
-          name: routineTitleRef.current.value,
+          name: workoutTitleRef.current.value,
           description: textareaRef.current.value,
           sets: createdSetsRef.current
-            .flatMap((routineItem) =>
-              routineItem.sets.map((set) => ({
-                exerciseId: routineItem.exercise.id,
+            .flatMap((workoutItem) =>
+              workoutItem.sets.map((set) => ({
+                exerciseId: workoutItem.exercise.id,
                 set: set,
               }))
             )
@@ -138,39 +138,39 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
         onClose();
       });
     };
-    const [createdSets, setCreatedSets] = useState<RoutineItemData[] | null>(
+    const [createdSets, setCreatedSets] = useState<WorkoutItemData[] | null>(
       null
     );
 
     useEffect(() => {
-      loaderData?.routine.then((x) => {
+      loaderData?.workout.then((x) => {
         setCreatedSets(x.code === "OK" ? extractSets(x.content) : []);
         setIsPublic(x.code === "OK" ? x.content.isPublic : false);
       });
     }, [loaderData]);
 
     return (
-      <Async await={loaderData?.routine}>
+      <Async await={loaderData?.workout}>
         {(originalWorkout) => {
           if (originalWorkout?.code !== "OK") return null;
 
           if (createdSets === null) return null;
 
           return (
-            <div ref={wrapperRef} className="edit-routine-window">
-              <div className="edit-routine-header">
+            <div ref={wrapperRef} className="edit-workout-window">
+              <div className="edit-workout-header">
                 <input
                   defaultValue={originalWorkout.content.name}
-                  ref={routineTitleRef}
+                  ref={workoutTitleRef}
                   type="text"
-                  id="routine-title"
-                  placeholder="Routine title"
+                  id="workout-title"
+                  placeholder="Workout title"
                   maxLength={25}
                 />
-                <div className="edit-routine-public-or-private">
+                <div className="edit-workout-public-or-private">
                   <div
                     ref={publicOrPrivatePopupRef}
-                    className="edit-routine-public-or-private-popup"
+                    className="edit-workout-public-or-private-popup"
                   >
                     {isPublic ? "Public" : "Private"}
                   </div>
@@ -188,12 +188,12 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
                   />
                 </div>
 
-                <button onClick={handleSaveClick} className="edit-routine-save">
+                <button onClick={handleSaveClick} className="edit-workout-save">
                   Save
                 </button>
               </div>
 
-              <RoutineSetCreator
+              <WorkoutSetCreator
                 setCreatedSets={setCreatedSets}
                 createdSets={createdSets}
                 onSetsChange={(newSets) =>
@@ -215,9 +215,9 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
                 safeGuard={safeGuard}
               />
 
-              <div className="edit-routine-description">
+              <div className="edit-workout-description">
                 <textarea
-                  id="routine-description"
+                  id="workout-description"
                   defaultValue={
                     originalWorkout.content.description ?? undefined
                   }
@@ -228,10 +228,10 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
                   }}
                 />
                 <label
-                  htmlFor="routine-description"
-                  className="routine-description-placeholder"
+                  htmlFor="workout-description"
+                  className="workout-description-placeholder"
                 >
-                  Routine description
+                  Workout description
                 </label>
               </div>
             </div>
@@ -242,4 +242,4 @@ const EditRoutine = WindowFC<EditRoutineWindowProps>(
   }
 );
 
-export default EditRoutine;
+export default EditWorkout;

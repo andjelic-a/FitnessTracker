@@ -1,6 +1,6 @@
-import "./CreateRoutine.scss";
+import "./CreateWorkout.scss";
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import RoutineItem, { RoutineItemData } from "./RoutineItem/RoutineItem";
+import WorkoutItem, { WorkoutItemData } from "./WorkoutItem/WorkoutItem";
 import gsap from "gsap";
 import Flip from "gsap/Flip";
 import Observer from "gsap/Observer";
@@ -18,19 +18,19 @@ import { v4 } from "uuid";
 gsap.registerPlugin(Flip);
 gsap.registerPlugin(Observer);
 
-type RoutineSetCreatorProps = {
-  onSetsChange: (sets: RoutineItemData[]) => void;
+type WorkoutSetCreatorProps = {
+  onSetsChange: (sets: WorkoutItemData[]) => void;
   onStartChoosingExercise?: () => void;
   onConfirmExerciseSelection?: () => void;
   animationLength?: number;
   safeGuard?: number;
-  createdSets: RoutineItemData[];
+  createdSets: WorkoutItemData[];
   setCreatedSets: React.Dispatch<
-    React.SetStateAction<RoutineItemData[] | null>
+    React.SetStateAction<WorkoutItemData[] | null>
   >;
 };
 
-export default function RoutineSetCreator({
+export default function WorkoutSetCreator({
   animationLength,
   safeGuard,
   onConfirmExerciseSelection,
@@ -38,10 +38,10 @@ export default function RoutineSetCreator({
   onSetsChange,
   createdSets,
   setCreatedSets,
-}: RoutineSetCreatorProps) {
+}: WorkoutSetCreatorProps) {
   const { contextSafe } = useGSAP();
 
-  const createdSetsRef = useRef<RoutineItemData[]>([]);
+  const createdSetsRef = useRef<WorkoutItemData[]>([]);
 
   const [isChoosingExercise, setIsChoosingExercise] = useState<boolean>(false);
   const [replacingExerciseId, setReplacingExerciseId] = useState<string | null>(
@@ -61,7 +61,7 @@ export default function RoutineSetCreator({
   const currentFlipTimeline = useRef<gsap.core.Timeline | null>(null);
   const movableRef = useRef<HTMLElement | null>(null);
   const isDraggingAvailable = useRef(true);
-  const routineItemContainerRef = useRef<HTMLDivElement>(null);
+  const workoutItemContainerRef = useRef<HTMLDivElement>(null);
   const isMoveAvailable = useRef(true);
   const addExerciseButtonRef = useRef<HTMLButtonElement | null>(null);
   const filtersRef = useRef<ChooseExerciseFilters | null>(null);
@@ -104,7 +104,7 @@ export default function RoutineSetCreator({
     if (!replacingExerciseId && Array.isArray(selected)) {
       setCreatedSets((prevState) => [
         ...(prevState ?? []),
-        ...selected.map<RoutineItemData>((x) => ({
+        ...selected.map<WorkoutItemData>((x) => ({
           exercise: x,
           id: v4(),
           sets: [
@@ -195,13 +195,13 @@ export default function RoutineSetCreator({
     onStartChoosingExercise?.();
   }
 
-  function handleRoutineItemChanged(routineItem: RoutineItemData) {
+  function handleWorkoutItemChanged(workoutItem: WorkoutItemData) {
     const index = createdSetsRef.current.findIndex(
-      (x) => x.id === routineItem.id
+      (x) => x.id === workoutItem.id
     );
 
-    if (index < 0) createdSetsRef.current.push(routineItem);
-    else createdSetsRef.current[index] = routineItem;
+    if (index < 0) createdSetsRef.current.push(workoutItem);
+    else createdSetsRef.current[index] = workoutItem;
     fuckYou();
     // setCreatedSets(createdSetsRef.current);
   }
@@ -213,13 +213,13 @@ export default function RoutineSetCreator({
     setCreatedSets(createdSetsRef.current);
   };
 
-  //#region Routine item drag and drop logic / animations
+  //#region Workout item drag and drop logic / animations
   const handleTouchMove = useCallback(
     (e: TouchEvent) => {
       const touch = e.touches[0];
       let element = document.elementFromPoint(touch.clientX, touch.clientY);
 
-      while (element && !element.classList.contains("routine-item"))
+      while (element && !element.classList.contains("workout-item"))
         element = element.parentElement;
 
       if (element) handleHoverOverItem(element as HTMLElement);
@@ -257,15 +257,15 @@ export default function RoutineSetCreator({
       return;
 
     let element: HTMLElement | null = target;
-    while (element && !element.classList.contains("routine-item")) {
+    while (element && !element.classList.contains("workout-item")) {
       element = element.parentNode as HTMLElement;
     }
     if (!element) return;
 
-    const hoverId = element.id.replace("routine-item-", "");
+    const hoverId = element.id.replace("workout-item-", "");
     const hoverIdx = createdSets.findIndex((x) => x.id === hoverId);
 
-    const draggingId = dragging.current!.id.replace("routine-item-", "");
+    const draggingId = dragging.current!.id.replace("workout-item-", "");
     const draggingIdx = createdSets.findIndex((x) => x.id === draggingId);
 
     if (hoverIdx < 0 || draggingIdx < 0 || hoverIdx === draggingIdx) return;
@@ -273,7 +273,7 @@ export default function RoutineSetCreator({
     if (currentFlipTimeline.current) currentFlipTimeline.current.kill();
 
     currentFlipState.current = Flip.getState(
-      routineItemContainerRef.current!.children
+      workoutItemContainerRef.current!.children
     );
 
     setCreatedSets(reorderArray(createdSets, draggingIdx, hoverIdx));
@@ -323,12 +323,12 @@ export default function RoutineSetCreator({
       top: 0,
       duration: 0.25,
       onComplete: () => {
-        routineItemContainerRef.current!.childNodes.forEach(
+        workoutItemContainerRef.current!.childNodes.forEach(
           (x) => void (x as HTMLElement).classList.remove("dragging")
         );
 
         document.body
-          .querySelectorAll(".routine-item.temporary")
+          .querySelectorAll(".workout-item.temporary")
           .forEach((x) => {
             x.remove();
           });
@@ -391,16 +391,16 @@ export default function RoutineSetCreator({
         </Async>
       )}
 
-      <div ref={routineItemContainerRef} className="set-creator-container">
+      <div ref={workoutItemContainerRef} className="set-creator-container">
         {createdSets.map((x) => (
-          <RoutineItem
+          <WorkoutItem
             onDrag={updateMovablePosition}
             onDragStart={beginDragging}
             onDragEnd={endDragging}
             onMouseOver={handleHoverOverItem}
-            onChange={handleRoutineItemChanged}
+            onChange={handleWorkoutItemChanged}
             key={x.id}
-            routineItem={x}
+            workoutItem={x}
             onDelete={() => handleDeleteExercise(x.id)}
             onRequestExerciseReplace={handleReplaceExerciseRequest}
           />
@@ -408,7 +408,7 @@ export default function RoutineSetCreator({
 
         <button
           onClick={handleAddExerciseSetBtnClick}
-          className="create-routine-add-exercise"
+          className="create-workout-add-exercise"
           ref={addExerciseButtonRef}
         >
           Add exercise

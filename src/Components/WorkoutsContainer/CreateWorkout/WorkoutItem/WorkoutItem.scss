@@ -1,6 +1,6 @@
 @import "../../../../Palette.scss";
 
-.routine-item {
+.workout-item {
   position: relative;
   background-color: $dark-400;
   border-radius: 1.5rem;
@@ -23,7 +23,7 @@
   }
 }
 
-.routine-item-header {
+.workout-item-header {
   display: flex;
   align-items: center;
   width: 100%;
@@ -47,7 +47,7 @@
     }
   }
 
-  & .routine-settings-popup {
+  & .workout-settings-popup {
     position: absolute;
     top: 0;
     right: 0;
@@ -93,7 +93,7 @@
     visibility: hidden;
   }
 
-  & .routine-settings-icon {
+  & .workout-settings-icon {
     display: flex;
     justify-content: center;
     align-items: center;

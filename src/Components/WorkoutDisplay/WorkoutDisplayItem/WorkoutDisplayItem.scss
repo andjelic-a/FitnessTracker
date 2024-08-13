@@ -1,6 +1,6 @@
 @import "../../../Palette.scss";
 
-.routine-display-item {
+.workout-display-item {
   position: relative;
   background-color: $dark-400;
   border-radius: 1.5rem;
@@ -10,7 +10,7 @@
   padding-bottom: 3.5rem;
 }
 
-.routine-display-item-header {
+.workout-display-item-header {
   display: flex;
   align-items: center;
   width: 100%;
@@ -46,7 +46,7 @@
   }
 }
 
-.routine-display-item-icon {
+.workout-display-item-icon {
   width: 100%;
   height: 100%;
   display: flex;

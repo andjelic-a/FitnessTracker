@@ -1,6 +1,6 @@
 @import "../../../Palette.scss";
 
-.edit-routine-window {
+.edit-workout-window {
   &,
   * {
     user-select: none;
@@ -47,19 +47,19 @@
     pointer-events: none;
   }
 
-  &.routine-item-error-button .edit-routine-add-exercise {
+  &.workout-item-error-button .edit-workout-add-exercise {
     background-color: red;
   }
 }
 
-.edit-routine-header {
+.edit-workout-header {
   width: 100%;
   height: 5rem;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
 
-  & #routine-title {
+  & #workout-title {
     width: 36rem;
     height: 5rem;
     border: none;
@@ -85,7 +85,7 @@
     }
   }
 
-  & .edit-routine-public-or-private {
+  & .edit-workout-public-or-private {
     position: relative;
     display: flex;
     justify-content: center;
@@ -101,7 +101,7 @@
       cursor: pointer;
     }
 
-    & .edit-routine-public-or-private-popup {
+    & .edit-workout-public-or-private-popup {
       position: absolute;
       left: 0;
       z-index: -1;
@@ -131,7 +131,7 @@
     }
   }
 
-  .routine-item-error-title {
+  .workout-item-error-title {
     border-color: rgb(255, 0, 0) !important;
 
     &::placeholder {
@@ -139,7 +139,7 @@
     }
   }
 
-  & .edit-routine-save {
+  & .edit-workout-save {
     width: 5.5rem;
     height: 3.75rem;
     border: none;
@@ -173,7 +173,7 @@
   }
 }
 
-.edit-routine-add-exercise {
+.edit-workout-add-exercise {
   justify-self: center;
   align-self: flex-start;
   display: flex;
@@ -193,7 +193,7 @@
   }
 }
 
-.edit-routine-description {
+.edit-workout-description {
   position: relative;
   margin-top: auto;
   align-self: center;
@@ -204,7 +204,7 @@
   margin-bottom: 1rem;
   overflow: visible;
 
-  #routine-description {
+  #workout-description {
     position: relative;
     font-family: sans-serif;
     width: 100%;
@@ -219,7 +219,7 @@
     overflow: hidden;
   }
 
-  .routine-description-placeholder {
+  .workout-description-placeholder {
     position: absolute;
     font-size: 1.8rem;
     font-weight: 600;

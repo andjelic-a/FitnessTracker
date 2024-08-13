@@ -1,8 +1,8 @@
-import "./RoutineItem.scss";
+import "./WorkoutItem.scss";
 import React, { useEffect, useRef, MutableRefObject } from "react";
 import Icon from "../../../Icon/Icon.tsx";
 import Observer from "gsap/Observer";
-import { PossibleSetIcon, Set } from "./RoutineItem.tsx";
+import { PossibleSetIcon, Set } from "./WorkoutItem.tsx";
 
 type SingleExerciseSetProps = {
   set: Set;
@@ -17,7 +17,7 @@ type SingleExerciseSetProps = {
   onMouseOver?: (ref: HTMLDivElement) => void;
 };
 
-export default function RoutineSetDisplay({
+export default function WorkoutSetDisplay({
   set,
   index,
   dropDownMenuWrapper,

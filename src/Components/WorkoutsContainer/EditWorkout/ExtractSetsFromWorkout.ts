@@ -2,13 +2,13 @@ import { v4 } from "uuid";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import {
   PossibleSetIcon,
-  RoutineItemData,
-} from "../CreateRoutine/RoutineItem/RoutineItem";
+  WorkoutItemData,
+} from "../CreateWorkout/WorkoutItem/WorkoutItem";
 
 export default function extractSets(
   originalWorkout: Schema<"DetailedWorkoutResponseDTO">
 ) {
-  const sets: RoutineItemData[] = [];
+  const sets: WorkoutItemData[] = [];
 
   let currentExercise: Schema<"SimpleExerciseResponseDTO"> | undefined =
     undefined;

@@ -1,12 +1,12 @@
-import "./RoutineItem.scss";
+import "./WorkoutItem.scss";
 import { useState, useEffect, useRef } from "react";
 import Icon from "../../../Icon/Icon.tsx";
 import useOutsideClick from "../../../../Hooks/UseOutsideClick.ts";
 import Observer from "gsap/Observer";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser.ts";
-import RoutineExerciseDisplay from "./RoutineExerciseDisplay.tsx";
+import WorkoutExerciseDisplay from "./WorkoutExerciseDisplay.tsx";
 
-//TODO:? Make rir field or the entire routine item change color or tint based on type of set
+//TODO:? Make rir field or the entire workout item change color or tint based on type of set
 export type Set = {
   id: string;
   idx: number;
@@ -18,24 +18,24 @@ export type Set = {
 
 export type PossibleSetIcon = "1" | "w" | "d" | "f";
 
-export type RoutineItemData = {
+export type WorkoutItemData = {
   exercise: Schema<"SimpleExerciseResponseDTO">;
   sets: Set[];
   id: string;
 };
 
-interface RoutineItemProps {
+interface WorkoutItemProps {
   onDelete: () => void;
   onRequestExerciseReplace: (id: string) => void;
   onDragStart?: (ref: HTMLDivElement) => void;
   onDrag?: (xDelta: number, yDelta: number) => void;
   onDragEnd?: (ref: HTMLDivElement) => void;
   onMouseOver?: (ref: HTMLDivElement) => void;
-  onChange: (routineItem: RoutineItemData) => void;
-  routineItem: RoutineItemData;
+  onChange: (workoutItem: WorkoutItemData) => void;
+  workoutItem: WorkoutItemData;
 }
 
-export default function RoutineItem({
+export default function WorkoutItem({
   onDelete,
   onRequestExerciseReplace,
   onDrag,
@@ -43,11 +43,11 @@ export default function RoutineItem({
   onDragStart,
   onMouseOver,
   onChange,
-  routineItem,
-}: RoutineItemProps) {
+  workoutItem,
+}: WorkoutItemProps) {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
-  const routineItemWrapperRef = useRef<HTMLDivElement>(null);
+  const workoutItemWrapperRef = useRef<HTMLDivElement>(null);
   const observer = useRef<Observer | null>(null);
   const isBeingDragged = useRef(false);
   const onMouseOverCallbackRef = useRef<
@@ -56,26 +56,26 @@ export default function RoutineItem({
 
   const handleReplaceExerciseClick = () => {
     setIsSettingsOpen(false);
-    onRequestExerciseReplace(routineItem.id);
+    onRequestExerciseReplace(workoutItem.id);
   };
 
   useEffect(() => {
     observer.current = Observer.create({
-      target: routineItemWrapperRef.current,
+      target: workoutItemWrapperRef.current,
       type: "touch,pointer",
       preventDefault: true,
       dragMinimum: 20,
       onDragStart: () => {
         isBeingDragged.current = true;
 
-        if (routineItemWrapperRef.current)
-          onDragStart?.(routineItemWrapperRef.current);
+        if (workoutItemWrapperRef.current)
+          onDragStart?.(workoutItemWrapperRef.current);
       },
       onDragEnd: () => {
         isBeingDragged.current = false;
 
-        if (routineItemWrapperRef.current)
-          onDragEnd?.(routineItemWrapperRef.current);
+        if (workoutItemWrapperRef.current)
+          onDragEnd?.(workoutItemWrapperRef.current);
       },
       onDrag: (x) => {
         onDrag?.(x.deltaX, x.deltaY);
@@ -86,7 +86,7 @@ export default function RoutineItem({
     });
 
     return () => observer.current?.kill();
-  }, [routineItemWrapperRef]);
+  }, [workoutItemWrapperRef]);
 
   useEffect(
     () => void (onMouseOverCallbackRef.current = onMouseOver),
@@ -104,8 +104,8 @@ export default function RoutineItem({
 
   const handleSetsChanged = (newSets: Set[]) => {
     onChange({
-      id: routineItem.id,
-      exercise: routineItem.exercise,
+      id: workoutItem.id,
+      exercise: workoutItem.exercise,
       sets: newSets,
     });
   };
@@ -113,8 +113,8 @@ export default function RoutineItem({
   const [sets, setSets] = useState<Set[]>([]);
 
   useEffect(() => {
-    setSets(routineItem.sets);
-  }, [routineItem.sets]);
+    setSets(workoutItem.sets);
+  }, [workoutItem.sets]);
 
   useEffect(() => {
     if (isBeingDragged.current) return;
@@ -123,24 +123,24 @@ export default function RoutineItem({
 
   return (
     <div
-      className="routine-item"
-      id={`routine-item-${routineItem.id}`}
-      ref={routineItemWrapperRef}
+      className="workout-item"
+      id={`workout-item-${workoutItem.id}`}
+      ref={workoutItemWrapperRef}
     >
-      <div className="routine-item-header">
+      <div className="workout-item-header">
         <img
-          src={routineItem.exercise.image}
+          src={workoutItem.exercise.image}
           onClick={(e) => handleImageScaleToggle(e.target as HTMLImageElement)}
         />
-        <p>{routineItem.exercise.name}</p>
+        <p>{workoutItem.exercise.name}</p>
         <Icon
           onClick={handleSettingsClick}
-          className="routine-settings-icon"
+          className="workout-settings-icon"
           name="ellipsis-vertical"
         />
         <div
           ref={excludedDivRef}
-          className={`routine-settings-popup ${
+          className={`workout-settings-popup ${
             !isSettingsOpen ? "hidden" : ""
           }`}
         >
@@ -149,8 +149,8 @@ export default function RoutineItem({
         </div>
       </div>
 
-      <div className="routine-item-body">
-        <RoutineExerciseDisplay
+      <div className="workout-item-body">
+        <WorkoutExerciseDisplay
           onStartDraggingSet={() => observer.current?.disable()}
           onEndDraggingSet={() => observer.current?.enable()}
           // onChange={handleSetsChanged}

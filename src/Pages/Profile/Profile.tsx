@@ -9,7 +9,7 @@ import useLoaderData from "../../BetterRouter/UseLoaderData";
 import Async from "../../Components/Async/Async";
 import ProfileWorkoutTabs from "../../Components/ProfileWorkoutTabs/ProfileWorkoutTabs";
 import { useState } from "react";
-import { NewWorkoutsContext } from "../../Components/WorkoutsContainer/CreateRoutine/NewWorkoutsContext";
+import { NewWorkoutsContext } from "../../Components/WorkoutsContainer/CreateWorkout/NewWorkoutsContext";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 
 export default function Profile() {
