@@ -29,15 +29,15 @@ export default function Profile() {
           void setNewWorkouts((prev) => [...prev, workout]),
       }}
     >
-      <div className="profile">
-        <AnimatedOutlet />
+      <AnimatedOutlet />
 
+      <div className="profile">
         <Async await={loaderData.user} skeleton={<ProfileSkeleton />}>
           {(loadedUserData: Awaited<typeof loaderData.user>) => {
             if (loadedUserData.code !== "OK") return null;
 
             return (
-              <div className="profile-user-container">
+              <>
                 <ProfileHeader
                   username={loadedUserData.content.name}
                   image={loadedUserData.content.image}
@@ -78,7 +78,7 @@ export default function Profile() {
                     )}
                   />
                 </div>
-              </div>
+              </>
             );
           }}
         </Async>
