@@ -126,16 +126,35 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
   ) {
     const startOfWeek = new Date(weekOfActivity.startDate);
 
-    return `Completed ${
+    return formatDates(
+      startOfWeek,
+      addDays(startOfWeek, 6),
       weekOfActivity.completedCount
-    } workouts from ${startOfWeek.toLocaleDateString("default", {
-      month: "long",
-      day: "numeric",
-    })} to ${addDays(startOfWeek, 6).toLocaleDateString("default", {
-      month: "long",
-      day: "numeric",
-    })}
-`;
+    );
+
+    function formatDates(
+      startDate: Date,
+      endDate: Date,
+      workoutCount: number
+    ): string {
+      const options: Intl.DateTimeFormatOptions = {
+        month: "short",
+        day: "numeric",
+      };
+
+      const start = startDate.toLocaleDateString("en-US", options);
+      const end = endDate.toLocaleDateString("en-US", options);
+
+      const startMonth = startDate.getMonth();
+      const endMonth = endDate.getMonth();
+
+      const dateRange =
+        startMonth === endMonth
+          ? `${start}-${end.split(" ")[1]}`
+          : `${start}-${end}`;
+
+      return `${workoutCount} workouts: ${dateRange}`;
+    }
   }
 
   return (
@@ -190,25 +209,6 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
                             zIndex: 9999,
                           }}
                         />
-
-                        {/*                         {hoveredWeek === weekOfActivity.startDate && (
-                          <div className="popup">
-                            Completed {weekOfActivity.completedCount} workouts
-                            from&nbsp;
-                            {startOfWeek.toLocaleDateString("default", {
-                              month: "long",
-                              day: "numeric",
-                            })}
-                            &nbsp;to&nbsp;
-                            {addDays(startOfWeek, 6).toLocaleDateString(
-                              "default",
-                              {
-                                month: "long",
-                                day: "numeric",
-                              }
-                            )}
-                          </div>
-                        )} */}
                       </div>
                     );
                   }
