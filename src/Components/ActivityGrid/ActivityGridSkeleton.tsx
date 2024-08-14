@@ -3,7 +3,7 @@ import "./ActivityGrid.scss";
 
 export default function ActivityGridSkeleton() {
   return (
-    <div className="activity-grid-wrapper">
+    <div className="activity-grid-container">
       <h3 className="activity-grid-header">
         <b>0</b> workouts done in last year
       </h3>

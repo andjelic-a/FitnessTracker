@@ -28,6 +28,11 @@
   position: absolute !important;
 }
 
+a.disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
 body {
   overflow: hidden;
 }

@@ -3,9 +3,11 @@ import Icon from "../Icon/Icon";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import Async from "../Async/Async";
-import ActivityGridSkeleton from "./ActivityGridSkeleton";
-import "./ActivityGrid.scss";
 import { addDays, getStartOfWeek } from "../../Utility/DateUtils";
+import "./ActivityGrid.scss";
+import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
+import { Tooltip } from "react-tooltip";
+import "overlayscrollbars/overlayscrollbars.css";
 
 type ActivityGrid = {
   latestActivity: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[];
@@ -14,7 +16,6 @@ type ActivityGrid = {
 };
 
 function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
-  const [hoveredWeek, setHoveredWeek] = useState<string | null>(null);
   const [showing, setShowing] = useState<"latest" | number>("latest");
   const [currentlyDisplayed, setCurrentlyDisplayed] = useState<Promise<
     Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[]
@@ -103,23 +104,15 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
   );
 
   const handlePreviousClick = (years: number[]) => {
-    if (showing === "latest") {
-      setShowing(years[years.length - 1]);
-    } else if (showing === years[0]) {
-      setShowing("latest");
-    } else {
-      setShowing(showing - 1);
-    }
+    if (showing === "latest") setShowing(years[years.length - 1]);
+    else if (showing === years[0]) setShowing("latest");
+    else setShowing(showing - 1);
   };
 
   const handleNextClick = (years: number[]) => {
-    if (showing === "latest") {
-      setShowing(years[0]);
-    } else if (showing === years[years.length - 1]) {
-      setShowing("latest");
-    } else {
-      setShowing(showing + 1);
-    }
+    if (showing === "latest") setShowing(years[0]);
+    else if (showing === years[years.length - 1]) setShowing("latest");
+    else setShowing(showing + 1);
   };
 
   function getNumberOfWorkoutsInYear(
@@ -128,68 +121,110 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
     return streak.reduce((total, week) => total + week.completedCount, 0);
   }
 
+  function getTooltipText(
+    weekOfActivity: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">
+  ) {
+    const startOfWeek = new Date(weekOfActivity.startDate);
+
+    return `Completed ${
+      weekOfActivity.completedCount
+    } workouts from ${startOfWeek.toLocaleDateString("default", {
+      month: "long",
+      day: "numeric",
+    })} to ${addDays(startOfWeek, 6).toLocaleDateString("default", {
+      month: "long",
+      day: "numeric",
+    })}
+`;
+  }
+
   return (
-    <div className="activity-grid-wrapper">
-      <Async
-        await={currentlyDisplayed ?? getStreak()}
-        skeleton={<ActivityGridSkeleton />}
-      >
+    <div className="activity-grid-container">
+      <Async await={currentlyDisplayed ?? getStreak()}>
         {(streak) => (
           <>
             <h3 className="activity-grid-header">
-              <b>{getNumberOfWorkoutsInYear(streak)}</b> workouts done in last
-              year
+              <b>{getNumberOfWorkoutsInYear(streak)}</b> workouts completed in
+              {showing === "latest" ? " the last year" : ` ${showing}`}
             </h3>
-            <div className="activity-grid">
-              {streak.map(
-                (
-                  weekOfActivity: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">
-                ) => {
-                  const startOfWeek = new Date(weekOfActivity.startDate);
 
-                  return (
-                    <div
-                      className={`activity-item ${getFillClass(
-                        weekOfActivity.completedCount,
-                        weekOfActivity.totalCount
-                      )}`}
-                      onMouseEnter={() =>
-                        setHoveredWeek(weekOfActivity.startDate)
-                      }
-                      onMouseLeave={() => setHoveredWeek(null)}
-                      key={weekOfActivity.startDate}
-                    >
-                      <Icon name="dumbbell" className="activity-icon" />
-                      {hoveredWeek === weekOfActivity.startDate && (
-                        <div className="popup">
-                          Completed {weekOfActivity.completedCount} workouts
-                          from&nbsp;
-                          {startOfWeek.toLocaleDateString("default", {
-                            month: "long",
-                            day: "numeric",
-                          })}
-                          &nbsp;to&nbsp;
-                          {addDays(startOfWeek, 6).toLocaleDateString(
-                            "default",
-                            {
+            <OverlayScrollbarsComponent
+              className="activity-grid-body"
+              options={{
+                scrollbars: {
+                  autoHide: "leave",
+                  autoHideDelay: 100,
+                  theme: "os-theme-light",
+                },
+                overflow: {
+                  x: "scroll",
+                  y: "scroll",
+                },
+              }}
+            >
+              <div className="activity-grid-items">
+                {streak.map(
+                  (
+                    weekOfActivity: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">
+                  ) => {
+                    return (
+                      <div
+                        className={`activity-item ${getFillClass(
+                          weekOfActivity.completedCount,
+                          weekOfActivity.totalCount
+                        )}`}
+                        key={weekOfActivity.startDate}
+                      >
+                        <p
+                          className="disabled"
+                          data-tooltip-id={`tooltip-${weekOfActivity.startDate}`}
+                          data-tooltip-content={getTooltipText(weekOfActivity)}
+                          data-tooltip-place="top"
+                        >
+                          <Icon name="dumbbell" className="activity-icon" />
+                        </p>
+
+                        <Tooltip
+                          id={`tooltip-${weekOfActivity.startDate}`}
+                          style={{
+                            zIndex: 9999,
+                          }}
+                        />
+
+                        {/*                         {hoveredWeek === weekOfActivity.startDate && (
+                          <div className="popup">
+                            Completed {weekOfActivity.completedCount} workouts
+                            from&nbsp;
+                            {startOfWeek.toLocaleDateString("default", {
                               month: "long",
                               day: "numeric",
-                            }
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  );
-                }
-              )}
-            </div>
+                            })}
+                            &nbsp;to&nbsp;
+                            {addDays(startOfWeek, 6).toLocaleDateString(
+                              "default",
+                              {
+                                month: "long",
+                                day: "numeric",
+                              }
+                            )}
+                          </div>
+                        )} */}
+                      </div>
+                    );
+                  }
+                )}
+              </div>
+            </OverlayScrollbarsComponent>
+
             <div className="activity-grid-footer">
               <Icon
                 onClick={() => handlePreviousClick(getYears())}
                 className="caret-icon"
                 name="caret-left"
               />
+
               <p>{showing}</p>
+
               <Icon
                 onClick={() => handleNextClick(getYears())}
                 className="caret-icon"
