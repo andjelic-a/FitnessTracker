@@ -69,14 +69,14 @@ export default function Profile() {
                     }}
                   </Async>
 
-                  <ProfileWorkoutTabs
+                  {/*                   <ProfileWorkoutTabs
                     latestActivity={loaderData.latestWeekOfActivity.then(
                       (x) => (x.code === "OK" ? x.content : null)!
                     )}
                     split={loaderData.user.then((x) =>
                       x.code === "OK" ? x.content.currentSplit : null
                     )}
-                  />
+                  /> */}
                 </div>
               </>
             );

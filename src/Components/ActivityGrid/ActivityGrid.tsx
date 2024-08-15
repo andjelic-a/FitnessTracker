@@ -177,7 +177,7 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
                 },
                 overflow: {
                   x: "scroll",
-                  y: "scroll",
+                  y: "hidden",
                 },
               }}
             >
@@ -192,14 +192,12 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
                           weekOfActivity.completedCount,
                           weekOfActivity.totalCount
                         )}`}
-                        key={weekOfActivity.startDate}
+                        key={"activity-grid-item-" + weekOfActivity.startDate}
+                        data-tooltip-id={`tooltip-${weekOfActivity.startDate}`}
+                        data-tooltip-content={getTooltipText(weekOfActivity)}
+                        data-tooltip-place="top"
                       >
-                        <p
-                          className="disabled"
-                          data-tooltip-id={`tooltip-${weekOfActivity.startDate}`}
-                          data-tooltip-content={getTooltipText(weekOfActivity)}
-                          data-tooltip-place="top"
-                        >
+                        <p className="disabled">
                           <Icon name="dumbbell" className="activity-icon" />
                         </p>
 
