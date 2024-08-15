@@ -19,29 +19,29 @@
       margin-left: 4rem;
     }
   }
-}
 
-.option {
-  cursor: pointer;
-  width: fit-content;
+  .option {
+    cursor: pointer;
+    width: fit-content;
 
-  &::before {
-    content: "";
-    display: block;
-    width: 0;
-    height: 0.2rem;
-    background-color: #fff;
+    &::before {
+      content: "";
+      display: block;
+      width: 0;
+      height: 0.2rem;
+      background-color: #fff;
 
-    transform: translate(0, 2.5rem);
-    transition: 175ms;
-    transition-timing-function: ease-in-out;
-  }
+      transform: translate(0, 2.5rem);
+      transition: 175ms;
+      transition-timing-function: ease-in-out;
+    }
 
-  &:not(.selected):hover::before {
-    width: 70%;
-  }
+    &:not(.selected):hover::before {
+      width: 70%;
+    }
 
-  &.selected::before {
-    width: 90%;
+    &.selected::before {
+      width: 90%;
+    }
   }
 }

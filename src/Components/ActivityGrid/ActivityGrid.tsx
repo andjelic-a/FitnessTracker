@@ -98,22 +98,14 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
     return Array.from(years);
   }
 
+  function getYearOptions(): ("latest" | number)[] {
+    return ["latest", ...getYears().reverse()];
+  }
+
   useEffect(
     () => void setCurrentlyDisplayed(getStreak()),
     [showing, latestActivity]
   );
-
-  const handlePreviousClick = (years: number[]) => {
-    if (showing === "latest") setShowing(years[years.length - 1]);
-    else if (showing === years[0]) setShowing("latest");
-    else setShowing(showing - 1);
-  };
-
-  const handleNextClick = (years: number[]) => {
-    if (showing === "latest") setShowing(years[0]);
-    else if (showing === years[years.length - 1]) setShowing("latest");
-    else setShowing(showing + 1);
-  };
 
   function getNumberOfWorkoutsInYear(
     streak: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[]
@@ -214,20 +206,20 @@ function ActivityGrid({ latestActivity, joinedAt, userId }: ActivityGrid) {
               </div>
             </OverlayScrollbarsComponent>
 
-            <div className="activity-grid-footer">
-              <Icon
-                onClick={() => handlePreviousClick(getYears())}
-                className="caret-icon"
-                name="caret-left"
-              />
-
-              <p>{showing}</p>
-
-              <Icon
-                onClick={() => handleNextClick(getYears())}
-                className="caret-icon"
-                name="caret-right"
-              />
+            <div className="year-options-sidebar">
+              {[...getYearOptions(), 123, 41, 76548, 4, 7, 2, 23, 432].map(
+                (option) => (
+                  <button
+                    className={
+                      "option" + (option === showing ? " selected" : "")
+                    }
+                    key={option}
+                    onClick={() => void setShowing(option)}
+                  >
+                    {option}
+                  </button>
+                )
+              )}
             </div>
           </>
         )}
