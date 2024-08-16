@@ -20,85 +20,130 @@
 
 @media screen and (max-width: 799.98px) {
   .profile-header {
-    height: 20rem;
+    width: 100%;
+
     display: grid;
     grid-template-columns: auto 1fr;
-    grid-template-rows: auto auto;
+    grid-template-rows: 3rem repeat(4, auto);
+    grid-template-areas:
+      "pic ."
+      "pic name"
+      "pic stats"
+      "pic ."
+      "btn btn";
+
+    row-gap: 1rem;
+    column-gap: 1.5rem;
+
+    place-items: center;
 
     .profile-picture-container {
-      max-width: 15rem;
-      max-height: 15rem;
+      grid-area: pic;
 
-      grid-row-start: 1;
-      grid-row-end: 3;
-      grid-column: 1;
-      place-self: center;
+      width: 100%;
+      max-width: 15rem;
+      aspect-ratio: 1;
+      border: 2px solid $dark-600;
     }
 
     .username-container {
-      grid-row: 1;
-      grid-column: 2;
+      grid-area: name;
 
       width: 100%;
       display: flex;
+      flex-direction: column;
       justify-content: flex-start;
-      align-items: flex-end;
-      padding-left: 5rem;
-      gap: 1.5rem;
-      font-size: 2.7rem;
+      align-items: flex-start;
 
-      .settings-btn {
-        cursor: pointer;
-        transition: 0.65s ease;
-        color: $primary-300;
-        font-size: 1.05em;
+      .nickname {
+        font-size: 2.5rem;
+        color: #fff;
+        font-weight: bold;
+      }
 
-        &:hover {
-          scale: 1.2;
-          transform: rotate(180deg);
-        }
+      .username {
+        font-size: 1.5rem;
+        color: #aaa;
+        font-weight: 100;
       }
     }
 
-    .user-base-stats {
-      grid-column: 2;
-      grid-row: 2;
+    .edit-profile-btn {
+      grid-area: btn;
 
       width: 100%;
+      height: 3.25rem;
+      margin: 1rem 0 0.25rem 0;
+
+      background-color: $primary-300;
+      transition: 100ms ease-out;
+      cursor: pointer;
+
+      border: none;
+      border-radius: 0.5rem;
+      outline: none;
+
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 550;
+
+      &:hover {
+        background-color: $primary-400;
+      }
+
+      &:focus-visible {
+        outline: 3px solid $primary-500;
+      }
+    }
+
+    .stats-container {
+      grid-area: stats;
+
       display: flex;
+      // flex-direction: column;
       justify-content: flex-start;
-      align-items: center;
-      padding-left: 5rem;
-      font-size: 1.6rem;
-      gap: 3rem;
+      align-items: flex-start;
+      // gap: 0.4rem;
+      width: 100%;
+      gap: 0.75rem;
 
-      .stat-container {
+      .followers-container {
         display: flex;
-        flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
-        cursor: pointer;
+        gap: 0.75rem;
 
-        &:first-child {
-          cursor: auto;
+        .stat:hover,
+        .stat:hover .value {
+          color: $primary-600;
+          cursor: pointer;
         }
 
-        .name {
-          color: $dark-600;
-          font-size: 1.4rem;
-        }
-
-        .value {
-          font-size: 1.8rem;
+        .dot {
+          font-size: 0.5em;
         }
       }
 
-      .stat-container:hover {
-        .name {
-          color: $primary-600;
+      .completed-workouts-container {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.75rem;
+        
+        &::before {
+          content: "●";
+          font-size: 0.5em;
         }
+      }
+
+      p.stat {
+        color: $dark-600;
+        font-weight: 100;
+        font-size: 1.5rem;
+
         .value {
-          color: $primary-600;
+          color: #fff;
+          font-weight: normal;
         }
       }
     }

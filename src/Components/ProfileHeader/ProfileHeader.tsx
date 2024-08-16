@@ -54,7 +54,7 @@ function ProfileHeader({
         </div>
 
         <div className="completed-workouts-container">
-          <p className="stat completed-workouts-container">
+          <p className="stat">
             <span className="value">{workouts ?? 0}</span> completed workouts
           </p>
         </div>
