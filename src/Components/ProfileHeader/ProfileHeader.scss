@@ -7,13 +7,103 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
     border-radius: 50%;
     background-color: $dark-500;
+    outline: 2px solid $dark-600;
+
+    width: 100%;
+    aspect-ratio: 1;
     overflow: hidden;
 
     img {
       width: 100%;
       height: 100%;
+    }
+  }
+
+  .username-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    .nickname {
+      font-size: 2.5rem;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .username {
+      font-size: 1.5rem;
+      color: #aaa;
+      font-weight: 100;
+    }
+  }
+
+  .edit-profile-btn {
+    width: 100%;
+    margin: 0.5rem 0 0.25rem 0;
+
+    background-color: $primary-300;
+    transition: 100ms ease-out;
+    cursor: pointer;
+
+    border: none;
+    border-radius: 0.5rem;
+    outline: none;
+
+    color: white;
+    font-weight: 550;
+
+    &:hover {
+      background-color: $primary-400;
+    }
+
+    &:focus-visible {
+      outline: 3px solid $primary-500;
+    }
+  }
+
+  .stats-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+
+    .followers-container {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 0.75rem;
+
+      .stat:hover,
+      .stat:hover .value {
+        color: $primary-600;
+        cursor: pointer;
+      }
+
+      .dot {
+        font-size: 0.5em;
+      }
+    }
+
+    .completed-workouts-container {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    p.stat {
+      color: $dark-600;
+      font-weight: 100;
+      font-size: 1.5rem;
+
+      .value {
+        color: #fff;
+        font-weight: normal;
+      }
     }
   }
 }
@@ -34,116 +124,36 @@
 
     row-gap: 1rem;
     column-gap: 1.5rem;
-
     place-items: center;
 
     .profile-picture-container {
       grid-area: pic;
-
-      width: 100%;
       max-width: 15rem;
-      aspect-ratio: 1;
-      border: 2px solid $dark-600;
     }
 
     .username-container {
       grid-area: name;
-
       width: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-start;
-
-      .nickname {
-        font-size: 2.5rem;
-        color: #fff;
-        font-weight: bold;
-      }
-
-      .username {
-        font-size: 1.5rem;
-        color: #aaa;
-        font-weight: 100;
-      }
     }
 
     .edit-profile-btn {
       grid-area: btn;
-
-      width: 100%;
       height: 3.25rem;
-      margin: 1rem 0 0.25rem 0;
-
-      background-color: $primary-300;
-      transition: 100ms ease-out;
-      cursor: pointer;
-
-      border: none;
-      border-radius: 0.5rem;
-      outline: none;
-
-      color: white;
       font-size: 1.5rem;
-      font-weight: 550;
-
-      &:hover {
-        background-color: $primary-400;
-      }
-
-      &:focus-visible {
-        outline: 3px solid $primary-500;
-      }
     }
 
     .stats-container {
       grid-area: stats;
-
-      display: flex;
-      // flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-start;
-      // gap: 0.4rem;
-      width: 100%;
       gap: 0.75rem;
 
       .followers-container {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        gap: 0.75rem;
-
-        .stat:hover,
-        .stat:hover .value {
-          color: $primary-600;
-          cursor: pointer;
-        }
-
-        .dot {
-          font-size: 0.5em;
-        }
+        width: max-content;
       }
 
       .completed-workouts-container {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        gap: 0.75rem;
-        
         &::before {
           content: "●";
           font-size: 0.5em;
-        }
-      }
-
-      p.stat {
-        color: $dark-600;
-        font-weight: 100;
-        font-size: 1.5rem;
-
-        .value {
-          color: #fff;
-          font-weight: normal;
         }
       }
     }
@@ -152,18 +162,16 @@
 
 @media screen and (min-width: 800px) {
   .profile-header {
+    height: 100%;
+
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    height: 100%;
-    gap: 1.5rem;
+    gap: 1rem;
 
     .profile-picture-container {
-      width: 100%;
       max-width: 20rem;
-      aspect-ratio: 1;
-      border: 2px solid $dark-600;
     }
 
     .username-container {
@@ -172,81 +180,23 @@
       flex-direction: column;
       justify-content: flex-start;
       align-items: flex-start;
-
-      .nickname {
-        font-size: 2.5rem;
-        color: #fff;
-        font-weight: bold;
-      }
-
-      .username {
-        font-size: 1.5rem;
-        color: #aaa;
-        font-weight: 100;
-      }
     }
 
     .edit-profile-btn {
-      width: 100%;
       height: 3.75rem;
-      margin: 1rem 0 0.25rem 0;
-
-      background-color: $primary-300;
-      transition: 100ms ease-out;
-      cursor: pointer;
-
-      border: none;
-      border-radius: 0.5rem;
-      outline: none;
-
-      color: white;
       font-size: 1.6rem;
-      font-weight: 550;
-
-      &:hover {
-        background-color: $primary-400;
-      }
     }
 
     .stats-container {
-      display: flex;
       flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-start;
       gap: 0.85rem;
-      width: 100%;
 
       .followers-container {
         width: 100%;
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        gap: 0.75rem;
-
-        .stat:hover,
-        .stat:hover .value {
-          color: $primary-600;
-          cursor: pointer;
-        }
-
-        .dot {
-          font-size: 0.5em;
-        }
       }
 
       .completed-workouts-container {
         width: 100%;
-      }
-
-      p.stat {
-        color: $dark-600;
-        font-weight: 100;
-        font-size: 1.5rem;
-
-        .value {
-          color: #fff;
-          font-weight: normal;
-        }
       }
     }
   }
