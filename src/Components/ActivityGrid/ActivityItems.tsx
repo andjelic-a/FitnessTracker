@@ -2,7 +2,7 @@ import { Tooltip } from "react-tooltip";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import { addDays, getStartOfWeek } from "../../Utility/DateUtils";
 import Icon from "../Icon/Icon";
-import { memo, useRef } from "react";
+import { memo, useCallback, useMemo } from "react";
 
 type ActivityItemsProps = {
   streak: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[] | null;
@@ -10,8 +10,6 @@ type ActivityItemsProps = {
 };
 
 const ActivityItems = memo<ActivityItemsProps>(({ streak, year }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-
   function getFillClass(completed: number, total: number) {
     if (completed >= total) return "fill-red";
     return `fill-${completed}-of-${total}`;
@@ -53,69 +51,81 @@ const ActivityItems = memo<ActivityItemsProps>(({ streak, year }) => {
     }
   }
 
-  function getStreak(): Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[] {
-    if (!streak) return [];
-    if (streak.length >= 52) return streak;
+  const getProcessedStreak =
+    useCallback((): Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[] => {
+      if (!streak) return [];
 
-    let yearStart = getStartOfWeek(
-      year === "latest" ? addDays(new Date(), -358) : new Date(`${year}-01-01`)
-    );
+      if (streak.length >= 52) return streak;
 
-    if (year !== "latest" && yearStart < new Date(`${year}-01-01`))
-      yearStart = addDays(yearStart, 7);
-
-    let newArray: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[] = [];
-
-    for (let curr = yearStart, i = 0; i < 52; curr = addDays(curr, 7), i++) {
-      const currentIndexInResponse = streak.findIndex(
-        (x) => curr.toDateString() === new Date(x.startDate).toDateString()
+      let yearStart = getStartOfWeek(
+        year === "latest"
+          ? addDays(new Date(), -358)
+          : new Date(`${year}-01-01`)
       );
 
-      newArray[i] =
-        currentIndexInResponse >= 0
-          ? streak[currentIndexInResponse]
-          : {
-              startDate: curr.toUTCString(),
-              completedCount: 0,
-              totalCount: 7,
-            };
-    }
+      if (year !== "latest" && yearStart < new Date(`${year}-01-01`))
+        yearStart = addDays(yearStart, 7);
 
-    return newArray;
-  }
+      let newArray: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[] = [];
+
+      for (let curr = yearStart, i = 0; i < 52; curr = addDays(curr, 7), i++) {
+        const currentIndexInResponse = streak.findIndex(
+          (x) => curr.toDateString() === new Date(x.startDate).toDateString()
+        );
+
+        newArray[i] =
+          currentIndexInResponse >= 0
+            ? streak[currentIndexInResponse]
+            : {
+                startDate: curr.toUTCString(),
+                completedCount: 0,
+                totalCount: 7,
+              };
+      }
+
+      return newArray;
+    }, [streak, year]);
+
+  const processedStreak = useMemo(
+    () => getProcessedStreak(),
+    [getProcessedStreak]
+  );
+
+  const emptyStreak = useMemo(() => new Array(52).fill({}), []);
 
   return (
     <div className="activity-grid-items">
-      {getStreak().map(
-        (
-          weekOfActivity: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">
-        ) => {
-          return (
-            <div
-              ref={containerRef}
-              className={`activity-item ${getFillClass(
-                weekOfActivity.completedCount,
-                weekOfActivity.totalCount
-              )}`}
-              key={"activity-grid-item-" + weekOfActivity.startDate}
-              data-tooltip-id={`tooltip-${weekOfActivity.startDate}`}
-              data-tooltip-content={getTooltipText(weekOfActivity)}
-              data-tooltip-place="top"
-            >
-              <p className="disabled">
+      {processedStreak.length === 0
+        ? emptyStreak.map((_, i) => {
+            return (
+              <div className="activity-item" key={"activity-grid-item-" + i}>
                 <Icon name="dumbbell" className="activity-icon" />
-              </p>
+              </div>
+            );
+          })
+        : processedStreak.map((weekOfActivity) => {
+            return (
+              <div
+                className={`activity-item ${getFillClass(
+                  weekOfActivity.completedCount,
+                  weekOfActivity.totalCount
+                )}`}
+                key={"activity-grid-item-" + weekOfActivity.startDate}
+                data-tooltip-id={`tooltip-${weekOfActivity.startDate}`}
+                data-tooltip-content={getTooltipText(weekOfActivity)}
+                data-tooltip-place="top"
+              >
+                <Icon name="dumbbell" className="activity-icon" />
 
-              <Tooltip
-                id={`tooltip-${weekOfActivity.startDate}`}
-                style={{
-                  zIndex: 9999,
-                }}
-              />
-            </div>
-          );
-        }
-      )}
+                <Tooltip
+                  id={`tooltip-${weekOfActivity.startDate}`}
+                  style={{
+                    zIndex: 9999,
+                  }}
+                />
+              </div>
+            );
+          })}
     </div>
   );
 });

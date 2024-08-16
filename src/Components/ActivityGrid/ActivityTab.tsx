@@ -2,6 +2,7 @@ import { memo, useEffect, useMemo, useRef, useState } from "react";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import ActivityItems from "./ActivityItems";
+import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 
 type ActivityTabProps = {
   year: number | "latest";
@@ -12,8 +13,6 @@ const ActivityTab = memo<ActivityTabProps>(({ year }) => {
   const [activity, setActivity] = useState<
     Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[] | null
   >(null);
-
-  console.log("rerendering activity tab", year);
 
   useEffect(() => {
     if (promiseRef.current) return;
@@ -34,7 +33,39 @@ const ActivityTab = memo<ActivityTabProps>(({ year }) => {
     [activity]
   );
 
-  return <>{tabItems}</>;
+  const completedWorkoutsCount = useMemo(
+    () =>
+      activity
+        ? activity.reduce((total, current) => total + current.completedCount, 0)
+        : 0,
+    [activity]
+  );
+
+  return (
+    <>
+      <h3 className="activity-grid-header">
+        <b>{completedWorkoutsCount}</b> workouts completed in
+        {year === "latest" ? " the last year" : ` ${year}`}
+      </h3>
+
+      <OverlayScrollbarsComponent
+        className="activity-grid-body"
+        options={{
+          scrollbars: {
+            autoHide: "leave",
+            autoHideDelay: 100,
+            theme: "os-theme-light",
+          },
+          overflow: {
+            x: "scroll",
+            y: "hidden",
+          },
+        }}
+      >
+        {tabItems}
+      </OverlayScrollbarsComponent>
+    </>
+  );
 });
 
 export default ActivityTab;
