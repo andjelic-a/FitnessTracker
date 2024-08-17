@@ -193,7 +193,7 @@
   }
 }
 
-.edit-workout-description {
+.edit-description-input {
   position: relative;
   margin-top: auto;
   align-self: center;
@@ -204,7 +204,7 @@
   margin-bottom: 1rem;
   overflow: visible;
 
-  #workout-description {
+  #description-input {
     position: relative;
     font-family: sans-serif;
     width: 100%;
@@ -219,7 +219,7 @@
     overflow: hidden;
   }
 
-  .workout-description-placeholder {
+  .description-input-label {
     position: absolute;
     font-size: 1.8rem;
     font-weight: 600;

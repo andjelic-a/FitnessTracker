@@ -114,6 +114,7 @@ const ActivityItems = memo<ActivityItemsProps>(({ streak, year }) => {
                 data-tooltip-id={`tooltip-${weekOfActivity.startDate}`}
                 data-tooltip-content={getTooltipText(weekOfActivity)}
                 data-tooltip-place="top"
+                data-tooltip-position-strategy="fixed"
               >
                 <Icon name="dumbbell" className="activity-icon" />
 

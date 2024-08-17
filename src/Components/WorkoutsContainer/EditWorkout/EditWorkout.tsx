@@ -215,9 +215,9 @@ const EditWorkout = WindowFC<EditWorkoutWindowProps>(
                 safeGuard={safeGuard}
               />
 
-              <div className="edit-workout-description">
+              <div className="edit-description-input">
                 <textarea
-                  id="workout-description"
+                  id="description-input"
                   defaultValue={
                     originalWorkout.content.description ?? undefined
                   }
@@ -228,8 +228,8 @@ const EditWorkout = WindowFC<EditWorkoutWindowProps>(
                   }}
                 />
                 <label
-                  htmlFor="workout-description"
-                  className="workout-description-placeholder"
+                  htmlFor="description-input"
+                  className="description-input-label"
                 >
                   Workout description
                 </label>
