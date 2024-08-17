@@ -155,6 +155,20 @@
       font-weight: 900;
     }
   }
+
+  .skipped-tooltip,
+  .done-tooltip {
+    max-width: 100%;
+    font-size: 1.2rem;
+    z-index: 1000;
+
+    p {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
 }
 
 .current-split-workouts .workout {
