@@ -40,14 +40,18 @@ export default function CurrentSplitDisplay({
 }: CurrentSplitDisplayProps) {
   const [workouts, setWorkouts] = useState<SplitWorkout[]>([]);
 
-  useEffect(() => void setWorkouts(extractWorkouts(split)), [split]);
+  useEffect(() => {
+    const a = extractWorkouts(split);
+    setWorkouts([...a.slice(1), a[0]]);
+    // setWorkouts(a);
+  }, [split]);
 
   function extractWorkouts(
     split: Schema<"DetailedUserSplitResponseDTO">
   ): SplitWorkout[] {
     const workouts: (Schema<"SimpleSplitWorkoutResponseDTO"> | null)[] = [];
 
-    //TODO: FIX THIS, map it properly. On backend day 0 is sunday and here day 0 is monday
+    //TODO: Ask the user if they prefer to have this display as monday-first or sunday-first
     for (let i = 0; i < 7; i++)
       workouts.push(split.workouts.find((x) => x.day === i) ?? null);
 
@@ -61,8 +65,8 @@ export default function CurrentSplitDisplay({
   function getStatusForWorkout(
     workout: Schema<"SimpleSplitWorkoutResponseDTO">
   ): WorkoutStatus {
-    let today = new Date().getUTCDay() - 1;
-    if (today === -1) today = 6;
+    let today = new Date().getUTCDay();
+    // if (today === -1) today = 6;
 
     if (workout.day > today) return "pending";
 
@@ -74,8 +78,8 @@ export default function CurrentSplitDisplay({
   }
 
   function getStatusForRest(day: number): RestStatus {
-    let today = new Date().getUTCDay() - 1;
-    if (today === -1) today = 6;
+    let today = new Date().getUTCDay();
+    // if (today === -1) today = 6;
 
     if (day === today) return "scheduled-today";
     if (day < today) return "passed";
@@ -89,7 +93,7 @@ export default function CurrentSplitDisplay({
           <CurrentSplitDayDisplay
             type="workout"
             key={x.key}
-            day={x.splitWorkout.day}
+            day={i}
             status={x.status}
             workout={x.splitWorkout as Schema<"SimpleWorkoutResponseDTO">}
           />
