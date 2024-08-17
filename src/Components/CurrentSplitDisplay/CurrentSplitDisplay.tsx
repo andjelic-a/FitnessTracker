@@ -47,6 +47,7 @@ export default function CurrentSplitDisplay({
   ): SplitWorkout[] {
     const workouts: (Schema<"SimpleSplitWorkoutResponseDTO"> | null)[] = [];
 
+    //TODO: FIX THIS, map it properly. On backend day 0 is sunday and here day 0 is monday
     for (let i = 0; i < 7; i++)
       workouts.push(split.workouts.find((x) => x.day === i) ?? null);
 
@@ -75,7 +76,7 @@ export default function CurrentSplitDisplay({
   function getStatusForRest(day: number): RestStatus {
     let today = new Date().getUTCDay() - 1;
     if (today === -1) today = 6;
-    
+
     if (day === today) return "scheduled-today";
     if (day < today) return "passed";
     return "scheduled";
