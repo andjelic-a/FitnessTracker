@@ -39,11 +39,11 @@ const EditWorkout = WindowFC<EditWorkoutWindowProps>(
 
     const isSetSelectionValid = (): boolean => {
       if (createdSetsRef.current.length <= 0) {
-        wrapperRef.current?.classList.add("workout-item-error-button");
+        wrapperRef.current?.classList.add("invalid-exercise-selection");
         return false;
       }
 
-      wrapperRef.current?.classList.remove("workout-item-error-button");
+      wrapperRef.current?.classList.remove("invalid-exercise-selection");
       return true;
     };
 

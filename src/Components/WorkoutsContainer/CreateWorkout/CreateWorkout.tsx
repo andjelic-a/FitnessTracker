@@ -27,21 +27,21 @@ const CreateWorkoutWindow = WindowFC<CreateWorkoutWindowProps>(
 
     const validateTitle = (): boolean => {
       if (!workoutTitleRef.current?.value) {
-        workoutTitleRef.current?.classList.add("workout-item-error-title");
+        workoutTitleRef.current?.classList.add("invalid");
         return false;
       }
 
-      workoutTitleRef.current?.classList.remove("workout-item-error-title");
+      workoutTitleRef.current?.classList.remove("invalid");
       return true;
     };
 
     const validateSets = (): boolean => {
       if (createdSetsRef.current.length <= 0) {
-        wrapperRef.current?.classList.add("workout-item-error-button");
+        wrapperRef.current?.classList.add("invalid-exercise-selection");
         return false;
       }
 
-      wrapperRef.current?.classList.remove("workout-item-error-button");
+      wrapperRef.current?.classList.remove("invalid-exercise-selection");
       return true;
     };
 
@@ -169,7 +169,7 @@ const CreateWorkoutWindow = WindowFC<CreateWorkoutWindowProps>(
               <Tooltip id="workout-visibility-tooltip" />
             </button>
 
-            <button onClick={handleSaveClick} className="create-btn">
+            <button onClick={handleSaveClick} className="save-btn">
               <p>Save</p>
               <Icon name="floppy-disk" />
             </button>
@@ -205,7 +205,7 @@ const CreateWorkoutWindow = WindowFC<CreateWorkoutWindowProps>(
               e.target.style.height = `${e.target.scrollHeight}px`;
             }}
           />
-          
+
           <label
             htmlFor="description-input"
             className="description-input-label"

@@ -37,198 +37,208 @@
     background: $dark-600;
   }
 
-  &.workout-item-error-button .create-workout-add-exercise {
+  &.invalid-exercise-selection .add-exercise-btn {
     background-color: red;
+
+    &:hover {
+      background-color: rgb(255, 100, 0);
+    }
   }
-}
 
-.header {
-  width: 100%;
-  height: 5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-
-  .title {
-    width: 36rem;
+  .header {
+    width: 100%;
     height: 5rem;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    color: white;
-    cursor: pointer;
-    font-size: 1.8rem;
-    font-weight: 550;
-    transition: 0.2s ease-in;
-    border-bottom: 3px solid $dark-600;
-
-    &:focus {
-      border-bottom: 3px solid rgb(199, 199, 199);
-    }
-
-    &::placeholder {
-      font-size: 1.8rem;
-      transition: 0.2s ease-in;
-    }
-    &:focus::placeholder {
-      color: rgb(199, 199, 198);
-    }
-  }
-
-  .buttons {
     display: flex;
-    align-items: center;
-    gap: 1rem;
+    justify-content: space-between;
+    align-items: flex-end;
 
-    .workout-visibility-toggle {
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-
-      position: relative;
-      font-size: 1.9rem;
-      color: $dark-600;
-
+    .title {
+      width: 36rem;
+      height: 5rem;
       border: none;
       outline: none;
-      background: none;
+      background-color: transparent;
+      color: white;
+      cursor: pointer;
+      font-size: 1.8rem;
+      font-weight: 550;
+      transition: 0.2s ease-in;
+      border-bottom: 3px solid $dark-600;
 
-      min-width: max-content;
-      min-height: max-content;
-      aspect-ratio: 1;
-      border: 1rem solid transparent;
+      &:focus {
+        border-bottom: 3px solid rgb(199, 199, 199);
 
-      &:focus-visible {
-        outline: 1px solid $primary-300;
+        &::placeholder {
+          color: rgb(199, 199, 198);
+        }
+      }
+
+      &::placeholder {
+        font-size: 1.8rem;
+        transition: 0.2s ease-in;
+      }
+
+      &.invalid {
+        border-color: rgb(255, 0, 0) !important;
+
+        &::placeholder {
+          color: red !important;
+        }
       }
     }
 
-    .create-btn {
-      cursor: pointer;
+    .buttons {
       display: flex;
       align-items: center;
       gap: 1rem;
 
-      width: max-content;
-      height: max-content;
-      padding: 1rem 1.5rem;
+      .workout-visibility-toggle {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+
+        position: relative;
+        font-size: 1.9rem;
+        color: $dark-600;
+
+        border: none;
+        outline: none;
+        background: none;
+        border-radius: 0.3rem;
+
+        min-width: max-content;
+        min-height: max-content;
+        aspect-ratio: 1;
+        border: 1rem solid transparent;
+
+        &:focus-visible {
+          outline: 1px solid $primary-300;
+        }
+      }
+
+      .save-btn {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        width: max-content;
+        height: max-content;
+        padding: 1rem 1.5rem;
+
+        border: none;
+        outline: none;
+        background-color: $primary-300;
+        border-radius: 0.5rem;
+
+        color: #fff;
+        font-size: 1.7rem;
+        font-weight: 100;
+
+        &:hover {
+          background-color: $primary-400;
+        }
+
+        &:focus-visible {
+          outline: 2px solid #fff;
+        }
+      }
+    }
+  }
+
+  .set-creator-container {
+    width: 100%;
+    height: auto;
+
+    margin-top: 2rem;
+    margin-bottom: 5rem;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .add-exercise-btn {
+    justify-self: center;
+
+    display: flex;
+    justify-content: center;
+    align-self: flex-start;
+    align-items: center;
+
+    min-width: max-content;
+    width: 60%;
+    padding: 0.5rem 0;
+
+    outline: none;
+    border: none;
+    border-radius: 0.2rem;
+    color: white;
+    background-color: $primary-300;
+    font-size: 1.6rem;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $primary-400;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #fff;
+    }
+  }
+
+  .description-container {
+    position: relative;
+    align-self: center;
+
+    margin-top: auto;
+    margin-bottom: 1rem;
+    width: 80%;
+    overflow: visible;
+
+    border: 2px solid $dark-600;
+    border-radius: 0.5rem;
+    transition: 0.2s;
+
+    &:focus-within {
+      border: 2px solid rgb(231, 231, 231);
+
+      .description-input-label {
+        top: -1.75rem;
+        font-size: 1.7rem;
+        color: rgb(231, 231, 231);
+      }
+    }
+
+    #description-input {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding: 1rem;
 
       border: none;
       outline: none;
-      background-color: $primary-300;
-      border-radius: 0.5rem;
+      background-color: transparent;
+      resize: none;
+      overflow: hidden;
 
-      color: #fff;
-      font-size: 1.7rem;
-      font-weight: 100;
-
-      &:hover {
-        background-color: $primary-400;
-      }
-
-      &:focus-visible {
-        outline: 2px solid #fff;
-      }
-    }
-  }
-
-  .workout-item-error-title {
-    border-color: rgb(255, 0, 0) !important;
-
-    &::placeholder {
-      color: red !important;
-    }
-  }
-}
-
-.set-creator-container {
-  width: 100%;
-  height: auto;
-  margin-top: 2rem;
-  margin-bottom: 5rem;
-  display: grid;
-  gap: 2rem;
-  grid-template-columns: repeat(2, 1fr);
-  align-content: start;
-
-  & > * {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-.create-workout-add-exercise {
-  justify-self: center;
-
-  display: flex;
-  justify-content: center;
-  align-self: flex-start;
-  align-items: center;
-  width: 23rem;
-  height: 3rem;
-  border-radius: 0.2rem;
-  border: none;
-  color: white;
-  background-color: $primary-300;
-  font-size: 1.6rem;
-  cursor: pointer;
-
-  &:hover {
-    background-color: $primary-400;
-  }
-}
-
-.description-container {
-  position: relative;
-  align-self: center;
-
-  margin-top: auto;
-  margin-bottom: 1rem;
-  width: 80%;
-  overflow: visible;
-
-  border: 2px solid $dark-600;
-  border-radius: 0.5rem;
-  transition: 0.2s;
-
-  &:focus-within {
-    border: 2px solid rgb(231, 231, 231);
-
-    .description-input-label {
-      top: -1.75rem;
-      font-size: 1.7rem;
+      font-family: sans-serif;
+      font-size: 1.8rem;
       color: rgb(231, 231, 231);
     }
-  }
 
-  #description-input {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    padding: 1rem;
+    .description-input-label {
+      position: absolute;
+      top: -1.5rem;
+      left: 1rem;
+      padding: 0 0.5rem;
+      white-space: nowrap;
 
-    border: none;
-    outline: none;
-    background-color: transparent;
-    resize: none;
-    overflow: hidden;
-
-    font-family: sans-serif;
-    font-size: 1.8rem;
-    color: rgb(231, 231, 231);
-  }
-
-  .description-input-label {
-    position: absolute;
-    top: -1.5rem;
-    left: 1rem;
-    padding: 0 0.5rem;
-    white-space: nowrap;
-
-    color: $dark-600;
-    font-size: 1.8rem;
-    font-weight: 600;
-    background-color: $dark-200;
-    transition: 0.2s;
+      color: $dark-600;
+      font-size: 1.8rem;
+      font-weight: 600;
+      background-color: $dark-200;
+      transition: 0.2s;
+    }
   }
 }

@@ -47,188 +47,188 @@
     pointer-events: none;
   }
 
-  &.workout-item-error-button .edit-workout-add-exercise {
+  &.invalid-exercise-selection .edit-workout-add-exercise {
     background-color: red;
   }
-}
-
-.edit-workout-header {
-  width: 100%;
-  height: 5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-
-  & #workout-title {
-    width: 36rem;
+  
+  .edit-workout-header {
+    width: 100%;
     height: 5rem;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    color: white;
-    cursor: pointer;
-    font-size: 1.8rem;
-    font-weight: 550;
-    transition: 0.2s ease-in;
-    border-bottom: 3px solid $dark-600;
-
-    &:focus {
-      border-bottom: 3px solid rgb(199, 199, 199);
-    }
-
-    &::placeholder {
-      font-size: 1.8rem;
-      transition: 0.2s ease-in;
-    }
-    &:focus::placeholder {
-      color: rgb(199, 199, 199);
-    }
-  }
-
-  & .edit-workout-public-or-private {
-    position: relative;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 6rem;
-    height: 3.75rem;
-    margin-left: auto;
-    font-size: 1.8rem;
-    font-weight: 550;
-    color: $dark-600;
+    justify-content: space-between;
+    align-items: flex-end;
 
-    & .lock {
+    & #workout-title {
+      width: 36rem;
+      height: 5rem;
+      border: none;
+      outline: none;
+      background-color: transparent;
+      color: white;
       cursor: pointer;
+      font-size: 1.8rem;
+      font-weight: 550;
+      transition: 0.2s ease-in;
+      border-bottom: 3px solid $dark-600;
+
+      &:focus {
+        border-bottom: 3px solid rgb(199, 199, 199);
+      }
+
+      &::placeholder {
+        font-size: 1.8rem;
+        transition: 0.2s ease-in;
+      }
+      &:focus::placeholder {
+        color: rgb(199, 199, 199);
+      }
     }
 
-    & .edit-workout-public-or-private-popup {
-      position: absolute;
-      left: 0;
-      z-index: -1;
+    & .edit-workout-public-or-private {
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 3.5rem;
-      height: 1.5rem;
+      width: 6rem;
+      height: 3.75rem;
+      margin-left: auto;
+      font-size: 1.8rem;
+      font-weight: 550;
+      color: $dark-600;
+
+      & .lock {
+        cursor: pointer;
+      }
+
+      & .edit-workout-public-or-private-popup {
+        position: absolute;
+        left: 0;
+        z-index: -1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 3.5rem;
+        height: 1.5rem;
+        border: none;
+        border-radius: 0.5rem;
+        outline: none;
+        background-color: $dark-600;
+        color: $dark-100;
+        font-size: 1.6rem;
+        visibility: 0;
+        opacity: 0;
+        transition: 0.2s;
+      }
+
+      & .show {
+        z-index: 1;
+        visibility: visible;
+        opacity: 1;
+        left: -6rem;
+        width: 7rem;
+        height: 3rem;
+      }
+    }
+
+    .workout-item-error-title {
+      border-color: rgb(255, 0, 0) !important;
+
+      &::placeholder {
+        color: red !important;
+      }
+    }
+
+    & .edit-workout-save {
+      width: 5.5rem;
+      height: 3.75rem;
       border: none;
       border-radius: 0.5rem;
       outline: none;
-      background-color: $dark-600;
-      color: $dark-100;
+      background-color: $primary-300;
+      color: white;
+      cursor: pointer;
       font-size: 1.6rem;
-      visibility: 0;
-      opacity: 0;
-      transition: 0.2s;
-    }
+      font-weight: 550;
 
-    & .show {
-      z-index: 1;
-      visibility: visible;
-      opacity: 1;
-      left: -6rem;
-      width: 7rem;
-      height: 3rem;
+      &:hover {
+        background-color: $primary-400;
+      }
     }
   }
 
-  .workout-item-error-title {
-    border-color: rgb(255, 0, 0) !important;
+  .set-creator-container {
+    width: 100%;
+    height: auto;
+    margin-top: 2rem;
+    margin-bottom: 5rem;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+    align-content: start;
 
-    &::placeholder {
-      color: red !important;
+    & > * {
+      display: flex;
+      flex-direction: column;
     }
   }
 
-  & .edit-workout-save {
-    width: 5.5rem;
-    height: 3.75rem;
+  .edit-workout-add-exercise {
+    justify-self: center;
+    align-self: flex-start;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 23rem;
+    height: 3rem;
+    border-radius: 0.2rem;
     border: none;
-    border-radius: 0.5rem;
-    outline: none;
-    background-color: $primary-300;
     color: white;
-    cursor: pointer;
+    background-color: $primary-300;
     font-size: 1.6rem;
-    font-weight: 550;
+    cursor: pointer;
 
     &:hover {
       background-color: $primary-400;
     }
   }
-}
 
-.set-creator-container {
-  width: 100%;
-  height: auto;
-  margin-top: 2rem;
-  margin-bottom: 5rem;
-  display: grid;
-  gap: 2rem;
-  grid-template-columns: repeat(2, 1fr);
-  align-content: start;
-
-  & > * {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-.edit-workout-add-exercise {
-  justify-self: center;
-  align-self: flex-start;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 23rem;
-  height: 3rem;
-  border-radius: 0.2rem;
-  border: none;
-  color: white;
-  background-color: $primary-300;
-  font-size: 1.6rem;
-  cursor: pointer;
-
-  &:hover {
-    background-color: $primary-400;
-  }
-}
-
-.edit-description-input {
-  position: relative;
-  margin-top: auto;
-  align-self: center;
-  width: 80%;
-  height: auto;
-  border-radius: 0.5rem;
-  border: 2px solid $dark-600;
-  margin-bottom: 1rem;
-  overflow: visible;
-
-  #description-input {
+  .edit-description-input {
     position: relative;
-    font-family: sans-serif;
-    width: 100%;
-    height: 100%;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    font-size: 1.8rem;
-    color: rgb(231, 231, 231);
-    resize: none;
-    padding: 1rem;
-    overflow: hidden;
-  }
+    margin-top: auto;
+    align-self: center;
+    width: 80%;
+    height: auto;
+    border-radius: 0.5rem;
+    border: 2px solid $dark-600;
+    margin-bottom: 1rem;
+    overflow: visible;
 
-  .description-input-label {
-    position: absolute;
-    font-size: 1.8rem;
-    font-weight: 600;
-    top: -1.5rem;
-    left: 1rem;
-    background-color: $dark-200;
-    padding: 0 0.5rem;
-    white-space: nowrap;
-    color: $dark-600;
-    transition: top 0.2s ease-in-out, font-size 0.2s ease-in-out;
+    #description-input {
+      position: relative;
+      font-family: sans-serif;
+      width: 100%;
+      height: 100%;
+      border: none;
+      outline: none;
+      background-color: transparent;
+      font-size: 1.8rem;
+      color: rgb(231, 231, 231);
+      resize: none;
+      padding: 1rem;
+      overflow: hidden;
+    }
+
+    .description-input-label {
+      position: absolute;
+      font-size: 1.8rem;
+      font-weight: 600;
+      top: -1.5rem;
+      left: 1rem;
+      background-color: $dark-200;
+      padding: 0 0.5rem;
+      white-space: nowrap;
+      color: $dark-600;
+      transition: top 0.2s ease-in-out, font-size 0.2s ease-in-out;
+    }
   }
 }
