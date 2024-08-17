@@ -2,7 +2,6 @@ import "./WorkoutItem.scss";
 import { useState, useEffect, useRef } from "react";
 import Icon from "../../../Icon/Icon.tsx";
 import useOutsideClick from "../../../../Hooks/UseOutsideClick.ts";
-import Observer from "gsap/Observer";
 import { Schema } from "../../../../Types/Endpoints/SchemaParser.ts";
 import WorkoutExerciseDisplay from "./WorkoutExerciseDisplay.tsx";
 
@@ -27,10 +26,6 @@ export type WorkoutItemData = {
 interface WorkoutItemProps {
   onDelete: () => void;
   onRequestExerciseReplace: (id: string) => void;
-  onDragStart?: (ref: HTMLDivElement) => void;
-  onDrag?: (xDelta: number, yDelta: number) => void;
-  onDragEnd?: (ref: HTMLDivElement) => void;
-  onMouseOver?: (ref: HTMLDivElement) => void;
   onChange: (workoutItem: WorkoutItemData) => void;
   workoutItem: WorkoutItemData;
 }
@@ -38,60 +33,17 @@ interface WorkoutItemProps {
 export default function WorkoutItem({
   onDelete,
   onRequestExerciseReplace,
-  onDrag,
-  onDragEnd,
-  onDragStart,
-  onMouseOver,
   onChange,
   workoutItem,
 }: WorkoutItemProps) {
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const excludedDivRef = useRef<HTMLDivElement | null>(null);
   const workoutItemWrapperRef = useRef<HTMLDivElement>(null);
-  const observer = useRef<Observer | null>(null);
-  const isBeingDragged = useRef(false);
-  const onMouseOverCallbackRef = useRef<
-    ((ref: HTMLDivElement) => void) | undefined
-  >(undefined);
 
   const handleReplaceExerciseClick = () => {
     setIsSettingsOpen(false);
     onRequestExerciseReplace(workoutItem.id);
   };
-
-  useEffect(() => {
-    observer.current = Observer.create({
-      target: workoutItemWrapperRef.current,
-      type: "touch,pointer",
-      preventDefault: true,
-      dragMinimum: 20,
-      onDragStart: () => {
-        isBeingDragged.current = true;
-
-        if (workoutItemWrapperRef.current)
-          onDragStart?.(workoutItemWrapperRef.current);
-      },
-      onDragEnd: () => {
-        isBeingDragged.current = false;
-
-        if (workoutItemWrapperRef.current)
-          onDragEnd?.(workoutItemWrapperRef.current);
-      },
-      onDrag: (x) => {
-        onDrag?.(x.deltaX, x.deltaY);
-      },
-      onHover: (x) => {
-        onMouseOverCallbackRef.current?.(x.target as HTMLDivElement);
-      },
-    });
-
-    return () => observer.current?.kill();
-  }, [workoutItemWrapperRef]);
-
-  useEffect(
-    () => void (onMouseOverCallbackRef.current = onMouseOver),
-    [onMouseOver]
-  );
 
   useOutsideClick(excludedDivRef, () => {
     if (isSettingsOpen) setIsSettingsOpen(false);
@@ -117,7 +69,6 @@ export default function WorkoutItem({
   }, [workoutItem.sets]);
 
   useEffect(() => {
-    if (isBeingDragged.current) return;
     handleSetsChanged(sets);
   }, [sets]);
 
@@ -150,15 +101,7 @@ export default function WorkoutItem({
       </div>
 
       <div className="workout-item-body">
-        <WorkoutExerciseDisplay
-          onStartDraggingSet={() => observer.current?.disable()}
-          onEndDraggingSet={() => observer.current?.enable()}
-          // onChange={handleSetsChanged}
-          animationLength={0.2}
-          safeGuard={20}
-          sets={sets}
-          setSets={setSets}
-        />
+        <WorkoutExerciseDisplay sets={sets} setSets={setSets} />
       </div>
     </div>
   );

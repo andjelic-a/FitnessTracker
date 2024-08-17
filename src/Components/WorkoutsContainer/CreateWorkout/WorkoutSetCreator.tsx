@@ -1,10 +1,5 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import WorkoutItem, { WorkoutItemData } from "./WorkoutItem/WorkoutItem";
-import gsap from "gsap";
-import Flip from "gsap/Flip";
-import Observer from "gsap/Observer";
-import reorderArray from "./ReorderArray";
-import { useGSAP } from "@gsap/react";
 import ChooseExerciseWindow, {
   ChooseExerciseFilters,
 } from "./ChooseExercise/ChooseExercise";
@@ -14,15 +9,10 @@ import Async from "../../Async/Async";
 import ChooseExerciseSkeleton from "./ChooseExercise/ChooseExerciseSkeleton";
 import { v4 } from "uuid";
 
-gsap.registerPlugin(Flip);
-gsap.registerPlugin(Observer);
-
 type WorkoutSetCreatorProps = {
   onSetsChange: (sets: WorkoutItemData[]) => void;
   onStartChoosingExercise?: () => void;
   onConfirmExerciseSelection?: () => void;
-  animationLength?: number;
-  safeGuard?: number;
   createdSets: WorkoutItemData[];
   setCreatedSets: React.Dispatch<
     React.SetStateAction<WorkoutItemData[] | null>
@@ -30,16 +20,12 @@ type WorkoutSetCreatorProps = {
 };
 
 export default function WorkoutSetCreator({
-  animationLength,
-  safeGuard,
   onConfirmExerciseSelection,
   onStartChoosingExercise,
   onSetsChange,
   createdSets,
   setCreatedSets,
 }: WorkoutSetCreatorProps) {
-  const { contextSafe } = useGSAP();
-
   const createdSetsRef = useRef<WorkoutItemData[]>([]);
 
   const [isChoosingExercise, setIsChoosingExercise] = useState<boolean>(false);
@@ -55,19 +41,11 @@ export default function WorkoutSetCreator({
   > | null>(null);
   const reachedEnd = useRef(false);
   const lazyLoadedExercises = useRef<Schema<"SimpleExerciseResponseDTO">[]>([]);
-  const dragging = useRef<HTMLElement | null>(null);
-  const currentFlipState = useRef<Flip.FlipState | null>(null);
-  const currentFlipTimeline = useRef<gsap.core.Timeline | null>(null);
-  const movableRef = useRef<HTMLElement | null>(null);
-  const isDraggingAvailable = useRef(true);
   const workoutItemContainerRef = useRef<HTMLDivElement>(null);
-  const isMoveAvailable = useRef(true);
   const addExerciseButtonRef = useRef<HTMLButtonElement | null>(null);
   const filtersRef = useRef<ChooseExerciseFilters | null>(null);
 
   useEffect(() => {
-    playReorderAnimation();
-
     //Sort data according to their respective elements
     fuckYou();
   }, [createdSets]);
@@ -212,132 +190,6 @@ export default function WorkoutSetCreator({
     setCreatedSets(createdSetsRef.current);
   };
 
-  //#region Workout item drag and drop logic / animations
-  const handleTouchMove = useCallback(
-    (e: TouchEvent) => {
-      const touch = e.touches[0];
-      let element = document.elementFromPoint(touch.clientX, touch.clientY);
-
-      while (element && !element.classList.contains("workout-item"))
-        element = element.parentElement;
-
-      if (element) handleHoverOverItem(element as HTMLElement);
-    },
-    [handleHoverOverItem]
-  );
-
-  useEffect(() => {
-    document.addEventListener("touchmove", handleTouchMove);
-    return () =>
-      void document.removeEventListener("touchmove", handleTouchMove);
-  }, [handleTouchMove]);
-
-  const playReorderAnimation = contextSafe(() => {
-    if (!currentFlipState.current) return;
-
-    isMoveAvailable.current = false;
-    setTimeout(() => void (isMoveAvailable.current = true), safeGuard ?? 150);
-
-    currentFlipTimeline.current = Flip.from(currentFlipState.current, {
-      duration: animationLength ?? 0.3,
-      onComplete: () => {
-        currentFlipState.current = null;
-        currentFlipTimeline.current = null;
-      },
-    });
-  });
-
-  function handleHoverOverItem(target: HTMLElement) {
-    if (
-      !dragging.current ||
-      dragging.current.contains(target) ||
-      !isMoveAvailable.current
-    )
-      return;
-
-    let element: HTMLElement | null = target;
-    while (element && !element.classList.contains("workout-item")) {
-      element = element.parentNode as HTMLElement;
-    }
-    if (!element) return;
-
-    const hoverId = element.id.replace("workout-item-", "");
-    const hoverIdx = createdSets.findIndex((x) => x.id === hoverId);
-
-    const draggingId = dragging.current!.id.replace("workout-item-", "");
-    const draggingIdx = createdSets.findIndex((x) => x.id === draggingId);
-
-    if (hoverIdx < 0 || draggingIdx < 0 || hoverIdx === draggingIdx) return;
-
-    if (currentFlipTimeline.current) currentFlipTimeline.current.kill();
-
-    currentFlipState.current = Flip.getState(
-      workoutItemContainerRef.current!.children
-    );
-
-    setCreatedSets(reorderArray(createdSets, draggingIdx, hoverIdx));
-  }
-
-  const updateMovablePosition = useCallback(
-    contextSafe((x: number, y: number) => {
-      if (!movableRef.current) return;
-
-      gsap.set(movableRef.current, {
-        x: `+=${x}`,
-        y: `+=${y}`,
-      });
-    }),
-    [contextSafe, movableRef.current]
-  );
-
-  const beginDragging = contextSafe((element: HTMLElement) => {
-    if (!isDraggingAvailable) return;
-    isDraggingAvailable.current = false;
-
-    movableRef.current = element.cloneNode(true) as HTMLElement;
-    document.body.appendChild(movableRef.current);
-    movableRef.current.classList.add("temporary");
-
-    const rect = element.getBoundingClientRect();
-    gsap.set(movableRef.current, {
-      x: rect.x,
-      y: rect.y,
-      width: rect.width,
-      height: rect.height,
-    });
-
-    element.classList.add("dragging");
-    dragging.current = element;
-  });
-
-  const endDragging = contextSafe((element: HTMLElement) => {
-    if (!dragging.current) return;
-    dragging.current = null;
-
-    const rect = element.getBoundingClientRect();
-    gsap.to(movableRef.current, {
-      x: rect.x - +gsap.getProperty(element, "x"),
-      y: rect.y - +gsap.getProperty(element, "y"),
-      left: 0,
-      top: 0,
-      duration: 0.25,
-      onComplete: () => {
-        workoutItemContainerRef.current!.childNodes.forEach(
-          (x) => void (x as HTMLElement).classList.remove("dragging")
-        );
-
-        document.body
-          .querySelectorAll(".workout-item.temporary")
-          .forEach((x) => {
-            x.remove();
-          });
-      },
-    });
-
-    isDraggingAvailable.current = true;
-    movableRef.current = null;
-  });
-  //#endregion
   async function handleMuscleGroupRequest(): Promise<
     Schema<"SimpleMuscleGroupResponseDTO">[]
   > {
@@ -393,10 +245,6 @@ export default function WorkoutSetCreator({
       <div ref={workoutItemContainerRef} className="set-creator-container">
         {createdSets.map((x) => (
           <WorkoutItem
-            onDrag={updateMovablePosition}
-            onDragStart={beginDragging}
-            onDragEnd={endDragging}
-            onMouseOver={handleHoverOverItem}
             onChange={handleWorkoutItemChanged}
             key={x.id}
             workoutItem={x}

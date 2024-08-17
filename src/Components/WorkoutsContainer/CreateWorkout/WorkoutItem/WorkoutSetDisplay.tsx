@@ -1,7 +1,6 @@
 import "./WorkoutItem.scss";
-import React, { useEffect, useRef, MutableRefObject } from "react";
+import React, { useRef, MutableRefObject } from "react";
 import Icon from "../../../Icon/Icon.tsx";
-import Observer from "gsap/Observer";
 import { PossibleSetIcon, Set } from "./WorkoutItem.tsx";
 
 type SingleExerciseSetProps = {
@@ -12,9 +11,6 @@ type SingleExerciseSetProps = {
   onSetClick?: (id: string) => void;
   onDeleteSet?: (id: string) => void;
   onChangeSetIcon?: (id: string, icon: PossibleSetIcon) => void;
-  onDragStart?: (ref: HTMLDivElement) => void;
-  onDragEnd?: (ref: HTMLDivElement) => void;
-  onMouseOver?: (ref: HTMLDivElement) => void;
 };
 
 export default function WorkoutSetDisplay({
@@ -24,41 +20,9 @@ export default function WorkoutSetDisplay({
   onSetClick,
   onDeleteSet,
   onChangeSetIcon,
-  onDragEnd,
-  onDragStart,
-  onMouseOver,
   onSetChanged,
 }: SingleExerciseSetProps): React.JSX.Element {
   const setWrapperRef = useRef<HTMLDivElement>(null);
-
-  const onMouseOverCallbackRef = useRef<
-    ((ref: HTMLDivElement) => void) | undefined
-  >(undefined);
-
-  useEffect(
-    () => void (onMouseOverCallbackRef.current = onMouseOver),
-    [onMouseOver]
-  );
-
-  useEffect(() => {
-    const observer = Observer.create({
-      target: setWrapperRef.current,
-      type: "touch,pointer",
-      preventDefault: true,
-      dragMinimum: 10,
-      onDragStart: () => {
-        if (setWrapperRef.current) onDragStart?.(setWrapperRef.current);
-      },
-      onDragEnd: () => {
-        if (setWrapperRef.current) onDragEnd?.(setWrapperRef.current);
-      },
-      onHover: (x) => {
-        onMouseOverCallbackRef.current?.(x.target as HTMLDivElement);
-      },
-    });
-
-    return () => observer.kill();
-  }, [setWrapperRef]);
 
   return (
     <div
