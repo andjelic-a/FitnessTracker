@@ -1,11 +1,5 @@
 import "./ProfileWorkoutTabs.scss";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import * as portals from "react-reverse-portal";
 import gsap from "gsap";
@@ -17,6 +11,7 @@ import CreatedWorkoutsTab from "./CreatedWorkoutsTab";
 import FavoriteWorkoutsTab from "./FavoriteWorkoutsTab";
 import LikedWorkoutsTab from "./LikedWorkoutsTab";
 import Icon from "../Icon/Icon";
+import { useNavigate } from "react-router-dom";
 gsap.registerPlugin(Flip);
 
 type ProfileWorkoutTabsProps = {
@@ -33,6 +28,7 @@ export default function ProfileWorkoutTabs({
   const [openTab, setOpenTab] = useState<Tab>("split");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const searchBarRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   const flipStateRef = useRef<Flip.FlipState | null>(null);
   const activeIndicatorPortalNode = useMemo(
@@ -56,7 +52,7 @@ export default function ProfileWorkoutTabs({
     []
   );
 
-  const changeSplitBtnPortalNode = useMemo(
+  const startWorkoutBtnPortalNode = useMemo(
     () =>
       portals.createHtmlPortalNode({
         attributes: {
@@ -103,10 +99,6 @@ export default function ProfileWorkoutTabs({
     }),
     [searchTerm]
   );
-
-  const handleChangeSplit = useCallback(() => {
-    console.log("change split");
-  }, []);
 
   function handleSearch() {
     if (!searchBarRef.current) return;
@@ -158,8 +150,21 @@ export default function ProfileWorkoutTabs({
         <Icon name="search" className="search-icon" onClick={handleSearch} />
       </portals.InPortal>
 
-      <portals.InPortal node={changeSplitBtnPortalNode}>
-        <button onClick={handleChangeSplit}>Change Split</button>
+      <portals.InPortal node={startWorkoutBtnPortalNode}>
+        <Async await={split}>
+          {(split) => (
+            <>
+              {split &&
+                split.workouts.findIndex(
+                  (x) => x.day === new Date().getUTCDay()
+                ) !== -1 && (
+                  <button onClick={() => navigate("started-workout")}>
+                    Start today's workout
+                  </button>
+                )}
+            </>
+          )}
+        </Async>
       </portals.InPortal>
 
       <div className="tabs-header">
@@ -196,7 +201,7 @@ export default function ProfileWorkoutTabs({
         </div>
 
         {openTab === "split" ? (
-          <portals.OutPortal node={changeSplitBtnPortalNode} />
+          <portals.OutPortal node={startWorkoutBtnPortalNode} />
         ) : (
           <portals.OutPortal node={searchBarPortalNode} />
         )}

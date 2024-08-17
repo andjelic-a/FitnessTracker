@@ -5,11 +5,10 @@ import Icon from "../../Icon/Icon";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import WindowFC from "../../WindowWrapper/WindowFC";
-import createWorkoutLoader from "./CreateWorkoutLoader";
-import useLoaderData from "../../../BetterRouter/UseLoaderData";
-import Async from "../../Async/Async";
 import WorkoutSetCreator from "./WorkoutSetCreator";
 import { NewWorkoutsContext } from "./NewWorkoutsContext";
+import { getProfileCache } from "../../../Pages/Profile/ProfileCache";
+import { Tooltip } from "react-tooltip";
 
 type CreateWorkoutWindowProps = {
   animationLength?: number;
@@ -18,47 +17,53 @@ type CreateWorkoutWindowProps = {
 
 const CreateWorkoutWindow = WindowFC<CreateWorkoutWindowProps>(
   ({ animationLength, safeGuard }, wrapperRef, onClose) => {
-    const loaderData = useLoaderData<typeof createWorkoutLoader>();
     const newWorkoutsContext = useContext(NewWorkoutsContext);
 
     const [isPublic, setIsPublic] = useState<boolean>(false);
 
     const createdSetsRef = useRef<WorkoutItemData[]>([]);
     const workoutTitleRef = useRef<HTMLInputElement | null>(null);
-    const publicOrPrivatePopupRef = useRef<HTMLDivElement | null>(null);
-    const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const descriptionTextAreaRef = useRef<HTMLTextAreaElement>(null);
 
-    const isWorkoutTitleValid = (): boolean => {
+    const validateTitle = (): boolean => {
       if (!workoutTitleRef.current?.value) {
-        workoutTitleRef.current?.classList.add("workout-item-error-title");
+        workoutTitleRef.current?.classList.add("invalid");
         return false;
       }
 
-      workoutTitleRef.current?.classList.remove("workout-item-error-title");
+      workoutTitleRef.current?.classList.remove("invalid");
       return true;
     };
 
-    const isSetSelectionValid = (): boolean => {
+    const validateSets = (): boolean => {
       if (createdSetsRef.current.length <= 0) {
-        wrapperRef.current?.classList.add("workout-item-error-button");
+        wrapperRef.current?.classList.add("invalid-exercise-selection");
         return false;
       }
 
-      wrapperRef.current?.classList.remove("workout-item-error-button");
+      wrapperRef.current?.classList.remove("invalid-exercise-selection");
       return true;
     };
 
-    const handleSaveClick = (user: Schema<"SimpleUserResponseDTO"> | null) => {
-      let isValid = isWorkoutTitleValid();
-      isValid = isSetSelectionValid() && isValid;
+    const handleSaveClick = async () => {
+      const userResponse = await getProfileCache()?.user;
+      const user = userResponse?.code !== "OK" ? null : userResponse?.content;
 
-      if (!user || !textareaRef.current || !workoutTitleRef.current || !isValid)
+      let isValid = validateTitle();
+      isValid = validateSets() && isValid;
+
+      if (
+        !user ||
+        !descriptionTextAreaRef.current ||
+        !workoutTitleRef.current ||
+        !isValid
+      )
         return;
 
       const newWorkout: Schema<"CreateWorkoutRequestDTO"> = {
         isPublic: isPublic,
         name: workoutTitleRef.current.value,
-        description: textareaRef.current.value,
+        description: descriptionTextAreaRef.current.value,
         sets: createdSetsRef.current
           .flatMap((workoutItem) =>
             workoutItem.sets.map((set) => ({
@@ -101,8 +106,8 @@ const CreateWorkoutWindow = WindowFC<CreateWorkoutWindowProps>(
           }),
       };
 
-      textareaRef.current.value = "";
-      textareaRef.current.blur();
+      descriptionTextAreaRef.current.value = "";
+      descriptionTextAreaRef.current.blur();
       sendAPIRequest("/api/workout", {
         method: "post",
         payload: newWorkout,
@@ -125,68 +130,50 @@ const CreateWorkoutWindow = WindowFC<CreateWorkoutWindowProps>(
         newWorkoutsContext.addWorkout(simulatedResponse);
       });
     };
+
     const [createdSets, setCreatedSets] = useState<WorkoutItemData[] | null>(
       []
     );
 
+    console.log("Rerendering create workout window");
+
     return (
       <div ref={wrapperRef} className="create-workout-window">
-        <div className="create-workout-header">
+        <div className="header">
           <input
             ref={workoutTitleRef}
             type="text"
-            id="workout-title"
+            className="title"
             placeholder="Workout title"
             maxLength={25}
           />
-          <div className="create-workout-public-or-private">
-            <div
-              ref={publicOrPrivatePopupRef}
-              className="create-workout-public-or-private-popup"
+
+          <div className="buttons">
+            <button
+              className="workout-visibility-toggle"
+              onClick={() => setIsPublic(!isPublic)}
+              data-tooltip-content={isPublic ? "Public" : "Private"}
+              data-tooltip-id="workout-visibility-tooltip"
+              data-tooltip-place="left"
             >
-              {isPublic ? "Public" : "Private"}
-            </div>
-            {isPublic ? (
               <Icon
+                aria-hidden
                 className="lock"
-                name="unlock"
-                onClick={() => setIsPublic(false)}
-                onMouseEnter={() =>
-                  publicOrPrivatePopupRef.current?.classList.add("show")
-                }
-                onMouseLeave={() =>
-                  publicOrPrivatePopupRef.current?.classList.remove("show")
-                }
+                name={isPublic ? "unlock" : "lock"}
               />
-            ) : (
-              <Icon
-                className="lock"
-                name="lock"
-                onClick={() => setIsPublic(true)}
-                onMouseEnter={() =>
-                  publicOrPrivatePopupRef.current?.classList.add("show")
-                }
-                onMouseLeave={() =>
-                  publicOrPrivatePopupRef.current?.classList.remove("show")
-                }
-              />
-            )}
+
+              <p aria-hidden={false} className="accessibility-only">
+                {isPublic ? "Public" : "Private"}
+              </p>
+
+              <Tooltip id="workout-visibility-tooltip" />
+            </button>
+
+            <button onClick={handleSaveClick} className="save-btn">
+              <p>Save</p>
+              <Icon name="floppy-disk" />
+            </button>
           </div>
-
-          <Async await={loaderData?.user ?? null}>
-            {(user) => {
-              if (!user) return null;
-
-              return (
-                <button
-                  onClick={() => handleSaveClick(user)}
-                  className="create-workout-save"
-                >
-                  Save
-                </button>
-              );
-            }}
-          </Async>
         </div>
 
         <WorkoutSetCreator
@@ -209,18 +196,19 @@ const CreateWorkoutWindow = WindowFC<CreateWorkoutWindowProps>(
           safeGuard={safeGuard}
         />
 
-        <div className="create-workout-description">
+        <div className="description-container">
           <textarea
-            id="workout-description"
-            ref={textareaRef}
+            id="description-input"
+            ref={descriptionTextAreaRef}
             onChange={(e) => {
               e.target.style.height = "auto";
               e.target.style.height = `${e.target.scrollHeight}px`;
             }}
           />
+
           <label
-            htmlFor="workout-description"
-            className="workout-description-placeholder"
+            htmlFor="description-input"
+            className="description-input-label"
           >
             Workout description
           </label>

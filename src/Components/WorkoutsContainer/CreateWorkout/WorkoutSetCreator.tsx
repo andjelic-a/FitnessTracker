@@ -1,4 +1,3 @@
-import "./CreateWorkout.scss";
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import WorkoutItem, { WorkoutItemData } from "./WorkoutItem/WorkoutItem";
 import gsap from "gsap";
@@ -408,7 +407,7 @@ export default function WorkoutSetCreator({
 
         <button
           onClick={handleAddExerciseSetBtnClick}
-          className="create-workout-add-exercise"
+          className="add-exercise-btn"
           ref={addExerciseButtonRef}
         >
           Add exercise

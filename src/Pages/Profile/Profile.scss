@@ -2,31 +2,37 @@
 
 .profile {
   width: 100%;
+  max-width: 100%;
   height: max-content;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  padding: 10vh 12.5vw 0 12.5vw;
 
-  .profile-user-container {
+  grid-template-columns: 1fr 3.5fr;
+  grid-auto-flow: column;
+  place-items: center;
+  column-gap: 2rem;
+
+  .profile-body {
     width: 100%;
-    max-width: 73rem;
+    max-width: 100%;
+    height: 100%;
 
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 2rem;
+    align-items: flex-start;
+    gap: 5rem;
 
-    .profile-body {
-      width: 100%;
-      max-width: 100%;
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5rem;
-    }
+    overflow: auto;
   }
 
   padding-bottom: 5rem;
+
+  @media screen and (max-width: 799.98px) {
+    grid-auto-flow: row;
+    grid-template-columns: 1fr;
+    padding: 10vh 5vw 0 5vw;
+
+    row-gap: 3rem;
+  }
 }

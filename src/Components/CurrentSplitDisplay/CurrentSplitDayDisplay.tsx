@@ -3,6 +3,7 @@ import { RestStatus, WorkoutStatus } from "./CurrentSplitDisplay";
 import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
 import { useMemo } from "react";
 import Icon from "../Icon/Icon";
+import { Tooltip } from "react-tooltip";
 
 type CurrentSplitDayDisplayProps = {
   day: number;
@@ -56,15 +57,49 @@ export default function CurrentSplitDayDisplay({
           />
 
           {props.status === "skipped" && (
-            <div className="badge">
-              <Icon name="clock" />
-            </div>
+            <>
+              <div
+                className="badge"
+                data-tooltip-id="skipped-tooltip"
+                data-tooltip-place="bottom"
+                data-tooltip-class-name="skipped-tooltip"
+                data-tooltip-delay-show={150}
+              >
+                <Icon name="clock" />
+              </div>
+
+              <p className="accessibility-only" aria-hidden={false}>
+                Looks like you missed a workout. Let’s aim to complete the next
+                one. Consistency is key!
+              </p>
+
+              <Tooltip id="skipped-tooltip">
+                <p>
+                  Looks like you missed a workout. Let’s aim to complete the
+                  next one. Consistency is key!
+                </p>
+              </Tooltip>
+            </>
           )}
 
           {props.status === "done" && (
-            <div className="badge">
-              <Icon name="circle-check" />
-            </div>
+            <>
+              <div className="badge">
+                <Icon name="circle-check" />
+              </div>
+
+              <p className="accessibility-only" aria-hidden={false}>
+                Workout complete! You're one step closer to your goals. Well
+                done!
+              </p>
+
+              <Tooltip id="done-tooltip">
+                <p>
+                  Workout complete! You're one step closer to your goals. Well
+                  done!
+                </p>
+              </Tooltip>
+            </>
           )}
 
           <p className="accessibility-only" aria-hidden={false}>

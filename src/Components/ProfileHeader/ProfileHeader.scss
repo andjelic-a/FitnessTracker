@@ -1,94 +1,210 @@
 @import "../../Palette.scss";
 
 .profile-header {
-  width: 100%;
-  height: 20rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: fit-content;
 
-  & .profile-picture {
+  .profile-picture-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 15rem;
-    height: 15rem;
+
     border-radius: 50%;
     background-color: $dark-500;
+    outline: 2px solid $dark-600;
+
+    width: 100%;
+    aspect-ratio: 1;
     overflow: hidden;
 
-    & img {
+    img {
       width: 100%;
       height: 100%;
     }
   }
 
-  .profile-user-information {
-    width: calc(100% - 15rem);
-    height: 100%;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(2, 1fr);
+  .username-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
 
-    & .profile-user-username {
-      width: 95%;
+    .nickname {
+      font-size: 2.5rem;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .username {
+      font-size: 1.5rem;
+      color: #aaa;
+      font-weight: 100;
+    }
+  }
+
+  .edit-profile-btn {
+    width: 100%;
+    margin: 0.5rem 0 0.25rem 0;
+
+    background-color: $primary-300;
+    transition: 100ms ease-out;
+    cursor: pointer;
+
+    border: none;
+    border-radius: 0.5rem;
+    outline: none;
+
+    color: white;
+    font-weight: 550;
+
+    &:hover {
+      background-color: $primary-400;
+    }
+
+    &:focus-visible {
+      outline: 3px solid $primary-500;
+    }
+  }
+
+  .stats-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+
+    .followers-container {
       display: flex;
       justify-content: flex-start;
-      align-items: flex-end;
-      padding-left: 5rem;
-      font-size: 2.5rem;
+      align-items: center;
+      gap: 0.75rem;
 
-      & .profile-user-settings {
-        margin-top: 3rem;
-        margin-left: auto;
-        align-self: flex-start;
+      .stat:hover,
+      .stat:hover .value {
+        color: $primary-600;
         cursor: pointer;
-        transition: 0.65s ease;
-        color: $primary-300;
-        font-size: 3rem;
       }
 
-      & .profile-user-settings:hover {
-        scale: 1.3;
-        transform: rotate(180deg);
+      .dot {
+        font-size: 0.5em;
       }
     }
 
-    & .profile-user-stats {
-      width: 30rem;
+    .completed-workouts-container {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
-      padding-left: 5rem;
+      gap: 0.75rem;
+    }
+
+    p.stat {
+      color: $dark-600;
+      font-weight: 100;
+      font-size: 1.5rem;
+
+      .value {
+        color: #fff;
+        font-weight: normal;
+      }
+    }
+  }
+}
+
+//1000px and up
+@media screen and (min-width: 800px) {
+  .profile-header {
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+
+    .profile-picture-container {
+      max-width: 20rem;
+    }
+
+    .username-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+
+    .edit-profile-btn {
+      height: 3.75rem;
       font-size: 1.6rem;
+    }
 
-      & .profile-user-stats-stat {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
+    .stats-container {
+      flex-direction: column;
+      gap: 0.85rem;
 
-        &:first-child{
-          cursor: auto;
-        }
-
-        & .profile-user-stats-name {
-          color: $dark-600;
-          font-size: 1.4rem;
-        }
-
-        & .profile-user-stats-num {
-          font-size: 1.8rem;
-        }
+      .followers-container {
+        width: 100%;
       }
 
-      & .profile-user-stats-stat:hover {
-        & .profile-user-stats-name {
-          color: $primary-600;
-        }
-        & .profile-user-stats-num {
-          color: $primary-600;
+      .completed-workouts-container {
+        width: 100%;
+      }
+    }
+  }
+}
+
+//Less than 1000px
+@media screen and (max-width: 1000px) {
+  .profile-header .stats-container {
+    min-width: max-content;
+  }
+}
+
+//Less than 800px
+@media screen and (max-width: 799.98px) {
+  .profile-header {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: 3rem repeat(4, auto);
+    grid-template-areas:
+      "pic ."
+      "pic name"
+      "pic stats"
+      "pic ."
+      "btn btn";
+
+    row-gap: 1rem;
+    column-gap: 1.5rem;
+    place-items: center;
+
+    .profile-picture-container {
+      grid-area: pic;
+      max-width: 15rem;
+    }
+
+    .username-container {
+      grid-area: name;
+      width: 100%;
+    }
+
+    .edit-profile-btn {
+      grid-area: btn;
+      height: 3.25rem;
+      font-size: 1.5rem;
+    }
+
+    .stats-container {
+      grid-area: stats;
+      gap: 0.75rem;
+
+      .followers-container {
+        width: max-content;
+      }
+
+      .completed-workouts-container {
+        &::before {
+          content: "●";
+          font-size: 0.5em;
         }
       }
     }

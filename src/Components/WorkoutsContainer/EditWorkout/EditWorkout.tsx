@@ -39,11 +39,11 @@ const EditWorkout = WindowFC<EditWorkoutWindowProps>(
 
     const isSetSelectionValid = (): boolean => {
       if (createdSetsRef.current.length <= 0) {
-        wrapperRef.current?.classList.add("workout-item-error-button");
+        wrapperRef.current?.classList.add("invalid-exercise-selection");
         return false;
       }
 
-      wrapperRef.current?.classList.remove("workout-item-error-button");
+      wrapperRef.current?.classList.remove("invalid-exercise-selection");
       return true;
     };
 
@@ -215,9 +215,9 @@ const EditWorkout = WindowFC<EditWorkoutWindowProps>(
                 safeGuard={safeGuard}
               />
 
-              <div className="edit-workout-description">
+              <div className="edit-description-input">
                 <textarea
-                  id="workout-description"
+                  id="description-input"
                   defaultValue={
                     originalWorkout.content.description ?? undefined
                   }
@@ -228,8 +228,8 @@ const EditWorkout = WindowFC<EditWorkoutWindowProps>(
                   }}
                 />
                 <label
-                  htmlFor="workout-description"
-                  className="workout-description-placeholder"
+                  htmlFor="description-input"
+                  className="description-input-label"
                 >
                   Workout description
                 </label>
