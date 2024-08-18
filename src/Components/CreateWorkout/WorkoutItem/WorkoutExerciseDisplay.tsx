@@ -1,27 +1,36 @@
 import "./WorkoutItem.scss";
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useMemo } from "react";
 import Icon from "../../Icon/Icon.tsx";
 import { v4 as uuidv4 } from "uuid";
-import useOutsideClick from "../../../Hooks/UseOutsideClick.ts";
-import { PossibleSetIcon, Set } from "./WorkoutItem.tsx";
+import { Set } from "./WorkoutItem.tsx";
 import WorkoutSetDisplay from "./WorkoutSetDisplay.tsx";
+import CurrentEditingWorkoutSetsContext from "../../../Contexts/CurrentEditingWorkoutSetsContext.ts";
 
 type ExerciseSetProps = {
   sets: Set[];
-  setSets: React.Dispatch<React.SetStateAction<Set[]>>;
+  setSets: (newSets: Set[]) => void;
+  itemId: string;
 };
 
 export default function WorkoutExerciseDisplay({
-  sets,
-  setSets,
+  // sets,
+  // setSets,
+  itemId,
 }: ExerciseSetProps): React.JSX.Element {
-  const excludedDivRef = useRef<(HTMLDivElement | null)[]>([]);
+  const currentSetsContext = useContext(CurrentEditingWorkoutSetsContext);
 
-  useOutsideClick(excludedDivRef, () => {
-    setSets((prevSets) =>
-      prevSets.map((set) => ({ ...set, isDropdownOpen: false }))
-    );
-  });
+  // useOutsideClick(excludedDivRef, () => {
+  //   const oldSets = currentSetsContext.currentSets.slice();
+  //   handleSetChanged(oldSets.map((set) => ({ ...set, isDropdownOpen: false })));
+  // });
+
+  const sets = useMemo(
+    () =>
+      currentSetsContext.currentSets
+        .filter((x) => x.id === itemId)
+        .flatMap((x) => x.sets),
+    [currentSetsContext.currentSets]
+  );
 
   const addSet = () => {
     const newSet: Set = {
@@ -33,89 +42,20 @@ export default function WorkoutExerciseDisplay({
       selectedIcon: null,
     };
 
-    setSets([...sets, newSet]);
+    handleSetsChanged([...sets, newSet]);
   };
 
-  const handleSetClick = (id: string) => {
-    setSets((prevSets) =>
-      prevSets.map((set) =>
-        set.id === id
-          ? { ...set, isDropdownOpen: !set.isDropdownOpen }
-          : { ...set, isDropdownOpen: false }
-      )
-    );
-  };
+  const handleSetsChanged = (newSets: Set[]) => {
+    currentSetsContext.setCurrentSets((prev) => {
+      const index = prev.findIndex((x) => x.id === itemId);
+      if (index >= 0) prev[index].sets = newSets;
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      excludedDivRef.current.forEach((ref, index) => {
-        if (ref && !ref.contains(event.target as Node)) {
-          setSets((prevSets) =>
-            prevSets.map((set, i) =>
-              i === index ? { ...set, isDropdownOpen: false } : set
-            )
-          );
-        }
-      });
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const findPositionOfElement = (id: string) => {
-    return sets.findIndex((set) => set.id === id);
-  };
-
-  const changeSetIcon = (id: string, icon: PossibleSetIcon) => {
-    setSets((prevSets) => {
-      return prevSets.map((set) => {
-        if (set.id === id) {
-          if (icon === "1") {
-            return {
-              ...set,
-              selectedIcon: null,
-              idx: findPositionOfElement(id) + 1,
-              isDropdownOpen: false,
-            };
-          } else {
-            return {
-              ...set,
-              selectedIcon: icon,
-              isDropdownOpen: false,
-            };
-          }
-        } else {
-          return set;
-        }
-      });
+      return prev.slice();
     });
   };
-
-  const deleteSet = (id: string) => {
-    setSets((prevSets) => {
-      const updatedSets = prevSets.filter((set) => set.id !== id);
-
-      return updatedSets.map((set, index) => ({
-        ...set,
-        set: index + 1,
-      }));
-    });
-  };
-
-  const setContainerRef = useRef<HTMLDivElement>(null);
-
-  function handleSetChanged(set: Set) {
-    setSets((prevSets) =>
-      prevSets.map((prevSet) => (prevSet.id === set.id ? set : prevSet))
-    );
-  }
 
   return (
-    <div className="exercise-set" ref={setContainerRef}>
+    <div className="exercise-set">
       <div className="exercise-set-placeholder">
         <p>SET</p>
         <p>RiR</p>
@@ -125,12 +65,8 @@ export default function WorkoutExerciseDisplay({
         <WorkoutSetDisplay
           key={set.id}
           set={set}
-          onSetChanged={handleSetChanged}
           index={index}
-          onSetClick={handleSetClick}
-          onDeleteSet={deleteSet}
-          onChangeSetIcon={changeSetIcon}
-          dropDownMenuWrapper={excludedDivRef}
+          itemId={itemId}
         />
       ))}
       <div className="icon-wrapper">

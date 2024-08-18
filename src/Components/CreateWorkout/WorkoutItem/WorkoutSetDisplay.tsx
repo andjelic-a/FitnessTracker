@@ -1,28 +1,66 @@
 import "./WorkoutItem.scss";
-import React, { useRef, MutableRefObject } from "react";
+import React, { useContext, useMemo, useRef } from "react";
 import Icon from "../../Icon/Icon.tsx";
 import { PossibleSetIcon, Set } from "./WorkoutItem.tsx";
+import CurrentEditingWorkoutSetsContext from "../../../Contexts/CurrentEditingWorkoutSetsContext.ts";
 
 type SingleExerciseSetProps = {
   set: Set;
-  onSetChanged: (newSet: Set) => void;
   index: number;
-  dropDownMenuWrapper?: MutableRefObject<(HTMLDivElement | null)[]>;
-  onSetClick?: (id: string) => void;
-  onDeleteSet?: (id: string) => void;
-  onChangeSetIcon?: (id: string, icon: PossibleSetIcon) => void;
+  itemId: string;
 };
 
 export default function WorkoutSetDisplay({
   set,
   index,
-  dropDownMenuWrapper,
-  onSetClick,
-  onDeleteSet,
-  onChangeSetIcon,
-  onSetChanged,
+  itemId,
 }: SingleExerciseSetProps): React.JSX.Element {
   const setWrapperRef = useRef<HTMLDivElement>(null);
+  const currentSetsContext = useContext(CurrentEditingWorkoutSetsContext);
+
+  const sets = useMemo(
+    () =>
+      currentSetsContext.currentSets
+        .filter((x) => x.id === itemId)
+        .flatMap((x) => x.sets),
+    [currentSetsContext.currentSets]
+  );
+
+  const handleSetsChanged = (newSets: Set[]) => {
+    currentSetsContext.setCurrentSets((prev) => {
+      const index = prev.findIndex((x) => x.id === itemId);
+      if (index >= 0) prev[index].sets = newSets;
+
+      return prev.slice();
+    });
+  };
+
+  function handleSetChanged(set: Set) {
+    const prevSets = sets.slice();
+    handleSetsChanged(
+      prevSets.map((prevSet) => (prevSet.id === set.id ? set : prevSet))
+    );
+  }
+
+  function handleChangeSetIcon(newIcon: PossibleSetIcon) {
+    handleSetChanged({
+      ...set,
+      isDropdownOpen: false,
+      selectedIcon: newIcon,
+    });
+  }
+
+  function handleSetIconClick() {
+    handleSetChanged({
+      ...set,
+      isDropdownOpen: true,
+    });
+  }
+
+  const handleDeleteSet = () => {
+    const prevSets = sets.slice();
+    handleSetsChanged(prevSets.filter((prevSet) => prevSet.id !== set.id));
+  };
 
   return (
     <div
@@ -31,7 +69,7 @@ export default function WorkoutSetDisplay({
       id={`exercise-set-item-${set.id}`}
     >
       <div className="set-button">
-        <p onClick={() => onSetClick?.(set.id)}>
+        <p onClick={handleSetIconClick}>
           {set.selectedIcon ? (
             <Icon className="set-icon" name={set.selectedIcon} />
           ) : (
@@ -39,30 +77,23 @@ export default function WorkoutSetDisplay({
           )}
         </p>
         <div
-          ref={(element) =>
-            dropDownMenuWrapper
-              ? (dropDownMenuWrapper.current[index] = element)
-              : void element
-          }
           className={`set-dropdown-menu ${!set.isDropdownOpen ? "hidden" : ""}`}
         >
           <span>
-            <div onClick={() => onChangeSetIcon?.(set.id, "1")}>
-              {index + 1}
-            </div>
+            <div onClick={() => handleChangeSetIcon("1")}>{index + 1}</div>
           </span>
           <span>
-            <div onClick={() => onChangeSetIcon?.(set.id, "w")}>Warmup</div>
+            <div onClick={() => handleChangeSetIcon("w")}>Warmup</div>
           </span>
           <span>
-            <div onClick={() => onChangeSetIcon?.(set.id, "d")}>Drop set</div>
+            <div onClick={() => handleChangeSetIcon("d")}>Drop set</div>
           </span>
           <span>
-            <div onClick={() => onChangeSetIcon?.(set.id, "f")}>Failure</div>
+            <div onClick={() => handleChangeSetIcon("f")}>Failure</div>
           </span>
           <span>
             <Icon
-              onClick={() => onDeleteSet?.(set.id)}
+              onClick={handleDeleteSet}
               className="set-icon x"
               name="xmark"
             />
@@ -76,7 +107,7 @@ export default function WorkoutSetDisplay({
             value={set.rir <= 0 ? "" : set.rir}
             placeholder={set.rir <= 0 ? "0" : set.rir.toString()}
             maxLength={4}
-            onChange={(e) => onSetChanged?.({ ...set, rir: +e.target.value })}
+            onChange={(e) => handleSetChanged({ ...set, rir: +e.target.value })}
           />
         ) : (
           <input
@@ -92,7 +123,9 @@ export default function WorkoutSetDisplay({
           defaultValue={set.repRange === "0" ? "" : set.repRange}
           placeholder={set.repRange}
           maxLength={5}
-          onChange={(e) => onSetChanged?.({ ...set, repRange: e.target.value })}
+          onChange={(e) =>
+            handleSetChanged({ ...set, repRange: e.target.value })
+          }
         />
       </div>
     </div>

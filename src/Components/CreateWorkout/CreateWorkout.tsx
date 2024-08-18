@@ -12,11 +12,13 @@ import { Tooltip } from "react-tooltip";
 import CurrentEditingWorkoutSetsContext from "../../Contexts/CurrentEditingWorkoutSetsContext";
 
 const CreateWorkoutWindow = WindowFC(({}, wrapperRef, onClose) => {
+  // console.log("Rerendering create workout window");
+
   const newWorkoutsContext = useContext(NewWorkoutsContext);
 
   const [isPublic, setIsPublic] = useState<boolean>(false);
+  const [currentSets, setCurrentSets] = useState<WorkoutItemData[]>([]);
 
-  const createdSetsRef = useRef<WorkoutItemData[]>([]);
   const workoutTitleRef = useRef<HTMLInputElement | null>(null);
   const descriptionTextAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -31,7 +33,7 @@ const CreateWorkoutWindow = WindowFC(({}, wrapperRef, onClose) => {
   };
 
   const validateSets = (): boolean => {
-    if (createdSetsRef.current.length <= 0) {
+    if (currentSets.length <= 0) {
       wrapperRef.current?.classList.add("invalid-exercise-selection");
       return false;
     }
@@ -59,7 +61,7 @@ const CreateWorkoutWindow = WindowFC(({}, wrapperRef, onClose) => {
       isPublic: isPublic,
       name: workoutTitleRef.current.value,
       description: descriptionTextAreaRef.current.value,
-      sets: createdSetsRef.current
+      sets: currentSets
         .flatMap((workoutItem) =>
           workoutItem.sets.map((set) => ({
             exerciseId: workoutItem.exercise.id,
@@ -126,10 +128,6 @@ const CreateWorkoutWindow = WindowFC(({}, wrapperRef, onClose) => {
     });
   };
 
-  const [currentSets, setCurrentSets] = useState<WorkoutItemData[]>([]);
-
-  console.log("Rerendering create workout window");
-
   return (
     <CurrentEditingWorkoutSetsContext.Provider
       value={{
@@ -176,14 +174,13 @@ const CreateWorkoutWindow = WindowFC(({}, wrapperRef, onClose) => {
         </div>
 
         <WorkoutSetCreator
-          onSetsChange={(newSets) => void (createdSetsRef.current = newSets)}
-          onStartChoosingExercise={() => {
+          onOverlayOpen={() => {
             if (!wrapperRef.current) return;
 
             wrapperRef.current.style.overflow = "hidden";
             wrapperRef.current.scrollTop = 0;
           }}
-          onConfirmExerciseSelection={() => {
+          onOverlayClose={() => {
             if (!wrapperRef.current) return;
 
             wrapperRef.current.style.overflow = "auto";
