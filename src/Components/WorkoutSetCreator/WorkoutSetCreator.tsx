@@ -1,13 +1,18 @@
 import React, { useRef, useEffect, useState } from "react";
-import WorkoutItem, { WorkoutItemData } from "./WorkoutItem/WorkoutItem";
+import WorkoutItem, {
+  WorkoutItemData,
+} from "../CreateWorkout/WorkoutItem/WorkoutItem";
 import ChooseExerciseWindow, {
   ChooseExerciseFilters,
-} from "./ChooseExercise/ChooseExercise";
-import { Schema } from "../../../Types/Endpoints/SchemaParser";
-import sendAPIRequest from "../../../Data/SendAPIRequest";
-import Async from "../../Async/Async";
-import ChooseExerciseSkeleton from "./ChooseExercise/ChooseExerciseSkeleton";
+} from "../CreateWorkout/ChooseExercise/ChooseExercise";
+import { Schema } from "../../Types/Endpoints/SchemaParser";
+import sendAPIRequest from "../../Data/SendAPIRequest";
+import Async from "../Async/Async";
+import ChooseExerciseSkeleton from "../CreateWorkout/ChooseExercise/ChooseExerciseSkeleton";
 import { v4 } from "uuid";
+import Droppable from "./Droppable";
+import Draggable from "./Draggable";
+import { DndContext } from "@dnd-kit/core";
 
 type WorkoutSetCreatorProps = {
   onSetsChange: (sets: WorkoutItemData[]) => void;
@@ -69,10 +74,30 @@ export default function WorkoutSetCreator({
     onSetsChange(createdSetsRef.current);
   }
 
+  //#region Exercise Selection //TODO: Move to a separate component
+  async function handleMuscleGroupRequest(): Promise<
+    Schema<"SimpleMuscleGroupResponseDTO">[]
+  > {
+    return sendAPIRequest("/api/musclegroup", {
+      method: "get",
+      parameters: {},
+    }).then((x) => (x.code === "OK" ? x.content : []));
+  }
+
+  async function handleEquipmentRequest(): Promise<
+    Schema<"SimpleEquipmentResponseDTO">[]
+  > {
+    return sendAPIRequest("/api/equipment", {
+      method: "get",
+      parameters: {},
+    }).then((x) => (x.code === "OK" ? x.content : []));
+  }
+
   function handleAddExerciseSetBtnClick() {
     setIsChoosingExercise(true);
     onStartChoosingExercise?.();
   }
+
   const handleExerciseChosen = (
     selected:
       | Schema<"SimpleExerciseResponseDTO">
@@ -110,6 +135,7 @@ export default function WorkoutSetCreator({
       return prev;
     });
   };
+
   function handleExerciseSearch(filters: ChooseExerciseFilters) {
     reachedEnd.current = false;
     filtersRef.current = filters;
@@ -171,6 +197,7 @@ export default function WorkoutSetCreator({
     setReplacingExerciseId(id);
     onStartChoosingExercise?.();
   }
+  //#endregion
 
   function handleWorkoutItemChanged(workoutItem: WorkoutItemData) {
     const index = createdSetsRef.current.findIndex(
@@ -182,6 +209,7 @@ export default function WorkoutSetCreator({
     fuckYou();
     // setCreatedSets(createdSetsRef.current);
   }
+
   const handleDeleteExercise = (id: string) => {
     createdSetsRef.current = createdSetsRef.current.filter(
       (item) => item.id !== id
@@ -190,23 +218,6 @@ export default function WorkoutSetCreator({
     setCreatedSets(createdSetsRef.current);
   };
 
-  async function handleMuscleGroupRequest(): Promise<
-    Schema<"SimpleMuscleGroupResponseDTO">[]
-  > {
-    return sendAPIRequest("/api/musclegroup", {
-      method: "get",
-      parameters: {},
-    }).then((x) => (x.code === "OK" ? x.content : []));
-  }
-
-  async function handleEquipmentRequest(): Promise<
-    Schema<"SimpleEquipmentResponseDTO">[]
-  > {
-    return sendAPIRequest("/api/equipment", {
-      method: "get",
-      parameters: {},
-    }).then((x) => (x.code === "OK" ? x.content : []));
-  }
   return (
     <>
       {isChoosingExercise && (
@@ -242,25 +253,35 @@ export default function WorkoutSetCreator({
         </Async>
       )}
 
-      <div ref={workoutItemContainerRef} className="set-creator-container">
-        {createdSets.map((x) => (
-          <WorkoutItem
-            onChange={handleWorkoutItemChanged}
-            key={x.id}
-            workoutItem={x}
-            onDelete={() => handleDeleteExercise(x.id)}
-            onRequestExerciseReplace={handleReplaceExerciseRequest}
-          />
-        ))}
+      <DndContext
+        onDragEnd={(x) => {
+          console.log(x);
+        }}
+      >
+        <div ref={workoutItemContainerRef} className="set-creator-container">
+          {createdSets.map((x) => (
+            <WorkoutItem
+              onChange={handleWorkoutItemChanged}
+              key={x.id}
+              workoutItem={x}
+              onDelete={() => handleDeleteExercise(x.id)}
+              onRequestExerciseReplace={handleReplaceExerciseRequest}
+            />
+          ))}
 
-        <button
-          onClick={handleAddExerciseSetBtnClick}
-          className="add-exercise-btn"
-          ref={addExerciseButtonRef}
-        >
-          Add exercise
-        </button>
-      </div>
+          <Droppable id="droppable-1" />
+
+          <Draggable id="draggable-1" />
+
+          <button
+            onClick={handleAddExerciseSetBtnClick}
+            className="add-exercise-btn"
+            ref={addExerciseButtonRef}
+          >
+            Add exercise
+          </button>
+        </div>
+      </DndContext>
     </>
   );
 }

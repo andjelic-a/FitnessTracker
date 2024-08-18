@@ -1,6 +1,6 @@
 import "./WorkoutItem.scss";
 import React, { useRef, MutableRefObject } from "react";
-import Icon from "../../../Icon/Icon.tsx";
+import Icon from "../../Icon/Icon.tsx";
 import { PossibleSetIcon, Set } from "./WorkoutItem.tsx";
 
 type SingleExerciseSetProps = {

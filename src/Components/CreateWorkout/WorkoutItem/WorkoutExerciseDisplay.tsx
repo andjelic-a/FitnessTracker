@@ -1,8 +1,8 @@
 import "./WorkoutItem.scss";
 import React, { useEffect, useRef } from "react";
-import Icon from "../../../Icon/Icon.tsx";
+import Icon from "../../Icon/Icon.tsx";
 import { v4 as uuidv4 } from "uuid";
-import useOutsideClick from "../../../../Hooks/UseOutsideClick.ts";
+import useOutsideClick from "../../../Hooks/UseOutsideClick.ts";
 import { PossibleSetIcon, Set } from "./WorkoutItem.tsx";
 import WorkoutSetDisplay from "./WorkoutSetDisplay.tsx";
 

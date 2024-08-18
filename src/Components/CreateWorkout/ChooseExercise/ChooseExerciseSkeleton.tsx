@@ -1,7 +1,7 @@
 import "./ChooseExercise.scss";
-import Icon from "../../../Icon/Icon";
+import Icon from "../../Icon/Icon";
 import "./ChooseExercise.scss";
-import Dropdown from "../../../DropdownMenu/Dropdown";
+import Dropdown from "../../DropdownMenu/Dropdown";
 import { v4 } from "uuid";
 import ExerciseOptionSkeleton from "./ExerciseOptionSkeleton";
 

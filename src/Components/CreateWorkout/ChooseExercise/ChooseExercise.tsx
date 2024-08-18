@@ -1,10 +1,10 @@
 import "./ChooseExercise.scss";
 import { useRef, useState } from "react";
-import { Schema } from "../../../../Types/Endpoints/SchemaParser";
+import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import { ExerciseOption } from "./ExerciseOption";
-import Icon from "../../../Icon/Icon";
+import Icon from "../../Icon/Icon";
 import "./ChooseExercise.scss";
-import AsyncDropdown from "../../../DropdownMenu/AsyncDropdown/AsyncDropdown";
+import AsyncDropdown from "../../DropdownMenu/AsyncDropdown/AsyncDropdown";
 
 export type ChooseExerciseData = {
   id: string;

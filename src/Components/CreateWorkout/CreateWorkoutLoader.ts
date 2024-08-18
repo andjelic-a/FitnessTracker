@@ -1,5 +1,5 @@
-import { getProfileCache } from "../../../Pages/Profile/ProfileCache";
-import createLoader from "../../../BetterRouter/CreateLoader";
+import { getProfileCache } from "../../Pages/Profile/ProfileCache";
+import createLoader from "../../BetterRouter/CreateLoader";
 
 const createWorkoutLoader = createLoader(() => {
   const cache = getProfileCache();

@@ -1,5 +1,5 @@
 import "./ChooseExercise.scss";
-import Icon from "../../../Icon/Icon";
+import Icon from "../../Icon/Icon";
 import { v4 } from "uuid";
 import { useMemo } from "react";
 

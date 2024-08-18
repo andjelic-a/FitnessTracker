@@ -1,4 +1,4 @@
-@import "../../../Palette.scss";
+@import "../../Palette.scss";
 
 .edit-workout-window {
   &,
@@ -50,7 +50,7 @@
   &.invalid-exercise-selection .edit-workout-add-exercise {
     background-color: red;
   }
-  
+
   .edit-workout-header {
     width: 100%;
     height: 5rem;

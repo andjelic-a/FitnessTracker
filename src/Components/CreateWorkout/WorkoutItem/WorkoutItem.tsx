@@ -1,8 +1,8 @@
 import "./WorkoutItem.scss";
 import { useState, useEffect, useRef } from "react";
-import Icon from "../../../Icon/Icon.tsx";
-import useOutsideClick from "../../../../Hooks/UseOutsideClick.ts";
-import { Schema } from "../../../../Types/Endpoints/SchemaParser.ts";
+import Icon from "../../Icon/Icon.tsx";
+import useOutsideClick from "../../../Hooks/UseOutsideClick.ts";
+import { Schema } from "../../../Types/Endpoints/SchemaParser.ts";
 import WorkoutExerciseDisplay from "./WorkoutExerciseDisplay.tsx";
 
 //TODO:? Make rir field or the entire workout item change color or tint based on type of set

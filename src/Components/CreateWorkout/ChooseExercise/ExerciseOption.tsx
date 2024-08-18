@@ -1,7 +1,7 @@
 import "./ChooseExercise.scss";
 import { useState } from "react";
-import { Schema } from "../../../../Types/Endpoints/SchemaParser";
-import Icon from "../../../Icon/Icon";
+import { Schema } from "../../../Types/Endpoints/SchemaParser";
+import Icon from "../../Icon/Icon";
 
 type ExerciseOptionProps = {
   exercise: Schema<"SimpleExerciseResponseDTO">;
