@@ -3,6 +3,7 @@ import React, { useContext, useMemo, useRef } from "react";
 import Icon from "../../Icon/Icon.tsx";
 import { PossibleSetIcon, Set } from "./WorkoutItem.tsx";
 import CurrentEditingWorkoutSetsContext from "../../../Contexts/CurrentEditingWorkoutSetsContext.ts";
+import useOutsideClick from "../../../Hooks/UseOutsideClick.ts";
 
 type SingleExerciseSetProps = {
   set: Set;
@@ -17,6 +18,7 @@ export default function WorkoutSetDisplay({
 }: SingleExerciseSetProps): React.JSX.Element {
   const setWrapperRef = useRef<HTMLDivElement>(null);
   const currentSetsContext = useContext(CurrentEditingWorkoutSetsContext);
+  const iconDropdownRef = useRef<HTMLDivElement>(null);
 
   const sets = useMemo(
     () =>
@@ -62,6 +64,13 @@ export default function WorkoutSetDisplay({
     handleSetsChanged(prevSets.filter((prevSet) => prevSet.id !== set.id));
   };
 
+  useOutsideClick(iconDropdownRef, () => {
+    handleSetChanged({
+      ...set,
+      isDropdownOpen: false,
+    });
+  });
+
   return (
     <div
       className="exercise-set-item"
@@ -70,36 +79,32 @@ export default function WorkoutSetDisplay({
     >
       <div className="set-button">
         <p onClick={handleSetIconClick}>
-          {set.selectedIcon ? (
+          {set.selectedIcon && set.selectedIcon !== "1" ? (
             <Icon className="set-icon" name={set.selectedIcon} />
           ) : (
-            set.idx
+            index + 1
           )}
         </p>
-        <div
-          className={`set-dropdown-menu ${!set.isDropdownOpen ? "hidden" : ""}`}
-        >
-          <span>
+
+        {set.isDropdownOpen && (
+          <div ref={iconDropdownRef} className="set-dropdown-menu">
             <div onClick={() => handleChangeSetIcon("1")}>{index + 1}</div>
-          </span>
-          <span>
+
             <div onClick={() => handleChangeSetIcon("w")}>Warmup</div>
-          </span>
-          <span>
+
             <div onClick={() => handleChangeSetIcon("d")}>Drop set</div>
-          </span>
-          <span>
+
             <div onClick={() => handleChangeSetIcon("f")}>Failure</div>
-          </span>
-          <span>
+
             <Icon
               onClick={handleDeleteSet}
               className="set-icon x"
               name="xmark"
             />
-          </span>
-        </div>
+          </div>
+        )}
       </div>
+
       <div>
         {!set.selectedIcon || set.selectedIcon === "1" ? (
           <input

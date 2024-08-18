@@ -30,14 +30,14 @@
   height: 6rem;
   padding: 0.5rem;
 
-  & img {
+  img {
     margin-top: 1rem;
     height: 6rem;
     aspect-ratio: 1;
     border-radius: 50%;
   }
 
-  & p {
+  p {
     margin-left: 1.5rem;
     font-size: 1.8rem;
     transition: 0.2s;
@@ -48,7 +48,7 @@
     }
   }
 
-  & .workout-settings-popup {
+  .workout-settings-popup {
     position: absolute;
     top: 0;
     right: 0;
@@ -62,7 +62,7 @@
     visibility: visible;
     transition: 0.2s;
 
-    & p {
+    p {
       height: 2rem;
       margin-left: 0;
       font-size: 1.4rem;
@@ -77,16 +77,16 @@
       }
     }
 
-    & :first-child {
+    :first-child {
       border-radius: 1rem 1rem 0 0;
     }
 
-    & :last-child {
+    :last-child {
       border-radius: 0 0 1rem 1rem;
     }
   }
 
-  & .hidden {
+  .hidden {
     font-size: 0px;
     width: 7rem;
     height: 2rem;
@@ -94,7 +94,7 @@
     visibility: hidden;
   }
 
-  & .workout-settings-icon {
+  .workout-settings-icon {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -119,7 +119,7 @@
   min-height: 13rem;
   height: auto;
 
-  & * {
+  * {
     height: 4rem;
     width: 100%;
 
@@ -128,17 +128,17 @@
     }
   }
 
-  & .exercise-set-placeholder {
+  .exercise-set-placeholder {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     height: 4rem;
 
-    & *:nth-child(even) {
+    *:nth-child(even) {
       background-color: initial;
     }
 
-    & p {
+    p {
       font-size: 1.6rem;
       display: flex;
       justify-content: center;
@@ -146,7 +146,7 @@
     }
   }
 
-  & .icon-wrapper {
+  .icon-wrapper {
     margin-top: auto;
     align-self: flex-end;
     display: flex;
@@ -156,7 +156,7 @@
     border-radius: 0 0 1.5rem 1.5rem;
     background-color: initial;
 
-    & .add-set-icon {
+    .add-set-icon {
       width: 3rem;
       height: 3rem;
       border-radius: 50%;
@@ -175,7 +175,7 @@
     }
   }
 
-  & .exercise-set-item {
+  .exercise-set-item {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -187,32 +187,88 @@
       background-color: $dark-mixed-600;
     }
 
-    & *:nth-child(even) {
+    *:nth-child(even) {
       background-color: initial;
     }
 
-    & .set-button {
+    .set-button {
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
       width: 100%;
       height: 4rem;
 
-      & p {
+      p {
         display: flex;
         justify-content: center;
         align-items: center;
         width: 3rem;
         height: 4rem;
-        font-size: 2rem;
-        font-weight: 600;
+        font-size: 1.9rem;
         cursor: pointer;
         margin: 0;
         padding: 0;
       }
+
+      .set-dropdown-menu {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        position: absolute;
+        z-index: 10000;
+        top: 0.5rem;
+        background-color: $dark-400;
+        box-shadow: 8px 16px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem;
+        width: 8rem;
+        height: 15rem;
+        transition: 0.2s;
+        white-space: nowrap;
+
+        * {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          height: 3rem;
+          font-size: 1.9rem;
+          cursor: pointer;
+
+          &:first-child {
+            border-radius: 0.5rem 0.5rem 0 0;
+          }
+
+          &:last-child {
+            border-radius: 0 0 0.5rem 0.5rem;
+          }
+
+          &:hover {
+            background-color: $dark-500;
+          }
+
+          &.set-icon {
+            font-size: 1.6rem;
+          }
+
+          &.x {
+            font-size: 2.5rem;
+            color: rgb(255, 0, 0);
+
+            &:hover {
+              color: rgb(255, 75, 75);
+            }
+          }
+        }
+      }
+
+      &:has(.set-dropdown-menu) p {
+        display: none;
+      }
     }
 
-    & div {
+    div {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -221,7 +277,7 @@
       background-color: initial;
       color: white;
 
-      & input {
+      input {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -238,75 +294,12 @@
         padding: 0;
       }
 
-      & .set-icon {
+      .set-icon {
         display: flex;
         justify-content: center;
         align-items: center;
         font-size: 1.8rem;
       }
-    }
-  }
-
-  & .set-button {
-    position: relative;
-
-    & .set-dropdown-menu {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-evenly;
-      align-items: center;
-      position: absolute;
-      z-index: 10000;
-      top: 0.5rem;
-      background-color: $dark-400;
-      box-shadow: 8px 16px 10px rgba(0, 0, 0, 0.1);
-      border-radius: 0.5rem;
-      width: 8rem;
-      height: 15rem;
-      transition: 0.2s;
-      white-space: nowrap;
-
-      & span {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 3rem;
-        font-size: 1.8rem;
-        cursor: pointer;
-
-        &:first-child {
-          border-radius: 0.5rem 0.5rem 0 0;
-        }
-
-        &:last-child {
-          border-radius: 0 0 0.5rem 0.5rem;
-        }
-
-        &:hover {
-          background-color: $dark-500;
-        }
-
-        & .set-icon {
-          font-size: 1.6rem;
-        }
-
-        & .x {
-          font-size: 2.5rem;
-          color: rgb(255, 0, 0);
-
-          &:hover {
-            color: rgb(255, 75, 75);
-          }
-        }
-      }
-    }
-
-    & .hidden {
-      height: 5rem;
-      visibility: 0;
-      opacity: 0;
-      z-index: -100;
     }
   }
 }
