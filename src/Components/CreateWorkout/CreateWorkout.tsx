@@ -83,13 +83,13 @@ const CreateWorkoutWindow = WindowFC(({}, wrapperRef, onClose) => {
           if (repRange.length === 1) repRange = [repRange[0], repRange[0]];
 
           const enumValue = ["1", "w", "d", "f"].indexOf(
-            x.set.selectedIcon ?? "1"
+            x.set.type ?? "1"
           );
 
           const rir =
-            !x.set.selectedIcon || x.set.selectedIcon === "1"
+            !x.set.type || x.set.type === "1"
               ? x.set.rir
-              : x.set.selectedIcon === "w"
+              : x.set.type === "w"
               ? -1
               : 0;
 

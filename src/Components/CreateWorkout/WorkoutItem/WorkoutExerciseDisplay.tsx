@@ -35,11 +35,9 @@ export default function WorkoutExerciseDisplay({
   const addSet = () => {
     const newSet: Set = {
       id: uuidv4(),
-      idx: sets.length + 1,
       rir: 0,
       repRange: "0",
-      isDropdownOpen: false,
-      selectedIcon: null,
+      type: "1",
     };
 
     handleSetsChanged([...sets, newSet]);

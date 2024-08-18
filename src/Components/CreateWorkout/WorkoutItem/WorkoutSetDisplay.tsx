@@ -1,7 +1,7 @@
 import "./WorkoutItem.scss";
-import React, { useContext, useMemo, useRef } from "react";
+import React, { useContext, useMemo, useRef, useState } from "react";
 import Icon from "../../Icon/Icon.tsx";
-import { PossibleSetIcon, Set } from "./WorkoutItem.tsx";
+import { SetType, Set } from "./WorkoutItem.tsx";
 import CurrentEditingWorkoutSetsContext from "../../../Contexts/CurrentEditingWorkoutSetsContext.ts";
 import useOutsideClick from "../../../Hooks/UseOutsideClick.ts";
 
@@ -44,19 +44,14 @@ export default function WorkoutSetDisplay({
     );
   }
 
-  function handleChangeSetIcon(newIcon: PossibleSetIcon) {
-    handleSetChanged({
-      ...set,
-      isDropdownOpen: false,
-      selectedIcon: newIcon,
-    });
-  }
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  function handleSetIconClick() {
+  function handleChangeSetIcon(newIcon: SetType) {
     handleSetChanged({
       ...set,
-      isDropdownOpen: true,
+      type: newIcon,
     });
+    setIsDropdownOpen(false);
   }
 
   const handleDeleteSet = () => {
@@ -64,12 +59,7 @@ export default function WorkoutSetDisplay({
     handleSetsChanged(prevSets.filter((prevSet) => prevSet.id !== set.id));
   };
 
-  useOutsideClick(iconDropdownRef, () => {
-    handleSetChanged({
-      ...set,
-      isDropdownOpen: false,
-    });
-  });
+  useOutsideClick(iconDropdownRef, () => void setIsDropdownOpen(false));
 
   return (
     <div
@@ -78,15 +68,15 @@ export default function WorkoutSetDisplay({
       id={`exercise-set-item-${set.id}`}
     >
       <div className="set-button">
-        <p onClick={handleSetIconClick}>
-          {set.selectedIcon && set.selectedIcon !== "1" ? (
-            <Icon className="set-icon" name={set.selectedIcon} />
+        <p onClick={() => void setIsDropdownOpen(true)}>
+          {set.type && set.type !== "1" ? (
+            <Icon className="set-icon" name={set.type} />
           ) : (
             index + 1
           )}
         </p>
 
-        {set.isDropdownOpen && (
+        {isDropdownOpen && (
           <div ref={iconDropdownRef} className="set-dropdown-menu">
             <div onClick={() => handleChangeSetIcon("1")}>{index + 1}</div>
 
@@ -106,7 +96,7 @@ export default function WorkoutSetDisplay({
       </div>
 
       <div>
-        {!set.selectedIcon || set.selectedIcon === "1" ? (
+        {!set.type || set.type === "1" ? (
           <input
             type="text"
             value={set.rir <= 0 ? "" : set.rir}
@@ -115,11 +105,7 @@ export default function WorkoutSetDisplay({
             onChange={(e) => handleSetChanged({ ...set, rir: +e.target.value })}
           />
         ) : (
-          <input
-            type="text"
-            disabled
-            value={set.selectedIcon === "w" ? "-" : "0"}
-          />
+          <input type="text" disabled value={set.type === "w" ? "-" : "0"} />
         )}
       </div>
       <div>

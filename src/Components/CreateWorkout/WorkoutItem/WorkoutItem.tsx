@@ -9,14 +9,12 @@ import CurrentEditingWorkoutSetsContext from "../../../Contexts/CurrentEditingWo
 //TODO:? Make rir field or the entire workout item change color or tint based on type of set
 export type Set = {
   id: string;
-  idx: number;
   rir: number;
   repRange: string;
-  isDropdownOpen: boolean;
-  selectedIcon: PossibleSetIcon | null;
+  type: SetType;
 };
 
-export type PossibleSetIcon = "1" | "w" | "d" | "f";
+export type SetType = "1" | "w" | "d" | "f";
 
 export type WorkoutItemData = {
   exercise: Schema<"SimpleExerciseResponseDTO">;

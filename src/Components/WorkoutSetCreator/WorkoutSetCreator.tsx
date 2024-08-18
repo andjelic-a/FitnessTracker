@@ -77,7 +77,7 @@ export default function WorkoutSetCreator({
               isDropdownOpen: false,
               repRange: "0",
               rir: -1,
-              selectedIcon: "1",
+              type: "1",
             },
           ],
         })),
