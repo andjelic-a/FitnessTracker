@@ -1,61 +1,53 @@
-import React, { useRef, useEffect, useState } from "react";
+import { useRef, useContext, useState, useMemo } from "react";
 import WorkoutItem, {
   WorkoutItemData,
 } from "../CreateWorkout/WorkoutItem/WorkoutItem";
-import ChooseExerciseWindow, {
-  ChooseExerciseFilters,
-} from "../CreateWorkout/ChooseExercise/ChooseExercise";
-import { Schema } from "../../Types/Endpoints/SchemaParser";
-import sendAPIRequest from "../../Data/SendAPIRequest";
-import Async from "../Async/Async";
-import ChooseExerciseSkeleton from "../CreateWorkout/ChooseExercise/ChooseExerciseSkeleton";
-import { v4 } from "uuid";
 import Droppable from "./Droppable";
 import Draggable from "./Draggable";
 import { DndContext } from "@dnd-kit/core";
+import CurrentEditingWorkoutSetsContext from "../../Contexts/CurrentEditingWorkoutSetsContext";
+import ExerciseSelector from "../CreateWorkout/ChooseExercise/ExerciseSelector";
+import { Schema } from "../../Types/Endpoints/SchemaParser";
+import { v4 } from "uuid";
+import {
+  createHtmlPortalNode,
+  InPortal,
+  OutPortal,
+} from "react-reverse-portal";
 
 type WorkoutSetCreatorProps = {
   onSetsChange: (sets: WorkoutItemData[]) => void;
   onStartChoosingExercise?: () => void;
   onConfirmExerciseSelection?: () => void;
-  createdSets: WorkoutItemData[];
-  setCreatedSets: React.Dispatch<
-    React.SetStateAction<WorkoutItemData[] | null>
-  >;
 };
 
-export default function WorkoutSetCreator({
-  onConfirmExerciseSelection,
-  onStartChoosingExercise,
-  onSetsChange,
-  createdSets,
-  setCreatedSets,
-}: WorkoutSetCreatorProps) {
+export default function WorkoutSetCreator({}: WorkoutSetCreatorProps) {
   const createdSetsRef = useRef<WorkoutItemData[]>([]);
 
   const [isChoosingExercise, setIsChoosingExercise] = useState<boolean>(false);
   const [replacingExerciseId, setReplacingExerciseId] = useState<string | null>(
     null
   );
-  const [previouslyLoadedExercises, setPreviouslyLoadedExercises] = useState<
-    Schema<"SimpleExerciseResponseDTO">[]
-  >([]);
 
-  const loadingExercises = useRef<Promise<
+  /*   const [previouslyLoadedExercises, setPreviouslyLoadedExercises] = useState<
+    Schema<"SimpleExerciseResponseDTO">[]
+  >([]); */
+
+  /*   const loadingExercises = useRef<Promise<
     Schema<"SimpleExerciseResponseDTO">[] | null
-  > | null>(null);
-  const reachedEnd = useRef(false);
-  const lazyLoadedExercises = useRef<Schema<"SimpleExerciseResponseDTO">[]>([]);
+  > | null>(null); */
+  // const reachedEnd = useRef(false);
+  // const lazyLoadedExercises = useRef<Schema<"SimpleExerciseResponseDTO">[]>([]);
   const workoutItemContainerRef = useRef<HTMLDivElement>(null);
   const addExerciseButtonRef = useRef<HTMLButtonElement | null>(null);
-  const filtersRef = useRef<ChooseExerciseFilters | null>(null);
+  // const filtersRef = useRef<ChooseExerciseFilters | null>(null);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     //Sort data according to their respective elements
     fuckYou();
-  }, [createdSets]);
+  }, [createdSets]); */
 
-  function fuckYou() {
+  /*   function fuckYou() {
     const idToIndexMap = new Map<string, number>();
     createdSets.forEach((item, index) => {
       idToIndexMap.set(item.id, index);
@@ -73,9 +65,10 @@ export default function WorkoutSetCreator({
     });
     onSetsChange(createdSetsRef.current);
   }
+ */
 
   //#region Exercise Selection //TODO: Move to a separate component
-  async function handleMuscleGroupRequest(): Promise<
+  /*   async function handleMuscleGroupRequest(): Promise<
     Schema<"SimpleMuscleGroupResponseDTO">[]
   > {
     return sendAPIRequest("/api/musclegroup", {
@@ -92,10 +85,10 @@ export default function WorkoutSetCreator({
       parameters: {},
     }).then((x) => (x.code === "OK" ? x.content : []));
   }
-
+*/
   function handleAddExerciseSetBtnClick() {
     setIsChoosingExercise(true);
-    onStartChoosingExercise?.();
+    // onStartChoosingExercise?.();
   }
 
   const handleExerciseChosen = (
@@ -104,7 +97,7 @@ export default function WorkoutSetCreator({
       | Schema<"SimpleExerciseResponseDTO">[]
   ) => {
     if (!replacingExerciseId && Array.isArray(selected)) {
-      setCreatedSets((prevState) => [
+      currentSetsContext.setCurrentSets((prevState) => [
         ...(prevState ?? []),
         ...selected.map<WorkoutItemData>((x) => ({
           exercise: x,
@@ -125,9 +118,7 @@ export default function WorkoutSetCreator({
     }
 
     setReplacingExerciseId(null);
-    setCreatedSets((prev) => {
-      if (!prev) return prev;
-
+    currentSetsContext.setCurrentSets((prev) => {
       const index = prev.findIndex((x) => x.id === replacingExerciseId);
       if (index >= 0 && !Array.isArray(selected))
         prev[index].exercise = selected;
@@ -136,7 +127,7 @@ export default function WorkoutSetCreator({
     });
   };
 
-  function handleExerciseSearch(filters: ChooseExerciseFilters) {
+  /*   function handleExerciseSearch(filters: ChooseExerciseFilters) {
     reachedEnd.current = false;
     filtersRef.current = filters;
     loadingExercises.current = null;
@@ -147,9 +138,9 @@ export default function WorkoutSetCreator({
       if (x) setPreviouslyLoadedExercises(x);
     });
     lazyLoadedExercises.current = [];
-  }
+  } */
 
-  async function getInitialExercises(): Promise<
+  /*   async function getInitialExercises(): Promise<
     Schema<"SimpleExerciseResponseDTO">[]
   > {
     if (previouslyLoadedExercises.length > 0) return previouslyLoadedExercises;
@@ -192,10 +183,11 @@ export default function WorkoutSetCreator({
 
     return loadingExercises.current;
   }
+    */
   function handleReplaceExerciseRequest(id: string) {
     setIsChoosingExercise(true);
     setReplacingExerciseId(id);
-    onStartChoosingExercise?.();
+    // onStartChoosingExercise?.();
   }
   //#endregion
 
@@ -206,52 +198,43 @@ export default function WorkoutSetCreator({
 
     if (index < 0) createdSetsRef.current.push(workoutItem);
     else createdSetsRef.current[index] = workoutItem;
-    fuckYou();
-    // setCreatedSets(createdSetsRef.current);
+    // fuckYou();
+    currentSetsContext.setCurrentSets(createdSetsRef.current);
   }
 
   const handleDeleteExercise = (id: string) => {
     createdSetsRef.current = createdSetsRef.current.filter(
       (item) => item.id !== id
     );
-    fuckYou();
-    setCreatedSets(createdSetsRef.current);
+    // fuckYou();
+    currentSetsContext.setCurrentSets(createdSetsRef.current);
   };
+
+  const currentSetsContext = useContext(CurrentEditingWorkoutSetsContext);
+
+  const exerciseSelectorPortalNode = useMemo(() => createHtmlPortalNode(), []);
+  const exerciseSelectorMemo = useMemo(
+    () => (
+      <ExerciseSelector
+        onClose={() => {
+          setIsChoosingExercise(false);
+          setReplacingExerciseId(null);
+        }}
+        onConfirmSelection={handleExerciseChosen}
+        singleMode={!!replacingExerciseId}
+      />
+    ),
+    [replacingExerciseId, handleExerciseChosen]
+  );
 
   return (
     <>
-      {isChoosingExercise && (
-        <Async
-          await={getInitialExercises()}
-          skeleton={<ChooseExerciseSkeleton />}
-        >
-          {(exercises) => {
-            return (
-              <ChooseExerciseWindow
-                onSearch={handleExerciseSearch}
-                onClose={() => {
-                  setIsChoosingExercise(false);
-                  onConfirmExerciseSelection?.();
+      <InPortal
+        node={exerciseSelectorPortalNode}
+        children={exerciseSelectorMemo}
+      />
 
-                  setReplacingExerciseId(null);
-                  setPreviouslyLoadedExercises([
-                    ...previouslyLoadedExercises,
-                    ...lazyLoadedExercises.current,
-                  ]);
-
-                  lazyLoadedExercises.current = [];
-                }}
-                onConfirmSelection={handleExerciseChosen}
-                singleMode={!!replacingExerciseId}
-                exercises={exercises}
-                onRequestLazyLoad={async () => getMoreExercises(true)}
-                onRequestEquipment={handleEquipmentRequest}
-                onRequestMuscleGroups={handleMuscleGroupRequest}
-              />
-            );
-          }}
-        </Async>
-      )}
+      {isChoosingExercise && <OutPortal node={exerciseSelectorPortalNode} />}
 
       <DndContext
         onDragEnd={(x) => {
@@ -259,7 +242,7 @@ export default function WorkoutSetCreator({
         }}
       >
         <div ref={workoutItemContainerRef} className="set-creator-container">
-          {createdSets.map((x) => (
+          {currentSetsContext.currentSets.map((x) => (
             <WorkoutItem
               onChange={handleWorkoutItemChanged}
               key={x.id}

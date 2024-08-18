@@ -9,6 +9,7 @@ import WorkoutSetCreator from "../WorkoutSetCreator/WorkoutSetCreator";
 import { NewWorkoutsContext } from "../../Contexts/NewWorkoutsContext";
 import { getProfileCache } from "../../Pages/Profile/ProfileCache";
 import { Tooltip } from "react-tooltip";
+import CurrentEditingWorkoutSetsContext from "../../Contexts/CurrentEditingWorkoutSetsContext";
 
 const CreateWorkoutWindow = WindowFC(({}, wrapperRef, onClose) => {
   const newWorkoutsContext = useContext(NewWorkoutsContext);
@@ -125,82 +126,90 @@ const CreateWorkoutWindow = WindowFC(({}, wrapperRef, onClose) => {
     });
   };
 
-  const [createdSets, setCreatedSets] = useState<WorkoutItemData[] | null>([]);
+  const [currentSets, setCurrentSets] = useState<WorkoutItemData[]>([]);
 
   console.log("Rerendering create workout window");
 
   return (
-    <div ref={wrapperRef} className="create-workout-window">
-      <div className="header">
-        <input
-          ref={workoutTitleRef}
-          type="text"
-          className="title"
-          placeholder="Workout title"
-          maxLength={25}
-        />
+    <CurrentEditingWorkoutSetsContext.Provider
+      value={{
+        currentSets,
+        setCurrentSets,
+      }}
+    >
+      <div ref={wrapperRef} className="create-workout-window">
+        <div className="header">
+          <input
+            ref={workoutTitleRef}
+            type="text"
+            className="title"
+            placeholder="Workout title"
+            maxLength={25}
+          />
 
-        <div className="buttons">
-          <button
-            className="workout-visibility-toggle"
-            onClick={() => setIsPublic(!isPublic)}
-            data-tooltip-content={isPublic ? "Public" : "Private"}
-            data-tooltip-id="workout-visibility-tooltip"
-            data-tooltip-place="left"
-          >
-            <Icon
-              aria-hidden
-              className="lock"
-              name={isPublic ? "unlock" : "lock"}
-            />
+          <div className="buttons">
+            <button
+              className="workout-visibility-toggle"
+              onClick={() => setIsPublic(!isPublic)}
+              data-tooltip-content={isPublic ? "Public" : "Private"}
+              data-tooltip-id="workout-visibility-tooltip"
+              data-tooltip-place="left"
+            >
+              <Icon
+                aria-hidden
+                className="lock"
+                name={isPublic ? "unlock" : "lock"}
+              />
 
-            <p aria-hidden={false} className="accessibility-only">
-              {isPublic ? "Public" : "Private"}
-            </p>
+              <p aria-hidden={false} className="accessibility-only">
+                {isPublic ? "Public" : "Private"}
+              </p>
 
-            <Tooltip id="workout-visibility-tooltip" />
-          </button>
+              <Tooltip id="workout-visibility-tooltip" />
+            </button>
 
-          <button onClick={handleSaveClick} className="save-btn">
-            <p>Save</p>
-            <Icon name="floppy-disk" />
-          </button>
+            <button onClick={handleSaveClick} className="save-btn">
+              <p>Save</p>
+              <Icon name="floppy-disk" />
+            </button>
+          </div>
         </div>
-      </div>
 
-      <WorkoutSetCreator
-        setCreatedSets={setCreatedSets}
-        createdSets={createdSets ?? []}
-        onSetsChange={(newSets) => void (createdSetsRef.current = newSets)}
-        onStartChoosingExercise={() => {
-          if (!wrapperRef.current) return;
+        <WorkoutSetCreator
+          onSetsChange={(newSets) => void (createdSetsRef.current = newSets)}
+          onStartChoosingExercise={() => {
+            if (!wrapperRef.current) return;
 
-          wrapperRef.current.style.overflow = "hidden";
-          wrapperRef.current.scrollTop = 0;
-        }}
-        onConfirmExerciseSelection={() => {
-          if (!wrapperRef.current) return;
+            wrapperRef.current.style.overflow = "hidden";
+            wrapperRef.current.scrollTop = 0;
+          }}
+          onConfirmExerciseSelection={() => {
+            if (!wrapperRef.current) return;
 
-          wrapperRef.current.style.overflow = "auto";
-          wrapperRef.current.scrollTop = 0;
-        }}
-      />
-
-      <div className="description-container">
-        <textarea
-          id="description-input"
-          ref={descriptionTextAreaRef}
-          onChange={(e) => {
-            e.target.style.height = "auto";
-            e.target.style.height = `${e.target.scrollHeight}px`;
+            wrapperRef.current.style.overflow = "auto";
+            wrapperRef.current.scrollTop = 0;
           }}
         />
 
-        <label htmlFor="description-input" className="description-input-label">
-          Workout description
-        </label>
+        <div className="description-container">
+          <textarea
+            id="description-input"
+            ref={descriptionTextAreaRef}
+            onChange={(e) => {
+              e.target.style.height = "auto";
+              e.target.style.height = `${e.target.scrollHeight}px`;
+            }}
+          />
+
+          <label
+            htmlFor="description-input"
+            className="description-input-label"
+          >
+            Workout description
+          </label>
+        </div>
       </div>
-    </div>
+    </CurrentEditingWorkoutSetsContext.Provider>
   );
 });
 

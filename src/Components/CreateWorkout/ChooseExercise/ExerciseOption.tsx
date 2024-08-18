@@ -1,4 +1,3 @@
-import "./ChooseExercise.scss";
 import { useState } from "react";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import Icon from "../../Icon/Icon";
@@ -27,7 +26,7 @@ export function ExerciseOption({
   const handleLinkContainerClick = () => {
     setIsLinkHovered(false);
     console.log("link");
-  }
+  };
 
   return (
     <div

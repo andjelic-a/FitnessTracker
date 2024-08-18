@@ -1,10 +1,10 @@
-import "./ChooseExercise.scss";
-import { useRef, useState } from "react";
+import "./ExerciseSelector.scss";
+import { useEffect, useRef, useState } from "react";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
-import { ExerciseOption } from "./ExerciseOption";
 import Icon from "../../Icon/Icon";
-import "./ChooseExercise.scss";
 import AsyncDropdown from "../../DropdownMenu/AsyncDropdown/AsyncDropdown";
+import ExerciseSelectorSegment from "./ExerciseSelectorSegment";
+import sendAPIRequest from "../../../Data/SendAPIRequest";
 
 export type ChooseExerciseData = {
   id: string;
@@ -25,32 +25,23 @@ type ChooseExerciseWindowProps = {
       | Schema<"SimpleExerciseResponseDTO">[]
   ) => void;
   singleMode?: boolean;
-  exercises: Schema<"SimpleExerciseResponseDTO">[];
-  onRequestLazyLoad: () => Promise<
-    Schema<"SimpleExerciseResponseDTO">[] | null
-  >;
-  onRequestMuscleGroups: () => Promise<
-    Schema<"SimpleMuscleGroupResponseDTO">[]
-  >;
-  onRequestEquipment: () => Promise<Schema<"SimpleEquipmentResponseDTO">[]>;
-  onSearch: (filters: ChooseExerciseFilters) => void;
 };
 
-export default function ChooseExerciseWindow({
+export default function ExerciseSelector({
   onClose,
   onConfirmSelection,
   singleMode: replaceMode,
-  exercises: preLoadedExercises,
-  onRequestLazyLoad,
-  onRequestEquipment,
-  onRequestMuscleGroups,
-  onSearch,
 }: ChooseExerciseWindowProps) {
   const [selected, setSelectedExercises] = useState<
     Schema<"SimpleExerciseResponseDTO"> | Schema<"SimpleExerciseResponseDTO">[]
   >([]);
 
+  const [exercisePromises, setExercisePromises] = useState<
+    Promise<Schema<"SimpleExerciseResponseDTO">[]>[]
+  >([]);
+
   const handleConfirm = () => {
+    setSelectedExercises([]);
     onConfirmSelection(selected);
     onClose();
   };
@@ -68,26 +59,80 @@ export default function ChooseExerciseWindow({
     });
   };
 
-  const [lazyLoaded, setLazyLoaded] = useState<
-    Schema<"SimpleExerciseResponseDTO">[]
-  >([]);
+  const isWaitingForResponse = useRef(false);
+  const reachedEnd = useRef(false);
+  const loadMoreButtonRef = useRef<HTMLButtonElement>(null);
 
-  async function requireLazyLoad() {
-    if (!onRequestLazyLoad) return;
+  useEffect(() => {
+    if (isWaitingForResponse.current) return;
 
-    const newExercises = await onRequestLazyLoad();
-    setLazyLoaded([...lazyLoaded, ...(newExercises ?? [])]);
+    isWaitingForResponse.current = true;
+    setExercisePromises([
+      sendAPIRequest("/api/exercise", {
+        method: "get",
+        parameters: {
+          limit: 10,
+          offset: 0,
+        },
+      }).then((x) => {
+        isWaitingForResponse.current = false;
+        if (x.code === "Too Many Requests") return [];
+
+        if (x.code === "OK") {
+          if (x.content.length !== 10) {
+            reachedEnd.current = true;
+
+            if (loadMoreButtonRef.current)
+              loadMoreButtonRef.current.disabled = true;
+          }
+          return x.content;
+        }
+
+        reachedEnd.current = true;
+        return [];
+      }),
+    ]);
+  }, []);
+
+  async function handleLazyLoad() {
+    if (isWaitingForResponse.current || reachedEnd.current) return;
+
+    isWaitingForResponse.current = true;
+    setExercisePromises([
+      ...exercisePromises,
+      sendAPIRequest("/api/exercise", {
+        method: "get",
+        parameters: {
+          limit: 10,
+          offset: exercisePromises.length * 10,
+        },
+      }).then((x) => {
+        isWaitingForResponse.current = false;
+        if (x.code === "Too Many Requests") return [];
+
+        if (x.code === "OK") {
+          if (x.content.length !== 10) {
+            reachedEnd.current = true;
+
+            if (loadMoreButtonRef.current)
+              loadMoreButtonRef.current.disabled = true;
+          }
+          return x.content;
+        }
+
+        reachedEnd.current = true;
+        return [];
+      }),
+    ]);
   }
-
-  const requireLazyLoadBtnRef = useRef<HTMLButtonElement>(null);
 
   const equipmentFilter = useRef<number>(-1);
   const muscleGroupFilter = useRef<number>(-1);
   const searchBarRef = useRef<HTMLInputElement>(null);
 
   function handleSearch() {
-    if (!onSearch) return;
-    setLazyLoaded([]);
+    // if (!onSearch) return;
+    /*     setLazyLoaded([]);
 
     onSearch({
       equipmentId:
@@ -98,7 +143,7 @@ export default function ChooseExerciseWindow({
         !searchBarRef.current || searchBarRef.current?.value === ""
           ? null
           : searchBarRef.current?.value,
-    });
+    }); */
   }
 
   function handleEquipmentFilterChange(newSelectionKey: string) {
@@ -114,6 +159,7 @@ export default function ChooseExerciseWindow({
       <div className="choose-exercise-header">
         <h3>Choose Exercise</h3>
       </div>
+
       <div className="choose-exercise-body">
         <div className="choose-exercise-search-container">
           <div className="choose-exercise-search-bar-container">
@@ -134,48 +180,48 @@ export default function ChooseExerciseWindow({
           </div>
           <div className="choose-exercise-filter">
             <AsyncDropdown<"SimpleMuscleGroupResponseDTO">
-              onRequest={onRequestMuscleGroups}
+              onRequest={() => {
+                return Promise.resolve([]);
+              }}
               placeholder="All muscles"
               className="choose-exercise-filter-muscles-dropdown"
               onSelectionChanged={handleMuscleGroupFilterChange}
             />
 
             <AsyncDropdown<"SimpleEquipmentResponseDTO">
-              onRequest={onRequestEquipment}
+              onRequest={() => {
+                return Promise.resolve([]);
+              }}
               placeholder="All equipment"
               className="choose-exercise-filter-equipment-dropdown"
               onSelectionChanged={handleEquipmentFilterChange}
             />
           </div>
         </div>
-        {[...preLoadedExercises, ...lazyLoaded].map((exercise) => (
-          <ExerciseOption
-            key={exercise.id}
-            exercise={exercise}
+
+        {exercisePromises.map((exercisesPromise, i) => (
+          <ExerciseSelectorSegment
+            key={i}
+            exercises={exercisesPromise}
             onSelectExercise={handleSelectExercise}
-            isSelected={
-              Array.isArray(selected)
-                ? selected.includes(exercise)
-                : selected === exercise
-            }
+            selectedExercises={selected}
           />
         ))}
       </div>
+
       <div className="choose-exercise-footer">
         <button className="choose-exercise-button" onClick={handleConfirm}>
           {replaceMode ? "Replace" : "Add"}
         </button>
+
         <button
           className={"choose-exercise-button"}
-          ref={requireLazyLoadBtnRef}
-          onClick={requireLazyLoad}
-          disabled={
-            lazyLoaded.length + preLoadedExercises.length > 0 &&
-            (lazyLoaded.length + preLoadedExercises.length) % 10 !== 0
-          }
+          onClick={handleLazyLoad}
+          ref={loadMoreButtonRef}
         >
           More
         </button>
+
         <button className="choose-exercise-button" onClick={onClose}>
           Cancel
         </button>
