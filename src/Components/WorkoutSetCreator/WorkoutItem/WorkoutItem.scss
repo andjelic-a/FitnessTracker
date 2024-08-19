@@ -7,20 +7,6 @@
   min-height: 19rem;
   height: fit-content;
   max-height: fit-content;
-
-  &.dragging {
-    opacity: 0.25;
-    pointer-events: none;
-    transition: opacity 0.1ms;
-  }
-
-  &.temporary {
-    position: absolute;
-    left: 0;
-    top: 0;
-    pointer-events: none;
-    z-index: 10000000000;
-  }
 }
 
 .workout-item-header {
@@ -129,16 +115,215 @@
 .exercise-set {
   display: flex;
   flex-direction: column;
+
   width: 100%;
   min-height: 13rem;
-  height: auto;
+  height: max-content;
+  padding-bottom: 1.25rem;
 
-  * {
-    height: 4rem;
-    width: 100%;
+  .set {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    padding: 0 0.5rem;
 
-    &:nth-child(even) {
-      background-color: $dark-300;
+    .information-container {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      transition: opacity 150ms;
+      transition: background-color 150ms;
+
+      .set-type-dropdown-container {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 4rem;
+
+        button {
+          cursor: pointer;
+          height: 100%;
+          aspect-ratio: 1;
+
+          font-size: 2rem;
+          color: #fff;
+          border-radius: 0.5rem;
+
+          margin: 0;
+          padding: 0;
+          background: none;
+          border: none;
+          outline: none;
+
+          &:hover,
+          &:focus-visible {
+            color: $primary-600;
+          }
+
+          &:focus-visible {
+            outline: 1px solid $primary-300;
+          }
+        }
+
+        .set-dropdown-menu {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-evenly;
+          align-items: center;
+          position: absolute;
+          z-index: 10000;
+          top: 0.5rem;
+          background-color: $dark-400;
+          box-shadow: 8px 16px 10px rgba(0, 0, 0, 0.1);
+          border-radius: 0.5rem;
+          width: 8rem;
+          height: 15rem;
+          transition: 0.2s;
+          white-space: nowrap;
+
+          * {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 3rem;
+            font-size: 1.9rem;
+            cursor: pointer;
+
+            &:first-child {
+              border-radius: 0.5rem 0.5rem 0 0;
+            }
+
+            &:last-child {
+              border-radius: 0 0 0.5rem 0.5rem;
+            }
+
+            &:hover {
+              background-color: $dark-500;
+            }
+
+            &.set-icon {
+              font-size: 1.6rem;
+            }
+
+            &.x {
+              font-size: 2.5rem;
+              color: rgb(255, 0, 0);
+
+              &:hover {
+                color: rgb(255, 75, 75);
+              }
+            }
+          }
+        }
+
+        &:has(.set-dropdown-menu) p {
+          display: none;
+        }
+      }
+
+      div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 4rem;
+        width: 100%;
+        background-color: initial;
+        color: white;
+
+        input {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100%;
+          width: 5rem;
+          text-align: center;
+          color: white;
+          border: none;
+          background-color: initial;
+          outline: none;
+          cursor: pointer;
+          font-size: 2rem;
+          margin: 0;
+          padding: 0;
+        }
+
+        .set-icon {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 1.8rem;
+        }
+      }
+    }
+
+    .options {
+      display: flex;
+
+      button {
+        height: 100%;
+        aspect-ratio: 1;
+
+        background: none;
+        border: none;
+        outline: none;
+
+        border-radius: 0.5rem;
+        font-size: 2rem;
+
+        &.drag-handle i {
+          color: #fff;
+        }
+
+        &.duplicate {
+          cursor: pointer;
+          color: $primary-300;
+
+          &:hover,
+          &:focus-visible {
+            color: $primary-400;
+          }
+
+          i {
+            font-weight: 100;
+          }
+        }
+
+        &:focus-visible {
+          outline: 1px solid $primary-300;
+        }
+      }
+    }
+  }
+
+  .set:nth-child(even) {
+    background-color: $dark-300;
+  }
+
+  .add-set-btn {
+    cursor: pointer;
+    align-self: center;
+    width: max-content;
+    height: max-content;
+
+    border: none;
+    border-radius: 50%;
+    background-color: $primary-300;
+    padding: 0.7rem;
+
+    &:hover,
+    &:focus-visible {
+      background-color: $primary-400;
+    }
+
+    &:focus-visible {
+      outline: 1px solid #fff;
+    }
+
+    .add-set-icon {
+      color: $dark-400;
+      font-size: 2rem;
     }
   }
 
@@ -157,163 +342,6 @@
       display: flex;
       justify-content: center;
       align-items: flex-end;
-    }
-  }
-
-  .icon-wrapper {
-    margin-top: auto;
-    align-self: flex-end;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    border-radius: 0 0 1.5rem 1.5rem;
-    background-color: initial;
-
-    .add-set-icon {
-      width: 3rem;
-      height: 3rem;
-      border-radius: 50%;
-      background-color: $primary-300;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: $dark-400;
-      font-size: 2rem;
-      cursor: pointer;
-      border: none;
-
-      &:hover {
-        background-color: $primary-400;
-      }
-    }
-  }
-
-  .exercise-set-item {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    transition: opacity 150ms;
-    transition: background-color 150ms;
-
-    &.dragging {
-      opacity: 0.5;
-      background-color: $dark-mixed-600;
-    }
-
-    *:nth-child(even) {
-      background-color: initial;
-    }
-
-    .set-button {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      height: 4rem;
-
-      p {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 3rem;
-        height: 4rem;
-        font-size: 1.9rem;
-        cursor: pointer;
-        margin: 0;
-        padding: 0;
-      }
-
-      .set-dropdown-menu {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
-        align-items: center;
-        position: absolute;
-        z-index: 10000;
-        top: 0.5rem;
-        background-color: $dark-400;
-        box-shadow: 8px 16px 10px rgba(0, 0, 0, 0.1);
-        border-radius: 0.5rem;
-        width: 8rem;
-        height: 15rem;
-        transition: 0.2s;
-        white-space: nowrap;
-
-        * {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          width: 100%;
-          height: 3rem;
-          font-size: 1.9rem;
-          cursor: pointer;
-
-          &:first-child {
-            border-radius: 0.5rem 0.5rem 0 0;
-          }
-
-          &:last-child {
-            border-radius: 0 0 0.5rem 0.5rem;
-          }
-
-          &:hover {
-            background-color: $dark-500;
-          }
-
-          &.set-icon {
-            font-size: 1.6rem;
-          }
-
-          &.x {
-            font-size: 2.5rem;
-            color: rgb(255, 0, 0);
-
-            &:hover {
-              color: rgb(255, 75, 75);
-            }
-          }
-        }
-      }
-
-      &:has(.set-dropdown-menu) p {
-        display: none;
-      }
-    }
-
-    div {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 4rem;
-      width: 100%;
-      background-color: initial;
-      color: white;
-
-      input {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
-        width: 5rem;
-        text-align: center;
-        color: white;
-        border: none;
-        background-color: initial;
-        outline: none;
-        cursor: pointer;
-        font-size: 2rem;
-        margin: 0;
-        padding: 0;
-      }
-
-      .set-icon {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 1.8rem;
-      }
     }
   }
 }

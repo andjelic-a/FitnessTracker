@@ -116,6 +116,7 @@ export default function WorkoutItem({
             <p>RiR</p>
             <p>VOLUME</p>
           </div>
+
           {sets.map((set, index) => (
             <WorkoutSetDisplay
               key={set.id}
@@ -124,9 +125,22 @@ export default function WorkoutItem({
               itemId={workoutItem.id}
             />
           ))}
-          <div className="icon-wrapper">
-            <Icon onClick={addSet} className="add-set-icon" name="plus" />
-          </div>
+
+          <button
+            className="add-set-btn"
+            onClick={addSet}
+            aria-describedby="add-set-text"
+          >
+            <Icon className="add-set-icon" name="plus" />
+
+            <p
+              id="add-set-text"
+              className="accessibility-only"
+              aria-hidden={false}
+            >
+              Add Set
+            </p>
+          </button>
         </div>
       </div>
     </div>

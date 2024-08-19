@@ -17,7 +17,7 @@ export default function StaticWorkoutSetDisplay({
       className="exercise-set-item"
       id={`static-exercise-set-item-${set.id}`}
     >
-      <div className="set-button">
+      <div className="set-type-dropdown-container">
         <p>
           {set.type && set.type !== "1" ? (
             <Icon className="set-icon" name={set.type} />

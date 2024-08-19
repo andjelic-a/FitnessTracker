@@ -18,7 +18,6 @@ export default function WorkoutSetDisplay({
 }: SingleExerciseSetProps): React.JSX.Element {
   const currentSetsContext = useContext(CurrentEditingWorkoutSetsContext);
 
-  const setWrapperRef = useRef<HTMLDivElement>(null);
   const iconDropdownRef = useRef<HTMLDivElement>(null);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -62,62 +61,83 @@ export default function WorkoutSetDisplay({
   };
 
   return (
-    <div
-      className="exercise-set-item"
-      ref={setWrapperRef}
-      id={`exercise-set-item-${set.id}`}
-    >
-      <div className="set-button">
-        <p onClick={() => void setIsDropdownOpen(true)}>
-          {set.type && set.type !== "1" ? (
-            <Icon className="set-icon" name={set.type} />
-          ) : (
-            index + 1
-          )}
-        </p>
+    <div className="set" id={`set-${set.id}`}>
+      <div className="options">
+        <button className="drag-handle">
+          <Icon name="grip-vertical" />
+        </button>
 
-        {isDropdownOpen && (
-          <div ref={iconDropdownRef} className="set-dropdown-menu">
-            <div onClick={() => handleChangeSetIcon("1")}>{index + 1}</div>
+        <button className="duplicate" aria-describedby="duplicate-set-desc">
+          <Icon name="copy" />
 
-            <div onClick={() => handleChangeSetIcon("w")}>Warmup</div>
-
-            <div onClick={() => handleChangeSetIcon("d")}>Drop set</div>
-
-            <div onClick={() => handleChangeSetIcon("f")}>Failure</div>
-
-            <Icon
-              onClick={handleDeleteSet}
-              className="set-icon x"
-              name="xmark"
-            />
-          </div>
-        )}
+          <p
+            id="duplicate-set-desc"
+            className="accessibility-only"
+            aria-hidden={false}
+          >
+            Duplicate set
+          </p>
+        </button>
       </div>
 
-      <div>
-        {!set.type || set.type === "1" ? (
+      <div className="information-container">
+        <div className="set-type-dropdown-container">
+          <button onClick={() => void setIsDropdownOpen(true)}>
+            {set.type && set.type !== "1" ? (
+              <Icon className="set-icon" name={set.type} />
+            ) : (
+              index + 1
+            )}
+          </button>
+
+          {/* TODO: make the dropdown menu's items (?non focusable by tabbing and instead only?) reachable with arrows */}
+          {/* TODO?: make the dropdown open on focus */}
+          {isDropdownOpen && (
+            <div ref={iconDropdownRef} className="set-dropdown-menu">
+              <button onClick={() => handleChangeSetIcon("1")}>
+                {index + 1}
+              </button>
+
+              <button onClick={() => handleChangeSetIcon("w")}>Warmup</button>
+
+              <button onClick={() => handleChangeSetIcon("d")}>Drop set</button>
+
+              <button onClick={() => handleChangeSetIcon("f")}>Failure</button>
+
+              <button onClick={handleDeleteSet}>
+                <Icon className="set-icon x" name="xmark" />
+              </button>
+            </div>
+          )}
+        </div>
+
+        <div>
+          {!set.type || set.type === "1" ? (
+            <input
+              type="text"
+              value={set.rir <= 0 ? "" : set.rir}
+              placeholder={set.rir <= 0 ? "0" : set.rir.toString()}
+              maxLength={4}
+              onChange={(e) =>
+                handleSetChanged({ ...set, rir: +e.target.value })
+              }
+            />
+          ) : (
+            <input type="text" disabled value={set.type === "w" ? "-" : "0"} />
+          )}
+        </div>
+
+        <div>
           <input
             type="text"
-            value={set.rir <= 0 ? "" : set.rir}
-            placeholder={set.rir <= 0 ? "0" : set.rir.toString()}
-            maxLength={4}
-            onChange={(e) => handleSetChanged({ ...set, rir: +e.target.value })}
+            defaultValue={set.repRange === "0" ? "" : set.repRange}
+            placeholder={set.repRange}
+            maxLength={5}
+            onChange={(e) =>
+              handleSetChanged({ ...set, repRange: e.target.value })
+            }
           />
-        ) : (
-          <input type="text" disabled value={set.type === "w" ? "-" : "0"} />
-        )}
-      </div>
-      <div>
-        <input
-          type="text"
-          defaultValue={set.repRange === "0" ? "" : set.repRange}
-          placeholder={set.repRange}
-          maxLength={5}
-          onChange={(e) =>
-            handleSetChanged({ ...set, repRange: e.target.value })
-          }
-        />
+        </div>
       </div>
     </div>
   );
