@@ -1,12 +1,13 @@
 import "./WorkoutItem.scss";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import Icon from "../../Icon/Icon.tsx";
 import { Schema } from "../../../Types/Endpoints/SchemaParser.ts";
-import WorkoutExerciseDisplay from "./WorkoutExerciseDisplay.tsx";
 import CurrentEditingWorkoutSetsContext from "../../../Contexts/CurrentEditingWorkoutSetsContext.ts";
 import { useSortable } from "@dnd-kit/sortable";
+import { v4 } from "uuid";
+import WorkoutSetDisplay from "./WorkoutSetDisplay.tsx";
+import { CSS } from "@dnd-kit/utilities";
 
-//TODO:? Make rir field or the entire workout item change color or tint based on type of set
 export type Set = {
   id: string;
   rir: number;
@@ -46,37 +47,53 @@ export default function WorkoutItem({
     },
   });
 
-  const style = {
-    transition,
-    transform: `translate3d(${transform?.x ?? 0}px, ${transform?.y ?? 0}px, 0)`,
-    opacity: isDragging ? 0.5 : 1,
-  };
-
   const currentSetsContext = useContext(CurrentEditingWorkoutSetsContext);
+  const sets = useMemo(
+    () =>
+      currentSetsContext.currentSets
+        .filter((x) => x.id === workoutItem.id)
+        .flatMap((x) => x.sets),
+    [currentSetsContext.currentSets]
+  );
+
+  const addSet = () => {
+    const newSet: Set = {
+      id: v4(),
+      rir: 0,
+      repRange: "0",
+      type: "1",
+    };
+
+    handleSetsChanged([...sets, newSet]);
+  };
 
   const handleSetsChanged = (newSets: Set[]) => {
     currentSetsContext.setCurrentSets((prev) => {
       const index = prev.findIndex((x) => x.id === workoutItem.id);
-
-      if (index < 0) prev.push(workoutItem);
-      else prev[index].sets = newSets;
+      if (index >= 0) prev[index].sets = newSets;
 
       return prev.slice();
     });
   };
 
-  const handleDelete = () => {
+  /*   const handleDelete = () => {
     currentSetsContext.setCurrentSets((prev) =>
       prev.filter((item) => item.id !== workoutItem.id).slice()
     );
-  };
+  }; */
 
+  //TODO: Add drag and drop to reorder sets
+  //TODO: Add a copy / duplicate button to sets
   return (
     <div
-      className="workout-item"
       id={`workout-item-${workoutItem.id}`}
-      style={style}
+      className="workout-item"
       ref={setNodeRef}
+      style={{
+        transition,
+        transform: CSS.Transform.toString(transform),
+        opacity: isDragging ? 0.5 : 1,
+      }}
     >
       <div className="workout-item-header">
         <div className="exercise">
@@ -87,21 +104,30 @@ export default function WorkoutItem({
           </button>
         </div>
 
-        {/*FIX ARIA HIDDEN, IT SHOULD BE FALSE OR JUST NON EXISTENT --- Font awesome causes it*/}
         <div className="drag-handle" {...listeners} {...attributes}>
           <Icon name="grip-vertical" />
         </div>
       </div>
 
       <div className="workout-item-body">
-        <WorkoutExerciseDisplay
-          sets={
-            currentSetsContext.currentSets.find((x) => x.id === workoutItem.id)
-              ?.sets ?? []
-          }
-          setSets={handleSetsChanged}
-          itemId={workoutItem.id}
-        />
+        <div className="exercise-set">
+          <div className="exercise-set-placeholder">
+            <p>SET</p>
+            <p>RiR</p>
+            <p>VOLUME</p>
+          </div>
+          {sets.map((set, index) => (
+            <WorkoutSetDisplay
+              key={set.id}
+              set={set}
+              index={index}
+              itemId={workoutItem.id}
+            />
+          ))}
+          <div className="icon-wrapper">
+            <Icon onClick={addSet} className="add-set-icon" name="plus" />
+          </div>
+        </div>
       </div>
     </div>
   );
