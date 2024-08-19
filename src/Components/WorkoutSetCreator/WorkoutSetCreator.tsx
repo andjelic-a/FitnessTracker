@@ -1,7 +1,5 @@
 import { useContext, useState, useMemo } from "react";
-import WorkoutItem, {
-  WorkoutItemData,
-} from "../CreateWorkout/WorkoutItem/WorkoutItem";
+import WorkoutItem, { WorkoutItemData } from "./WorkoutItem/WorkoutItem";
 import {
   defaultDropAnimation,
   defaultDropAnimationSideEffects,
@@ -19,6 +17,7 @@ import {
 } from "react-reverse-portal";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
+import StaticWorkoutItem from "./WorkoutItem/StaticWorkoutItem";
 
 type WorkoutSetCreatorProps = {
   onOverlayOpen: () => void;
@@ -167,12 +166,7 @@ export default function WorkoutSetCreator({
               }),
             }}
           >
-            {draggingItem && (
-              <WorkoutItem
-                onRequestExerciseReplace={() => {}}
-                workoutItem={draggingItem}
-              />
-            )}
+            {draggingItem && <StaticWorkoutItem workoutItem={draggingItem} />}
           </DragOverlay>,
           document.body
         )}

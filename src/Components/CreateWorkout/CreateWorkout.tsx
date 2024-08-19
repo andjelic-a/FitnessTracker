@@ -1,6 +1,6 @@
 import "./CreateWorkout.scss";
 import { useContext, useRef, useState } from "react";
-import { WorkoutItemData } from "./WorkoutItem/WorkoutItem";
+import { WorkoutItemData } from "../WorkoutSetCreator/WorkoutItem/WorkoutItem";
 import Icon from "../Icon/Icon";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import { Schema } from "../../Types/Endpoints/SchemaParser";

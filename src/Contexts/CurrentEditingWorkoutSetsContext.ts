@@ -1,5 +1,5 @@
 import React, { createContext } from "react";
-import { WorkoutItemData } from "../Components/CreateWorkout/WorkoutItem/WorkoutItem";
+import { WorkoutItemData } from "../Components/WorkoutSetCreator/WorkoutItem/WorkoutItem";
 
 const CurrentEditingWorkoutSetsContext = createContext<{
   currentSets: WorkoutItemData[];

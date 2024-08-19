@@ -16,9 +16,12 @@ export default function WorkoutSetDisplay({
   index,
   itemId,
 }: SingleExerciseSetProps): React.JSX.Element {
-  const setWrapperRef = useRef<HTMLDivElement>(null);
   const currentSetsContext = useContext(CurrentEditingWorkoutSetsContext);
+
+  const setWrapperRef = useRef<HTMLDivElement>(null);
   const iconDropdownRef = useRef<HTMLDivElement>(null);
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const sets = useMemo(
     () =>
@@ -27,6 +30,8 @@ export default function WorkoutSetDisplay({
         .flatMap((x) => x.sets),
     [currentSetsContext.currentSets]
   );
+
+  useOutsideClick(iconDropdownRef, () => void setIsDropdownOpen(false));
 
   const handleSetsChanged = (newSets: Set[]) => {
     currentSetsContext.setCurrentSets((prev) => {
@@ -38,13 +43,10 @@ export default function WorkoutSetDisplay({
   };
 
   function handleSetChanged(set: Set) {
-    const prevSets = sets.slice();
     handleSetsChanged(
-      prevSets.map((prevSet) => (prevSet.id === set.id ? set : prevSet))
+      sets.map((prevSet) => (prevSet.id === set.id ? set : prevSet))
     );
   }
-
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   function handleChangeSetIcon(newIcon: SetType) {
     handleSetChanged({
@@ -58,8 +60,6 @@ export default function WorkoutSetDisplay({
     const prevSets = sets.slice();
     handleSetsChanged(prevSets.filter((prevSet) => prevSet.id !== set.id));
   };
-
-  useOutsideClick(iconDropdownRef, () => void setIsDropdownOpen(false));
 
   return (
     <div

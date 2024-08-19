@@ -4,7 +4,7 @@ import Async from "../Async/Async";
 import WindowFC from "../WindowWrapper/WindowFC";
 import workoutDisplayLoader from "../WorkoutDisplay/WorkoutDisplayLoader";
 import { useEffect, useRef, useState } from "react";
-import { WorkoutItemData } from "../CreateWorkout/WorkoutItem/WorkoutItem";
+import { WorkoutItemData } from "../WorkoutSetCreator/WorkoutItem/WorkoutItem";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import Icon from "../Icon/Icon";
