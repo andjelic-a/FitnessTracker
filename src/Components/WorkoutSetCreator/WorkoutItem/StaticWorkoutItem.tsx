@@ -1,7 +1,7 @@
 import "./WorkoutItem.scss";
 import Icon from "../../Icon/Icon.tsx";
-import WorkoutSetDisplay from "./WorkoutSetDisplay.tsx";
 import { WorkoutItemData } from "./WorkoutItem.tsx";
+import StaticWorkoutSetDisplay from "./StaticWorkoutSetDisplay.tsx";
 
 type StaticWorkoutItemProps = {
   workoutItem: WorkoutItemData;
@@ -11,12 +11,16 @@ export default function StaticWorkoutItem({
   workoutItem,
 }: StaticWorkoutItemProps) {
   return (
-    <div id={`workout-item-${workoutItem.id}`} className="workout-item">
+    <div className="workout-item" aria-hidden tabIndex={-1}>
       <div className="workout-item-header">
         <div className="exercise">
-          <img src={workoutItem.exercise.image} />
+          <img
+            src={workoutItem.exercise.image}
+            alt={`Image of an exercise: ${workoutItem.exercise.name}`}
+            className="exercise-image"
+          />
 
-          <button>{workoutItem.exercise.name}</button>
+          <button className="exercise-name">{workoutItem.exercise.name}</button>
         </div>
 
         <div className="drag-handle">
@@ -26,22 +30,20 @@ export default function StaticWorkoutItem({
 
       <div className="workout-item-body">
         <div className="exercise-set">
-          <div className="exercise-set-placeholder">
+          <div className="set-information-header-container">
+            <p hidden></p>
             <p>SET</p>
             <p>RiR</p>
             <p>VOLUME</p>
           </div>
+
           {workoutItem.sets.map((set, index) => (
-            <WorkoutSetDisplay
-              key={set.id}
-              set={set}
-              index={index}
-              itemId={workoutItem.id}
-            />
+            <StaticWorkoutSetDisplay key={set.id} set={set} index={index} />
           ))}
-          <div className="icon-wrapper">
+
+          <button className="add-set-btn">
             <Icon className="add-set-icon" name="plus" />
-          </div>
+          </button>
         </div>
       </div>
     </div>

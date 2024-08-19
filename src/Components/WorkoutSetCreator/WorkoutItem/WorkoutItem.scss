@@ -21,93 +21,31 @@
   .exercise {
     display: flex;
     align-items: center;
-  }
-
-  img {
     margin-top: 1rem;
-    height: 6rem;
-    aspect-ratio: 1;
-    border-radius: 50%;
-  }
 
-  button {
-    margin-left: 1.5rem;
-    font-size: 1.8rem;
-    transition: 0.2s;
-    cursor: pointer;
-
-    background: none;
-    border: none;
-    outline: none;
-
-    color: #fff;
-
-    &:hover,
-    &:focus-visible {
-      color: $primary-500;
+    .exercise-image {
+      height: 6rem;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 50%;
     }
-  }
 
-  .workout-settings-popup {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 14rem;
-    height: 4rem;
-    transform: translate(-5px, 5px);
-    background-color: $dark-200;
-    border-radius: 1rem;
-    box-shadow: 4px 8px 10px rgba(0, 0, 0, 0.1);
-    opacity: 1;
-    visibility: visible;
-    transition: 0.2s;
+    button.exercise-name {
+      margin-left: 1.5rem;
+      font-size: 1.8rem;
+      transition: 0.2s;
+      cursor: pointer;
 
-    p {
-      height: 2rem;
-      margin-left: 0;
-      font-size: 1.4rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      background: none;
+      border: none;
+      outline: none;
 
-      &:hover {
-        background-color: $dark-300;
-        color: white;
+      color: #fff;
+
+      &:hover,
+      &:focus-visible {
+        color: $primary-500;
       }
-    }
-
-    :first-child {
-      border-radius: 1rem 1rem 0 0;
-    }
-
-    :last-child {
-      border-radius: 0 0 1rem 1rem;
-    }
-  }
-
-  .hidden {
-    font-size: 0px;
-    width: 7rem;
-    height: 2rem;
-    opacity: 0;
-    visibility: hidden;
-  }
-
-  .workout-settings-icon {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 1.8rem;
-    height: 1.8rem;
-    margin-left: auto;
-    margin-right: 1.5rem;
-    cursor: pointer;
-    font-size: 2rem;
-    transition: 0.2s;
-
-    &:hover {
-      color: $primary-500;
     }
   }
 }
@@ -121,7 +59,25 @@
   height: max-content;
   padding-bottom: 1.25rem;
 
+  .set-information-header-container {
+    display: grid;
+    grid-template-columns: 8rem 1fr 1fr 1fr;
+
+    width: 100%;
+    height: 4rem;
+    padding: 0 0.5rem;
+
+    p {
+      font-size: 1.6rem;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+  }
+
   .set {
+    height: 4rem;
+
     display: grid;
     grid-template-columns: auto 1fr;
     padding: 0 0.5rem;
@@ -139,7 +95,6 @@
         justify-content: center;
         align-items: center;
         width: 100%;
-        height: 4rem;
 
         button {
           cursor: pointer;
@@ -227,7 +182,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 4rem;
+        height: 100%;
         width: 100%;
         background-color: initial;
         color: white;
@@ -311,6 +266,7 @@
     border-radius: 50%;
     background-color: $primary-300;
     padding: 0.7rem;
+    margin-top: 1rem;
 
     &:hover,
     &:focus-visible {
@@ -324,24 +280,6 @@
     .add-set-icon {
       color: $dark-400;
       font-size: 2rem;
-    }
-  }
-
-  .exercise-set-placeholder {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    height: 4rem;
-
-    *:nth-child(even) {
-      background-color: initial;
-    }
-
-    p {
-      font-size: 1.6rem;
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
     }
   }
 }

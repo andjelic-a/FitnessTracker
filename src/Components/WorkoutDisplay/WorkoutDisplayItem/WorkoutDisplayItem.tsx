@@ -35,7 +35,7 @@ export default function WorkoutDisplayItem({
 
       <div className="workout-display-item-body"></div>
       <div className="exercise-set">
-        <div className="exercise-set-placeholder">
+        <div className="set-information-header-container">
           <p>SET</p>
           <p>KG</p>
           <p>VOLUME</p>

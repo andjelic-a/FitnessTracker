@@ -91,15 +91,22 @@ export default function WorkoutItem({
       ref={setNodeRef}
       style={{
         transition,
-        transform: CSS.Transform.toString(transform),
+        transform: CSS.Translate.toString(transform),
         opacity: isDragging ? 0.5 : 1,
       }}
     >
       <div className="workout-item-header">
         <div className="exercise">
-          <img src={workoutItem.exercise.image} />
+          <img
+            src={workoutItem.exercise.image}
+            alt={`Image of an exercise: ${workoutItem.exercise.name}`}
+            className="exercise-image"
+          />
 
-          <button onClick={() => void onRequestExerciseReplace(workoutItem.id)}>
+          <button
+            onClick={() => void onRequestExerciseReplace(workoutItem.id)}
+            className="exercise-name"
+          >
             {workoutItem.exercise.name}
           </button>
         </div>
@@ -111,7 +118,8 @@ export default function WorkoutItem({
 
       <div className="workout-item-body">
         <div className="exercise-set">
-          <div className="exercise-set-placeholder">
+          <div className="set-information-header-container">
+            <p hidden></p>
             <p>SET</p>
             <p>RiR</p>
             <p>VOLUME</p>
