@@ -5,6 +5,7 @@ import useOutsideClick from "../../../Hooks/UseOutsideClick.ts";
 import { Schema } from "../../../Types/Endpoints/SchemaParser.ts";
 import WorkoutExerciseDisplay from "./WorkoutExerciseDisplay.tsx";
 import CurrentEditingWorkoutSetsContext from "../../../Contexts/CurrentEditingWorkoutSetsContext.ts";
+import { useSortable } from "@dnd-kit/sortable";
 
 //TODO:? Make rir field or the entire workout item change color or tint based on type of set
 export type Set = {
@@ -31,6 +32,27 @@ export default function WorkoutItem({
   onRequestExerciseReplace,
   workoutItem,
 }: WorkoutItemProps) {
+  const {
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: workoutItem.id,
+    data: {
+      type: "WorkoutItem",
+      workoutItem,
+    },
+  });
+
+  const style = {
+    transition,
+    transform: `translate3d(${transform?.x ?? 0}px, ${transform?.y ?? 0}px, 0)`,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const workoutSettingsPopup = useRef<HTMLDivElement | null>(null);
 
@@ -68,7 +90,14 @@ export default function WorkoutItem({
   };
 
   return (
-    <div className="workout-item" id={`workout-item-${workoutItem.id}`}>
+    <div
+      className="workout-item"
+      id={`workout-item-${workoutItem.id}`}
+      {...listeners}
+      {...attributes}
+      style={style}
+      ref={setNodeRef}
+    >
       <div className="workout-item-header">
         <img src={workoutItem.exercise.image} />
 
