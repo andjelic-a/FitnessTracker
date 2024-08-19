@@ -1,7 +1,6 @@
 import "./WorkoutItem.scss";
-import { useState, useRef, useContext } from "react";
+import { useContext } from "react";
 import Icon from "../../Icon/Icon.tsx";
-import useOutsideClick from "../../../Hooks/UseOutsideClick.ts";
 import { Schema } from "../../../Types/Endpoints/SchemaParser.ts";
 import WorkoutExerciseDisplay from "./WorkoutExerciseDisplay.tsx";
 import CurrentEditingWorkoutSetsContext from "../../../Contexts/CurrentEditingWorkoutSetsContext.ts";
@@ -53,24 +52,7 @@ export default function WorkoutItem({
     opacity: isDragging ? 0.5 : 1,
   };
 
-  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
-  const workoutSettingsPopup = useRef<HTMLDivElement | null>(null);
-
-  const handleReplaceExerciseClick = () => {
-    setIsSettingsOpen(false);
-    onRequestExerciseReplace(workoutItem.id);
-  };
-
   const currentSetsContext = useContext(CurrentEditingWorkoutSetsContext);
-
-  //TODO: Fix this
-  useOutsideClick(workoutSettingsPopup, () => {
-    console.log("a");
-
-    if (isSettingsOpen) setIsSettingsOpen(false);
-  });
-
-  const handleSettingsClick = () => void setIsSettingsOpen(!isSettingsOpen);
 
   const handleSetsChanged = (newSets: Set[]) => {
     currentSetsContext.setCurrentSets((prev) => {
@@ -93,31 +75,21 @@ export default function WorkoutItem({
     <div
       className="workout-item"
       id={`workout-item-${workoutItem.id}`}
-      {...listeners}
-      {...attributes}
       style={style}
       ref={setNodeRef}
     >
       <div className="workout-item-header">
-        <img src={workoutItem.exercise.image} />
+        <div className="exercise">
+          <img src={workoutItem.exercise.image} />
 
-        <p>{workoutItem.exercise.name}</p>
+          <button onClick={() => void onRequestExerciseReplace(workoutItem.id)}>
+            {workoutItem.exercise.name}
+          </button>
+        </div>
 
-        <Icon
-          onClick={handleSettingsClick}
-          className="workout-settings-icon"
-          name="ellipsis-vertical"
-        />
-
-        <div
-          ref={workoutSettingsPopup}
-          className={`workout-settings-popup ${
-            !isSettingsOpen ? "hidden" : ""
-          }`}
-        >
-          <p onClick={handleReplaceExerciseClick}>Replace exercise</p>
-
-          <p onClick={handleDelete}>Delete exercise</p>
+        {/*FIX ARIA HIDDEN, IT SHOULD BE FALSE OR JUST NON EXISTENT --- Font awesome causes it*/}
+        <div className="drag-handle" {...listeners} {...attributes}>
+          <Icon name="grip-vertical" />
         </div>
       </div>
 

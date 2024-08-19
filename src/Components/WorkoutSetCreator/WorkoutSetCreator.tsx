@@ -3,11 +3,10 @@ import WorkoutItem, {
   WorkoutItemData,
 } from "../CreateWorkout/WorkoutItem/WorkoutItem";
 import {
+  defaultDropAnimation,
+  defaultDropAnimationSideEffects,
   DndContext,
   DragOverlay,
-  PointerSensor,
-  useSensor,
-  useSensors,
 } from "@dnd-kit/core";
 import CurrentEditingWorkoutSetsContext from "../../Contexts/CurrentEditingWorkoutSetsContext";
 import ExerciseSelector from "../CreateWorkout/ChooseExercise/ExerciseSelector";
@@ -33,14 +32,6 @@ export default function WorkoutSetCreator({
   const [isChoosingExercise, setIsChoosingExercise] = useState<boolean>(false);
   const [replacingExerciseId, setReplacingExerciseId] = useState<string | null>(
     null
-  );
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 5,
-      },
-    })
   );
 
   function handleAddExerciseSetBtnClick() {
@@ -123,12 +114,9 @@ export default function WorkoutSetCreator({
       {isChoosingExercise && <OutPortal node={exerciseSelectorPortalNode} />}
 
       <DndContext
-        sensors={sensors}
         onDragStart={(x) => {
           if (x.active.data.current?.type === "WorkoutItem")
             setDraggingItem(x.active.data.current.workoutItem);
-
-          console.log(x);
         }}
         onDragEnd={({ active, over }) => {
           if (!over) return;
@@ -167,7 +155,18 @@ export default function WorkoutSetCreator({
         </div>
 
         {createPortal(
-          <DragOverlay>
+          <DragOverlay
+            dropAnimation={{
+              ...defaultDropAnimation,
+              sideEffects: defaultDropAnimationSideEffects({
+                styles: {
+                  active: {
+                    opacity: "0.5",
+                  },
+                },
+              }),
+            }}
+          >
             {draggingItem && (
               <WorkoutItem
                 onRequestExerciseReplace={() => {}}

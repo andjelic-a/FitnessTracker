@@ -11,10 +11,11 @@ import { getProfileCache } from "../../Pages/Profile/ProfileCache";
 import { Tooltip } from "react-tooltip";
 import CurrentEditingWorkoutSetsContext from "../../Contexts/CurrentEditingWorkoutSetsContext";
 
-const CreateWorkoutWindow = WindowFC(({}, wrapperRef, onClose) => {
+const CreateWorkoutWindow = WindowFC(({}, _, onClose) => {
   // console.log("Rerendering create workout window");
 
   const newWorkoutsContext = useContext(NewWorkoutsContext);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   const [isPublic, setIsPublic] = useState<boolean>(false);
   const [currentSets, setCurrentSets] = useState<WorkoutItemData[]>([]);
@@ -82,9 +83,7 @@ const CreateWorkoutWindow = WindowFC(({}, wrapperRef, onClose) => {
 
           if (repRange.length === 1) repRange = [repRange[0], repRange[0]];
 
-          const enumValue = ["1", "w", "d", "f"].indexOf(
-            x.set.type ?? "1"
-          );
+          const enumValue = ["1", "w", "d", "f"].indexOf(x.set.type ?? "1");
 
           const rir =
             !x.set.type || x.set.type === "1"

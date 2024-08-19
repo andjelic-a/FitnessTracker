@@ -33,6 +33,11 @@ a.disabled {
   cursor: default;
 }
 
+.drag-handle {
+  touch-action: none;
+  cursor: grab;
+}
+
 body {
   overflow: hidden;
 }
