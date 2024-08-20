@@ -4,105 +4,141 @@
   position: relative;
   background-color: $dark-400;
   border-radius: 1.5rem;
-  min-height: 19rem;
-  height: fit-content;
+  height: max-content;
   max-height: fit-content;
-}
+  padding: 1rem 0;
 
-.workout-item-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  height: 6rem;
-  padding: 0 1.5rem 0 0.5rem;
-  font-size: 2rem;
-
-  .exercise {
+  .workout-item-header {
     display: flex;
     align-items: center;
-    margin-top: 1rem;
+    justify-content: space-between;
+    width: 100%;
+    height: 6rem;
+    padding: 0 1.5rem 0 0.5rem;
+    font-size: 2rem;
 
-    .exercise-image {
-      height: 6rem;
-      aspect-ratio: 1;
-      object-fit: cover;
-      border-radius: 50%;
+    .exercise {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 1rem;
+
+      .exercise-image {
+        height: 6rem;
+        aspect-ratio: 1;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+
+      button.exercise-name {
+        font-size: 1.8rem;
+        transition: 0.2s;
+        cursor: pointer;
+
+        background: none;
+        border: none;
+        outline: none;
+
+        color: #fff;
+
+        &:hover,
+        &:focus-visible {
+          color: $primary-500;
+        }
+      }
+
+      .collapse-btn {
+        cursor: pointer;
+        border: none;
+        background: none;
+        outline: none;
+
+        color: #fff;
+        font-size: 1.7rem;
+
+        &:hover,
+        &:focus-visible {
+          color: $primary-500;
+        }
+      }
     }
 
-    button.exercise-name {
-      margin-left: 1.5rem;
-      font-size: 1.8rem;
-      transition: 0.2s;
-      cursor: pointer;
+    .drag-handle {
+      height: 4rem;
+      aspect-ratio: 1;
 
       background: none;
       border: none;
       outline: none;
 
-      color: #fff;
+      border-radius: 0.5rem;
+      font-size: 2rem;
 
-      &:hover,
+      border-radius: 0.5rem;
+      font-size: 2rem;
+
+      & i {
+        color: #fff;
+      }
+
       &:focus-visible {
-        color: $primary-500;
+        outline: 1px solid $primary-300;
       }
     }
   }
-}
 
-.exercise-set {
-  display: flex;
-  flex-direction: column;
-
-  width: 100%;
-  min-height: 13rem;
-  height: max-content;
-  padding-bottom: 1.25rem;
-
-  .set-information-header-container {
-    display: grid;
-    grid-template-columns: 8rem 1fr 1fr 1fr;
+  .workout-item-body {
+    display: flex;
+    flex-direction: column;
 
     width: 100%;
-    height: 4rem;
-    padding: 0 0.5rem;
+    min-height: 13rem;
+    height: max-content;
 
-    p {
-      font-size: 1.6rem;
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
+    .set-information-header-container {
+      display: grid;
+      grid-template-columns: 8rem 1fr 1fr 1fr;
+
+      width: 100%;
+      padding: 0.5rem;
+
+      p {
+        font-size: 1.6rem;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+      }
     }
-  }
 
-  /*   .set:nth-child(even) {
+    /*   .set:nth-child(even) {
     background-color: $dark-300;
   } */
 
-  .add-set-btn {
-    cursor: pointer;
-    align-self: center;
-    width: max-content;
-    height: max-content;
+    .add-set-btn {
+      cursor: pointer;
+      align-self: center;
+      width: max-content;
+      height: max-content;
 
-    border: none;
-    border-radius: 50%;
-    background-color: $primary-300;
-    padding: 0.7rem;
-    margin-top: 1rem;
+      border: none;
+      border-radius: 50%;
+      background-color: $primary-300;
+      padding: 0.7rem;
+      margin-top: 1rem;
 
-    &:hover,
-    &:focus-visible {
-      background-color: $primary-400;
-    }
+      &:hover,
+      &:focus-visible {
+        background-color: $primary-400;
+      }
 
-    &:focus-visible {
-      outline: 1px solid #fff;
-    }
+      &:focus-visible {
+        outline: 1px solid #fff;
+      }
 
-    .add-set-icon {
-      color: $dark-400;
-      font-size: 2rem;
+      .add-set-icon {
+        color: $dark-400;
+        font-size: 2rem;
+      }
     }
   }
 }

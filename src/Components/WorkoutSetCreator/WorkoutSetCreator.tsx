@@ -22,6 +22,7 @@ import {
 } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 import StaticWorkoutItem from "./WorkoutItem/StaticWorkoutItem";
+import { snapCenterToCursor } from "@dnd-kit/modifiers";
 
 type WorkoutSetCreatorProps = {
   onOverlayOpen: () => void;
@@ -117,11 +118,16 @@ export default function WorkoutSetCreator({
       {isChoosingExercise && <OutPortal node={exerciseSelectorPortalNode} />}
 
       <DndContext
+        modifiers={[snapCenterToCursor]}
         onDragStart={(x) => {
           if (x.active.data.current?.type === "WorkoutItem")
             setDraggingItem(x.active.data.current.workoutItem);
         }}
         onDragEnd={({ active, over }) => {
+          setTimeout(() => {
+            setDraggingItem(null);
+          }, 150);
+
           if (!over) return;
 
           const activeId = active.data.current?.workoutItem.id;
@@ -143,6 +149,7 @@ export default function WorkoutSetCreator({
           >
             {currentSetsContext.currentSets.map((x) => (
               <WorkoutItem
+                forceCollapse={!!draggingItem}
                 key={x.id}
                 workoutItem={x}
                 onRequestExerciseReplace={handleReplaceExerciseRequest}
@@ -162,6 +169,7 @@ export default function WorkoutSetCreator({
           <DragOverlay
             dropAnimation={{
               ...defaultDropAnimation,
+              duration: 150,
               sideEffects: defaultDropAnimationSideEffects({
                 styles: {
                   active: {

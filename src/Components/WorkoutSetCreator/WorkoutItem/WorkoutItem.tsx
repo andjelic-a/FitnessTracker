@@ -21,6 +21,11 @@ import {
 } from "@dnd-kit/core";
 import { createPortal } from "react-dom";
 import StaticWorkoutSetDisplay from "./StaticWorkoutSetDisplay.tsx";
+import {
+  createHtmlPortalNode,
+  InPortal,
+  OutPortal,
+} from "react-reverse-portal";
 
 export type Set = {
   id: string;
@@ -40,11 +45,13 @@ export type WorkoutItemData = {
 type WorkoutItemProps = {
   onRequestExerciseReplace: (id: string) => void;
   workoutItem: WorkoutItemData;
+  forceCollapse: boolean;
 };
 
 export default function WorkoutItem({
   onRequestExerciseReplace,
   workoutItem,
+  forceCollapse,
 }: WorkoutItemProps) {
   const {
     setNodeRef,
@@ -69,6 +76,22 @@ export default function WorkoutItem({
         .flatMap((x) => x.sets),
     [currentSetsContext.currentSets]
   );
+  const workoutItemBodyPortalNode = useMemo(
+    () =>
+      createHtmlPortalNode({
+        attributes: {
+          class: "workout-item-body",
+        },
+      }),
+    []
+  );
+
+  const [draggingSet, setDraggingSet] = useState<{
+    set: Set;
+    index: number;
+  } | null>(null);
+
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const addSet = () => {
     const newSet: Set = {
@@ -96,14 +119,7 @@ export default function WorkoutItem({
     );
   }; */
 
-  const [draggingSet, setDraggingSet] = useState<{
-    set: Set;
-    index: number;
-  } | null>(null);
-
   //TODO: Add a collapse/expand button and collapse all workout items before initializing drag
-  //TODO: Add drag and drop to reorder sets
-  //TODO: Add a copy / duplicate button to sets
   return (
     <DndContext
       collisionDetection={closestCenter}
@@ -131,11 +147,51 @@ export default function WorkoutItem({
         const overIndex = sets.findIndex((x) => x.id === overId);
 
         if (activeIndex < 0 || overIndex < 0) return;
-        console.log("a");
 
         handleSetsChanged(arrayMove(sets, activeIndex, overIndex));
       }}
     >
+      <InPortal node={workoutItemBodyPortalNode}>
+        <div className="workout-item-body">
+          <div className="set-information-header-container">
+            <p hidden></p>
+            <p>SET</p>
+            <p>RiR</p>
+            <p>VOLUME</p>
+          </div>
+
+          <SortableContext
+            strategy={verticalListSortingStrategy}
+            items={sets.map((x) => x.id)}
+          >
+            {sets.map((set, index) => (
+              <WorkoutSetDisplay
+                key={set.id}
+                set={set}
+                index={index}
+                itemId={workoutItem.id}
+              />
+            ))}
+          </SortableContext>
+
+          <button
+            className="add-set-btn"
+            onClick={addSet}
+            aria-describedby="add-set-text"
+          >
+            <Icon className="add-set-icon" name="plus" />
+
+            <p
+              id="add-set-text"
+              className="accessibility-only"
+              aria-hidden={false}
+            >
+              Add Set
+            </p>
+          </button>
+        </div>
+      </InPortal>
+
       <div
         id={`workout-item-${workoutItem.id}`}
         className="workout-item"
@@ -160,53 +216,23 @@ export default function WorkoutItem({
             >
               {workoutItem.exercise.name}
             </button>
-          </div>
-
-          <div className="drag-handle" {...listeners} {...attributes}>
-            <Icon name="grip-vertical" />
-          </div>
-        </div>
-
-        <div className="workout-item-body">
-          <div className="exercise-set">
-            <div className="set-information-header-container">
-              <p hidden></p>
-              <p>SET</p>
-              <p>RiR</p>
-              <p>VOLUME</p>
-            </div>
-
-            <SortableContext
-              strategy={verticalListSortingStrategy}
-              items={sets.map((x) => x.id)}
-            >
-              {sets.map((set, index) => (
-                <WorkoutSetDisplay
-                  key={set.id}
-                  set={set}
-                  index={index}
-                  itemId={workoutItem.id}
-                />
-              ))}
-            </SortableContext>
 
             <button
-              className="add-set-btn"
-              onClick={addSet}
-              aria-describedby="add-set-text"
+              className="collapse-btn"
+              onClick={() => setIsCollapsed(!isCollapsed)}
             >
-              <Icon className="add-set-icon" name="plus" />
-
-              <p
-                id="add-set-text"
-                className="accessibility-only"
-                aria-hidden={false}
-              >
-                Add Set
-              </p>
+              <Icon name={`chevron-${isCollapsed ? "up" : "down"}`} />
             </button>
           </div>
+
+          <button className="drag-handle" {...listeners} {...attributes}>
+            <Icon name="grip-vertical" />
+          </button>
         </div>
+
+        {!forceCollapse && !isCollapsed && (
+          <OutPortal node={workoutItemBodyPortalNode} />
+        )}
       </div>
 
       {createPortal(
