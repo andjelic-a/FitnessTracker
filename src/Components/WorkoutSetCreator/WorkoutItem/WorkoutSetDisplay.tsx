@@ -5,6 +5,8 @@ import { SetType, Set } from "./WorkoutItem.tsx";
 import CurrentEditingWorkoutSetsContext from "../../../Contexts/CurrentEditingWorkoutSetsContext.ts";
 import useOutsideClick from "../../../Hooks/UseOutsideClick.ts";
 import { v4 } from "uuid";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 type SingleExerciseSetProps = {
   set: Set;
@@ -17,6 +19,22 @@ export default function WorkoutSetDisplay({
   index,
   itemId,
 }: SingleExerciseSetProps): React.JSX.Element {
+  const {
+    setNodeRef,
+    attributes,
+    listeners,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: set.id,
+    data: {
+      type: "Set",
+      set,
+      index,
+    },
+  });
+
   const currentSetsContext = useContext(CurrentEditingWorkoutSetsContext);
 
   const iconDropdownRef = useRef<HTMLDivElement>(null);
@@ -62,9 +80,6 @@ export default function WorkoutSetDisplay({
 
   function handleDuplicate() {
     const prevSets = sets.slice();
-    const index = prevSets.findIndex((x) => x.id === set.id);
-
-    if (index < 0) return;
 
     handleSetsChanged([
       ...prevSets.slice(0, index),
@@ -77,9 +92,18 @@ export default function WorkoutSetDisplay({
   }
 
   return (
-    <div className="set" id={`set-${set.id}`}>
+    <div
+      className="set"
+      id={`set-${set.id}`}
+      ref={setNodeRef}
+      style={{
+        transition,
+        transform: CSS.Translate.toString(transform),
+        opacity: isDragging ? 0.5 : 1,
+      }}
+    >
       <div className="options">
-        <button className="drag-handle">
+        <button className="drag-handle" {...attributes} {...listeners}>
           <Icon name="grip-vertical" />
         </button>
 
