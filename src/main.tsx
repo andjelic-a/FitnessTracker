@@ -33,8 +33,7 @@ import UserPage from "./Pages/User/User.tsx";
 import userLoader from "./Pages/User/UserLoader.ts";
 import WorkoutDisplay from "./Components/WorkoutDisplay/WorkoutDisplay.tsx";
 import workoutDisplayLoader from "./Components/WorkoutDisplay/WorkoutDisplayLoader.ts";
-import CreateWorkoutWindow from "./Components/CreateWorkout/CreateWorkout.tsx";
-import createWorkoutLoader from "./Components/CreateWorkout/CreateWorkoutLoader.ts";
+import WorkoutCreator from "./Components/WorkoutCreator/WorkoutCreator.tsx";
 import landingPageLoader from "./Pages/LandingPage/LandingPageLoader.ts";
 import FollowContainer from "./Components/FollowContainer/FollowContainer.tsx";
 import profileFollowersContainerLoader from "./Components/FollowContainer/ProfileFollowersContainerLoader.ts";
@@ -46,7 +45,8 @@ import adminEquipmentLoader from "./Pages/AdminPanel/Equipment/EquipmentAdminPan
 import Settings from "./Pages/Settings/Settings.tsx";
 import StartedWorkout from "./Pages/StartedWorkout/StartedWorkout.tsx";
 import startedWorkoutLoader from "./Pages/StartedWorkout/StartedWorkoutLoader.ts";
-import EditWorkout from "./Components/EditWorkout/EditWorkout.tsx";
+import WorkoutEditor from "./Components/WorkoutEditor/WorkoutEditor.tsx";
+import workoutCreatorLoader from "./Components/WorkoutCreator/WorkoutCreatorLoader.ts";
 
 const routes: RouteObject[] = [
   {
@@ -94,13 +94,13 @@ const routes: RouteObject[] = [
           },
           {
             path: "workout/:id/edit",
-            element: <EditWorkout />,
+            element: <WorkoutEditor />,
             loader: workoutDisplayLoader,
           },
           {
             path: "workout/new",
-            element: <CreateWorkoutWindow />,
-            loader: createWorkoutLoader,
+            element: <WorkoutCreator />,
+            loader: workoutCreatorLoader,
           },
           {
             path: "followers",

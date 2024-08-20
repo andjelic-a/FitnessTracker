@@ -1,4 +1,4 @@
-import "./EditWorkout.scss";
+import "./WorkoutEditor.scss";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
 import Async from "../Async/Async";
 import WindowFC from "../WindowWrapper/WindowFC";
@@ -11,7 +11,7 @@ import Icon from "../Icon/Icon";
 import extractSets from "./ExtractSetsFromWorkout";
 import WorkoutSetCreator from "../WorkoutSetCreator/WorkoutSetCreator";
 
-const EditWorkout = WindowFC(({}, wrapperRef, onClose) => {
+const WorkoutEditor = WindowFC(({}, wrapperRef, onClose) => {
   const loaderData = useLoaderData<typeof workoutDisplayLoader>();
 
   const [isPublic, setIsPublic] = useState<boolean>(false);
@@ -74,9 +74,7 @@ const EditWorkout = WindowFC(({}, wrapperRef, onClose) => {
 
             if (repRange.length === 1) repRange = [repRange[0], repRange[0]];
 
-            const enumValue = ["1", "w", "d", "f"].indexOf(
-              x.set.type ?? "1"
-            );
+            const enumValue = ["1", "w", "d", "f"].indexOf(x.set.type ?? "1");
 
             const rir =
               !x.set.type || x.set.type === "1"
@@ -187,18 +185,13 @@ const EditWorkout = WindowFC(({}, wrapperRef, onClose) => {
             </div>
 
             <WorkoutSetCreator
-              setCreatedSets={setCreatedSets}
-              createdSets={createdSets}
-              onSetsChange={(newSets) =>
-                void (createdSetsRef.current = newSets)
-              }
-              onStartChoosingExercise={() => {
+              onOverlayOpen={() => {
                 if (!wrapperRef.current) return;
 
                 wrapperRef.current.style.overflow = "hidden";
                 wrapperRef.current.scrollTop = 0;
               }}
-              onConfirmExerciseSelection={() => {
+              onOverlayClose={() => {
                 if (!wrapperRef.current) return;
 
                 wrapperRef.current.style.overflow = "auto";
@@ -230,4 +223,4 @@ const EditWorkout = WindowFC(({}, wrapperRef, onClose) => {
   );
 });
 
-export default EditWorkout;
+export default WorkoutEditor;

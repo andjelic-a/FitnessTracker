@@ -1,4 +1,4 @@
-import "./CreateWorkout.scss";
+import "./WorkoutCreator.scss";
 import { useContext, useRef, useState } from "react";
 import { WorkoutItemData } from "../WorkoutSetCreator/WorkoutItem/WorkoutItem";
 import Icon from "../Icon/Icon";
@@ -11,7 +11,7 @@ import { getProfileCache } from "../../Pages/Profile/ProfileCache";
 import { Tooltip } from "react-tooltip";
 import CurrentEditingWorkoutSetsContext from "../../Contexts/CurrentEditingWorkoutSetsContext";
 
-const CreateWorkoutWindow = WindowFC(({}, _, onClose) => {
+const WorkoutCreator = WindowFC(({}, _, onClose) => {
   // console.log("Rerendering create workout window");
 
   const newWorkoutsContext = useContext(NewWorkoutsContext);
@@ -209,4 +209,4 @@ const CreateWorkoutWindow = WindowFC(({}, _, onClose) => {
   );
 });
 
-export default CreateWorkoutWindow;
+export default WorkoutCreator;

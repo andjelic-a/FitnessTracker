@@ -1,10 +1,10 @@
 import "./ExerciseSelector.scss";
 import { useEffect, useRef, useState } from "react";
-import { Schema } from "../../../Types/Endpoints/SchemaParser";
-import Icon from "../../Icon/Icon";
-import AsyncDropdown from "../../DropdownMenu/AsyncDropdown/AsyncDropdown";
+import { Schema } from "../../Types/Endpoints/SchemaParser";
+import Icon from "../Icon/Icon";
+import AsyncDropdown from "../DropdownMenu/AsyncDropdown/AsyncDropdown";
 import ExerciseSelectorSegment from "./ExerciseSelectorSegment";
-import sendAPIRequest from "../../../Data/SendAPIRequest";
+import sendAPIRequest from "../../Data/SendAPIRequest";
 
 export type ChooseExerciseData = {
   id: string;

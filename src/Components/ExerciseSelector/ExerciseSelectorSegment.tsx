@@ -1,6 +1,6 @@
-import { Schema } from "../../../Types/Endpoints/SchemaParser";
-import Async from "../../Async/Async";
-import { ExerciseOption } from "./ExerciseOption";
+import { Schema } from "../../Types/Endpoints/SchemaParser";
+import Async from "../Async/Async";
+import { ExerciseSelectorOption } from "./ExerciseSelectorOption";
 
 type ExerciseSelectorSegmentProps = {
   exercises: Promise<Schema<"SimpleExerciseResponseDTO">[]>;
@@ -19,7 +19,7 @@ export default function ExerciseSelectorSegment({
     <Async await={exercises}>
       {(exercises) =>
         exercises.map((exercise) => (
-          <ExerciseOption
+          <ExerciseSelectorOption
             key={exercise.id}
             exercise={exercise}
             isSelected={

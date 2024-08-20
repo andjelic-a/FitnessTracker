@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Schema } from "../../../Types/Endpoints/SchemaParser";
-import Icon from "../../Icon/Icon";
+import { Schema } from "../../Types/Endpoints/SchemaParser";
+import Icon from "../Icon/Icon";
 
 type ExerciseOptionProps = {
   exercise: Schema<"SimpleExerciseResponseDTO">;
@@ -8,7 +8,7 @@ type ExerciseOptionProps = {
   isSelected: boolean;
 };
 
-export function ExerciseOption({
+export function ExerciseSelectorOption({
   exercise,
   onSelectExercise,
   isSelected,

@@ -8,7 +8,7 @@ import {
   DragOverlay,
 } from "@dnd-kit/core";
 import CurrentEditingWorkoutSetsContext from "../../Contexts/CurrentEditingWorkoutSetsContext";
-import ExerciseSelector from "../CreateWorkout/ChooseExercise/ExerciseSelector";
+import ExerciseSelector from "../ExerciseSelector/ExerciseSelector";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import { v4 } from "uuid";
 import {
