@@ -4,6 +4,7 @@ import Icon from "../../Icon/Icon.tsx";
 import { SetType, Set } from "./WorkoutItem.tsx";
 import CurrentEditingWorkoutSetsContext from "../../../Contexts/CurrentEditingWorkoutSetsContext.ts";
 import useOutsideClick from "../../../Hooks/UseOutsideClick.ts";
+import { v4 } from "uuid";
 
 type SingleExerciseSetProps = {
   set: Set;
@@ -55,10 +56,25 @@ export default function WorkoutSetDisplay({
     setIsDropdownOpen(false);
   }
 
-  const handleDeleteSet = () => {
+  function handleDeleteSet() {
+    handleSetsChanged(sets.filter((prevSet) => prevSet.id !== set.id));
+  }
+
+  function handleDuplicate() {
     const prevSets = sets.slice();
-    handleSetsChanged(prevSets.filter((prevSet) => prevSet.id !== set.id));
-  };
+    const index = prevSets.findIndex((x) => x.id === set.id);
+
+    if (index < 0) return;
+
+    handleSetsChanged([
+      ...prevSets.slice(0, index),
+      {
+        ...set,
+        id: v4(),
+      },
+      ...prevSets.slice(index),
+    ]);
+  }
 
   return (
     <div className="set" id={`set-${set.id}`}>
@@ -67,7 +83,11 @@ export default function WorkoutSetDisplay({
           <Icon name="grip-vertical" />
         </button>
 
-        <button className="duplicate" aria-describedby="duplicate-set-desc">
+        <button
+          className="duplicate"
+          aria-describedby="duplicate-set-desc"
+          onClick={handleDuplicate}
+        >
           <Icon name="copy" />
 
           <p

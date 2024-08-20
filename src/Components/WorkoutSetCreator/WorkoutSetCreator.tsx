@@ -15,7 +15,11 @@ import {
   InPortal,
   OutPortal,
 } from "react-reverse-portal";
-import { arrayMove, SortableContext } from "@dnd-kit/sortable";
+import {
+  arrayMove,
+  rectSortingStrategy,
+  SortableContext,
+} from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 import StaticWorkoutItem from "./WorkoutItem/StaticWorkoutItem";
 
@@ -134,6 +138,7 @@ export default function WorkoutSetCreator({
       >
         <div className="set-creator-container">
           <SortableContext
+            strategy={rectSortingStrategy}
             items={currentSetsContext.currentSets.map((x) => x.id)}
           >
             {currentSetsContext.currentSets.map((x) => (

@@ -82,6 +82,7 @@ export default function WorkoutItem({
     );
   }; */
 
+  //TODO: Add a collapse/expand button and collapse all workout items before initializing drag
   //TODO: Add drag and drop to reorder sets
   //TODO: Add a copy / duplicate button to sets
   return (
