@@ -25,6 +25,7 @@ export default function WorkoutSetDisplay({
     listeners,
     transform,
     transition,
+    newIndex,
     isDragging,
   } = useSortable({
     id: set.id,
@@ -93,13 +94,13 @@ export default function WorkoutSetDisplay({
 
   return (
     <div
-      className="set"
+      className={"set " + (newIndex % 2 === 0 ? "even" : "odd")}
       id={`set-${set.id}`}
       ref={setNodeRef}
       style={{
         transition,
         transform: CSS.Translate.toString(transform),
-        opacity: isDragging ? 0.5 : 1,
+        opacity: isDragging ? 0 : 1,
       }}
     >
       <div className="options">

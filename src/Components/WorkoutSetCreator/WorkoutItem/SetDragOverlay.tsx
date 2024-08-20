@@ -8,7 +8,7 @@ type StaticWorkoutSetDisplayProps = {
   index: number;
 };
 
-export default function StaticWorkoutSetDisplay({
+export default function SetDragOverlay({
   set,
   index,
 }: StaticWorkoutSetDisplayProps): React.JSX.Element {

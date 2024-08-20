@@ -12,20 +12,15 @@ import {
 import { v4 } from "uuid";
 import WorkoutSetDisplay from "./WorkoutSetDisplay.tsx";
 import { CSS } from "@dnd-kit/utilities";
-import {
-  closestCenter,
-  defaultDropAnimation,
-  defaultDropAnimationSideEffects,
-  DndContext,
-  DragOverlay,
-} from "@dnd-kit/core";
-import { createPortal } from "react-dom";
-import StaticWorkoutSetDisplay from "./StaticWorkoutSetDisplay.tsx";
+import { closestCenter, DndContext, DragOverlay } from "@dnd-kit/core";
 import {
   createHtmlPortalNode,
   InPortal,
   OutPortal,
 } from "react-reverse-portal";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { createPortal } from "react-dom";
+import SetDragOverlay from "./SetDragOverlay.tsx";
 
 export type Set = {
   id: string;
@@ -86,11 +81,6 @@ export default function WorkoutItem({
     []
   );
 
-  const [draggingSet, setDraggingSet] = useState<{
-    set: Set;
-    index: number;
-  } | null>(null);
-
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const addSet = () => {
@@ -119,10 +109,15 @@ export default function WorkoutItem({
     );
   }; */
 
-  //TODO: Add a collapse/expand button and collapse all workout items before initializing drag
+  const [draggingSet, setDraggingSet] = useState<{
+    set: Set;
+    index: number;
+  } | null>(null);
+
   return (
     <DndContext
       collisionDetection={closestCenter}
+      modifiers={[restrictToVerticalAxis]}
       onDragStart={({
         active: {
           data: { current: data },
@@ -221,7 +216,9 @@ export default function WorkoutItem({
               className="collapse-btn"
               onClick={() => setIsCollapsed(!isCollapsed)}
             >
-              <Icon name={`chevron-${isCollapsed ? "up" : "down"}`} />
+              <Icon
+                name={`chevron-${isCollapsed || forceCollapse ? "up" : "down"}`}
+              />
             </button>
           </div>
 
@@ -236,23 +233,9 @@ export default function WorkoutItem({
       </div>
 
       {createPortal(
-        <DragOverlay
-          dropAnimation={{
-            ...defaultDropAnimation,
-            sideEffects: defaultDropAnimationSideEffects({
-              styles: {
-                active: {
-                  opacity: "0.5",
-                },
-              },
-            }),
-          }}
-        >
+        <DragOverlay>
           {draggingSet && (
-            <StaticWorkoutSetDisplay
-              index={draggingSet.index}
-              set={draggingSet.set}
-            />
+            <SetDragOverlay set={draggingSet.set} index={draggingSet.index} />
           )}
         </DragOverlay>,
         document.body

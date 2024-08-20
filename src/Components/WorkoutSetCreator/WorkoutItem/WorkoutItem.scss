@@ -110,10 +110,6 @@
       }
     }
 
-    /*   .set:nth-child(even) {
-    background-color: $dark-300;
-  } */
-
     .add-set-btn {
       cursor: pointer;
       align-self: center;
@@ -151,6 +147,7 @@
   padding: 0 0.5rem;
 
   background-color: $dark-300;
+  transition: background-color 250ms;
 
   .information-container {
     display: flex;
@@ -319,5 +316,20 @@
         outline: 1px solid $primary-300;
       }
     }
+  }
+
+  &.even {
+    background-color: $dark-300;
+  }
+
+  &.odd {
+    background-color: $dark-400;
+  }
+
+  &.dragging {
+    position: relative;
+    z-index: 1000000;
+    outline: 1px solid $primary-300;
+    background-color: $mixed-200;
   }
 }

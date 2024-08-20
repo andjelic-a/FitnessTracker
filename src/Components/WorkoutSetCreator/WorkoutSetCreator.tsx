@@ -1,6 +1,7 @@
 import { useContext, useState, useMemo } from "react";
 import WorkoutItem, { WorkoutItemData } from "./WorkoutItem/WorkoutItem";
 import {
+  closestCenter,
   defaultDropAnimation,
   defaultDropAnimationSideEffects,
   DndContext,
@@ -21,7 +22,7 @@ import {
   SortableContext,
 } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
-import StaticWorkoutItem from "./WorkoutItem/StaticWorkoutItem";
+import WorkoutItemDragOverlay from "./WorkoutItem/WorkoutItemDragOverlay";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
 
 type WorkoutSetCreatorProps = {
@@ -118,6 +119,7 @@ export default function WorkoutSetCreator({
       {isChoosingExercise && <OutPortal node={exerciseSelectorPortalNode} />}
 
       <DndContext
+        collisionDetection={closestCenter}
         modifiers={[snapCenterToCursor]}
         onDragStart={(x) => {
           if (x.active.data.current?.type === "WorkoutItem")
@@ -179,7 +181,9 @@ export default function WorkoutSetCreator({
               }),
             }}
           >
-            {draggingItem && <StaticWorkoutItem workoutItem={draggingItem} />}
+            {draggingItem && (
+              <WorkoutItemDragOverlay workoutItem={draggingItem} />
+            )}
           </DragOverlay>,
           document.body
         )}

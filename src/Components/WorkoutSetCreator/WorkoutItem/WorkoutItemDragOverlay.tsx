@@ -6,7 +6,7 @@ type StaticWorkoutItemProps = {
   workoutItem: WorkoutItemData;
 };
 
-export default function StaticWorkoutItem({
+export default function WorkoutItemDragOverlay({
   workoutItem,
 }: StaticWorkoutItemProps) {
   return (
