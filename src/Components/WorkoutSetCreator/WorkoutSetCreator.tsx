@@ -1,3 +1,4 @@
+import "./WorkoutSetCreator.scss";
 import { useContext, useState, useMemo } from "react";
 import WorkoutItem, { WorkoutItemData } from "./WorkoutItem/WorkoutItem";
 import {
@@ -95,6 +96,7 @@ export default function WorkoutSetCreator({
     () => (
       <ExerciseSelector
         onClose={() => {
+          onOverlayClose();
           setIsChoosingExercise(false);
           setReplacingExerciseId(null);
         }}

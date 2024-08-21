@@ -13,7 +13,7 @@ export default function SetDragOverlay({
   index,
 }: StaticWorkoutSetDisplayProps): React.JSX.Element {
   return (
-    <div className="set" id={`set-${set.id}`} aria-hidden tabIndex={-1}>
+    <div className="set dragging" id={`set-${set.id}`} aria-hidden tabIndex={-1}>
       <div className="options">
         <button className="drag-handle">
           <Icon name="grip-vertical" />

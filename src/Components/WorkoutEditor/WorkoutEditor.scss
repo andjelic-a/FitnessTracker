@@ -156,22 +156,6 @@
     }
   }
 
-  .set-creator-container {
-    width: 100%;
-    height: auto;
-    margin-top: 2rem;
-    margin-bottom: 5rem;
-    display: grid;
-    gap: 2rem;
-    grid-template-columns: repeat(2, 1fr);
-    align-content: start;
-
-    & > * {
-      display: flex;
-      flex-direction: column;
-    }
-  }
-
   .edit-workout-add-exercise {
     justify-self: center;
     align-self: flex-start;

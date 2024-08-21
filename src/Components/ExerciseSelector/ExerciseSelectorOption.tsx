@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import Icon from "../Icon/Icon";
+import { Tooltip } from "react-tooltip";
 
 type ExerciseOptionProps = {
   exercise: Schema<"SimpleExerciseResponseDTO">;
@@ -13,55 +14,37 @@ export function ExerciseSelectorOption({
   onSelectExercise,
   isSelected,
 }: ExerciseOptionProps) {
-  const [isLinkHovered, setIsLinkHovered] = useState<boolean>(false);
-
-  const handleClick = () => void onSelectExercise(exercise);
-
-  const handleScaleUp = (element: HTMLImageElement | HTMLDivElement) =>
-    void element.classList.add("big");
-
-  const handleScaleDown = (element: HTMLImageElement | HTMLDivElement) =>
-    void element.classList.remove("big");
-
-  const handleLinkContainerClick = () => {
-    setIsLinkHovered(false);
-    console.log("link");
-  };
-
   return (
     <div
       className={"exercise-option " + (isSelected ? "selected" : "")}
-      onClick={handleClick}
+      onClick={() => void onSelectExercise(exercise)}
     >
-      <div className="select-circle-container">
-        <div>
-          {isSelected && <Icon className="select-circle-check" name="check" />}
+      <div className="selection-indicator">
+        <div className="circle">
+          {isSelected && <Icon className="selected-mark" name="check" />}
         </div>
       </div>
-      <div
-        className="image-container"
-        onMouseOver={(e) => handleScaleUp(e.currentTarget)}
-        onMouseLeave={(e) => handleScaleDown(e.currentTarget)}
-        onClick={(e) => handleScaleDown(e.currentTarget)}
-      >
+
+      <div className="image-container">
         <img src={exercise.image} alt="Exercise" />
       </div>
+
       <h3>{exercise.name}</h3>
-      <div
-        onMouseEnter={() => setIsLinkHovered(true)}
-        onMouseLeave={() => setIsLinkHovered(false)}
-        onClick={() => handleLinkContainerClick()}
-        className="choose-exercise-link-container"
+
+      <Link
+        to={`/exercises/${exercise.id}`}
+        className="view-details-link"
+        data-tooltip-id={`link-tooltip-${exercise.id}`}
       >
         <Icon name="link" />
-        <div
-          className={`choose-exercise-link-popup ${
-            isLinkHovered ? "show" : ""
-          }`}
-        >
-          <p>link</p>
-        </div>
-      </div>
+
+        <Tooltip
+          id={`link-tooltip-${exercise.id}`}
+          place="top"
+          content="View details"
+          delayShow={150}
+        />
+      </Link>
     </div>
   );
 }

@@ -8,7 +8,7 @@ import sendAPIRequest from "../../Data/SendAPIRequest";
 
 export type ChooseExerciseData = {
   id: string;
-  exercise: Schema<"SimpleExerciseResponseDTO">;
+  exercise: ExerciseSchema;
 };
 
 export type ChooseExerciseFilters = {
@@ -17,13 +17,11 @@ export type ChooseExerciseFilters = {
   name: string | null;
 };
 
+type ExerciseSchema = Schema<"SimpleExerciseResponseDTO">;
+
 type ChooseExerciseWindowProps = {
   onClose: () => void;
-  onConfirmSelection: (
-    exercise:
-      | Schema<"SimpleExerciseResponseDTO">
-      | Schema<"SimpleExerciseResponseDTO">[]
-  ) => void;
+  onConfirmSelection: (exercise: ExerciseSchema | ExerciseSchema[]) => void;
   singleMode?: boolean;
 };
 
@@ -33,11 +31,11 @@ export default function ExerciseSelector({
   singleMode: replaceMode,
 }: ChooseExerciseWindowProps) {
   const [selected, setSelectedExercises] = useState<
-    Schema<"SimpleExerciseResponseDTO"> | Schema<"SimpleExerciseResponseDTO">[]
+    ExerciseSchema | ExerciseSchema[]
   >([]);
 
   const [exercisePromises, setExercisePromises] = useState<
-    Promise<Schema<"SimpleExerciseResponseDTO">[]>[]
+    Promise<ExerciseSchema[]>[]
   >([]);
 
   const handleConfirm = () => {
@@ -46,9 +44,7 @@ export default function ExerciseSelector({
     onClose();
   };
 
-  const handleSelectExercise = (
-    exercise: Schema<"SimpleExerciseResponseDTO">
-  ) => {
+  const handleSelectExercise = (exercise: ExerciseSchema) => {
     setSelectedExercises((prevSelectedExercises) => {
       if (replaceMode || !Array.isArray(prevSelectedExercises)) return exercise;
 
@@ -155,50 +151,49 @@ export default function ExerciseSelector({
   }
 
   return (
-    <div className="choose-exercise" id="choose-exercise">
-      <div className="choose-exercise-header">
-        <h3>Choose Exercise</h3>
-      </div>
+    <div className="exercise-selector">
+      <div className="header">
+        <h3 className="title">Choose Exercise</h3>
 
-      <div className="choose-exercise-body">
-        <div className="choose-exercise-search-container">
-          <div className="choose-exercise-search-bar-container">
-            <Icon className="choose-exercise-search-bar-icon" name="search" />
-            <input
-              type="text"
-              className="choose-exercise-search-bar"
-              ref={searchBarRef}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleSearch();
-              }}
-            />
-            <Icon
-              onClick={handleSearch}
-              className="choose-exercise-search-bar-icon arrow-right-icon"
-              name="arrow-right"
-            />
-          </div>
-          <div className="choose-exercise-filter">
-            <AsyncDropdown<"SimpleMuscleGroupResponseDTO">
-              onRequest={() => {
-                return Promise.resolve([]);
-              }}
-              placeholder="All muscles"
-              className="choose-exercise-filter-muscles-dropdown"
-              onSelectionChanged={handleMuscleGroupFilterChange}
-            />
+        <div className="search-bar-container">
+          <Icon name="search" />
 
-            <AsyncDropdown<"SimpleEquipmentResponseDTO">
-              onRequest={() => {
-                return Promise.resolve([]);
-              }}
-              placeholder="All equipment"
-              className="choose-exercise-filter-equipment-dropdown"
-              onSelectionChanged={handleEquipmentFilterChange}
-            />
-          </div>
+          <input
+            type="text"
+            className="search-bar"
+            ref={searchBarRef}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSearch();
+            }}
+          />
+
+          <button className="search-btn">
+            <Icon onClick={handleSearch} name="arrow-right" />
+          </button>
         </div>
 
+        <div className="filters-container">
+          <AsyncDropdown<"SimpleMuscleGroupResponseDTO">
+            onRequest={() => {
+              return Promise.resolve([]);
+            }}
+            placeholder="All muscles"
+            className="muscles-dropdown"
+            onSelectionChanged={handleMuscleGroupFilterChange}
+          />
+
+          <AsyncDropdown<"SimpleEquipmentResponseDTO">
+            onRequest={() => {
+              return Promise.resolve([]);
+            }}
+            placeholder="All equipment"
+            className="equipment-dropdown"
+            onSelectionChanged={handleEquipmentFilterChange}
+          />
+        </div>
+      </div>
+
+      <div className="body">
         {exercisePromises.map((exercisesPromise, i) => (
           <ExerciseSelectorSegment
             key={i}
@@ -209,13 +204,13 @@ export default function ExerciseSelector({
         ))}
       </div>
 
-      <div className="choose-exercise-footer">
+      <div className="footer">
         <button className="choose-exercise-button" onClick={handleConfirm}>
           {replaceMode ? "Replace" : "Add"}
         </button>
 
         <button
-          className={"choose-exercise-button"}
+          className="choose-exercise-button"
           onClick={handleLazyLoad}
           ref={loadMoreButtonRef}
         >
