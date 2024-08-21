@@ -1,5 +1,5 @@
 import "./ExerciseSelector.scss";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import Icon from "../Icon/Icon";
 import AsyncDropdown from "../DropdownMenu/AsyncDropdown/AsyncDropdown";
@@ -59,7 +59,28 @@ export default function ExerciseSelector({
   const reachedEnd = useRef(false);
   const loadMoreButtonRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
+  useEffect(() => handleInitialRequest, []);
+
+  function getFilters(): {
+    name: string | undefined;
+    muscleGroupId: number | undefined;
+    equipmentId: number | undefined;
+  } {
+    let name: string | undefined = searchBarRef.current?.value?.trim() ?? "";
+    if (name.length === 0) name = undefined;
+
+    return {
+      name: name,
+      equipmentId:
+        equipmentFilter.current === -1 ? undefined : equipmentFilter.current,
+      muscleGroupId:
+        muscleGroupFilter.current === -1
+          ? undefined
+          : muscleGroupFilter.current,
+    };
+  }
+
+  function handleInitialRequest() {
     if (isWaitingForResponse.current) return;
 
     isWaitingForResponse.current = true;
@@ -69,6 +90,7 @@ export default function ExerciseSelector({
         parameters: {
           limit: 10,
           offset: 0,
+          ...getFilters(),
         },
       }).then((x) => {
         isWaitingForResponse.current = false;
@@ -88,7 +110,7 @@ export default function ExerciseSelector({
         return [];
       }),
     ]);
-  }, []);
+  }
 
   async function handleLazyLoad() {
     if (isWaitingForResponse.current || reachedEnd.current) return;
@@ -101,6 +123,7 @@ export default function ExerciseSelector({
         parameters: {
           limit: 10,
           offset: exercisePromises.length * 10,
+          ...getFilters(),
         },
       }).then((x) => {
         isWaitingForResponse.current = false;
@@ -127,28 +150,52 @@ export default function ExerciseSelector({
   const searchBarRef = useRef<HTMLInputElement>(null);
 
   function handleSearch() {
-    // if (!onSearch) return;
-    /*     setLazyLoaded([]);
+    if (isWaitingForResponse.current) return;
 
-    onSearch({
-      equipmentId:
-        equipmentFilter.current === -1 ? null : equipmentFilter.current,
-      muscleGroupId:
-        muscleGroupFilter.current === -1 ? null : muscleGroupFilter.current,
-      name:
-        !searchBarRef.current || searchBarRef.current?.value === ""
-          ? null
-          : searchBarRef.current?.value,
-    }); */
+    reachedEnd.current = false;
+    if (loadMoreButtonRef.current) loadMoreButtonRef.current.disabled = false;
+
+    setExercisePromises([]);
+    handleInitialRequest();
   }
 
-  function handleEquipmentFilterChange(newSelectionKey: string) {
-    equipmentFilter.current = +newSelectionKey.replace(".$", "");
-  }
+  const muscleGroupDropdown = useMemo(
+    () => (
+      <AsyncDropdown<"SimpleMuscleGroupResponseDTO">
+        onRequest={() =>
+          sendAPIRequest("/api/musclegroup", {
+            method: "get",
+            parameters: {},
+          }).then((x) => (x.code === "OK" ? x.content : []))
+        }
+        placeholder="All muscles"
+        className="muscles-dropdown"
+        onSelectionChanged={(newSelectionKey) =>
+          void (muscleGroupFilter.current = +newSelectionKey.replace(".$", ""))
+        }
+      />
+    ),
+    []
+  );
 
-  function handleMuscleGroupFilterChange(newSelectionKey: string) {
-    muscleGroupFilter.current = +newSelectionKey.replace(".$", "");
-  }
+  const equipmentDropdown = useMemo(
+    () => (
+      <AsyncDropdown<"SimpleEquipmentResponseDTO">
+        onRequest={() =>
+          sendAPIRequest("/api/equipment", {
+            method: "get",
+            parameters: {},
+          }).then((x) => (x.code === "OK" ? x.content : []))
+        }
+        placeholder="All equipment"
+        className="equipment-dropdown"
+        onSelectionChanged={(newSelectionKey) =>
+          void (equipmentFilter.current = +newSelectionKey.replace(".$", ""))
+        }
+      />
+    ),
+    []
+  );
 
   return (
     <div className="exercise-selector">
@@ -173,27 +220,18 @@ export default function ExerciseSelector({
         </div>
 
         <div className="filters-container">
-          <AsyncDropdown<"SimpleMuscleGroupResponseDTO">
-            onRequest={() => {
-              return Promise.resolve([]);
-            }}
-            placeholder="All muscles"
-            className="muscles-dropdown"
-            onSelectionChanged={handleMuscleGroupFilterChange}
-          />
+          {muscleGroupDropdown}
 
-          <AsyncDropdown<"SimpleEquipmentResponseDTO">
-            onRequest={() => {
-              return Promise.resolve([]);
-            }}
-            placeholder="All equipment"
-            className="equipment-dropdown"
-            onSelectionChanged={handleEquipmentFilterChange}
-          />
+          {equipmentDropdown}
         </div>
       </div>
 
-      <div className="body">
+      <div
+        className="body"
+        role="listbox"
+        aria-orientation="vertical"
+        aria-label="Choose Exercise"
+      >
         {exercisePromises.map((exercisesPromise, i) => (
           <ExerciseSelectorSegment
             key={i}

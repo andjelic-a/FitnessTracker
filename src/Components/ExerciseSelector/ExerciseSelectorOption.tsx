@@ -15,7 +15,9 @@ export function ExerciseSelectorOption({
   isSelected,
 }: ExerciseOptionProps) {
   return (
-    <div
+    <button
+      role="option"
+      aria-selected={isSelected}
       className={"exercise-option " + (isSelected ? "selected" : "")}
       onClick={() => void onSelectExercise(exercise)}
     >
@@ -29,7 +31,7 @@ export function ExerciseSelectorOption({
         <img src={exercise.image} alt="Exercise" />
       </div>
 
-      <h3>{exercise.name}</h3>
+      <h3 className="exercise-name">{exercise.name}</h3>
 
       <Link
         to={`/exercises/${exercise.id}`}
@@ -45,6 +47,6 @@ export function ExerciseSelectorOption({
           delayShow={150}
         />
       </Link>
-    </div>
+    </button>
   );
 }

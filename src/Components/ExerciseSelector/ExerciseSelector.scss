@@ -109,94 +109,6 @@
       width: 35rem;
       justify-content: space-between;
       align-items: center;
-
-      .muscles-dropdown {
-        border-radius: 2rem;
-        width: 15rem;
-        height: 3.5rem;
-        color: white;
-        background-color: $primary-300;
-
-        .dropdown-button {
-          background-color: $primary-400;
-          border-radius: 0.5rem;
-        }
-
-        .dropdown-content {
-          background-color: $primary-300;
-          border-radius: 0 0 0.5rem 0.5rem;
-
-          &::-webkit-scrollbar {
-            width: 8px;
-          }
-
-          &::-webkit-scrollbar-track {
-            background: $primary-300;
-            border-radius: 3rem;
-          }
-
-          &::-webkit-scrollbar-thumb {
-            background: $primary-600;
-            border-radius: 0px;
-          }
-
-          &::-webkit-scrollbar-thumb:hover {
-            background: $primary-500;
-          }
-
-          :last-child {
-            border-radius: 0 0 0.5rem 0.5rem;
-          }
-
-          .dropdown-item:hover {
-            background-color: $primary-400;
-          }
-        }
-      }
-
-      .equipment-dropdown {
-        border-radius: 2rem;
-        width: 15rem;
-        height: 3.5rem;
-        color: white;
-        background-color: $primary-300;
-
-        .dropdown-button {
-          background-color: $primary-400;
-          border-radius: 0.5rem;
-        }
-
-        .dropdown-content {
-          background-color: $primary-300;
-          border-radius: 0 0 0.5rem 0.5rem;
-
-          &::-webkit-scrollbar {
-            width: 8px;
-          }
-
-          &::-webkit-scrollbar-track {
-            background: $primary-300;
-            border-radius: 3rem;
-          }
-
-          &::-webkit-scrollbar-thumb {
-            background: $primary-600;
-            border-radius: 0px;
-          }
-
-          &::-webkit-scrollbar-thumb:hover {
-            background: $primary-500;
-          }
-
-          :last-child {
-            border-radius: 0 0 0.5rem 0.5rem;
-          }
-
-          .dropdown-item:hover {
-            background-color: $primary-400;
-          }
-        }
-      }
     }
   }
 
@@ -219,10 +131,19 @@
       padding: 0.5rem 0;
       background-color: $dark-300;
       border-radius: 0.5rem;
+      color: #fff;
+
+      outline: none;
+      border: none;
 
       &.selected,
-      &:hover {
+      &:hover,
+      &:focus-visible {
         background-color: $dark-400;
+      }
+
+      &:focus-visible {
+        outline: 1px solid $primary-500;
       }
 
       .selection-indicator {
@@ -266,8 +187,10 @@
         }
       }
 
-      h3 {
+      .exercise-name {
+        margin-top: 0.7rem;
         font-size: 2rem;
+        text-align: start;
       }
 
       .view-details-link {
