@@ -5,7 +5,6 @@
   background-color: $dark-400;
   border-radius: 1.5rem;
   height: max-content;
-  max-height: fit-content;
   padding: 1rem 0;
 
   .workout-item-header {
@@ -64,6 +63,9 @@
     }
 
     .drag-handle {
+      display: grid;
+      place-content: center;
+
       height: 4rem;
       aspect-ratio: 1;
 
@@ -92,7 +94,6 @@
     flex-direction: column;
 
     width: 100%;
-    min-height: 13rem;
     height: max-content;
 
     .set-information-header-container {
@@ -115,6 +116,10 @@
       align-self: center;
       width: max-content;
       height: max-content;
+      aspect-ratio: 1;
+
+      display: grid;
+      place-items: center;
 
       border: none;
       border-radius: 50%;
@@ -330,5 +335,97 @@
     position: relative;
     z-index: 1000000;
     outline: 1px solid $primary-300;
+  }
+}
+
+@media screen and (max-width: 999.98px) {
+  .workout-item {
+    .workout-item-header {
+      padding: 0 0.5rem;
+
+      .exercise {
+        .exercise-image {
+          height: 5.5rem;
+        }
+
+        button.exercise-name {
+          font-size: 1.6rem;
+        }
+      }
+
+      .drag-handle {
+        height: 3rem;
+        font-size: 1.7rem;
+      }
+    }
+
+    .workout-item-body {
+      .set-information-header-container {
+        grid-template-columns: 7rem 1fr 1fr 1fr;
+
+        p {
+          font-size: 1.5rem;
+        }
+      }
+
+      .add-set-btn {
+        padding: 0.5rem;
+      }
+    }
+  }
+
+  .set {
+    height: 3.5rem;
+
+    .options {
+      button {
+        font-size: 1.7rem;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 799.98px) {
+  .workout-item {
+    .workout-item-header {
+      .exercise {
+        .exercise-image {
+          height: 6rem;
+        }
+
+        button.exercise-name {
+          font-size: 1.9rem;
+        }
+      }
+
+      .drag-handle {
+        height: 5rem;
+        font-size: 2.25rem;
+      }
+    }
+
+    .workout-item-body {
+      .set-information-header-container {
+        grid-template-columns: 8rem 1fr 1fr 1fr;
+
+        p {
+          font-size: 1.75rem;
+        }
+      }
+
+      .add-set-btn {
+        padding: 0.5rem;
+      }
+    }
+  }
+
+  .set {
+    height: 4rem;
+
+    .options {
+      button {
+        font-size: 2.1rem;
+      }
+    }
   }
 }

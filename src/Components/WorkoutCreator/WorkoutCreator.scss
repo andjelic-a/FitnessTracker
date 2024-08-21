@@ -7,11 +7,13 @@
   }
 
   width: 80rem;
+  max-width: 85vw;
   height: 50rem;
+  max-height: 85svh;
 
   background-color: $dark-200;
   border-radius: 0.5rem;
-  padding: 1rem 2rem;
+  padding: 1rem 1.5rem;
 
   display: flex;
   flex-direction: column;
@@ -19,6 +21,8 @@
 
   overflow-y: auto;
   overflow-x: hidden;
+
+  scrollbar-gutter: stable both-edges;
 
   &::-webkit-scrollbar {
     width: 8px;
@@ -47,7 +51,6 @@
 
   .header {
     width: 100%;
-    height: 5rem;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -229,21 +232,35 @@
       transition: 0.2s;
     }
   }
-}
 
-//* TESTING DND KIT
-.draggable {
-  width: 10rem;
-  min-width: 10rem;
-  height: 10rem;
-  min-height: 10rem;
-  background-color: #00f;
-}
+  @media screen and (max-width: 999.98px) {
+    width: 65rem;
+    height: 60rem;
+  }
 
-.droppable {
-  width: 20rem;
-  min-width: 20rem;
-  height: 20rem;
-  min-height: 20rem;
-  background-color: #aaa;
+  @media screen and (max-width: 799.98px) {
+    width: 55rem;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .header {
+      display: grid;
+      width: 100%;
+
+      grid-template-rows: 1fr max-content;
+      grid-template-columns: 1fr;
+      place-items: start end;
+      row-gap: 1rem;
+
+      .title {
+        width: 100%;
+      }
+    }
+
+    .description-container {
+      width: 100%;
+    }
+  }
 }
