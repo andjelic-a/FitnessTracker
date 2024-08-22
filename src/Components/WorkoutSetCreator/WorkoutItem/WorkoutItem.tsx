@@ -21,6 +21,7 @@ import {
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { createPortal } from "react-dom";
 import SetDragOverlay from "./SetDragOverlay.tsx";
+import ReactModal from "react-modal";
 
 export type Set = {
   id: string;
@@ -103,11 +104,14 @@ export default function WorkoutItem({
     });
   };
 
-  /*   const handleDelete = () => {
+  function handleDelete() {
     currentSetsContext.setCurrentSets((prev) =>
       prev.filter((item) => item.id !== workoutItem.id).slice()
     );
-  }; */
+  }
+
+  const [isConfirmDeletionModalOpen, setIsConfirmDeletionModalOpen] =
+    useState(false);
 
   const [draggingSet, setDraggingSet] = useState<{
     set: Set;
@@ -222,9 +226,64 @@ export default function WorkoutItem({
             </button>
           </div>
 
-          <button className="drag-handle" {...listeners} {...attributes}>
-            <Icon name="grip-vertical" />
-          </button>
+          <div className="options">
+            <button
+              className="delete-btn"
+              onClick={() => void setIsConfirmDeletionModalOpen(true)}
+            >
+              <Icon name="trash" />
+
+              <p className="accessibility-only" aria-hidden={false}>
+                Delete
+              </p>
+            </button>
+
+            <button className="drag-handle" {...listeners} {...attributes}>
+              <Icon name="grip-vertical" />
+
+              <p className="accessibility-only" aria-hidden={false}>
+                Drag to reorder
+              </p>
+            </button>
+          </div>
+
+          <ReactModal
+            isOpen={isConfirmDeletionModalOpen}
+            className={{
+              afterOpen: "open",
+              base: "confirm-deletion-modal",
+              beforeClose: "closing",
+            }}
+            overlayClassName="overlay-confirm-deletion-modal"
+            portalClassName="modal-portal"
+            onRequestClose={() => void setIsConfirmDeletionModalOpen(false)}
+            closeTimeoutMS={300}
+            aria={{
+              labelledby: "confirm-deletion-title",
+              describedby: "confirm-deletion-text",
+            }}
+          >
+            <h3 id="confirm-deletion-text">Confirmation Required</h3>
+
+            <h2>
+              Are you sure you want to remove this exercise from your workout?
+            </h2>
+
+            <div className="modal-buttons-container">
+              <button onClick={() => void setIsConfirmDeletionModalOpen(false)}>
+                No
+              </button>
+
+              <button
+                onClick={() => {
+                  handleDelete();
+                  setIsConfirmDeletionModalOpen(false);
+                }}
+              >
+                Yes
+              </button>
+            </div>
+          </ReactModal>
         </div>
 
         {!forceCollapse && !isCollapsed && (

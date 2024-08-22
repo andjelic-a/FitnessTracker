@@ -7,6 +7,7 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
+import Modal from "react-modal";
 import Error from "./Components/Error/Error.tsx";
 import Exercises from "./Pages/Exercises/Exercises.tsx";
 import FullExerciseDisplay from "./Components/FullExerciseDisplay/FullExerciseDisplay.tsx";
@@ -195,8 +196,12 @@ export type RouteObjects = typeof routes;
 
 const router = createBrowserRouter(routes);
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+const root = document.getElementById("root")!;
+
+ReactDOM.createRoot(root).render(
   <React.StrictMode>
     <RouterProvider router={router} />
   </React.StrictMode>
 );
+
+Modal.setAppElement("#root");
