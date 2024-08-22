@@ -21,20 +21,26 @@ const WorkoutEditor = WindowFC(
 
     const titleInputRef = useRef<HTMLInputElement | null>(null);
     const descriptionTextAreaRef = useRef<HTMLTextAreaElement>(null);
+    const originalWorkout = useRef<Schema<"DetailedWorkoutResponseDTO"> | null>(
+      null
+    );
 
     useEffect(() => {
       setModalConfirmationOpeningCondition?.(
-        () => validateTitle() || validateSets()
+        () =>
+          (validateTitle() || validateSets()) &&
+          checkForChanges(assembleWorkout())
       );
     }, [currentSets]);
 
     useEffect(() => {
       loaderData?.workout.then((x) => {
         if (x.code !== "OK") {
-          onClose();
+          onClose(true);
           return;
         }
 
+        originalWorkout.current = x.content;
         setCurrentSets(extractSets(x.content));
         setIsPublic(x.content.isPublic);
         titleInputRef.current!.value = x.content.name;
@@ -62,20 +68,38 @@ const WorkoutEditor = WindowFC(
       return true;
     };
 
-    const handleSaveClick = async () => {
-      let isValid = validateTitle();
-      isValid = validateSets() && isValid;
+    const checkForChanges = (
+      updatedWorkout: Schema<"UpdateFullWorkoutRequestDTO">
+    ): boolean => {
+      const original = originalWorkout.current;
+      if (!original) return true;
 
-      if (!descriptionTextAreaRef.current || !titleInputRef.current || !isValid)
-        return;
+      if (updatedWorkout.name.trim() !== original.name.trim()) return true;
+      if (updatedWorkout.description?.trim() !== original.description.trim())
+        return true;
+      if (updatedWorkout.isPublic !== original.isPublic) return true;
+      if (updatedWorkout.sets.length !== original.sets.length) return true;
 
-      const originalWorkout = await loaderData.workout;
-      if (originalWorkout.code !== "OK") return;
+      for (let i = 0; i < updatedWorkout.sets.length; i++) {
+        const updatedSet = updatedWorkout.sets[i];
+        const originalSet = original.sets[i];
 
+        if (updatedSet.exerciseId !== originalSet.exerciseId) return true;
+        if (updatedSet.riR !== originalSet.riR) return true;
+        if (updatedSet.topRepRange !== originalSet.topRepRange) return true;
+        if (updatedSet.bottomRepRange !== originalSet.bottomRepRange)
+          return true;
+        if (updatedSet.type !== originalSet.type) return true;
+      }
+
+      return false;
+    };
+
+    function assembleWorkout(): Schema<"UpdateFullWorkoutRequestDTO"> {
       const updatedWorkout: Schema<"UpdateFullWorkoutRequestDTO"> = {
         isPublic: isPublic,
-        name: titleInputRef.current.value,
-        description: descriptionTextAreaRef.current.value,
+        name: titleInputRef.current?.value ?? "",
+        description: descriptionTextAreaRef.current?.value ?? "",
         sets: currentSets
           .flatMap((workoutItem) =>
             workoutItem.sets.map((set) => ({
@@ -115,6 +139,23 @@ const WorkoutEditor = WindowFC(
             };
           }),
       };
+
+      return updatedWorkout;
+    }
+
+    const handleSaveClick = async () => {
+      let isValid = validateTitle();
+      isValid = validateSets() && isValid;
+
+      if (!descriptionTextAreaRef.current || !titleInputRef.current || !isValid)
+        return;
+
+      const originalWorkout = await loaderData.workout;
+      if (originalWorkout.code !== "OK") return;
+
+      const updatedWorkout = assembleWorkout();
+
+      if (!checkForChanges(updatedWorkout)) return;
 
       descriptionTextAreaRef.current.value = "";
       descriptionTextAreaRef.current.blur();

@@ -199,7 +199,7 @@ export default function ExerciseSelector({
 
   return (
     <div className="exercise-selector">
-      <div className="header">
+      <div className="exercise-selector-header">
         <h3 className="title">Choose Exercise</h3>
 
         <div className="search-bar-container">
