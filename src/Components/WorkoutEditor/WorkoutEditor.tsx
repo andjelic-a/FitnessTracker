@@ -1,6 +1,5 @@
 import "./WorkoutEditor.scss";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
-import Async from "../Async/Async";
 import WindowFC from "../WindowWrapper/WindowFC";
 import workoutDisplayLoader from "../WorkoutDisplay/WorkoutDisplayLoader";
 import { useEffect, useRef, useState } from "react";
@@ -132,99 +131,90 @@ const WorkoutEditor = WindowFC(
     };
 
     return (
-      <Async await={loaderData?.workout}>
-        {(originalWorkout) => {
-          if (originalWorkout?.code !== "OK") return null;
+      <CurrentEditingWorkoutSetsContext.Provider
+        value={{
+          currentSets,
+          setCurrentSets,
+        }}
+      >
+        <div ref={wrapperRef} className="workout-editor-container">
+          <div className="header">
+            <input
+              ref={titleInputRef}
+              type="text"
+              className="title"
+              placeholder="Workout title"
+              maxLength={25}
+            />
 
-          return (
-            <CurrentEditingWorkoutSetsContext.Provider
-              value={{
-                currentSets,
-                setCurrentSets,
-              }}
-            >
-              <div ref={wrapperRef} className="workout-editor-container">
-                <div className="header">
-                  <input
-                    ref={titleInputRef}
-                    type="text"
-                    className="title"
-                    placeholder="Workout title"
-                    defaultValue={originalWorkout.content.name}
-                    maxLength={25}
-                  />
-
-                  <div className="buttons">
-                    <button
-                      className="workout-visibility-toggle"
-                      onClick={() => setIsPublic(!isPublic)}
-                      data-tooltip-content={isPublic ? "Public" : "Private"}
-                      data-tooltip-id="workout-visibility-tooltip"
-                      data-tooltip-place="left"
-                    >
-                      <Icon
-                        aria-hidden
-                        className="lock"
-                        name={isPublic ? "unlock" : "lock"}
-                      />
-
-                      <p aria-hidden={false} className="accessibility-only">
-                        {isPublic ? "Public" : "Private"}
-                      </p>
-
-                      <Tooltip id="workout-visibility-tooltip" />
-                    </button>
-
-                    <button onClick={() => onClose()} className="discard-btn">
-                      <p>Discard</p>
-                    </button>
-
-                    <button onClick={handleSaveClick} className="save-btn">
-                      <p>Save</p>
-                      <Icon name="floppy-disk" />
-                    </button>
-                  </div>
-                </div>
-
-                <WorkoutSetCreator
-                  onOverlayOpen={() => {
-                    if (!wrapperRef.current) return;
-
-                    wrapperRef.current.style.overflow = "hidden";
-                    wrapperRef.current.scrollTop = 0;
-                  }}
-                  onOverlayClose={() => {
-                    if (!wrapperRef.current) return;
-
-                    wrapperRef.current.style.overflow = "auto";
-                    wrapperRef.current.scrollTop = 0;
-                  }}
+            <div className="buttons">
+              <button
+                className="workout-visibility-toggle"
+                onClick={() => setIsPublic(!isPublic)}
+                data-tooltip-content={isPublic ? "Public" : "Private"}
+                data-tooltip-id="workout-visibility-tooltip"
+                data-tooltip-place="left"
+              >
+                <Icon
+                  aria-hidden
+                  className="lock"
+                  name={isPublic ? "unlock" : "lock"}
                 />
 
-                <div className="description-container">
-                  <textarea
-                    id="description-input"
-                    ref={descriptionTextAreaRef}
-                    onChange={(e) => {
-                      e.target.style.height = "auto";
-                      e.target.style.height = `${e.target.scrollHeight}px`;
-                    }}
-                    aria-labelledby="description-input-label"
-                  />
+                <p aria-hidden={false} className="accessibility-only">
+                  {isPublic ? "Public" : "Private"}
+                </p>
 
-                  <label
-                    htmlFor="description-input"
-                    className="description-input-label"
-                    id="description-input-label"
-                  >
-                    Workout description
-                  </label>
-                </div>
-              </div>
-            </CurrentEditingWorkoutSetsContext.Provider>
-          );
-        }}
-      </Async>
+                <Tooltip id="workout-visibility-tooltip" />
+              </button>
+
+              <button onClick={() => onClose()} className="discard-btn">
+                <p>Discard</p>
+              </button>
+
+              <button onClick={handleSaveClick} className="save-btn">
+                <p>Save</p>
+                <Icon name="floppy-disk" />
+              </button>
+            </div>
+          </div>
+
+          <WorkoutSetCreator
+            onOverlayOpen={() => {
+              if (!wrapperRef.current) return;
+
+              wrapperRef.current.style.overflow = "hidden";
+              wrapperRef.current.scrollTop = 0;
+            }}
+            onOverlayClose={() => {
+              if (!wrapperRef.current) return;
+
+              wrapperRef.current.style.overflow = "auto";
+              wrapperRef.current.scrollTop = 0;
+            }}
+          />
+
+          <div className="description-container">
+            <textarea
+              id="description-input"
+              ref={descriptionTextAreaRef}
+              onChange={(e) => {
+                e.target.style.height = "auto";
+                e.target.style.height = `${e.target.scrollHeight}px`;
+              }}
+              aria-labelledby="description-input-label"
+            />
+
+            <label
+              htmlFor="description-input"
+              className="description-input-label"
+              id="description-input-label"
+            >
+              Workout description
+            </label>
+          </div>
+        </div>
+      </CurrentEditingWorkoutSetsContext.Provider>
     );
   },
   {
