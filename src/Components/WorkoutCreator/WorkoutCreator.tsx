@@ -18,16 +18,22 @@ const WorkoutCreator = WindowFC(
     const [isPublic, setIsPublic] = useState<boolean>(false);
     const [currentSets, setCurrentSets] = useState<WorkoutItemData[]>([]);
 
-    const workoutTitleRef = useRef<HTMLInputElement | null>(null);
+    const titleInputRef = useRef<HTMLInputElement | null>(null);
     const descriptionTextAreaRef = useRef<HTMLTextAreaElement>(null);
 
+    useEffect(() => {
+      setModalConfirmationOpeningCondition?.(
+        () => validateTitle() || validateSets()
+      );
+    }, [currentSets]);
+
     const validateTitle = (): boolean => {
-      if (!workoutTitleRef.current?.value) {
-        workoutTitleRef.current?.classList.add("invalid");
+      if (!titleInputRef.current?.value) {
+        titleInputRef.current?.classList.add("invalid");
         return false;
       }
 
-      workoutTitleRef.current?.classList.remove("invalid");
+      titleInputRef.current?.classList.remove("invalid");
       return true;
     };
 
@@ -51,14 +57,14 @@ const WorkoutCreator = WindowFC(
       if (
         !user ||
         !descriptionTextAreaRef.current ||
-        !workoutTitleRef.current ||
+        !titleInputRef.current ||
         !isValid
       )
         return;
 
       const newWorkout: Schema<"CreateWorkoutRequestDTO"> = {
         isPublic: isPublic,
-        name: workoutTitleRef.current.value,
+        name: titleInputRef.current.value,
         description: descriptionTextAreaRef.current.value,
         sets: currentSets
           .flatMap((workoutItem) =>
@@ -125,12 +131,6 @@ const WorkoutCreator = WindowFC(
       });
     };
 
-    useEffect(() => {
-      setModalConfirmationOpeningCondition?.(
-        () => validateTitle() || validateSets()
-      );
-    }, [currentSets]);
-
     return (
       <CurrentEditingWorkoutSetsContext.Provider
         value={{
@@ -141,7 +141,7 @@ const WorkoutCreator = WindowFC(
         <div ref={wrapperRef} className="workout-creator-container">
           <div className="header">
             <input
-              ref={workoutTitleRef}
+              ref={titleInputRef}
               type="text"
               className="title"
               placeholder="Workout title"
@@ -203,11 +203,13 @@ const WorkoutCreator = WindowFC(
                 e.target.style.height = "auto";
                 e.target.style.height = `${e.target.scrollHeight}px`;
               }}
+              aria-labelledby="description-input-label"
             />
 
             <label
               htmlFor="description-input"
               className="description-input-label"
+              id="description-input-label"
             >
               Workout description
             </label>

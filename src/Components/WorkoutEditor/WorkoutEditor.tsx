@@ -8,52 +8,76 @@ import { WorkoutItemData } from "../WorkoutSetCreator/WorkoutItem/WorkoutItem";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import Icon from "../Icon/Icon";
-import extractSets from "./ExtractSetsFromWorkout";
 import WorkoutSetCreator from "../WorkoutSetCreator/WorkoutSetCreator";
+import { Tooltip } from "react-tooltip";
+import CurrentEditingWorkoutSetsContext from "../../Contexts/CurrentEditingWorkoutSetsContext";
+import extractSets from "../../Utility/ExtractSetsFromWorkout";
 
-const WorkoutEditor = WindowFC(({}, wrapperRef, onClose) => {
-  const loaderData = useLoaderData<typeof workoutDisplayLoader>();
+const WorkoutEditor = WindowFC(
+  ({}, wrapperRef, onClose, setModalConfirmationOpeningCondition) => {
+    const loaderData = useLoaderData<typeof workoutDisplayLoader>();
 
-  const [isPublic, setIsPublic] = useState<boolean>(false);
+    const [isPublic, setIsPublic] = useState<boolean>(false);
+    const [currentSets, setCurrentSets] = useState<WorkoutItemData[]>([]);
 
-  const createdSetsRef = useRef<WorkoutItemData[]>([]);
-  const workoutTitleRef = useRef<HTMLInputElement | null>(null);
-  const publicOrPrivatePopupRef = useRef<HTMLDivElement | null>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const titleInputRef = useRef<HTMLInputElement | null>(null);
+    const descriptionTextAreaRef = useRef<HTMLTextAreaElement>(null);
 
-  const isWorkoutTitleValid = (): boolean => {
-    if (!workoutTitleRef.current?.value) {
-      workoutTitleRef.current?.classList.add("workout-item-error-title");
-      return false;
-    }
+    useEffect(() => {
+      setModalConfirmationOpeningCondition?.(
+        () => validateTitle() || validateSets()
+      );
+    }, [currentSets]);
 
-    workoutTitleRef.current?.classList.remove("workout-item-error-title");
-    return true;
-  };
+    useEffect(() => {
+      loaderData?.workout.then((x) => {
+        if (x.code !== "OK") {
+          onClose();
+          return;
+        }
 
-  const isSetSelectionValid = (): boolean => {
-    if (createdSetsRef.current.length <= 0) {
-      wrapperRef.current?.classList.add("invalid-exercise-selection");
-      return false;
-    }
+        setCurrentSets(extractSets(x.content));
+        setIsPublic(x.content.isPublic);
+        titleInputRef.current!.value = x.content.name;
+        descriptionTextAreaRef.current!.value = x.content.description;
+      });
+    }, [loaderData]);
 
-    wrapperRef.current?.classList.remove("invalid-exercise-selection");
-    return true;
-  };
+    const validateTitle = (): boolean => {
+      if (!titleInputRef.current?.value) {
+        titleInputRef.current?.classList.add("invalid");
+        return false;
+      }
 
-  const handleSaveClick = () => {
-    loaderData?.workout.then((originalWorkout) => {
-      let isValid = isWorkoutTitleValid();
-      isValid = isSetSelectionValid() && isValid;
+      titleInputRef.current?.classList.remove("invalid");
+      return true;
+    };
 
+    const validateSets = (): boolean => {
+      if (currentSets.length <= 0) {
+        wrapperRef.current?.classList.add("invalid-exercise-selection");
+        return false;
+      }
+
+      wrapperRef.current?.classList.remove("invalid-exercise-selection");
+      return true;
+    };
+
+    const handleSaveClick = async () => {
+      let isValid = validateTitle();
+      isValid = validateSets() && isValid;
+
+      if (!descriptionTextAreaRef.current || !titleInputRef.current || !isValid)
+        return;
+
+      const originalWorkout = await loaderData.workout;
       if (originalWorkout.code !== "OK") return;
-      if (!textareaRef.current || !workoutTitleRef.current || !isValid) return;
 
       const updatedWorkout: Schema<"UpdateFullWorkoutRequestDTO"> = {
         isPublic: isPublic,
-        name: workoutTitleRef.current.value,
-        description: textareaRef.current.value,
-        sets: createdSetsRef.current
+        name: titleInputRef.current.value,
+        description: descriptionTextAreaRef.current.value,
+        sets: currentSets
           .flatMap((workoutItem) =>
             workoutItem.sets.map((set) => ({
               exerciseId: workoutItem.exercise.id,
@@ -93,8 +117,8 @@ const WorkoutEditor = WindowFC(({}, wrapperRef, onClose) => {
           }),
       };
 
-      textareaRef.current.value = "";
-      textareaRef.current.blur();
+      descriptionTextAreaRef.current.value = "";
+      descriptionTextAreaRef.current.blur();
       sendAPIRequest("/api/workout/{id}", {
         method: "put",
         payload: updatedWorkout,
@@ -104,123 +128,138 @@ const WorkoutEditor = WindowFC(({}, wrapperRef, onClose) => {
       });
 
       //TODO: Update cache
-      /*         const profileCache = getProfileCache();
-        setProfileCache({
-          streak: profileCache!.streak,
-          user: profileCache!.user,
-          latestWeekOfActivity: profileCache!.latestWeekOfActivity,
-          workouts: profileCache!.workouts.then((x) => {
-            const index = x.findIndex(
-              (x) => x.id === originalWorkout.content.id
-            );
+      onClose(true);
+    };
 
-            x[index] = {
-              id: originalWorkout.content.id,
-              name: updatedWorkout.name,
-              isPublic: updatedWorkout.isPublic,
-              creator: originalWorkout.content.creator,
-              description: textareaRef.current!.value,
-            };
+    return (
+      <Async await={loaderData?.workout}>
+        {(originalWorkout) => {
+          if (originalWorkout?.code !== "OK") return null;
 
-            return x;
-          }),
-        }); */
+          return (
+            <CurrentEditingWorkoutSetsContext.Provider
+              value={{
+                currentSets,
+                setCurrentSets,
+              }}
+            >
+              <div ref={wrapperRef} className="workout-editor-container">
+                <div className="header">
+                  <input
+                    ref={titleInputRef}
+                    type="text"
+                    className="title"
+                    placeholder="Workout title"
+                    defaultValue={originalWorkout.content.name}
+                    maxLength={25}
+                  />
 
-      onClose();
-    });
-  };
-  const [createdSets, setCreatedSets] = useState<WorkoutItemData[] | null>(
-    null
-  );
+                  <div className="buttons">
+                    <button
+                      className="workout-visibility-toggle"
+                      onClick={() => setIsPublic(!isPublic)}
+                      data-tooltip-content={isPublic ? "Public" : "Private"}
+                      data-tooltip-id="workout-visibility-tooltip"
+                      data-tooltip-place="left"
+                    >
+                      <Icon
+                        aria-hidden
+                        className="lock"
+                        name={isPublic ? "unlock" : "lock"}
+                      />
 
-  useEffect(() => {
-    loaderData?.workout.then((x) => {
-      setCreatedSets(x.code === "OK" ? extractSets(x.content) : []);
-      setIsPublic(x.code === "OK" ? x.content.isPublic : false);
-    });
-  }, [loaderData]);
+                      <p aria-hidden={false} className="accessibility-only">
+                        {isPublic ? "Public" : "Private"}
+                      </p>
 
-  return (
-    <Async await={loaderData?.workout}>
-      {(originalWorkout) => {
-        if (originalWorkout?.code !== "OK") return null;
+                      <Tooltip id="workout-visibility-tooltip" />
+                    </button>
 
-        if (createdSets === null) return null;
+                    <button onClick={() => onClose()} className="discard-btn">
+                      <p>Discard</p>
+                    </button>
 
-        return (
-          <div ref={wrapperRef} className="edit-workout-window">
-            <div className="edit-workout-header">
-              <input
-                defaultValue={originalWorkout.content.name}
-                ref={workoutTitleRef}
-                type="text"
-                id="workout-title"
-                placeholder="Workout title"
-                maxLength={25}
-              />
-              <div className="edit-workout-public-or-private">
-                <div
-                  ref={publicOrPrivatePopupRef}
-                  className="edit-workout-public-or-private-popup"
-                >
-                  {isPublic ? "Public" : "Private"}
+                    <button onClick={handleSaveClick} className="save-btn">
+                      <p>Save</p>
+                      <Icon name="floppy-disk" />
+                    </button>
+                  </div>
                 </div>
 
-                <Icon
-                  className="lock"
-                  name={isPublic ? "unlock" : "lock"}
-                  onClick={() => setIsPublic((x) => !x)}
-                  onMouseEnter={() =>
-                    publicOrPrivatePopupRef.current?.classList.add("show")
-                  }
-                  onMouseLeave={() =>
-                    publicOrPrivatePopupRef.current?.classList.remove("show")
-                  }
+                <WorkoutSetCreator
+                  onOverlayOpen={() => {
+                    if (!wrapperRef.current) return;
+
+                    wrapperRef.current.style.overflow = "hidden";
+                    wrapperRef.current.scrollTop = 0;
+                  }}
+                  onOverlayClose={() => {
+                    if (!wrapperRef.current) return;
+
+                    wrapperRef.current.style.overflow = "auto";
+                    wrapperRef.current.scrollTop = 0;
+                  }}
                 />
+
+                <div className="description-container">
+                  <textarea
+                    id="description-input"
+                    ref={descriptionTextAreaRef}
+                    onChange={(e) => {
+                      e.target.style.height = "auto";
+                      e.target.style.height = `${e.target.scrollHeight}px`;
+                    }}
+                    aria-labelledby="description-input-label"
+                  />
+
+                  <label
+                    htmlFor="description-input"
+                    className="description-input-label"
+                    id="description-input-label"
+                  >
+                    Workout description
+                  </label>
+                </div>
               </div>
+            </CurrentEditingWorkoutSetsContext.Provider>
+          );
+        }}
+      </Async>
+    );
+  },
+  {
+    closeConfirmationModal: {
+      children: (cancel, confirm) => {
+        return (
+          <div className="workout-editor-closing-modal-content-container">
+            <h2 id="workout-editor-closing-modal-title">
+              Are you sure you want to discard your changes?
+            </h2>
 
-              <button onClick={handleSaveClick} className="edit-workout-save">
-                Save
-              </button>
-            </div>
-
-            <WorkoutSetCreator
-              onOverlayOpen={() => {
-                if (!wrapperRef.current) return;
-
-                wrapperRef.current.style.overflow = "hidden";
-                wrapperRef.current.scrollTop = 0;
-              }}
-              onOverlayClose={() => {
-                if (!wrapperRef.current) return;
-
-                wrapperRef.current.style.overflow = "auto";
-                wrapperRef.current.scrollTop = 0;
-              }}
-            />
-
-            <div className="edit-description-input">
-              <textarea
-                id="description-input"
-                defaultValue={originalWorkout.content.description ?? undefined}
-                ref={textareaRef}
-                onChange={(e) => {
-                  e.target.style.height = "auto";
-                  e.target.style.height = `${e.target.scrollHeight}px`;
-                }}
-              />
-              <label
-                htmlFor="description-input"
-                className="description-input-label"
-              >
-                Workout description
-              </label>
+            <div className="modal-buttons-container">
+              <button onClick={cancel}>Cancel</button>
+              <button onClick={confirm}>Confirm</button>
             </div>
           </div>
         );
-      }}
-    </Async>
-  );
-});
+      },
+      modalProps: {
+        className: {
+          afterOpen: "open",
+          base: "workout-editor-closing-modal",
+          beforeClose: "closing",
+        },
+        overlayClassName: "workout-editor-closing-modal-overlay",
+        closeTimeoutMS: 250,
+        shouldCloseOnOverlayClick: true,
+        shouldFocusAfterRender: true,
+        shouldReturnFocusAfterClose: true,
+        aria: {
+          describedby: "workout-editor-closing-modal-title",
+        },
+      },
+    },
+  }
+);
 
 export default WorkoutEditor;
