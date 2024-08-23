@@ -292,7 +292,7 @@ export default function WorkoutItem({
       </div>
 
       {createPortal(
-        <DragOverlay>
+        <DragOverlay className="drag-overlay">
           {draggingSet && (
             <SetDragOverlay set={draggingSet.set} index={draggingSet.index} />
           )}

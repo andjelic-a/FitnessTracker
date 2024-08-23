@@ -171,6 +171,7 @@ export default function WorkoutSetCreator({
 
         {createPortal(
           <DragOverlay
+            className="drag-overlay"
             dropAnimation={{
               ...defaultDropAnimation,
               duration: 150,

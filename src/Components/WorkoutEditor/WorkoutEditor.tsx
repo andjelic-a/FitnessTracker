@@ -155,7 +155,10 @@ const WorkoutEditor = WindowFC(
 
       const updatedWorkout = assembleWorkout();
 
-      if (!checkForChanges(updatedWorkout)) return;
+      if (!checkForChanges(updatedWorkout)) {
+        onClose(true);
+        return;
+      }
 
       descriptionTextAreaRef.current.value = "";
       descriptionTextAreaRef.current.blur();
