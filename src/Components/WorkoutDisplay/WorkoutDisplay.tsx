@@ -14,7 +14,7 @@ import { Schema } from "../../Types/Endpoints/SchemaParser";
 import formatCount from "../../Utility/FormatCount";
 import { v4 } from "uuid";
 import { AnimatePresence } from "framer-motion";
-import { extractSetsNoMapping } from "../WorkoutsContainer/EditWorkout/ExtractSetsFromWorkout";
+import { extractSetsNoMapping } from "../../Utility/ExtractSetsFromWorkout";
 
 const WorkoutDisplay = WindowFC(({}, workoutDisplayWrapperRef, close) => {
   const navigate = useNavigate();

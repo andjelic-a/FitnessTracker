@@ -10,15 +10,18 @@ export default function useOutsideClick(
   type: "left" | "all" = "all"
 ) {
   const handleClick = (event: MouseEvent) => {
+    if (document.body.classList.contains("ReactModal__Body--open")) return;
     if (type === "left" && event.button !== 0) return;
 
     if (!ref?.current) return;
 
+    const target = event.target as HTMLElement;
+    if (target.classList.contains("drag-overlay")) return;
+
     if (
       (Array.isArray(ref.current) &&
-        !ref.current.find((x) => x?.contains(event.target as Node))) ||
-      (!Array.isArray(ref.current) &&
-        !ref.current.contains(event.target as Node))
+        !ref.current.find((x) => x?.contains(target as Node))) ||
+      (!Array.isArray(ref.current) && !ref.current.contains(target as Node))
     ) {
       callback();
     }

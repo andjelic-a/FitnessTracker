@@ -1,13 +1,13 @@
 import { v4 } from "uuid";
-import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import {
-  PossibleSetIcon,
+  SetType,
   WorkoutItemData,
-} from "../CreateWorkout/WorkoutItem/WorkoutItem";
+} from "../Components/WorkoutSetCreator/WorkoutItem/WorkoutItem";
+import { Schema } from "../Types/Endpoints/SchemaParser";
 
 export default function extractSets(
   originalWorkout: Schema<"DetailedWorkoutResponseDTO">
-) {
+): WorkoutItemData[] {
   const sets: WorkoutItemData[] = [];
 
   let currentExercise: Schema<"SimpleExerciseResponseDTO"> | undefined =
@@ -29,14 +29,10 @@ export default function extractSets(
 
     sets[sets.length - 1].sets.push({
       id: set.id,
-      isDropdownOpen: false,
       repRange: `${set.bottomRepRange}-${set.topRepRange}`,
       rir: set.riR,
-      selectedIcon: [null, "w", "d", "f"][set.type] as PossibleSetIcon,
-      idx: 1,
+      type: ["1", "w", "d", "f"][set.type] as SetType,
     });
-
-    const firstIdx = i;
 
     while (
       i + 1 < originalWorkout.sets.length &&
@@ -47,11 +43,9 @@ export default function extractSets(
 
       sets[sets.length - 1].sets.push({
         id: set.id,
-        isDropdownOpen: false,
         repRange: `${set.bottomRepRange}-${set.topRepRange}`,
         rir: set.riR,
-        selectedIcon: [null, "w", "d", "f"][set.type] as PossibleSetIcon,
-        idx: i - firstIdx + 1,
+        type: [null, "w", "d", "f"][set.type] as SetType,
       });
     }
   }

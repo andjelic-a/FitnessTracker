@@ -4,7 +4,7 @@ import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
 import { useNavigate } from "react-router-dom";
 import Icon from "../Icon/Icon";
 import { Request } from "../../Types/Endpoints/RequestParser";
-import { NewWorkoutsContext } from "../WorkoutsContainer/CreateWorkout/NewWorkoutsContext";
+import { NewWorkoutsContext } from "../../Contexts/NewWorkoutsContext";
 
 type CreatedWorkoutsTabProps = {
   searchTerm: string;

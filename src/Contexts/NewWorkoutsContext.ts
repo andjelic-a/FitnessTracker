@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { Schema } from "../../../Types/Endpoints/SchemaParser";
+import { Schema } from "../Types/Endpoints/SchemaParser";
 
 export const NewWorkoutsContext = createContext<{
   createdWorkouts: Schema<"SimpleWorkoutResponseDTO">[];
