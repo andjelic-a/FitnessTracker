@@ -25,7 +25,7 @@
 
     .comment-textarea-container {
       width: 100%;
-      height: fit-content;
+      height: max-content;
       display: grid;
       grid-template-rows: 1fr;
       grid-template-columns: 1fr;
@@ -33,6 +33,7 @@
 
       textarea {
         resize: none;
+        height: max-content;
         min-width: 100%;
         max-width: 100%;
         width: 100%;

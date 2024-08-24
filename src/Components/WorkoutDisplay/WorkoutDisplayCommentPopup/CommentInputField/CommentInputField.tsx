@@ -32,10 +32,10 @@ export default function CommentInputField({
     setIsButtonContainerVisible(props.type !== "comment");
     if (props.type !== "comment") inputRef.current?.focus();
 
-    inputRef.current?.setSelectionRange(
-      inputRef.current?.value.length,
-      inputRef.current?.value.length
-    );
+    // inputRef.current?.setSelectionRange(
+    //   inputRef.current?.value.length,
+    //   inputRef.current?.value.length
+    // );
   }, [inputRef, props.type]);
 
   useEffect(updateSubmitBtnDisabledState, [isButtonContainerVisible]);
@@ -43,8 +43,10 @@ export default function CommentInputField({
   function handleInputRefHeightChange() {
     if (!inputRef.current) return;
 
+    const height = inputRef.current.scrollHeight;
+
     inputRef.current.style.height = "auto";
-    inputRef.current.style.height = `${inputRef.current.scrollHeight}px`;
+    inputRef.current.style.height = height > 0 ? `${height}px` : "auto";
   }
 
   useEffect(handleInputRefHeightChange, [inputRef]);

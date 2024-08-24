@@ -112,34 +112,21 @@ const WorkoutCommentSection = memo<WorkoutCommentSectionProps>(
       [workoutId]
     );
 
-    /*     const commentELements = useMemo(
-      () => (
-        <>
-          {comments.map((comment) => (
-            <WorkoutComment
-              key={comment.id}
-              comment={comment}
-              workoutId={workoutId}
-            />
-          ))}
-        </>
-      ),
-      [comments]
-    ); */
-
     const commentElements = useMemo(
       () => (
         <LazyLoadingContainer
           before={
-            <>
-              {newComments.map((comment) => (
-                <WorkoutComment
-                  key={comment.id}
-                  comment={comment}
-                  workoutId={workoutId}
-                />
-              ))}
-            </>
+            newComments.length === 0 ? undefined : (
+              <>
+                {newComments.map((comment) => (
+                  <WorkoutComment
+                    key={comment.id}
+                    comment={comment}
+                    workoutId={workoutId}
+                  />
+                ))}
+              </>
+            )
           }
           endpoint="/api/workout/{workoutId}/comment"
           baseAPIRequest={baseRequest}
@@ -166,7 +153,7 @@ const WorkoutCommentSection = memo<WorkoutCommentSectionProps>(
           }
         />
       ),
-      []
+      [newComments]
     );
 
     return (
