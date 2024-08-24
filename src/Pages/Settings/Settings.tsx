@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import WindowFC from "../../Components/WindowWrapper/WindowFC";
 import EditProfile from "../../Components/Settings/EditProfile/EditProfile";
+import Authentication from "../../Components/Settings/Authentication/Authentication";
 import { logout } from "../../Data/User";
 import "./Settings.scss";
 
@@ -9,6 +10,7 @@ const Settings = WindowFC(({}, wrapperRef) => {
   const navigate = useNavigate();
 
   const [isEditProfileOpen, setIsEditProfileOpen] = useState<boolean>(false);
+  const [isAuthenticationOpen, setIsAuthenticationOpen] = useState<boolean>(false);
 
   const menuItemsRef = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -59,9 +61,10 @@ const Settings = WindowFC(({}, wrapperRef) => {
   return (
     <div ref={wrapperRef}>
       <EditProfile visible={isEditProfileOpen} onClose={handleCloseEditProfile} />
+      <Authentication visible={isAuthenticationOpen} onClose={() => setIsAuthenticationOpen(false)} />
       <div className="settings">
         <div ref={setMenuItemRef} onClick={() => setIsEditProfileOpen(prevState => !prevState)} className="settings-item">Edit profile</div>
-        <div ref={setMenuItemRef} className="settings-item">Authentication</div>
+        <div ref={setMenuItemRef} onClick={() => setIsAuthenticationOpen(prevState => !prevState)} className="settings-item">Authentication</div>
         <div ref={setMenuItemRef} className="settings-item">Privacy</div>
         <div ref={setMenuItemRef} onClick={logout} className="settings-item">Log out</div>
         <div ref={setMenuItemRef} onClick={handleCancel} className="settings-item">Cancel</div>
