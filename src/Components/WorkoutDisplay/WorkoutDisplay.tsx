@@ -17,6 +17,7 @@ import {
   InPortal,
   OutPortal,
 } from "react-reverse-portal";
+import { motion } from "framer-motion";
 
 const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
   const navigate = useNavigate();
@@ -124,6 +125,28 @@ const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
   }, [workoutId.current]);
 
   const commentSectionPortalNode = useMemo(() => createHtmlPortalNode(), []);
+
+  const motionProps = useMemo(
+    () => ({
+      initial: {
+        opacity: 0,
+        y: 300,
+      },
+      animate: {
+        opacity: 1,
+        y: 0,
+      },
+      exit: {
+        opacity: 0,
+        y: 300,
+      },
+      transition: {
+        duration: 0.3,
+        type: "just",
+      },
+    }),
+    []
+  );
 
   return (
     <>
@@ -249,7 +272,9 @@ const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
 
         <AnimatePresence>
           {isCommentSectionOpen && (
-            <OutPortal node={commentSectionPortalNode} />
+            <motion.div {...motionProps}>
+              <OutPortal node={commentSectionPortalNode} />
+            </motion.div>
           )}
         </AnimatePresence>
       </div>

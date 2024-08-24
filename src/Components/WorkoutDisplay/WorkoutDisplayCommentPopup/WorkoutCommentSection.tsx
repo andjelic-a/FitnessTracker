@@ -5,7 +5,6 @@ import useOutsideClick from "../../../Hooks/UseOutsideClick";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import WorkoutComment from "./Comment/WorkoutComment";
 import CommentInputField from "./CommentInputField/CommentInputField";
-import { motion as Motion } from "framer-motion";
 import { getProfileCache } from "../../../Pages/Profile/ProfileCache";
 import LazyLoadingContainer, {
   OnlyGet,
@@ -69,33 +68,6 @@ const WorkoutCommentSection = memo<WorkoutCommentSectionProps>(
 
       setNewComments((prev) => [newCommentSimulatedResponse, ...prev]);
     }
-
-    const motionProps = useMemo(
-      () => ({
-        variants: {
-          hidden: {
-            opacity: 0,
-            y: 300,
-          },
-          enter: {
-            opacity: 1,
-            y: 0,
-          },
-          exit: {
-            opacity: 0,
-            y: 300,
-          },
-        },
-        initial: "hidden",
-        animate: "enter",
-        exit: "exit",
-        transition: {
-          duration: 0.3,
-          type: "just",
-        },
-      }),
-      []
-    );
 
     const baseRequest = useMemo<
       OnlyGet<Request<"/api/workout/{workoutId}/comment">>
@@ -161,11 +133,7 @@ const WorkoutCommentSection = memo<WorkoutCommentSectionProps>(
     );
 
     return (
-      <Motion.div
-        {...motionProps}
-        className="workout-display-comment-section"
-        ref={wrapperRef}
-      >
+      <div className="workout-display-comment-section" ref={wrapperRef}>
         <div
           className="comment-section-wrapper"
           id="comment-section-wrapper"
@@ -182,7 +150,7 @@ const WorkoutCommentSection = memo<WorkoutCommentSectionProps>(
             {commentElements}
           </div>
         </div>
-      </Motion.div>
+      </div>
     );
   }
 );
