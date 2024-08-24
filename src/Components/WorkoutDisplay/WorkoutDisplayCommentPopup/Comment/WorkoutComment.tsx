@@ -5,12 +5,12 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import sendAPIRequest from "../../../../Data/SendAPIRequest";
 import formatDateSince from "../../../../Utility/FormatDateSince";
 import CommentInputField from "../CommentInputField/CommentInputField";
-import { v4 } from "uuid";
 import { getProfileCache } from "../../../../Pages/Profile/ProfileCache";
 import { AnimatePresence, motion } from "framer-motion";
 
 type WorkoutCommentProps = {
   comment: Schema<"SimpleWorkoutCommentResponseDTO">;
+  onCreateNewReply: () => void;
 } & (ParentProps | ReplyProps);
 
 type ParentProps = {
@@ -21,11 +21,14 @@ type ParentProps = {
 type ReplyProps = {
   isReply: true;
   parentId: string;
-  onReplyToChild: (newReply: Schema<"CreateWorkoutCommentRequestDTO">) => void;
+  onReplyToChild: (
+    newReply: Schema<"CreateWorkoutCommentRequestDTO">,
+    newReplyId: string
+  ) => void;
 };
 
 const WorkoutComment = React.memo<WorkoutCommentProps>(
-  ({ comment, ...props }) => {
+  ({ comment, onCreateNewReply, ...props }) => {
     const isWaitingForResponse = useRef<boolean>(false);
     const commentInputFieldRef = useRef<HTMLTextAreaElement>(null);
 
@@ -154,27 +157,33 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
       else setIsReplying(true);
     }
 
-    function handleCreateReply(
+    async function handleCreateReply(
       newReply: Schema<"CreateWorkoutCommentRequestDTO">
     ) {
-      console.log(comment.id);
+      const response = await sendAPIRequest(
+        "/api/workout/{workoutId}/comment/{commentId}/reply",
+        {
+          method: "post",
+          parameters: {
+            workoutId: comment.workoutId,
+            commentId: props.isReply ? props.parentId : comment.id,
+          },
+          payload: newReply,
+        }
+      );
 
-      sendAPIRequest("/api/workout/{workoutId}/comment/{commentId}/reply", {
-        method: "post",
-        parameters: {
-          workoutId: comment.workoutId,
-          commentId: props.isReply ? props.parentId : comment.id,
-        },
-        payload: newReply,
-      });
+      if (response.code !== "Created") return;
 
-      if (!props.isReply) handleNewReplyUIUpdate(newReply);
-      else props.onReplyToChild(newReply);
+      onCreateNewReply();
+
+      if (!props.isReply) handleNewReplyUIUpdate(newReply, response.content);
+      else props.onReplyToChild(newReply, response.content);
       setIsReplying(false);
     }
 
     async function handleNewReplyUIUpdate(
-      newReply: Schema<"CreateWorkoutCommentRequestDTO">
+      newReply: Schema<"CreateWorkoutCommentRequestDTO">,
+      newReplyId: string
     ) {
       const userData = getProfileCache();
       if (props.isReply || !userData) return;
@@ -184,7 +193,7 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
 
       const newCommentSimulatedResponse: Schema<"SimpleWorkoutCommentResponseDTO"> =
         {
-          id: v4(),
+          id: newReplyId,
           createdAt: new Date().toISOString(),
           creator: user.content,
           isCreator: true,
@@ -233,13 +242,14 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
           {replies.replies.map((reply) => (
             <WorkoutComment
               key={reply.id}
+              onCreateNewReply={onCreateNewReply}
               isReply
               parentId={comment.id}
               comment={reply}
-              onReplyToChild={(newReply) =>
+              onReplyToChild={(newReply, newReplyId) =>
                 void (props.isReply
-                  ? props.onReplyToChild(newReply)
-                  : handleNewReplyUIUpdate(newReply))
+                  ? props.onReplyToChild(newReply, newReplyId)
+                  : handleNewReplyUIUpdate(newReply, newReplyId))
               }
             />
           ))}

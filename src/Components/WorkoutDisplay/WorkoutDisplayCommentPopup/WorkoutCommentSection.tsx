@@ -119,6 +119,7 @@ const WorkoutCommentSection = memo<WorkoutCommentSectionProps>(
               <>
                 {newComments.map((comment) => (
                   <WorkoutComment
+                    onCreateNewReply={onCreateNewComment}
                     key={comment.id}
                     comment={comment}
                     workoutId={workoutId}
@@ -138,6 +139,7 @@ const WorkoutCommentSection = memo<WorkoutCommentSectionProps>(
                 {comments.content.map((x) => (
                   <WorkoutComment
                     key={x.id}
+                    onCreateNewReply={onCreateNewComment}
                     comment={x}
                     workoutId={workoutId}
                   />
