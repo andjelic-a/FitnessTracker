@@ -38,9 +38,16 @@
     }
 
     .workout-comments-body {
-      display: flex;
-      flex-direction: column;
-      gap: 3rem;
+      .lazy-container,
+      .lazy-container .lazy-segment {
+        flex-direction: column;
+        width: 100%;
+        width: fit-content;
+      }
+
+      .lazy-container .lazy-segment {
+        gap: 3rem;
+      }
     }
   }
 }

@@ -27,6 +27,12 @@ type LazyLoadingContainerProps<
   after?: ReactNode;
 };
 
+export type OnlyGet<T extends Request<any>> = T extends {
+  method: "get";
+}
+  ? T
+  : never;
+
 type RequestIsh = {
   method: "get";
   parameters: {
@@ -58,13 +64,11 @@ function LazyLoadingContainer<
     isWaiting.current = true;
     isWaitingForInitial.current = true;
 
-    const response = sendAPIRequest(endpoint, baseAPIRequest as any).then(
-      (x) => {
-        if (!stopCondition(x)) isWaiting.current = false;
-        isWaitingForInitial.current = false;
-        return x;
-      }
-    );
+    const response = sendAPIRequest(endpoint, baseAPIRequest).then((x) => {
+      if (!stopCondition(x)) isWaiting.current = false;
+      isWaitingForInitial.current = false;
+      return x;
+    });
 
     setSegments(() => [
       <LazySegment
@@ -126,6 +130,7 @@ function LazyLoadingContainer<
 
     isWaiting.current = true;
     const newRequest = incrementRequest();
+
     const response = sendAPIRequest(endpoint, newRequest as any).then((x) => {
       if (!isResponse(x) || (x as any).code !== "Too Many Requests")
         currentRequest.current = newRequest;
@@ -139,9 +144,7 @@ function LazyLoadingContainer<
       <LazySegment
         onReachLoadThreshold={handleNewSegmentLoad}
         key={"segment-" + oldSegments.length}
-        onSegmentLoad={(x) => {
-          return onSegmentLoad(x);
-        }}
+        onSegmentLoad={onSegmentLoad}
         promise={response}
       />,
     ]);

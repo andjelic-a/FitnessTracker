@@ -1,6 +1,6 @@
+import "./WorkoutDisplayItem.scss";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import Icon from "../../Icon/Icon";
-import "./WorkoutDisplayItem.scss";
 
 type WorkoutDisplayItemProps = {
   exercise: Schema<"SimpleExerciseResponseDTO">;
