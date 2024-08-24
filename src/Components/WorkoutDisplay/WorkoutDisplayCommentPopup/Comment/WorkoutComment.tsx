@@ -157,6 +157,8 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
     function handleCreateReply(
       newReply: Schema<"CreateWorkoutCommentRequestDTO">
     ) {
+      console.log(comment.id);
+
       sendAPIRequest("/api/workout/{workoutId}/comment/{commentId}/reply", {
         method: "post",
         parameters: {

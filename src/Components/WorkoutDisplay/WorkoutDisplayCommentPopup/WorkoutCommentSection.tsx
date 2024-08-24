@@ -7,7 +7,6 @@ import WorkoutComment from "./Comment/WorkoutComment";
 import CommentInputField from "./CommentInputField/CommentInputField";
 import { motion as Motion } from "framer-motion";
 import { getProfileCache } from "../../../Pages/Profile/ProfileCache";
-import { v4 } from "uuid";
 import LazyLoadingContainer, {
   OnlyGet,
 } from "../../LazyLoadingContainer/LazyLoadingContainer";
@@ -16,10 +15,11 @@ import { Request } from "../../../Types/Endpoints/RequestParser";
 type WorkoutCommentSectionProps = {
   workoutId: string;
   onRequireClose: () => void;
+  onCreateNewComment: () => void;
 };
 
 const WorkoutCommentSection = memo<WorkoutCommentSectionProps>(
-  ({ workoutId, onRequireClose }) => {
+  ({ workoutId, onRequireClose, onCreateNewComment }) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const scrollableWrapperRef = useRef<HTMLDivElement>(null);
     const commentInputFieldRef = useRef<HTMLTextAreaElement>(null);
@@ -30,45 +30,44 @@ const WorkoutCommentSection = memo<WorkoutCommentSectionProps>(
       Schema<"SimpleWorkoutCommentResponseDTO">[]
     >([]);
 
-    async function handleNewComment(
-      newCommentRequest: Schema<"CreateWorkoutCommentRequestDTO">
+    async function handleCreateComment(
+      newComment: Schema<"CreateWorkoutCommentRequestDTO">
     ) {
+      const response = await sendAPIRequest(
+        "/api/workout/{workoutId}/comment",
+        {
+          method: "post",
+          parameters: {
+            workoutId,
+          },
+          payload: newComment,
+        }
+      );
+
+      if (response.code !== "Created") return;
+
       const userData = getProfileCache();
       if (!userData) return;
 
       const user = await userData.user;
       if (user.code !== "OK") return;
 
-      // setCommentCount((prevState) => prevState + 1);
+      onCreateNewComment();
 
       const newCommentSimulatedResponse: Schema<"SimpleWorkoutCommentResponseDTO"> =
         {
-          id: v4(),
+          id: response.content,
           createdAt: new Date().toISOString(),
           creator: user.content,
           isCreator: true,
           isLiked: false,
           likeCount: 0,
           replyCount: 0,
-          text: newCommentRequest.comment,
+          text: newComment.comment,
           workoutId,
         };
 
       setNewComments((prev) => [newCommentSimulatedResponse, ...prev]);
-    }
-
-    function handleCreateComment(
-      newComment: Schema<"CreateWorkoutCommentRequestDTO">
-    ) {
-      sendAPIRequest("/api/workout/{workoutId}/comment", {
-        method: "post",
-        parameters: {
-          workoutId,
-        },
-        payload: newComment,
-      });
-
-      handleNewComment(newComment);
     }
 
     const motionProps = useMemo(
@@ -174,7 +173,7 @@ const WorkoutCommentSection = memo<WorkoutCommentSectionProps>(
           />
 
           <div className="workout-comments-body">
-            {/* <AnimatePresence>{commentELements}</AnimatePresence> */}
+            {/* <AnimatePresence>{commentElements}</AnimatePresence> */}
             {commentElements}
           </div>
         </div>

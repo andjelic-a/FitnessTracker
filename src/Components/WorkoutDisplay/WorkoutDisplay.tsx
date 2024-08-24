@@ -8,11 +8,8 @@ import Async from "../Async/Async";
 import WindowFC from "../WindowWrapper/WindowFC";
 import { useNavigate } from "react-router-dom";
 import sendAPIRequest from "../../Data/SendAPIRequest";
-import { getProfileCache } from "../../Pages/Profile/ProfileCache";
 import WorkoutCommentSection from "./WorkoutDisplayCommentPopup/WorkoutCommentSection";
-import { Schema } from "../../Types/Endpoints/SchemaParser";
 import formatCount from "../../Utility/FormatCount";
-import { v4 } from "uuid";
 import { AnimatePresence } from "framer-motion";
 import { extractSetsNoMapping } from "../../Utility/ExtractSetsFromWorkout";
 import {
@@ -38,22 +35,9 @@ const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
 
   const loaderData = useLoaderData<typeof workoutDisplayLoader>();
 
-  const [loadedComments, setLoadedComments] = useState<Promise<
-    Schema<"SimpleWorkoutCommentResponseDTO">[]
-  > | null>(null);
-  const [createdComments, setCreatedComments] = useState<
-    Schema<"SimpleWorkoutCommentResponseDTO">[]
-  >([]);
-
-  const currentCommentPromiseRef = useRef<Promise<
-    Schema<"SimpleWorkoutCommentResponseDTO">[]
-  > | null>(null);
-
-  const reachedEndInCommentSection = useRef<boolean>(false);
-
   useEffect(() => {
     if (workoutId.current.length > 0) return;
-    
+
     isWaitingForResponse.current = true;
 
     loaderData?.workout?.then((currentWorkout) => {
@@ -87,34 +71,6 @@ const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
 
   const handleCommentClick = () =>
     void setIsCommentSectionOpen((prevState) => !prevState);
-
-  function handleNewComment(
-    newCommentRequest: Schema<"CreateWorkoutCommentRequestDTO">
-  ) {
-    const userData = getProfileCache();
-    if (!userData) return;
-
-    userData.user.then((user) => {
-      if (user.code !== "OK") return;
-
-      setCommentCount((prevState) => prevState + 1);
-
-      const newCommentSimulatedResponse: Schema<"SimpleWorkoutCommentResponseDTO"> =
-        {
-          id: v4(),
-          createdAt: new Date().toISOString(),
-          creator: user.content,
-          isCreator: true,
-          isLiked: false,
-          likeCount: 0,
-          replyCount: 0,
-          text: newCommentRequest.comment,
-          workoutId: workoutId.current,
-        };
-
-      setCreatedComments((prev) => [newCommentSimulatedResponse, ...prev]);
-    });
-  }
 
   const handleFavoriteClick = () => {
     if (isWaitingForResponse.current) return;
@@ -151,62 +107,6 @@ const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
     });
   };
 
-  async function handleCommentLazyLoadRequest(): Promise<
-    Schema<"SimpleWorkoutCommentResponseDTO">[]
-  > {
-    if (!loadedComments || reachedEndInCommentSection.current) return [];
-
-    currentCommentPromiseRef.current ??= sendAPIRequest(
-      "/api/workout/{workoutId}/comment",
-      {
-        method: "get",
-        parameters: {
-          workoutId: workoutId.current,
-          limit: 10,
-          offset: (await loadedComments).length,
-        },
-      }
-    ).then((data) => {
-      if (data.code !== "OK") return [];
-
-      setLoadedComments((prev) =>
-        prev!.then((prev) => [...prev, ...data.content])
-      );
-
-      reachedEndInCommentSection.current = data.content.length < 10;
-      currentCommentPromiseRef.current = null;
-      return [];
-    });
-
-    return await currentCommentPromiseRef.current;
-  }
-
-  async function getInitialComments(): Promise<
-    Schema<"SimpleWorkoutCommentResponseDTO">[]
-  > {
-    currentCommentPromiseRef.current ??= sendAPIRequest(
-      "/api/workout/{workoutId}/comment",
-      {
-        method: "get",
-        parameters: {
-          workoutId: workoutId.current,
-          limit: 10,
-          offset: 0,
-        },
-      }
-    ).then((data) => {
-      if (data.code !== "OK") return [];
-
-      setLoadedComments(Promise.resolve(data.content));
-
-      reachedEndInCommentSection.current = data.content.length < 10;
-      currentCommentPromiseRef.current = null;
-      return data.content;
-    });
-
-    return await currentCommentPromiseRef.current;
-  }
-
   function handleCloseCommentPopup() {
     setIsCommentSectionOpen(false);
   }
@@ -218,6 +118,7 @@ const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
       <WorkoutCommentSection
         workoutId={workoutId.current}
         onRequireClose={handleCloseCommentPopup}
+        onCreateNewComment={() => void setCommentCount((prev) => prev + 1)}
       />
     );
   }, [workoutId.current]);

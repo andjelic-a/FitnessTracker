@@ -6084,6 +6084,23 @@ type MappedEndpoints = {
         responses: {
           "201": {
             description: "Created";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "string";
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "string";
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "string";
+                };
+              };
+            };
           };
           "400": {
             description: "Bad Request";
@@ -6334,6 +6351,23 @@ type MappedEndpoints = {
         responses: {
           "201": {
             description: "Created";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "string";
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "string";
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "string";
+                };
+              };
+            };
           };
           "400": {
             description: "Bad Request";
