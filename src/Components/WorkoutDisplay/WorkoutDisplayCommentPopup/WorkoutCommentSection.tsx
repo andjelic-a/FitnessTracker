@@ -130,9 +130,12 @@ const WorkoutCommentSection = memo<WorkoutCommentSectionProps>(
           }
           endpoint="/api/workout/{workoutId}/comment"
           baseAPIRequest={baseRequest}
-          onSegmentLoad={(comments) => {
-            if (comments.code !== "OK" || comments.content.length === 0)
-              return <p className="empty">Nothing to see here...</p>;
+          onSegmentLoad={(comments, segmentIndex) => {
+            if (comments.code !== "OK" || comments.content.length === 0) {
+              if (segmentIndex === 0)
+                return <p className="empty">Nothing to see here...</p>;
+              else return <></>;
+            }
 
             return (
               <>

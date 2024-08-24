@@ -17,7 +17,8 @@ type LazyLoadingContainerProps<
     ? BaseRequest
     : never;
   onSegmentLoad: (
-    response: Awaited<ReturnType<typeof sendAPIRequest<BaseRequest, Endpoint>>>
+    response: Awaited<ReturnType<typeof sendAPIRequest<BaseRequest, Endpoint>>>,
+    segmentIndex: number
   ) => ReactNode;
   stopCondition: (
     response: Awaited<ReturnType<typeof sendAPIRequest<BaseRequest, Endpoint>>>
@@ -74,7 +75,7 @@ function LazyLoadingContainer<
       <LazySegment
         onReachLoadThreshold={handleNewSegmentLoad}
         key={"segment-0"}
-        onSegmentLoad={onSegmentLoad}
+        onSegmentLoad={(x) => onSegmentLoad(x, 0)}
         promise={response}
       />,
     ]);
@@ -144,7 +145,7 @@ function LazyLoadingContainer<
       <LazySegment
         onReachLoadThreshold={handleNewSegmentLoad}
         key={"segment-" + oldSegments.length}
-        onSegmentLoad={onSegmentLoad}
+        onSegmentLoad={(x) => onSegmentLoad(x, oldSegments.length)}
         promise={response}
       />,
     ]);
