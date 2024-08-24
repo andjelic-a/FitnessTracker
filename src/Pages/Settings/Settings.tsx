@@ -60,8 +60,8 @@ const Settings = WindowFC(({}, wrapperRef) => {
 
   return (
     <div ref={wrapperRef}>
-      <EditProfile visible={isEditProfileOpen} onClose={handleCloseEditProfile} />
-      <Authentication visible={isAuthenticationOpen} onClose={() => setIsAuthenticationOpen(false)} />
+      <EditProfile visible={isEditProfileOpen} setIsEditProfileOpen={setIsEditProfileOpen} setIsAuthenticationOpen={setIsAuthenticationOpen} onClose={handleCloseEditProfile} />
+      <Authentication visible={isAuthenticationOpen} setIsEditProfileOpen={setIsEditProfileOpen} setIsAuthenticationOpen={setIsAuthenticationOpen} onClose={() => setIsAuthenticationOpen(false)} />
       <div className="settings">
         <div ref={setMenuItemRef} onClick={() => setIsEditProfileOpen(prevState => !prevState)} className="settings-item">Edit profile</div>
         <div ref={setMenuItemRef} onClick={() => setIsAuthenticationOpen(prevState => !prevState)} className="settings-item">Authentication</div>

@@ -6,10 +6,12 @@ import "./EditProfile.scss";
 
 type EditProfileProps = {
   visible: boolean;
+  setIsEditProfileOpen: (isVisible: boolean) => void;
+  setIsAuthenticationOpen: (isVisible: boolean) => void;
   onClose: () => void;
 };
 
-export default function EditProfile({ visible, onClose }: EditProfileProps) {
+export default function EditProfile({ visible, onClose, setIsEditProfileOpen, setIsAuthenticationOpen }: EditProfileProps) {
   const [isImageHovered, setIsImageHovered] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedGender, setSelectedGender] = useState<"male" | "none" | "female">("none");
@@ -26,7 +28,7 @@ export default function EditProfile({ visible, onClose }: EditProfileProps) {
 
   return (
     <div className={`edit-profile ${visible ? "edit-profile-show" : ""}`}>
-      <SettingsMenu onClose={onClose} />
+      <SettingsMenu onClose={onClose} setIsEditProfileOpen={setIsEditProfileOpen} setIsAuthenticationOpen={setIsAuthenticationOpen}/>
       <div className="edit-profile-content">
         <h3>Edit profile</h3>
         <div className="edit-profile-user-details">
