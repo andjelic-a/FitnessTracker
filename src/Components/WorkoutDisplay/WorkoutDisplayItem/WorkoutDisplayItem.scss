@@ -33,13 +33,17 @@
       }
     }
 
-    p {
+    a.exercise-name {
       margin-left: 1.5rem;
-      font-size: 1.8rem;
-      transition: 0.2s;
-      cursor: pointer;
+      outline: none;
 
-      &:hover {
+      font-size: 1.8rem;
+      color: #fff;
+      text-decoration: none;
+      transition: 0.15s;
+
+      &:hover,
+      &:focus-visible {
         color: $primary-500;
       }
     }

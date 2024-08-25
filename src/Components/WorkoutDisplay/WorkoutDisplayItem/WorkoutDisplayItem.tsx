@@ -1,6 +1,7 @@
 import "./WorkoutDisplayItem.scss";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import WorkoutDisplaySet from "./WorkoutDisplaySet";
+import { Link } from "react-router-dom";
 
 type WorkoutDisplayItemProps = {
   exercise: Schema<"SimpleExerciseResponseDTO">;
@@ -18,7 +19,9 @@ export default function WorkoutDisplayItem({
           <img src={exercise.image} />
         </div>
 
-        <p>{exercise.name}</p>
+        <Link className="exercise-name" to={`/exercises/${exercise.id}`}>
+          {exercise.name}
+        </Link>
       </div>
 
       <div className="workout-display-item-body">
