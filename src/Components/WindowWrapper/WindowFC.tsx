@@ -42,7 +42,7 @@ const WindowFC =
         !windowProps?.closeConfirmationModal ||
         !modalCondition?.current?.()
       )
-        navigate("..");
+        navigate(-1);
       else setIsModalOpen(true);
     };
 
