@@ -1,13 +1,10 @@
 import { useMemo, useState } from "react";
-import { Schema } from "../../Types/Endpoints/SchemaParser";
 import "./ActivityGrid.scss";
 import "overlayscrollbars/overlayscrollbars.css";
 import ActivityTab from "./ActivityTab";
 
 type ActivityGrid = {
-  latestActivity: Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[];
   joinedAt: Date;
-  userId: string;
 };
 
 function ActivityGrid({ joinedAt }: ActivityGrid) {

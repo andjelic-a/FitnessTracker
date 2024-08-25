@@ -4778,17 +4778,16 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/user/{id}/detailed": {
+    "/api/user/{username}/detailed": {
       get: {
         tags: ["User"];
         parameters: [
           {
-            name: "id";
+            name: "username";
             in: "path";
             required: true;
             schema: {
               type: "string";
-              format: "uuid";
             };
           }
         ];
@@ -4836,21 +4835,20 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/user/{id}/following": {
+    "/api/user/{username}/following": {
       get: {
         tags: ["User"];
         parameters: [
           {
-            name: "id";
+            name: "username";
             in: "path";
             required: true;
             schema: {
               type: "string";
-              format: "uuid";
             };
           },
           {
-            name: "name";
+            name: "searchTerm";
             in: "query";
             schema: {
               type: "string";
@@ -4946,21 +4944,20 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/user/{id}/followers": {
+    "/api/user/{username}/followers": {
       get: {
         tags: ["User"];
         parameters: [
           {
-            name: "id";
+            name: "username";
             in: "path";
             required: true;
             schema: {
               type: "string";
-              format: "uuid";
             };
           },
           {
-            name: "name";
+            name: "searchTerm";
             in: "query";
             schema: {
               type: "string";
@@ -5404,17 +5401,16 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/user/{userId}/streak": {
+    "/api/user/{username}/streak": {
       get: {
         tags: ["User"];
         parameters: [
           {
-            name: "userId";
+            name: "username";
             in: "path";
             required: true;
             schema: {
               type: "string";
-              format: "uuid";
             };
           },
           {
@@ -9008,9 +9004,8 @@ type MappedEndpoints = {
       DetailedPublicUserResponseDTO: {
         type: "object";
         properties: {
-          id: {
+          username: {
             type: "string";
-            format: "uuid";
           };
           name: {
             type: "string";
@@ -9018,6 +9013,9 @@ type MappedEndpoints = {
           image: {
             type: "string";
             nullable: true;
+          };
+          bio: {
+            type: "string";
           };
           isMe: {
             type: "boolean";
@@ -9130,9 +9128,8 @@ type MappedEndpoints = {
       DetailedUserResponseDTO: {
         type: "object";
         properties: {
-          id: {
+          username: {
             type: "string";
-            format: "uuid";
           };
           name: {
             type: "string";
@@ -9140,6 +9137,9 @@ type MappedEndpoints = {
           image: {
             type: "string";
             nullable: true;
+          };
+          bio: {
+            type: "string";
           };
           followers: {
             type: "integer";
@@ -9313,7 +9313,7 @@ type MappedEndpoints = {
       RegisterUserRequestDTO: {
         type: "object";
         properties: {
-          name: {
+          username: {
             type: "string";
           };
           email: {
@@ -9505,9 +9505,8 @@ type MappedEndpoints = {
       SimpleUserResponseDTO: {
         type: "object";
         properties: {
-          id: {
+          username: {
             type: "string";
-            format: "uuid";
           };
           name: {
             type: "string";

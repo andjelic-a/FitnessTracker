@@ -1,7 +1,6 @@
 import "./Profile.scss";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
 import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
-import { useNavigate } from "react-router-dom";
 import AnimatedOutlet from "../../Components/WindowWrapper/AnimatedOutlet";
 import ProfileSkeleton from "./Skeletons/ProfileSkeleton";
 import profileLoader from "./ProfileLoader";
@@ -14,8 +13,6 @@ import { Schema } from "../../Types/Endpoints/SchemaParser";
 
 export default function Profile() {
   const loaderData = useLoaderData<typeof profileLoader>();
-
-  const navigate = useNavigate();
 
   const [newWorkouts, setNewWorkouts] = useState<
     Schema<"SimpleWorkoutResponseDTO">[]
@@ -38,16 +35,7 @@ export default function Profile() {
 
             return (
               <>
-                <ProfileHeader
-                  username={loadedUserData.content.name}
-                  image={loadedUserData.content.image}
-                  workouts={loadedUserData.content.totalCompletedWorkouts}
-                  followers={loadedUserData.content.followers}
-                  following={loadedUserData.content.following}
-                  setFollowersOrFollowing={(x) => {
-                    void navigate(`/me/${x}`);
-                  }}
-                />
+                <ProfileHeader user={loadedUserData.content} />
 
                 <div className="profile-body">
                   <ProfileWorkoutTabs
@@ -69,8 +57,6 @@ export default function Profile() {
                       return (
                         <>
                           <ActivityGrid
-                            userId={loadedUserData.content.id}
-                            latestActivity={loadedStreakData.content}
                             joinedAt={new Date(loadedUserData.content.joinedAt)}
                           />
                         </>

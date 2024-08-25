@@ -68,7 +68,7 @@ export async function register(
     {
       method: "post",
       payload: {
-        name: name.trim(),
+        username: name.trim(),
         email: email.trim(),
         password,
       },
