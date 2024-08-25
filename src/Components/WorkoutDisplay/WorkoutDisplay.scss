@@ -263,17 +263,18 @@
 
             .workout-display-comment {
               color: $dark-600;
+              font-weight: 100;
             }
+          }
+
+          .workout-display-interaction-count {
+            position: absolute;
+            color: $dark-600;
+            font-size: 1.8rem;
+            bottom: 0;
           }
         }
       }
     }
   }
-}
-
-.workout-display-interaction-count {
-  position: absolute;
-  color: $dark-600;
-  font-size: 1.8rem;
-  bottom: 0;
 }

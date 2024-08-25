@@ -8,7 +8,7 @@ import Async from "../Async/Async";
 import WindowFC from "../WindowWrapper/WindowFC";
 import { useNavigate } from "react-router-dom";
 import sendAPIRequest from "../../Data/SendAPIRequest";
-import WorkoutCommentSection from "./WorkoutDisplayCommentPopup/WorkoutCommentSection";
+import WorkoutCommentSection from "./WorkoutDisplayCommentSection/WorkoutCommentSection";
 import formatCount from "../../Utility/FormatCount";
 import { AnimatePresence } from "framer-motion";
 import { extractSetsNoMapping } from "../../Utility/ExtractSetsFromWorkout";
