@@ -18,8 +18,10 @@ import {
   OutPortal,
 } from "react-reverse-portal";
 import { motion } from "framer-motion";
+import ConfirmModalDialog from "../ConfirmModalDialog/ConfirmModalDialog";
 
 const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
+  const loaderData = useLoaderData<typeof workoutDisplayLoader>();
   const navigate = useNavigate();
 
   const [isLiked, setIsLiked] = useState<boolean | null>(null);
@@ -34,7 +36,8 @@ const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
   const isWaitingForResponse = useRef<boolean>(false);
   const workoutId = useRef<string>("");
 
-  const loaderData = useLoaderData<typeof workoutDisplayLoader>();
+  const [isConfirmDeletionModalOpen, setIsConfirmDeletionModalOpen] =
+    useState(false);
 
   useEffect(() => {
     if (workoutId.current.length > 0) return;
@@ -88,7 +91,7 @@ const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
     setIsFavorited((prevState) => !prevState);
   };
 
-  const handleWorkoutDelete = () => {
+  const handleDelete = () => {
     loaderData?.workout?.then((currentWorkout) => {
       if (currentWorkout.code !== "OK") {
         close();
@@ -178,7 +181,7 @@ const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
 
                     <button
                       className="workout-display-delete"
-                      onClick={handleWorkoutDelete}
+                      onClick={() => void setIsConfirmDeletionModalOpen(true)}
                     >
                       <Icon name="trash" />
 
@@ -290,6 +293,14 @@ const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
             </motion.div>
           )}
         </AnimatePresence>
+
+        <ConfirmModalDialog
+          isOpen={isConfirmDeletionModalOpen}
+          onConfirm={handleDelete}
+          onDeny={() => void setIsConfirmDeletionModalOpen(false)}
+        >
+          Are you sure you want to <b>permanently</b> delete this workout?
+        </ConfirmModalDialog>
       </div>
     </>
   );
