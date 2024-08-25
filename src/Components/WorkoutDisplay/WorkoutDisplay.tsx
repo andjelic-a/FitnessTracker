@@ -169,14 +169,22 @@ const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
                       className="workout-display-edit"
                       onClick={() => void navigate("edit")}
                     >
-                      Edit
+                      <Icon name="pen-to-square" />
+
+                      <p className="accessibility-only" aria-hidden={false}>
+                        Edit
+                      </p>
                     </button>
 
                     <button
                       className="workout-display-delete"
                       onClick={handleWorkoutDelete}
                     >
-                      Delete
+                      <Icon name="trash" />
+
+                      <p className="accessibility-only" aria-hidden={false}>
+                        Delete
+                      </p>
                     </button>
                   </div>
 

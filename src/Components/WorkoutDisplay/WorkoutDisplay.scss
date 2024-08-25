@@ -114,7 +114,8 @@
         font-weight: 550;
         right: 9rem;
 
-        &:hover {
+        &:hover,
+        &:focus-visible {
           background-color: $primary-400;
         }
       }
@@ -133,9 +134,15 @@
         font-weight: 550;
         right: 0;
 
-        &:hover {
+        &:hover,
+        &:focus-visible {
           background-color: $primary-400;
         }
+      }
+
+      .workout-display-edit:focus-visible,
+      .workout-display-delete:focus-visible {
+        outline: 2px solid #fff;
       }
     }
 
