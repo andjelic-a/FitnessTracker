@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import WindowFC from "../../Components/WindowWrapper/WindowFC";
 import EditProfile from "../../Components/Settings/EditProfile/EditProfile";
 import Authentication from "../../Components/Settings/Authentication/Authentication";
+import Privacy from "../../Components/Settings/Privacy/Privacy";
 import { logout } from "../../Data/User";
 import "./Settings.scss";
 
@@ -10,7 +11,9 @@ const Settings = WindowFC(({}, wrapperRef) => {
   const navigate = useNavigate();
 
   const [isEditProfileOpen, setIsEditProfileOpen] = useState<boolean>(false);
-  const [isAuthenticationOpen, setIsAuthenticationOpen] = useState<boolean>(false);
+  const [isAuthenticationOpen, setIsAuthenticationOpen] =
+    useState<boolean>(false);
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState<boolean>(false);
 
   const menuItemsRef = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -41,7 +44,7 @@ const Settings = WindowFC(({}, wrapperRef) => {
       (event.target as HTMLElement).style.background = "";
     };
 
-    menuItemsRef.current.forEach(item => {
+    menuItemsRef.current.forEach((item) => {
       if (item) {
         item.addEventListener("mousemove", handleMouseMove);
         item.addEventListener("mouseleave", handleMouseLeave);
@@ -49,7 +52,7 @@ const Settings = WindowFC(({}, wrapperRef) => {
     });
 
     return () => {
-      menuItemsRef.current.forEach(item => {
+      menuItemsRef.current.forEach((item) => {
         if (item) {
           item.removeEventListener("mousemove", handleMouseMove);
           item.removeEventListener("mouseleave", handleMouseLeave);
@@ -60,14 +63,59 @@ const Settings = WindowFC(({}, wrapperRef) => {
 
   return (
     <div ref={wrapperRef}>
-      <EditProfile visible={isEditProfileOpen} setIsEditProfileOpen={setIsEditProfileOpen} setIsAuthenticationOpen={setIsAuthenticationOpen} onClose={handleCloseEditProfile} />
-      <Authentication visible={isAuthenticationOpen} setIsEditProfileOpen={setIsEditProfileOpen} setIsAuthenticationOpen={setIsAuthenticationOpen} onClose={() => setIsAuthenticationOpen(false)} />
+      <EditProfile
+        visible={isEditProfileOpen}
+        setIsEditProfileOpen={setIsEditProfileOpen}
+        setIsAuthenticationOpen={setIsAuthenticationOpen}
+        setIsPrivacyOpen={setIsPrivacyOpen}
+        onClose={handleCloseEditProfile}
+      />
+      <Authentication
+        visible={isAuthenticationOpen}
+        setIsEditProfileOpen={setIsEditProfileOpen}
+        setIsAuthenticationOpen={setIsAuthenticationOpen}
+        setIsPrivacyOpen={setIsPrivacyOpen}
+        onClose={() => setIsAuthenticationOpen(false)}
+      />
+      <Privacy
+        visible={isPrivacyOpen}
+        setIsEditProfileOpen={setIsEditProfileOpen}
+        setIsAuthenticationOpen={setIsAuthenticationOpen}
+        setIsPrivacyOpen={setIsPrivacyOpen}
+        onClose={() => setIsPrivacyOpen(false)}
+      />
       <div className="settings">
-        <div ref={setMenuItemRef} onClick={() => setIsEditProfileOpen(prevState => !prevState)} className="settings-item">Edit profile</div>
-        <div ref={setMenuItemRef} onClick={() => setIsAuthenticationOpen(prevState => !prevState)} className="settings-item">Authentication</div>
-        <div ref={setMenuItemRef} className="settings-item">Privacy</div>
-        <div ref={setMenuItemRef} onClick={logout} className="settings-item">Log out</div>
-        <div ref={setMenuItemRef} onClick={handleCancel} className="settings-item">Cancel</div>
+        <div
+          ref={setMenuItemRef}
+          onClick={() => setIsEditProfileOpen((prevState) => !prevState)}
+          className="settings-item"
+        >
+          Edit profile
+        </div>
+        <div
+          ref={setMenuItemRef}
+          onClick={() => setIsAuthenticationOpen((prevState) => !prevState)}
+          className="settings-item"
+        >
+          Authentication
+        </div>
+        <div
+          ref={setMenuItemRef}
+          className="settings-item"
+          onClick={() => setIsPrivacyOpen((prevState) => !prevState)}
+        >
+          Privacy
+        </div>
+        <div ref={setMenuItemRef} onClick={logout} className="settings-item">
+          Log out
+        </div>
+        <div
+          ref={setMenuItemRef}
+          onClick={handleCancel}
+          className="settings-item"
+        >
+          Cancel
+        </div>
       </div>
     </div>
   );

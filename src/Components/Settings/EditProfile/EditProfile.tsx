@@ -8,13 +8,22 @@ type EditProfileProps = {
   visible: boolean;
   setIsEditProfileOpen: (isVisible: boolean) => void;
   setIsAuthenticationOpen: (isVisible: boolean) => void;
+  setIsPrivacyOpen: (isVisible: boolean) => void;
   onClose: () => void;
 };
 
-export default function EditProfile({ visible, onClose, setIsEditProfileOpen, setIsAuthenticationOpen }: EditProfileProps) {
+export default function EditProfile({
+  visible,
+  onClose,
+  setIsEditProfileOpen,
+  setIsAuthenticationOpen,
+  setIsPrivacyOpen,
+}: EditProfileProps) {
   const [isImageHovered, setIsImageHovered] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [selectedGender, setSelectedGender] = useState<"male" | "none" | "female">("none");
+  const [selectedGender, setSelectedGender] = useState<
+    "male" | "none" | "female"
+  >("none");
 
   const imageInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -28,7 +37,12 @@ export default function EditProfile({ visible, onClose, setIsEditProfileOpen, se
 
   return (
     <div className={`edit-profile ${visible ? "edit-profile-show" : ""}`}>
-      <SettingsMenu onClose={onClose} setIsEditProfileOpen={setIsEditProfileOpen} setIsAuthenticationOpen={setIsAuthenticationOpen}/>
+      <SettingsMenu
+        onClose={onClose}
+        setIsEditProfileOpen={setIsEditProfileOpen}
+        setIsAuthenticationOpen={setIsAuthenticationOpen}
+        setIsPrivacyOpen={setIsPrivacyOpen}
+      />
       <div className="edit-profile-content">
         <h3>Edit profile</h3>
         <div className="edit-profile-user-details">

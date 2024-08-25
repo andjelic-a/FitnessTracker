@@ -5,25 +5,34 @@ type SettingsMenuProps = {
     onClose: () => void;
     setIsEditProfileOpen: (isVisible: boolean) => void;
     setIsAuthenticationOpen: (isVisible: boolean) => void;
+    setIsPrivacyOpen: (isVisible: boolean) => void;
 };
 
-export default function SettingsMenu({ onClose, setIsEditProfileOpen, setIsAuthenticationOpen }: SettingsMenuProps) {
+export default function SettingsMenu({ onClose, setIsEditProfileOpen, setIsAuthenticationOpen, setIsPrivacyOpen }: SettingsMenuProps) {
 
     const handleEditProfileClick = () => {
-        setIsEditProfileOpen(true); // Opens the EditProfile component
-        setIsAuthenticationOpen(false); // Close Authentication if it was open
+        setIsEditProfileOpen(true);
+        setIsAuthenticationOpen(false);
+        setIsPrivacyOpen(false);
     }
 
     const handleAuthenticationClick = () => {
-        setIsAuthenticationOpen(true); // Opens the Authentication component
-        setIsEditProfileOpen(false); // Close EditProfile if it was open
+        setIsAuthenticationOpen(true);
+        setIsEditProfileOpen(false);
+        setIsPrivacyOpen(false);
+    }
+
+    const handlePrivacyClick = () => {
+        setIsPrivacyOpen(true);
+        setIsAuthenticationOpen(false);
+        setIsEditProfileOpen(false);
     }
 
     return (
         <div className="settings-menu">
             <div className="settings-menu-item" onClick={handleEditProfileClick}>Edit profile</div>
             <div className="settings-menu-item" onClick={handleAuthenticationClick}>Authentication</div>
-            <div className="settings-menu-item">Privacy</div>
+            <div className="settings-menu-item" onClick={handlePrivacyClick}>Privacy</div>
             <Icon className="edit-profile-close-icon" onClick={onClose} name="xmark" />
         </div>
     );
