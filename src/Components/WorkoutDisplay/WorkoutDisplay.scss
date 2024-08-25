@@ -1,6 +1,6 @@
 @import "../../Palette.scss";
 
-.workout-display-wrapper {
+.workout-display-container {
   &,
   * {
     user-select: none;
@@ -64,7 +64,7 @@
       overflow: hidden;
     }
 
-    & .workout-display-interaction-container {
+    .workout-display-interaction-container {
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -83,7 +83,7 @@
       align-items: flex-end;
       gap: 1rem;
 
-      & .workout-display-title {
+      .workout-display-title {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -100,7 +100,7 @@
         padding: 0 2rem;
       }
 
-      & .workout-display-edit {
+      .workout-display-edit {
         position: absolute;
         width: 7rem;
         height: 3.75rem;
@@ -119,7 +119,7 @@
         }
       }
 
-      & .workout-display-delete {
+      .workout-display-delete {
         position: absolute;
         width: 7rem;
         height: 3.75rem;
@@ -149,7 +149,7 @@
       grid-template-columns: repeat(2, 1fr);
       align-content: start;
 
-      & > * {
+      > * {
         display: flex;
         flex-direction: column;
       }
@@ -165,44 +165,9 @@
       grid-template-columns: repeat(2, 1fr);
       align-content: start;
 
-      & > * {
+      > * {
         display: flex;
         flex-direction: column;
-      }
-    }
-
-    .workout-display-description-container {
-      position: relative;
-      margin-top: auto;
-      align-self: center;
-      width: 80%;
-      min-height: 5rem;
-      height: auto;
-      border-radius: 0.5rem;
-      border: 2px solid $dark-600;
-      margin-bottom: 0rem;
-      overflow: visible;
-
-      & .workout-display-description {
-        position: relative;
-        width: 100%;
-        height: auto;
-        font-size: 1.8rem;
-        color: rgb(231, 231, 231);
-        padding: 1rem;
-        overflow: visible;
-
-        & .workout-display-description-placeholder {
-          position: absolute;
-          font-size: 1.8rem;
-          font-weight: 600;
-          top: -1.5rem;
-          left: 1rem;
-          background-color: $dark-200;
-          padding: 0 0.5rem;
-          white-space: nowrap;
-          color: $dark-600;
-        }
       }
     }
 
@@ -216,71 +181,90 @@
       align-items: center;
       font-size: 3rem;
 
-      & .icon-container {
+      .workout-display-description-container {
+        position: relative;
+        margin-top: auto;
+        align-self: center;
+        width: 80%;
+        min-height: 5rem;
+        height: auto;
+        border-radius: 0.5rem;
+        border: 2px solid $dark-600;
+        margin-bottom: 0rem;
+        overflow: visible;
+
+        .workout-display-description {
+          position: relative;
+          width: 100%;
+          height: auto;
+          font-size: 1.8rem;
+          color: rgb(231, 231, 231);
+          padding: 1rem;
+          overflow: visible;
+
+          .workout-display-description-placeholder {
+            position: absolute;
+            font-size: 1.8rem;
+            font-weight: 600;
+            top: -1.5rem;
+            left: 1rem;
+            background-color: $dark-200;
+            padding: 0 0.5rem;
+            white-space: nowrap;
+            color: $dark-600;
+          }
+        }
+      }
+
+      .icon-container {
         width: 30%;
         height: 8rem;
         display: flex;
         justify-content: space-between;
 
-        & .workout-display-interaction-container {
+        .workout-display-interaction-container {
           position: relative;
           height: 100%;
-        }
 
-        & .workout-display-thumbs-up {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 4rem;
-          width: 4rem;
-          border-radius: 50%;
-          cursor: pointer;
-          font-weight: normal;
-          transition: 0.3s;
-          color: $dark-500;
-          
-          &:hover {
-            color: $primary-300;
+          button {
+            border: none;
+            outline: none;
+            background-color: transparent;
+            cursor: pointer;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            height: 4rem;
+            width: 4rem;
+            border-radius: 1rem;
+
+            font-weight: normal;
+            font-size: 2.5rem;
+            color: $dark-500;
+
+            transition: margin-bottom 75ms;
+
+            &:focus-visible {
+              outline: 2px solid $primary-300;
+              margin-bottom: 1.5rem;
+            }
+
+            &:hover i,
+            &:focus-visible i,
+            &:has(.active) {
+              color: $primary-300;
+            }
+
+            i {
+              transition: 175ms;
+            }
+
+            .workout-display-comment {
+              color: $dark-600;
+            }
           }
-        }
-
-        & .workout-display-bookmark {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 4rem;
-          width: 4rem;
-          border-radius: 50%;
-          cursor: pointer;
-          font-weight: normal;
-          transition: 0.2s;
-          color: $dark-600;
-          
-          &:hover {
-            color: $primary-300;
-          }
-        }
-
-        & .workout-display-comment {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 4rem;
-          width: 4rem;
-          border-radius: 50%;
-          cursor: pointer;
-          font-weight: normal;
-          transition: 0.2s;
-          color: $dark-600;
-          
-          &:hover {
-            color: $primary-300;
-          }
-        }
-
-        & .active {
-          color: $primary-300;
-          font-weight: bold;
         }
       }
     }

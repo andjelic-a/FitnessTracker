@@ -152,43 +152,35 @@ const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
     <>
       <InPortal node={commentSectionPortalNode} children={commentSection} />
 
-      <div ref={wrapperRef} className="workout-display-wrapper">
+      <div ref={wrapperRef} className="workout-display-container">
         <div className="workout-display">
-          <div className="workout-display-header">
-            <Async await={loaderData?.workout}>
-              {(workout) => {
-                if (!workout || workout.code !== "OK") return null;
+          <Async await={loaderData?.workout}>
+            {(workout) => {
+              if (!workout || workout.code !== "OK") return null;
 
-                return (
-                  <>
+              return (
+                <>
+                  <div className="workout-display-header">
                     <p className="workout-display-title">
                       {workout.content.name}
                     </p>
+
                     <button
                       className="workout-display-edit"
                       onClick={() => void navigate("edit")}
                     >
                       Edit
                     </button>
+
                     <button
                       className="workout-display-delete"
                       onClick={handleWorkoutDelete}
                     >
                       Delete
                     </button>
-                  </>
-                );
-              }}
-            </Async>
-          </div>
+                  </div>
 
-          <div className="workout-display-body">
-            <Async await={loaderData?.workout}>
-              {(workout) => {
-                if (!workout || workout.code !== "OK") return null;
-
-                return (
-                  <>
+                  <div className="workout-display-body">
                     {extractSetsNoMapping(workout.content).map((set) => (
                       <WorkoutDisplayItem
                         key={set.id}
@@ -196,39 +188,35 @@ const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
                         sets={set.sets}
                       />
                     ))}
-                  </>
-                );
-              }}
-            </Async>
-          </div>
+                  </div>
 
-          <div className="workout-display-footer">
-            <Async await={loaderData?.workout}>
-              {(workout) => {
-                if (!workout || workout.code !== "OK") return null;
+                  <div className="workout-display-footer">
+                    {workout.content.description?.trim() && (
+                      <div className="workout-display-description-container">
+                        <div className="workout-display-description">
+                          <label className="workout-display-description-placeholder">
+                            Workout Description
+                          </label>
 
-                return (
-                  <>
-                    {workout.content.description?.trim() !== "" &&
-                      workout.content.description && (
-                        <div className="workout-display-description-container">
-                          <div className="workout-display-description">
-                            <label className="workout-display-description-placeholder">
-                              Workout Description
-                            </label>
-                            {workout.content.description}
-                          </div>
+                          {workout.content.description}
                         </div>
-                      )}
+                      </div>
+                    )}
+
                     <div className="icon-container">
                       <div className="workout-display-interaction-container">
-                        <Icon
-                          name="thumbs-up"
-                          onClick={handleThumbsUpClick}
-                          className={`workout-display-thumbs-up ${
-                            isLiked ? "active" : ""
-                          }`}
-                        />
+                        <button onClick={handleThumbsUpClick}>
+                          <Icon
+                            name="thumbs-up"
+                            className={`workout-display-thumbs-up ${
+                              isLiked ? "active" : ""
+                            }`}
+                          />
+                        </button>
+
+                        <p className="accessibility-only" aria-hidden={false}>
+                          Like
+                        </p>
 
                         <p className="workout-display-interaction-count">
                           {formatCount(likeCount)}
@@ -236,38 +224,55 @@ const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
                       </div>
 
                       <div className="workout-display-interaction-container">
-                        <Icon
-                          onClick={handleCommentClick}
-                          name="comment"
-                          className={`workout-display-comment ${
-                            isCommentSectionOpen ? "active" : ""
-                          }`}
-                        />
+                        <button onClick={handleCommentClick}>
+                          <Icon
+                            name="comment"
+                            className={`workout-display-comment ${
+                              isCommentSectionOpen ? "active" : ""
+                            }`}
+                          />
+                        </button>
+
+                        <p className="accessibility-only" aria-hidden={false}>
+                          Comment section
+                        </p>
 
                         <p className="workout-display-interaction-count">
                           {formatCount(commentCount)}
+
+                          <span
+                            className="accessibility-only"
+                            aria-hidden={false}
+                          >
+                            Comments
+                          </span>
                         </p>
                       </div>
 
                       <div className="workout-display-interaction-container">
-                        <Icon
-                          name="bookmark"
-                          onClick={handleFavoriteClick}
-                          className={`workout-display-bookmark ${
-                            isFavorited ? "active" : ""
-                          }`}
-                        />
+                        <button onClick={handleFavoriteClick}>
+                          <Icon
+                            name="bookmark"
+                            className={`workout-display-bookmark ${
+                              isFavorited ? "active" : ""
+                            }`}
+                          />
+                        </button>
+
+                        <p className="accessibility-only" aria-hidden={false}>
+                          Favorite
+                        </p>
 
                         <p className="workout-display-interaction-count">
                           {formatCount(favoriteCount)}
                         </p>
                       </div>
                     </div>
-                  </>
-                );
-              }}
-            </Async>
-          </div>
+                  </div>
+                </>
+              );
+            }}
+          </Async>
         </div>
 
         <AnimatePresence>
