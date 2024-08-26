@@ -1,10 +1,15 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./NavigationMenu.scss";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Flip from "gsap/Flip";
 import { Link } from "react-router-dom";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
+import {
+  createHtmlPortalNode,
+  InPortal,
+  OutPortal,
+} from "react-reverse-portal";
 gsap.registerPlugin(Flip);
 
 type NavigationItem = {
@@ -25,18 +30,21 @@ type NavigationProps = {
 };
 
 export default function NavigationMenu({ items, id }: NavigationProps) {
-  const hamburgerMenuRef = useRef<HTMLButtonElement>(null);
   const { contextSafe } = useGSAP();
-  const isAnimationActive = useRef<boolean>(false);
+
+  const [isOpen, setIsOpen] = useState(false);
   const [selectedNavigationItemIdx, setSelectedNavigationItemIdx] =
     useState<number>(0);
+
+  const hamburgerMenuRef = useRef<HTMLButtonElement>(null);
+  const isAnimationActive = useRef<boolean>(false);
   const navigationContainerRef = useRef<HTMLDivElement>(null);
   const selectionIndicatorRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useOutsideClick(containerRef, () => {
     isAnimationActive.current = true;
-    playDisappearAnimation();
+    handleClose();
   });
 
   useEffect(() => {
@@ -56,7 +64,7 @@ export default function NavigationMenu({ items, id }: NavigationProps) {
         return;
 
       isAnimationActive.current = true;
-      playDisappearAnimation();
+      handleClose();
     }
 
     const isKeyboardEvent = (
@@ -72,7 +80,7 @@ export default function NavigationMenu({ items, id }: NavigationProps) {
     };
   }, []);
 
-  const clickHandler = () => {
+  function handleHamburgerClick() {
     if (
       !navigationContainerRef.current ||
       !hamburgerMenuRef.current ||
@@ -81,15 +89,13 @@ export default function NavigationMenu({ items, id }: NavigationProps) {
       return;
 
     isAnimationActive.current = true;
+    isOpen ? handleClose() : handleOpen();
+  }
 
-    hamburgerMenuRef.current.classList.contains("active")
-      ? playDisappearAnimation()
-      : playAppearAnimation();
-  };
-
-  const playAppearAnimation = useCallback(
+  const handleOpen = useCallback(
     contextSafe(() => {
       if (!hamburgerMenuRef.current || !navigationContainerRef.current) return;
+      setIsOpen(true);
 
       const startLineOldState = Flip.getState(
         hamburgerMenuRef.current.children[2]
@@ -148,7 +154,7 @@ export default function NavigationMenu({ items, id }: NavigationProps) {
     [hamburgerMenuRef.current, navigationContainerRef.current]
   );
 
-  const playDisappearAnimation = useCallback(
+  const handleClose = useCallback(
     contextSafe(() => {
       if (!hamburgerMenuRef.current || !navigationContainerRef.current) return;
 
@@ -198,6 +204,7 @@ export default function NavigationMenu({ items, id }: NavigationProps) {
 
       timeline.eventCallback("onComplete", () => {
         isAnimationActive.current = false;
+        setIsOpen(false);
       });
     }),
     [hamburgerMenuRef.current, navigationContainerRef.current]
@@ -335,13 +342,46 @@ export default function NavigationMenu({ items, id }: NavigationProps) {
     selectionIndicatorRef.current.style.gridRow = `${pagePathIdx + 1}`;
   }, [items]);
 
+  const navigationPortalNode = useMemo(() => createHtmlPortalNode(), []);
+
   return (
     <div id={id} ref={containerRef} className="navigation-menu-container">
+      <InPortal node={navigationPortalNode}>
+        <div
+          className="navigation"
+          ref={navigationContainerRef}
+          style={{
+            gridTemplateRows: `repeat(${items.length}, max-content)`,
+          }}
+        >
+          {items.map((item, i) => (
+            <nav
+              style={{
+                gridRow: i + 1,
+              }}
+              className="navigation-item"
+              key={i}
+            >
+              <Link
+                to={"path" in item ? item.path : item.defaultPath}
+                onClick={() => handleSelect(i)}
+              >
+                {item.name}
+              </Link>
+            </nav>
+          ))}
+
+          <div className="selection-indicator" ref={selectionIndicatorRef}>
+            ●
+          </div>
+        </div>
+      </InPortal>
+
       <div className="hamburger-menu-container">
         <button
           className="hamburger-menu"
           ref={hamburgerMenuRef}
-          onClick={clickHandler}
+          onClick={handleHamburgerClick}
           aria-labelledby="hamburger-menu-accessibility-label"
         >
           <span></span>
@@ -358,34 +398,7 @@ export default function NavigationMenu({ items, id }: NavigationProps) {
         </button>
       </div>
 
-      <div
-        className="navigation"
-        ref={navigationContainerRef}
-        style={{
-          gridTemplateRows: `repeat(${items.length}, max-content)`,
-        }}
-      >
-        {items.map((item, i) => (
-          <nav
-            style={{
-              gridRow: i + 1,
-            }}
-            className="navigation-item"
-            key={i}
-          >
-            <Link
-              to={"path" in item ? item.path : item.defaultPath}
-              onClick={() => handleSelect(i)}
-            >
-              {item.name}
-            </Link>
-          </nav>
-        ))}
-
-        <div className="selection-indicator" ref={selectionIndicatorRef}>
-          ●
-        </div>
-      </div>
+      {isOpen && <OutPortal node={navigationPortalNode} />}
     </div>
   );
 }
