@@ -6,9 +6,15 @@
   display: grid;
   grid-template-columns: 7fr 93fr;
   column-gap: 1.5rem;
+  margin-top: 1rem;
+
+  &:not(.reply) .image-container {
+    min-width: 5rem;
+  }
 
   .image-container {
     width: fit-content;
+    min-width: 4rem;
 
     img {
       max-width: 100%;
@@ -25,7 +31,7 @@
 
     .comment-textarea-container {
       width: 100%;
-      height: fit-content;
+      height: max-content;
       display: grid;
       grid-template-rows: 1fr;
       grid-template-columns: 1fr;
@@ -33,6 +39,7 @@
 
       textarea {
         resize: none;
+        height: max-content;
         min-width: 100%;
         max-width: 100%;
         width: 100%;

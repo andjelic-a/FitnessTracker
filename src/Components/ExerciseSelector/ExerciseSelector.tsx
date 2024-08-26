@@ -209,6 +209,7 @@ export default function ExerciseSelector({
             type="text"
             className="search-bar"
             ref={searchBarRef}
+            autoComplete="off"
             onKeyDown={(e) => {
               if (e.key === "Enter") handleSearch();
             }}

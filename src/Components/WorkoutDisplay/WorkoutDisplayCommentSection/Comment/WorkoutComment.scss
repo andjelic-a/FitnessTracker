@@ -6,6 +6,10 @@
   column-gap: 1.5rem;
   width: 100%;
 
+  @media screen and (max-width: 799.98px) {
+    column-gap: 1rem;
+  }
+
   &.reply {
     font-size: 1.6rem;
   }
@@ -16,6 +20,7 @@
 
   .image-container {
     width: 100%;
+    min-width: 4rem;
 
     img {
       max-width: 100%;

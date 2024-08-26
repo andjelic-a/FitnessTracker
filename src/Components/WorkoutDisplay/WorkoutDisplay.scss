@@ -1,17 +1,20 @@
 @import "../../Palette.scss";
 
-.workout-display-wrapper {
+.workout-display-container {
   &,
   * {
     user-select: none;
   }
 
   position: relative;
-  width: 80rem;
-  height: 50rem;
   background-color: $dark-200;
   border-radius: 0.5rem;
   overflow: hidden;
+
+  width: 80rem;
+  max-width: 85vw;
+  height: 50rem;
+  max-height: 85svh;
 
   &:has(.workout-display-comment-section) .workout-display {
     overflow-y: hidden;
@@ -25,7 +28,7 @@
     overflow-x: hidden;
     position: relative;
     width: 100%;
-    height: 50rem;
+    height: 100%;
     background-color: $dark-200;
     padding: 1rem 2rem 1rem 2rem;
     scrollbar-gutter: stable both-edges;
@@ -64,7 +67,7 @@
       overflow: hidden;
     }
 
-    & .workout-display-interaction-container {
+    .workout-display-interaction-container {
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -77,15 +80,15 @@
     .workout-display-header {
       position: relative;
       width: 100%;
-      height: 5rem;
+      height: max-content;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: flex-end;
       gap: 1rem;
 
-      & .workout-display-title {
+      .workout-display-title {
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         min-width: 15rem;
         width: auto;
@@ -100,41 +103,36 @@
         padding: 0 2rem;
       }
 
-      & .workout-display-edit {
-        position: absolute;
-        width: 7rem;
-        height: 3.75rem;
-        border: none;
-        border-radius: 0.5rem;
-        outline: none;
-        background-color: $primary-300;
-        color: white;
-        cursor: pointer;
-        font-size: 1.6rem;
-        font-weight: 550;
-        right: 9rem;
+      .buttons {
+        width: max-content;
+        height: max-content;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
 
-        &:hover {
-          background-color: $primary-400;
-        }
-      }
+        button {
+          cursor: pointer;
+          width: 7rem;
+          height: 3.75rem;
+          background-color: $primary-300;
+          border-radius: 0.5rem;
 
-      & .workout-display-delete {
-        position: absolute;
-        width: 7rem;
-        height: 3.75rem;
-        border: none;
-        border-radius: 0.5rem;
-        outline: none;
-        background-color: $primary-300;
-        color: white;
-        cursor: pointer;
-        font-size: 1.6rem;
-        font-weight: 550;
-        right: 0;
+          border: none;
+          outline: none;
 
-        &:hover {
-          background-color: $primary-400;
+          color: white;
+          font-size: 1.6rem;
+          font-weight: 550;
+
+          &:hover,
+          &:focus-visible {
+            background-color: $primary-400;
+          }
+
+          &:focus-visible {
+            outline: 2px solid #fff;
+          }
         }
       }
     }
@@ -142,68 +140,12 @@
     .workout-display-body {
       width: 100%;
       height: auto;
-      margin-top: 2rem;
-      margin-bottom: 5rem;
-      display: grid;
       gap: 2rem;
-      grid-template-columns: repeat(2, 1fr);
-      align-content: start;
 
-      & > * {
-        display: flex;
-        flex-direction: column;
-      }
-    }
+      margin: 2rem 0 5rem 0;
 
-    .workout-display-body {
-      width: 100%;
-      height: auto;
-      margin-top: 2rem;
-      margin-bottom: 5rem;
       display: grid;
-      gap: 2rem;
       grid-template-columns: repeat(2, 1fr);
-      align-content: start;
-
-      & > * {
-        display: flex;
-        flex-direction: column;
-      }
-    }
-
-    .workout-display-description-container {
-      position: relative;
-      margin-top: auto;
-      align-self: center;
-      width: 80%;
-      min-height: 5rem;
-      height: auto;
-      border-radius: 0.5rem;
-      border: 2px solid $dark-600;
-      margin-bottom: 0rem;
-      overflow: visible;
-
-      & .workout-display-description {
-        position: relative;
-        width: 100%;
-        height: auto;
-        font-size: 1.8rem;
-        color: rgb(231, 231, 231);
-        padding: 1rem;
-        overflow: visible;
-
-        & .workout-display-description-placeholder {
-          position: absolute;
-          font-size: 1.8rem;
-          font-weight: 600;
-          top: -1.5rem;
-          left: 1rem;
-          background-color: $dark-200;
-          padding: 0 0.5rem;
-          white-space: nowrap;
-          color: $dark-600;
-        }
-      }
     }
 
     .workout-display-footer {
@@ -216,80 +158,142 @@
       align-items: center;
       font-size: 3rem;
 
-      & .icon-container {
+      .workout-display-description-container {
+        position: relative;
+        margin-top: auto;
+        align-self: center;
+        width: 80%;
+        min-height: 5rem;
+        height: auto;
+        border-radius: 0.5rem;
+        border: 2px solid $dark-600;
+        margin-bottom: 0rem;
+        overflow: visible;
+
+        .workout-display-description {
+          position: relative;
+          width: 100%;
+          height: auto;
+          font-size: 1.8rem;
+          color: rgb(231, 231, 231);
+          padding: 1rem;
+          overflow: visible;
+
+          .workout-display-description-placeholder {
+            position: absolute;
+            font-size: 1.8rem;
+            font-weight: 600;
+            top: -1.5rem;
+            left: 1rem;
+            background-color: $dark-200;
+            padding: 0 0.5rem;
+            white-space: nowrap;
+            color: $dark-600;
+          }
+        }
+      }
+
+      .icon-container {
         width: 30%;
         height: 8rem;
         display: flex;
         justify-content: space-between;
 
-        & .workout-display-interaction-container {
+        .workout-display-interaction-container {
           position: relative;
           height: 100%;
-        }
 
-        & .workout-display-thumbs-up {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 4rem;
-          width: 4rem;
-          border-radius: 50%;
-          cursor: pointer;
-          font-weight: normal;
-          transition: 0.3s;
-          color: $dark-500;
-          
-          &:hover {
-            color: $primary-300;
+          button {
+            border: none;
+            outline: none;
+            background-color: transparent;
+            cursor: pointer;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            height: 4rem;
+            width: 4rem;
+            border-radius: 1rem;
+
+            font-weight: normal;
+            font-size: 2.5rem;
+            color: $dark-500;
+
+            transition: margin-bottom 75ms;
+
+            &:focus-visible {
+              outline: 2px solid $primary-300;
+              margin-bottom: 1.5rem;
+            }
+
+            &:hover i,
+            &:focus-visible i,
+            &:has(.active) {
+              color: $primary-300;
+            }
+
+            i {
+              transition: 175ms;
+            }
+
+            .workout-display-comment {
+              color: $dark-600;
+              font-weight: 100;
+            }
           }
-        }
 
-        & .workout-display-bookmark {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 4rem;
-          width: 4rem;
-          border-radius: 50%;
-          cursor: pointer;
-          font-weight: normal;
-          transition: 0.2s;
-          color: $dark-600;
-          
-          &:hover {
-            color: $primary-300;
+          .workout-display-interaction-count {
+            position: absolute;
+            color: $dark-600;
+            font-size: 1.8rem;
+            bottom: 0;
           }
-        }
-
-        & .workout-display-comment {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 4rem;
-          width: 4rem;
-          border-radius: 50%;
-          cursor: pointer;
-          font-weight: normal;
-          transition: 0.2s;
-          color: $dark-600;
-          
-          &:hover {
-            color: $primary-300;
-          }
-        }
-
-        & .active {
-          color: $primary-300;
-          font-weight: bold;
         }
       }
     }
   }
-}
 
-.workout-display-interaction-count {
-  position: absolute;
-  color: $dark-600;
-  font-size: 1.8rem;
-  bottom: 0;
+  @media screen and (max-width: 999.98px) {
+    width: 65rem;
+    height: 60rem;
+  }
+
+  @media screen and (max-width: 799.98px) {
+    width: 55rem;
+
+    .workout-display {
+      &::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      .workout-display-header {
+        display: grid;
+        width: 100%;
+        place-items: center;
+
+        grid-template-rows: 1fr max-content;
+        grid-template-columns: 1fr;
+        place-items: start end;
+        row-gap: 1rem;
+
+        .workout-display-title {
+          width: 100%;
+        }
+
+        button {
+          position: relative;
+        }
+      }
+
+      .description-container {
+        width: 100%;
+      }
+
+      .workout-display-body {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
 }

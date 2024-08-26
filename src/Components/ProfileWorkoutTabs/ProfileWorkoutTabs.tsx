@@ -142,6 +142,7 @@ export default function ProfileWorkoutTabs({
         <input
           name="profile-workouts-search-bar"
           type="text"
+          autoComplete="off"
           className="search-bar"
           placeholder="Search"
           ref={searchBarRef}

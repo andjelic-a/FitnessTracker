@@ -74,6 +74,7 @@ export default function Login() {
             } else emailContainer.current!.classList.add("invalid");
           }}
           name="login-email"
+          autoComplete="username"
         />
 
         <InputField
@@ -85,6 +86,7 @@ export default function Login() {
           onEnter={handleLogin}
           password
           name="login-password"
+          autoComplete="password"
         />
 
         <div className="error-message" ref={errorMessageRef}>

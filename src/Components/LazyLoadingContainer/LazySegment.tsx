@@ -24,7 +24,9 @@ const LazySegment = memo<LazySegmentProps>(
     useEffect(() => {
       if (!thresholdMarker.current) return;
 
-      const observer = new IntersectionObserver(
+      let observer: IntersectionObserver;
+
+      observer = new IntersectionObserver(
         ([marker], self) => {
           if (
             marker &&
@@ -34,9 +36,9 @@ const LazySegment = memo<LazySegmentProps>(
             if (!onReachLoadThreshold()) return;
 
             self.unobserve(marker.target);
-            marker.target.remove();
+            // marker.target.remove();
 
-            portal.unmount();
+            // portal.unmount();
             self.disconnect();
           }
         },

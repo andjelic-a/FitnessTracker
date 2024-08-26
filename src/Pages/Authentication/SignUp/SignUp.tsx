@@ -82,6 +82,7 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
             } else usernameContainer.current!.classList.add("invalid");
           }}
           name="signup-username"
+          autoComplete="off"
         />
 
         <InputField
@@ -97,6 +98,7 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
             } else emailContainer.current!.classList.add("invalid");
           }}
           name="signup-email"
+          autoComplete="off"
         />
 
         <InputField
@@ -108,6 +110,7 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
           onEnter={handleSignup}
           password
           name="signup-password"
+          autoComplete="off"
         />
 
         <div className="error-message" ref={errorMessageRef}>

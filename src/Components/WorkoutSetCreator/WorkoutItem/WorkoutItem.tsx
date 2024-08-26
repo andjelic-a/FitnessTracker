@@ -21,7 +21,7 @@ import {
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import { createPortal } from "react-dom";
 import SetDragOverlay from "./SetDragOverlay.tsx";
-import ReactModal from "react-modal";
+import ConfirmModalDialog from "../../ConfirmModalDialog/ConfirmModalDialog.tsx";
 
 export type Set = {
   id: string;
@@ -151,44 +151,42 @@ export default function WorkoutItem({
       }}
     >
       <InPortal node={workoutItemBodyPortalNode}>
-        <div className="workout-item-body">
-          <div className="set-information-header-container">
-            <p hidden></p>
-            <p>SET</p>
-            <p>RiR</p>
-            <p>VOLUME</p>
-          </div>
-
-          <SortableContext
-            strategy={verticalListSortingStrategy}
-            items={sets.map((x) => x.id)}
-          >
-            {sets.map((set, index) => (
-              <WorkoutSetDisplay
-                key={set.id}
-                set={set}
-                index={index}
-                itemId={workoutItem.id}
-              />
-            ))}
-          </SortableContext>
-
-          <button
-            className="add-set-btn"
-            onClick={addSet}
-            aria-describedby="add-set-text"
-          >
-            <Icon className="add-set-icon" name="plus" />
-
-            <p
-              id="add-set-text"
-              className="accessibility-only"
-              aria-hidden={false}
-            >
-              Add Set
-            </p>
-          </button>
+        <div className="set-information-header-container">
+          <p hidden></p>
+          <p>SET</p>
+          <p>RiR</p>
+          <p>VOLUME</p>
         </div>
+
+        <SortableContext
+          strategy={verticalListSortingStrategy}
+          items={sets.map((x) => x.id)}
+        >
+          {sets.map((set, index) => (
+            <WorkoutSetDisplay
+              key={set.id}
+              set={set}
+              index={index}
+              itemId={workoutItem.id}
+            />
+          ))}
+        </SortableContext>
+
+        <button
+          className="add-set-btn"
+          onClick={addSet}
+          aria-describedby="add-set-text"
+        >
+          <Icon className="add-set-icon" name="plus" />
+
+          <p
+            id="add-set-text"
+            className="accessibility-only"
+            aria-hidden={false}
+          >
+            Add Set
+          </p>
+        </button>
       </InPortal>
 
       <div
@@ -223,6 +221,10 @@ export default function WorkoutItem({
               <Icon
                 name={`chevron-${isCollapsed || forceCollapse ? "up" : "down"}`}
               />
+
+              <p className="accessibility-only" aria-hidden={false}>
+                Collapse
+              </p>
             </button>
           </div>
 
@@ -247,43 +249,16 @@ export default function WorkoutItem({
             </button>
           </div>
 
-          <ReactModal
+          <ConfirmModalDialog
             isOpen={isConfirmDeletionModalOpen}
-            className={{
-              afterOpen: "open",
-              base: "confirm-deletion-modal",
-              beforeClose: "closing",
+            onConfirm={() => {
+              handleDelete();
+              setIsConfirmDeletionModalOpen(false);
             }}
-            overlayClassName="overlay-confirm-deletion-modal"
-            portalClassName="modal-portal"
-            onRequestClose={() => void setIsConfirmDeletionModalOpen(false)}
-            closeTimeoutMS={300}
-            aria={{
-              labelledby: "confirm-deletion-title",
-              describedby: "confirm-deletion-text",
-            }}
+            onDeny={() => void setIsConfirmDeletionModalOpen(false)}
           >
-            <h3 id="confirm-deletion-text">Confirmation Required</h3>
-
-            <h2>
-              Are you sure you want to remove this exercise from your workout?
-            </h2>
-
-            <div className="modal-buttons-container">
-              <button onClick={() => void setIsConfirmDeletionModalOpen(false)}>
-                No
-              </button>
-
-              <button
-                onClick={() => {
-                  handleDelete();
-                  setIsConfirmDeletionModalOpen(false);
-                }}
-              >
-                Yes
-              </button>
-            </div>
-          </ReactModal>
+            Are you sure you want to remove this exercise from your workout?
+          </ConfirmModalDialog>
         </div>
 
         {!forceCollapse && !isCollapsed && (

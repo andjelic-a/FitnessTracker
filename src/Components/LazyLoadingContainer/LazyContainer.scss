@@ -1,8 +1,10 @@
 .lazy-container {
+  position: relative;
   display: flex;
   justify-content: flex-start;
 
   .lazy-segment {
+    position: relative;
     display: flex;
     justify-content: flex-start;
 
@@ -11,9 +13,9 @@
       opacity: 0 !important;
       visibility: hidden !important;
 
-      position: relative !important;
+      position: absolute !important;
       left: 70% !important;
-      top: 0 !important;
+      top: 70% !important;
       z-index: -1 !important;
     }
   }

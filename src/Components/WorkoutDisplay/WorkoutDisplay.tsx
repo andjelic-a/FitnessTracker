@@ -1,5 +1,5 @@
 import "./WorkoutDisplay.scss";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Icon from "../Icon/Icon";
 import WorkoutDisplayItem from "./WorkoutDisplayItem/WorkoutDisplayItem";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
@@ -8,15 +8,20 @@ import Async from "../Async/Async";
 import WindowFC from "../WindowWrapper/WindowFC";
 import { useNavigate } from "react-router-dom";
 import sendAPIRequest from "../../Data/SendAPIRequest";
-import { getProfileCache } from "../../Pages/Profile/ProfileCache";
-import WorkoutCommentSection from "./WorkoutDisplayCommentPopup/WorkoutCommentSection";
-import { Schema } from "../../Types/Endpoints/SchemaParser";
+import WorkoutCommentSection from "./WorkoutDisplayCommentSection/WorkoutCommentSection";
 import formatCount from "../../Utility/FormatCount";
-import { v4 } from "uuid";
 import { AnimatePresence } from "framer-motion";
 import { extractSetsNoMapping } from "../../Utility/ExtractSetsFromWorkout";
+import {
+  createHtmlPortalNode,
+  InPortal,
+  OutPortal,
+} from "react-reverse-portal";
+import { motion } from "framer-motion";
+import ConfirmModalDialog from "../ConfirmModalDialog/ConfirmModalDialog";
 
-const WorkoutDisplay = WindowFC(({}, workoutDisplayWrapperRef, close) => {
+const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
+  const loaderData = useLoaderData<typeof workoutDisplayLoader>();
   const navigate = useNavigate();
 
   const [isLiked, setIsLiked] = useState<boolean | null>(null);
@@ -31,22 +36,12 @@ const WorkoutDisplay = WindowFC(({}, workoutDisplayWrapperRef, close) => {
   const isWaitingForResponse = useRef<boolean>(false);
   const workoutId = useRef<string>("");
 
-  const loaderData = useLoaderData<typeof workoutDisplayLoader>();
-
-  const [loadedComments, setLoadedComments] = useState<Promise<
-    Schema<"SimpleWorkoutCommentResponseDTO">[]
-  > | null>(null);
-  const [createdComments, setCreatedComments] = useState<
-    Schema<"SimpleWorkoutCommentResponseDTO">[]
-  >([]);
-
-  const currentCommentPromiseRef = useRef<Promise<
-    Schema<"SimpleWorkoutCommentResponseDTO">[]
-  > | null>(null);
-
-  const reachedEndInCommentSection = useRef<boolean>(false);
+  const [isConfirmDeletionModalOpen, setIsConfirmDeletionModalOpen] =
+    useState(false);
 
   useEffect(() => {
+    if (workoutId.current.length > 0) return;
+
     isWaitingForResponse.current = true;
 
     loaderData?.workout?.then((currentWorkout) => {
@@ -81,34 +76,6 @@ const WorkoutDisplay = WindowFC(({}, workoutDisplayWrapperRef, close) => {
   const handleCommentClick = () =>
     void setIsCommentSectionOpen((prevState) => !prevState);
 
-  function handleNewComment(
-    newCommentRequest: Schema<"CreateWorkoutCommentRequestDTO">
-  ) {
-    const userData = getProfileCache();
-    if (!userData) return;
-
-    userData.user.then((user) => {
-      if (user.code !== "OK") return;
-
-      setCommentCount((prevState) => prevState + 1);
-
-      const newCommentSimulatedResponse: Schema<"SimpleWorkoutCommentResponseDTO"> =
-        {
-          id: v4(),
-          createdAt: new Date().toISOString(),
-          creator: user.content,
-          isCreator: true,
-          isLiked: false,
-          likeCount: 0,
-          replyCount: 0,
-          text: newCommentRequest.comment,
-          workoutId: workoutId.current,
-        };
-
-      setCreatedComments((prev) => [newCommentSimulatedResponse, ...prev]);
-    });
-  }
-
   const handleFavoriteClick = () => {
     if (isWaitingForResponse.current) return;
     isWaitingForResponse.current = true;
@@ -124,7 +91,7 @@ const WorkoutDisplay = WindowFC(({}, workoutDisplayWrapperRef, close) => {
     setIsFavorited((prevState) => !prevState);
   };
 
-  const handleWorkoutDelete = () => {
+  const handleDelete = () => {
     loaderData?.workout?.then((currentWorkout) => {
       if (currentWorkout.code !== "OK") {
         close();
@@ -144,176 +111,175 @@ const WorkoutDisplay = WindowFC(({}, workoutDisplayWrapperRef, close) => {
     });
   };
 
-  async function handleCommentLazyLoadRequest(): Promise<
-    Schema<"SimpleWorkoutCommentResponseDTO">[]
-  > {
-    if (!loadedComments || reachedEndInCommentSection.current) return [];
-
-    currentCommentPromiseRef.current ??= sendAPIRequest(
-      "/api/workout/{workoutId}/comment",
-      {
-        method: "get",
-        parameters: {
-          workoutId: workoutId.current,
-          limit: 10,
-          offset: (await loadedComments).length,
-        },
-      }
-    ).then((data) => {
-      if (data.code !== "OK") return [];
-
-      setLoadedComments((prev) =>
-        prev!.then((prev) => [...prev, ...data.content])
-      );
-
-      reachedEndInCommentSection.current = data.content.length < 10;
-      currentCommentPromiseRef.current = null;
-      return [];
-    });
-
-    return await currentCommentPromiseRef.current;
-  }
-
-  async function getInitialComments(): Promise<
-    Schema<"SimpleWorkoutCommentResponseDTO">[]
-  > {
-    currentCommentPromiseRef.current ??= sendAPIRequest(
-      "/api/workout/{workoutId}/comment",
-      {
-        method: "get",
-        parameters: {
-          workoutId: workoutId.current,
-          limit: 10,
-          offset: 0,
-        },
-      }
-    ).then((data) => {
-      if (data.code !== "OK") return [];
-
-      setLoadedComments(Promise.resolve(data.content));
-
-      reachedEndInCommentSection.current = data.content.length < 10;
-      currentCommentPromiseRef.current = null;
-      return data.content;
-    });
-
-    return await currentCommentPromiseRef.current;
-  }
-
   function handleCloseCommentPopup() {
     setIsCommentSectionOpen(false);
   }
 
+  const commentSection = useMemo(() => {
+    if (workoutId.current.length === 0) return <></>;
+
+    return (
+      <WorkoutCommentSection
+        workoutId={workoutId.current}
+        onRequireClose={handleCloseCommentPopup}
+        onCreateNewComment={() => void setCommentCount((prev) => prev + 1)}
+      />
+    );
+  }, [workoutId.current]);
+
+  const commentSectionPortalNode = useMemo(() => createHtmlPortalNode(), []);
+
+  const motionProps = useMemo(
+    () => ({
+      initial: {
+        opacity: 0,
+        y: 300,
+      },
+      animate: {
+        opacity: 1,
+        y: 0,
+      },
+      exit: {
+        opacity: 0,
+        y: 300,
+      },
+      transition: {
+        duration: 0.3,
+        type: "just",
+      },
+    }),
+    []
+  );
+
   return (
-    <div ref={workoutDisplayWrapperRef} className="workout-display-wrapper">
-      <div className="workout-display">
-        <div className="workout-display-header">
+    <>
+      <InPortal node={commentSectionPortalNode} children={commentSection} />
+
+      <div ref={wrapperRef} className="workout-display-container">
+        <div className="workout-display">
           <Async await={loaderData?.workout}>
             {(workout) => {
               if (!workout || workout.code !== "OK") return null;
 
               return (
                 <>
-                  <p className="workout-display-title">
-                    {workout.content.name}
-                  </p>
-                  <button
-                    className="workout-display-edit"
-                    onClick={() => void navigate("edit")}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="workout-display-delete"
-                    onClick={handleWorkoutDelete}
-                  >
-                    Delete
-                  </button>
-                </>
-              );
-            }}
-          </Async>
-        </div>
+                  <div className="workout-display-header">
+                    <p className="workout-display-title">
+                      {workout.content.name}
+                    </p>
 
-        <div className="workout-display-body">
-          <Async await={loaderData?.workout}>
-            {(workout) => {
-              if (!workout || workout.code !== "OK") return null;
+                    <div className="buttons">
+                      <button
+                        className="workout-display-edit"
+                        onClick={() => void navigate("edit")}
+                      >
+                        <Icon name="pen-to-square" />
 
-              return (
-                <>
-                  {extractSetsNoMapping(workout.content).map((set) => (
-                    <WorkoutDisplayItem
-                      key={set.id}
-                      exercise={set.exercise}
-                      sets={set.sets}
-                    />
-                  ))}
-                </>
-              );
-            }}
-          </Async>
-        </div>
+                        <p className="accessibility-only" aria-hidden={false}>
+                          Edit
+                        </p>
+                      </button>
 
-        <div className="workout-display-footer">
-          <Async await={loaderData?.workout}>
-            {(workout) => {
-              if (!workout || workout.code !== "OK") return null;
+                      <button
+                        className="workout-display-delete"
+                        onClick={() => void setIsConfirmDeletionModalOpen(true)}
+                      >
+                        <Icon name="trash" />
 
-              return (
-                <>
-                  {workout.content.description?.trim() !== "" &&
-                    workout.content.description && (
+                        <p className="accessibility-only" aria-hidden={false}>
+                          Delete
+                        </p>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="workout-display-body">
+                    {extractSetsNoMapping(workout.content).map((set) => (
+                      <WorkoutDisplayItem
+                        key={set.id}
+                        exercise={set.exercise}
+                        sets={set.sets}
+                      />
+                    ))}
+                  </div>
+
+                  <div className="workout-display-footer">
+                    {workout.content.description?.trim() && (
                       <div className="workout-display-description-container">
                         <div className="workout-display-description">
                           <label className="workout-display-description-placeholder">
                             Workout Description
                           </label>
+
                           {workout.content.description}
                         </div>
                       </div>
                     )}
-                  <div className="icon-container">
-                    <div className="workout-display-interaction-container">
-                      <Icon
-                        name="thumbs-up"
-                        onClick={handleThumbsUpClick}
-                        className={`workout-display-thumbs-up ${
-                          isLiked ? "active" : ""
-                        }`}
-                      />
 
-                      <p className="workout-display-interaction-count">
-                        {formatCount(likeCount)}
-                      </p>
-                    </div>
+                    <div className="icon-container">
+                      <div className="workout-display-interaction-container">
+                        <button onClick={handleThumbsUpClick}>
+                          <Icon
+                            name="thumbs-up"
+                            className={`workout-display-thumbs-up ${
+                              isLiked ? "active" : ""
+                            }`}
+                          />
+                        </button>
 
-                    <div className="workout-display-interaction-container">
-                      <Icon
-                        onClick={handleCommentClick}
-                        name="comment"
-                        className={`workout-display-comment ${
-                          isCommentSectionOpen ? "active" : ""
-                        }`}
-                      />
+                        <p className="accessibility-only" aria-hidden={false}>
+                          Like
+                        </p>
 
-                      <p className="workout-display-interaction-count">
-                        {formatCount(commentCount)}
-                      </p>
-                    </div>
+                        <p className="workout-display-interaction-count">
+                          {formatCount(likeCount)}
+                        </p>
+                      </div>
 
-                    <div className="workout-display-interaction-container">
-                      <Icon
-                        name="bookmark"
-                        onClick={handleFavoriteClick}
-                        className={`workout-display-bookmark ${
-                          isFavorited ? "active" : ""
-                        }`}
-                      />
+                      <div className="workout-display-interaction-container">
+                        <button onClick={handleCommentClick}>
+                          <Icon
+                            name="comment"
+                            className={`workout-display-comment ${
+                              isCommentSectionOpen ? "active" : ""
+                            }`}
+                          />
+                        </button>
 
-                      <p className="workout-display-interaction-count">
-                        {formatCount(favoriteCount)}
-                      </p>
+                        <p className="accessibility-only" aria-hidden={false}>
+                          Comment section
+                        </p>
+
+                        <p className="workout-display-interaction-count">
+                          {formatCount(commentCount)}
+
+                          <span
+                            className="accessibility-only"
+                            aria-hidden={false}
+                          >
+                            Comments
+                          </span>
+                        </p>
+                      </div>
+
+                      <div className="workout-display-interaction-container">
+                        <button onClick={handleFavoriteClick}>
+                          <Icon
+                            name="bookmark"
+                            className={`workout-display-bookmark ${
+                              isFavorited ? "active" : ""
+                            }`}
+                          />
+                        </button>
+
+                        <p className="accessibility-only" aria-hidden={false}>
+                          Favorite
+                        </p>
+
+                        <p className="workout-display-interaction-count">
+                          {formatCount(favoriteCount)}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </>
@@ -321,26 +287,24 @@ const WorkoutDisplay = WindowFC(({}, workoutDisplayWrapperRef, close) => {
             }}
           </Async>
         </div>
-      </div>
 
-      <AnimatePresence>
-        {isCommentSectionOpen && (
-          <Async await={loadedComments ?? getInitialComments()}>
-            {(comments) => {
-              return (
-                <WorkoutCommentSection
-                  workoutId={workoutId.current}
-                  comments={[...createdComments, ...comments]}
-                  onRequireClose={handleCloseCommentPopup}
-                  onRequireLazyLoad={handleCommentLazyLoadRequest}
-                  onAddNewComment={handleNewComment}
-                />
-              );
-            }}
-          </Async>
-        )}
-      </AnimatePresence>
-    </div>
+        <AnimatePresence>
+          {isCommentSectionOpen && (
+            <motion.div {...motionProps}>
+              <OutPortal node={commentSectionPortalNode} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <ConfirmModalDialog
+          isOpen={isConfirmDeletionModalOpen}
+          onConfirm={handleDelete}
+          onDeny={() => void setIsConfirmDeletionModalOpen(false)}
+        >
+          Are you sure you want to <b>permanently</b> delete this workout?
+        </ConfirmModalDialog>
+      </div>
+    </>
   );
 });
 
