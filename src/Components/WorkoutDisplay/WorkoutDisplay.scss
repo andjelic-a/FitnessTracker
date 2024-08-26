@@ -7,11 +7,14 @@
   }
 
   position: relative;
-  width: 80rem;
-  height: 50rem;
   background-color: $dark-200;
   border-radius: 0.5rem;
   overflow: hidden;
+
+  width: 80rem;
+  max-width: 85vw;
+  height: 50rem;
+  max-height: 85svh;
 
   &:has(.workout-display-comment-section) .workout-display {
     overflow-y: hidden;
@@ -77,15 +80,15 @@
     .workout-display-header {
       position: relative;
       width: 100%;
-      height: 5rem;
+      height: max-content;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: flex-end;
       gap: 1rem;
 
       .workout-display-title {
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         min-width: 15rem;
         width: auto;
@@ -100,65 +103,37 @@
         padding: 0 2rem;
       }
 
-      .workout-display-edit {
-        position: absolute;
-        width: 7rem;
-        height: 3.75rem;
-        border: none;
-        border-radius: 0.5rem;
-        outline: none;
-        background-color: $primary-300;
-        color: white;
-        cursor: pointer;
-        font-size: 1.6rem;
-        font-weight: 550;
-        right: 9rem;
-
-        &:hover,
-        &:focus-visible {
-          background-color: $primary-400;
-        }
-      }
-
-      .workout-display-delete {
-        position: absolute;
-        width: 7rem;
-        height: 3.75rem;
-        border: none;
-        border-radius: 0.5rem;
-        outline: none;
-        background-color: $primary-300;
-        color: white;
-        cursor: pointer;
-        font-size: 1.6rem;
-        font-weight: 550;
-        right: 0;
-
-        &:hover,
-        &:focus-visible {
-          background-color: $primary-400;
-        }
-      }
-
-      .workout-display-edit:focus-visible,
-      .workout-display-delete:focus-visible {
-        outline: 2px solid #fff;
-      }
-    }
-
-    .workout-display-body {
-      width: 100%;
-      height: auto;
-      margin-top: 2rem;
-      margin-bottom: 5rem;
-      display: grid;
-      gap: 2rem;
-      grid-template-columns: repeat(2, 1fr);
-      align-content: start;
-
-      > * {
+      .buttons {
+        width: max-content;
+        height: max-content;
         display: flex;
-        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+
+        button {
+          cursor: pointer;
+          width: 7rem;
+          height: 3.75rem;
+          background-color: $primary-300;
+          border-radius: 0.5rem;
+
+          border: none;
+          outline: none;
+
+          color: white;
+          font-size: 1.6rem;
+          font-weight: 550;
+
+          &:hover,
+          &:focus-visible {
+            background-color: $primary-400;
+          }
+
+          &:focus-visible {
+            outline: 2px solid #fff;
+          }
+        }
       }
     }
 
@@ -281,6 +256,48 @@
             bottom: 0;
           }
         }
+      }
+    }
+  }
+
+  @media screen and (max-width: 999.98px) {
+    width: 65rem;
+    height: 60rem;
+  }
+
+  @media screen and (max-width: 799.98px) {
+    width: 55rem;
+
+    .workout-display {
+      &::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      .workout-display-header {
+        display: grid;
+        width: 100%;
+        place-items: center;
+
+        grid-template-rows: 1fr max-content;
+        grid-template-columns: 1fr;
+        place-items: start end;
+        row-gap: 1rem;
+
+        .workout-display-title {
+          width: 100%;
+        }
+
+        button {
+          position: relative;
+        }
+      }
+
+      .description-container {
+        width: 100%;
+      }
+
+      .workout-display-body {
+        grid-template-columns: 1fr;
       }
     }
   }

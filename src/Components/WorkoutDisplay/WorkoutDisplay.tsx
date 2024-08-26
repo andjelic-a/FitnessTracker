@@ -168,27 +168,29 @@ const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
                       {workout.content.name}
                     </p>
 
-                    <button
-                      className="workout-display-edit"
-                      onClick={() => void navigate("edit")}
-                    >
-                      <Icon name="pen-to-square" />
+                    <div className="buttons">
+                      <button
+                        className="workout-display-edit"
+                        onClick={() => void navigate("edit")}
+                      >
+                        <Icon name="pen-to-square" />
 
-                      <p className="accessibility-only" aria-hidden={false}>
-                        Edit
-                      </p>
-                    </button>
+                        <p className="accessibility-only" aria-hidden={false}>
+                          Edit
+                        </p>
+                      </button>
 
-                    <button
-                      className="workout-display-delete"
-                      onClick={() => void setIsConfirmDeletionModalOpen(true)}
-                    >
-                      <Icon name="trash" />
+                      <button
+                        className="workout-display-delete"
+                        onClick={() => void setIsConfirmDeletionModalOpen(true)}
+                      >
+                        <Icon name="trash" />
 
-                      <p className="accessibility-only" aria-hidden={false}>
-                        Delete
-                      </p>
-                    </button>
+                        <p className="accessibility-only" aria-hidden={false}>
+                          Delete
+                        </p>
+                      </button>
+                    </div>
                   </div>
 
                   <div className="workout-display-body">
