@@ -80,7 +80,11 @@ export default function CommentInputField({
   }
 
   return (
-    <div className="comment-input-container">
+    <div
+      className={
+        "comment-input-container" + (props.type === "comment" ? "" : " reply")
+      }
+    >
       <div className="image-container">
         <Async await={getProfileCache()?.user!}>
           {(user) => {
