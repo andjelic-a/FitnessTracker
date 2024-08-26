@@ -151,44 +151,42 @@ export default function WorkoutItem({
       }}
     >
       <InPortal node={workoutItemBodyPortalNode}>
-        <div className="workout-item-body">
-          <div className="set-information-header-container">
-            <p hidden></p>
-            <p>SET</p>
-            <p>RiR</p>
-            <p>VOLUME</p>
-          </div>
-
-          <SortableContext
-            strategy={verticalListSortingStrategy}
-            items={sets.map((x) => x.id)}
-          >
-            {sets.map((set, index) => (
-              <WorkoutSetDisplay
-                key={set.id}
-                set={set}
-                index={index}
-                itemId={workoutItem.id}
-              />
-            ))}
-          </SortableContext>
-
-          <button
-            className="add-set-btn"
-            onClick={addSet}
-            aria-describedby="add-set-text"
-          >
-            <Icon className="add-set-icon" name="plus" />
-
-            <p
-              id="add-set-text"
-              className="accessibility-only"
-              aria-hidden={false}
-            >
-              Add Set
-            </p>
-          </button>
+        <div className="set-information-header-container">
+          <p hidden></p>
+          <p>SET</p>
+          <p>RiR</p>
+          <p>VOLUME</p>
         </div>
+
+        <SortableContext
+          strategy={verticalListSortingStrategy}
+          items={sets.map((x) => x.id)}
+        >
+          {sets.map((set, index) => (
+            <WorkoutSetDisplay
+              key={set.id}
+              set={set}
+              index={index}
+              itemId={workoutItem.id}
+            />
+          ))}
+        </SortableContext>
+
+        <button
+          className="add-set-btn"
+          onClick={addSet}
+          aria-describedby="add-set-text"
+        >
+          <Icon className="add-set-icon" name="plus" />
+
+          <p
+            id="add-set-text"
+            className="accessibility-only"
+            aria-hidden={false}
+          >
+            Add Set
+          </p>
+        </button>
       </InPortal>
 
       <div
@@ -223,6 +221,10 @@ export default function WorkoutItem({
               <Icon
                 name={`chevron-${isCollapsed || forceCollapse ? "up" : "down"}`}
               />
+
+              <p className="accessibility-only" aria-hidden={false}>
+                Collapse
+              </p>
             </button>
           </div>
 
