@@ -25,7 +25,7 @@ type NavigationProps = {
 };
 
 export default function NavigationMenu({ items, id }: NavigationProps) {
-  const hamburgerMenuRef = useRef<HTMLDivElement>(null);
+  const hamburgerMenuRef = useRef<HTMLButtonElement>(null);
   const { contextSafe } = useGSAP();
   const isAnimationActive = useRef<boolean>(false);
   const [selectedNavigationItemIdx, setSelectedNavigationItemIdx] =
@@ -336,17 +336,26 @@ export default function NavigationMenu({ items, id }: NavigationProps) {
   }, [items]);
 
   return (
-    <div id={id} ref={containerRef}>
-      <div className="hamburger-menu-wrapper">
-        <div
+    <div id={id} ref={containerRef} className="navigation-menu-container">
+      <div className="hamburger-menu-container">
+        <button
           className="hamburger-menu"
           ref={hamburgerMenuRef}
           onClick={clickHandler}
+          aria-labelledby="hamburger-menu-accessibility-label"
         >
           <span></span>
           <span></span>
           <span></span>
-        </div>
+
+          <p
+            className="accessibility-only"
+            id="hamburger-menu-accessibility-label"
+            aria-hidden={false}
+          >
+            Navigation menu
+          </p>
+        </button>
       </div>
 
       <div
@@ -357,18 +366,22 @@ export default function NavigationMenu({ items, id }: NavigationProps) {
         }}
       >
         {items.map((item, i) => (
-          <Link
-            to={"path" in item ? item.path : item.defaultPath}
-            key={i}
-            onClick={() => handleSelect(i)}
-            className={`navigation-item`}
+          <nav
             style={{
               gridRow: i + 1,
             }}
+            className="navigation-item"
+            key={i}
           >
-            {item.name}
-          </Link>
+            <Link
+              to={"path" in item ? item.path : item.defaultPath}
+              onClick={() => handleSelect(i)}
+            >
+              {item.name}
+            </Link>
+          </nav>
         ))}
+
         <div className="selection-indicator" ref={selectionIndicatorRef}>
           ●
         </div>
