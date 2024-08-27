@@ -1,44 +1,158 @@
 @import "../../../Palette.scss";
 
 .authentication {
-    z-index: -1;
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 20rem;
-    height: 15rem;
-    background-color: $dark-200;
-    border-radius: 0.5rem;
-    transition: 0.3s;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    overflow-y: auto;
-  
-    &::-webkit-scrollbar {
-      width: 8px;
-    }
-  
-    &::-webkit-scrollbar-track {
-      background: $dark-200;
-    }
-  
-    &::-webkit-scrollbar-thumb {
-      background: $dark-500;
-      border-radius: 10px;
-    }
-  
-    &::-webkit-scrollbar-thumb:hover {
-      background: $dark-600;
-    }
+  z-index: -1;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20rem;
+  height: 15rem;
+  background-color: $dark-200;
+  border-radius: 0.5rem;
+  transition: 0.3s;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $dark-200;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $dark-500;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: $dark-600;
+  }
 }
 
 .authentication-show {
-    width: 80rem;
-    height: 60rem;
-    visibility: 0;
-    opacity: 1;
-    z-index: 1;
+  width: 80rem;
+  height: 60rem;
+  visibility: 0;
+  opacity: 1;
+  z-index: 1;
+}
+
+.authentication-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding-top: 2rem;
+
+  & h3 {
+    font-size: 2.8rem;
+    font-weight: 500;
   }
+}
+
+.authentication-email {
+  margin-top: 3rem;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 2.2rem;
+  font-weight: 450;
+
+  & p {
+    user-select: none;
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
+  }
+
+  & .authentication-email-input {
+    margin-bottom: 1rem;
+    width: 100%;
+    min-height: 5rem;
+    background-color: transparent;
+    outline: 1px solid $dark-400;
+    border: none;
+
+    &:has(:focus) {
+      background-color: transparent;
+      outline: 2px solid $dark-600;
+    }
+
+    & input {
+      font-size: 1.8rem;
+      &::placeholder {
+        font-size: 1.8rem;
+      }
+
+      &:focus::placeholder {
+        color: $dark-600;
+      }
+    }
+  }
+}
+
+.authentication-button {
+  margin-top: 1rem;
+  width: 10rem;
+  height: 3.75rem;
+  border-radius: 0.5rem;
+  font-size: 1.6rem;
+  border: none;
+  outline: none;
+  background-color: $primary-300;
+  color: white;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $primary-400;
+  }
+}
+
+.authentication-password {
+  margin-top: 3rem;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 2.2rem;
+  font-weight: 450;
+
+  & p {
+    user-select: none;
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
+  }
+
+  & .authentication-password-input {
+    margin-bottom: 1rem;
+    width: 100%;
+    min-height: 5rem;
+    background-color: transparent;
+    outline: 1px solid $dark-400;
+    border: none;
+
+    &:has(:focus) {
+      background-color: transparent;
+      outline: 2px solid $dark-600;
+    }
+
+    & input {
+      font-size: 1.8rem;
+      &::placeholder {
+        font-size: 1.8rem;
+      }
+
+      &:focus::placeholder {
+        color: $dark-600;
+      }
+    }
+  }
+}
