@@ -57,11 +57,7 @@ export default function NavigationMenu({ items, id }: NavigationProps) {
       )
         return;
 
-      if (
-        (isKeyboardEvent(e) && e.key !== "Escape") ||
-        containerRef.current?.contains(e.target as Node)
-      )
-        return;
+      if (isKeyboardEvent(e) && e.key !== "Escape") return;
 
       isAnimationActive.current = true;
       handleClose();
