@@ -40,13 +40,13 @@ function App() {
                 path: "/workouts",
               },
               {
+                name: "Splits",
+                path: "/splits",
+              },
+              {
                 name: "Profile",
                 defaultPath: "/me",
                 alternatePaths: ["/authentication", "/email-verification"],
-              },
-              {
-                name: "Nutrition",
-                path: "/nutrition",
               },
             ]}
           />

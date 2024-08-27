@@ -76,7 +76,15 @@ const routes: RouteObject[] = [
       },
       {
         path: "workouts/:workoutId",
-        element: <div>workout</div>,
+        element: <div>Workout</div>,
+      },
+      {
+        path: "splits",
+        element: <div>Splits</div>,
+      },
+      {
+        path: "splits/:splitId",
+        element: <div>Split</div>,
       },
       {
         path: "me",
@@ -123,10 +131,6 @@ const routes: RouteObject[] = [
         path: "authentication",
         element: <Authentication />,
         loader: authenticationLoader,
-      },
-      {
-        path: "nutrition",
-        element: <div>Nutrition</div>,
       },
       {
         path: "user/:userId",
