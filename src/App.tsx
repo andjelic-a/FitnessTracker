@@ -1,6 +1,5 @@
 import "./App.scss";
 import { Outlet } from "react-router-dom";
-import Icon from "./Components/Icon/Icon";
 import { createContext, useEffect, useState } from "react";
 import AppHeader from "./Components/AppHeader/AppHeader";
 
@@ -30,23 +29,6 @@ function App() {
             <Outlet />
           </section>
         </scrollPositionContext.Provider>
-
-        <footer>
-          <div id="media">
-            <a href="#">
-              <Icon id="brands" name="instagram" />
-            </a>
-            
-            <a href="#">
-              <Icon id="brands" name="facebook" />
-            </a>
-            
-            <a href="#">
-              <Icon id="brands" name="github" />
-            </a>
-          </div>
-          © 2024 FITNESS TRACKER
-        </footer>
       </section>
     </>
   );
