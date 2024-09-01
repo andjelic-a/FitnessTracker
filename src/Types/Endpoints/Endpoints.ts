@@ -101,31 +101,6 @@ type MappedEndpoints = {
       };
       get: {
         tags: ["Equipment"];
-        parameters: [
-          {
-            name: "limit";
-            in: "query";
-            schema: {
-              type: "integer";
-              format: "int32";
-            };
-          },
-          {
-            name: "offset";
-            in: "query";
-            schema: {
-              type: "integer";
-              format: "int32";
-            };
-          },
-          {
-            name: "include";
-            in: "query";
-            schema: {
-              type: "string";
-            };
-          }
-        ];
         responses: {
           "200": {
             description: "OK";
@@ -510,13 +485,6 @@ type MappedEndpoints = {
             in: "query";
             schema: {
               type: "string";
-            };
-          },
-          {
-            name: "favoriteOnly";
-            in: "query";
-            schema: {
-              type: "boolean";
             };
           },
           {
@@ -1125,31 +1093,6 @@ type MappedEndpoints = {
       };
       get: {
         tags: ["Muscle"];
-        parameters: [
-          {
-            name: "limit";
-            in: "query";
-            schema: {
-              type: "integer";
-              format: "int32";
-            };
-          },
-          {
-            name: "offset";
-            in: "query";
-            schema: {
-              type: "integer";
-              format: "int32";
-            };
-          },
-          {
-            name: "include";
-            in: "query";
-            schema: {
-              type: "string";
-            };
-          }
-        ];
         responses: {
           "200": {
             description: "OK";
@@ -1492,24 +1435,6 @@ type MappedEndpoints = {
       };
       get: {
         tags: ["MuscleGroup"];
-        parameters: [
-          {
-            name: "limit";
-            in: "query";
-            schema: {
-              type: "integer";
-              format: "int32";
-            };
-          },
-          {
-            name: "offset";
-            in: "query";
-            schema: {
-              type: "integer";
-              format: "int32";
-            };
-          }
-        ];
         responses: {
           "200": {
             description: "OK";
@@ -1765,24 +1690,6 @@ type MappedEndpoints = {
     "/api/musclegroup/detailed": {
       get: {
         tags: ["MuscleGroup"];
-        parameters: [
-          {
-            name: "limit";
-            in: "query";
-            schema: {
-              type: "integer";
-              format: "int32";
-            };
-          },
-          {
-            name: "offset";
-            in: "query";
-            schema: {
-              type: "integer";
-              format: "int32";
-            };
-          }
-        ];
         responses: {
           "200": {
             description: "OK";
@@ -2095,6 +2002,22 @@ type MappedEndpoints = {
               type: "string";
               format: "uuid";
             };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
           }
         ];
         responses: {
@@ -2337,6 +2260,22 @@ type MappedEndpoints = {
             schema: {
               type: "string";
               format: "uuid";
+            };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
             };
           }
         ];
@@ -4731,6 +4670,73 @@ type MappedEndpoints = {
               "text/json": {
                 schema: {
                   $ref: "#/components/schemas/DetailedUserResponseDTO";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    "/api/user/me/profilepicture": {
+      get: {
+        tags: ["User"];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/UserProfilePictureResponseDTO";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/UserProfilePictureResponseDTO";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/UserProfilePictureResponseDTO";
                 };
               };
             };
@@ -8150,563 +8156,6 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/workout/{id}/baseinfo": {
-      patch: {
-        tags: ["Workout"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          }
-        ];
-        requestBody: {
-          content: {
-            "application/json": {
-              schema: {
-                $ref: "#/components/schemas/UpdateWorkoutBaseInfoRequestDTO";
-              };
-            };
-            "text/json": {
-              schema: {
-                $ref: "#/components/schemas/UpdateWorkoutBaseInfoRequestDTO";
-              };
-            };
-            "application/*+json": {
-              schema: {
-                $ref: "#/components/schemas/UpdateWorkoutBaseInfoRequestDTO";
-              };
-            };
-          };
-        };
-        responses: {
-          "204": {
-            description: "No Content";
-          };
-          "400": {
-            description: "Bad Request";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "401": {
-            description: "Unauthorized";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "403": {
-            description: "Forbidden";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "404": {
-            description: "Not Found";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-        };
-      };
-    };
-    "/api/workout/{id}/set/{setId}": {
-      patch: {
-        tags: ["Workout"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          },
-          {
-            name: "setId";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          }
-        ];
-        requestBody: {
-          content: {
-            "application/json": {
-              schema: {
-                $ref: "#/components/schemas/UpdateSetRequestDTO";
-              };
-            };
-            "text/json": {
-              schema: {
-                $ref: "#/components/schemas/UpdateSetRequestDTO";
-              };
-            };
-            "application/*+json": {
-              schema: {
-                $ref: "#/components/schemas/UpdateSetRequestDTO";
-              };
-            };
-          };
-        };
-        responses: {
-          "204": {
-            description: "No Content";
-          };
-          "400": {
-            description: "Bad Request";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "401": {
-            description: "Unauthorized";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "403": {
-            description: "Forbidden";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "404": {
-            description: "Not Found";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-        };
-      };
-      delete: {
-        tags: ["Workout"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          },
-          {
-            name: "setId";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          }
-        ];
-        responses: {
-          "204": {
-            description: "No Content";
-          };
-          "400": {
-            description: "Bad Request";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "401": {
-            description: "Unauthorized";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "403": {
-            description: "Forbidden";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "404": {
-            description: "Not Found";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-        };
-      };
-    };
-    "/api/workout/{id}/set": {
-      post: {
-        tags: ["Workout"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          }
-        ];
-        requestBody: {
-          content: {
-            "application/json": {
-              schema: {
-                $ref: "#/components/schemas/CreateSetRequestDTO";
-              };
-            };
-            "text/json": {
-              schema: {
-                $ref: "#/components/schemas/CreateSetRequestDTO";
-              };
-            };
-            "application/*+json": {
-              schema: {
-                $ref: "#/components/schemas/CreateSetRequestDTO";
-              };
-            };
-          };
-        };
-        responses: {
-          "201": {
-            description: "Created";
-          };
-          "400": {
-            description: "Bad Request";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "401": {
-            description: "Unauthorized";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "403": {
-            description: "Forbidden";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "404": {
-            description: "Not Found";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-        };
-      };
-    };
   };
   components: {
     schemas: {
@@ -9685,28 +9134,6 @@ type MappedEndpoints = {
         };
         additionalProperties: false;
       };
-      UpdateSetRequestDTO: {
-        type: "object";
-        properties: {
-          exerciseId: {
-            type: "integer";
-            format: "int32";
-          };
-          topRepRange: {
-            type: "integer";
-            format: "int32";
-          };
-          bottomRepRange: {
-            type: "integer";
-            format: "int32";
-          };
-          riR: {
-            type: "integer";
-            format: "int32";
-          };
-        };
-        additionalProperties: false;
-      };
       UpdateSplitBaseInfoRequestDTO: {
         type: "object";
         properties: {
@@ -9743,18 +9170,12 @@ type MappedEndpoints = {
         };
         additionalProperties: false;
       };
-      UpdateWorkoutBaseInfoRequestDTO: {
+      UserProfilePictureResponseDTO: {
         type: "object";
         properties: {
-          name: {
-            type: "string";
-          };
-          description: {
+          image: {
             type: "string";
             nullable: true;
-          };
-          isPublic: {
-            type: "boolean";
           };
         };
         additionalProperties: false;

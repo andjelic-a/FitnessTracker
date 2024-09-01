@@ -1,8 +1,8 @@
-import { Outlet } from "react-router-dom";
 import "./App.scss";
-import NavigationMenu from "./Components/NavigationMenu/NavigationMenu";
+import { Outlet } from "react-router-dom";
 import Icon from "./Components/Icon/Icon";
 import { createContext, useEffect, useState } from "react";
+import AppHeader from "./Components/AppHeader/AppHeader";
 
 export const scrollPositionContext = createContext(0);
 
@@ -23,36 +23,7 @@ function App() {
   return (
     <>
       <section id="page">
-        <header>
-          <NavigationMenu
-            id="navigation"
-            items={[
-              {
-                name: "Home",
-                path: "/",
-              },
-              {
-                name: "Exercises",
-                path: "/exercises",
-              },
-              {
-                name: "Workouts",
-                path: "/workouts",
-              },
-              {
-                name: "Splits",
-                path: "/splits",
-              },
-              {
-                name: "Profile",
-                defaultPath: "/me",
-                alternatePaths: ["/authentication", "/email-verification"],
-              },
-            ]}
-          />
-          <h1 id="site-title">Fitness Tracker</h1>
-          <Icon id="logo" name="dumbbell" />
-        </header>
+        <AppHeader />
 
         <scrollPositionContext.Provider value={scrollPosition}>
           <section id="page-content">
@@ -65,9 +36,11 @@ function App() {
             <a href="#">
               <Icon id="brands" name="instagram" />
             </a>
+            
             <a href="#">
               <Icon id="brands" name="facebook" />
             </a>
+            
             <a href="#">
               <Icon id="brands" name="github" />
             </a>
