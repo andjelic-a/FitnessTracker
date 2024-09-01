@@ -66,24 +66,16 @@ const routes: RouteObject[] = [
         loader: exerciseLoader,
       },
       {
-        path: "exercises/:exerciseId",
+        path: "exercises/:id",
         element: <FullExerciseDisplay />,
         loader: singleExerciseLoader,
       },
       {
-        path: "workouts",
-        element: <div>Workouts</div>,
-      },
-      {
-        path: "workouts/:workoutId",
+        path: "workout/:id",
         element: <div>Workout</div>,
       },
       {
-        path: "splits",
-        element: <div>Splits</div>,
-      },
-      {
-        path: "splits/:splitId",
+        path: "split/:id",
         element: <div>Split</div>,
       },
       {
@@ -133,7 +125,7 @@ const routes: RouteObject[] = [
         loader: authenticationLoader,
       },
       {
-        path: "user/:userId",
+        path: "user/:username",
         element: <UserPage />,
         loader: userLoader,
         children: [

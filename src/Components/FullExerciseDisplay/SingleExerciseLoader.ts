@@ -3,16 +3,16 @@ import createLoader from "../../BetterRouter/CreateLoader";
 import { redirect } from "react-router-dom";
 
 const singleExerciseLoader = createLoader((request) => {
-  if (!request.params.exerciseId) return redirect("/exercises");
+  if (!request.params.id) return redirect("/exercises");
 
   return {
     exercise: sendAPIRequest("/api/exercise/{id}/detailed", {
       method: "get",
       parameters: {
-        id: parseInt(request.params.exerciseId),
+        id: parseInt(request.params.id),
       },
     }),
   };
-}, "/exercises/:exerciseId");
+}, "/exercises/:id");
 
 export default singleExerciseLoader;
