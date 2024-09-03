@@ -1,5 +1,6 @@
 import SettingsMenu from "../SettingsMenu";
 import InputField from "../../InputField/InputField";
+import Icon from "../../Icon/Icon";
 import "./Authentication.scss";
 
 type EditProfileProps = {
@@ -65,6 +66,9 @@ export default function Authentication({
             security code each time you sign in.
           </p>
           <div className="authentication-2fa-container">
+          <div className="authentication-2fa-icon-container">
+            <Icon className="authentication-2fa-icon" name="mobile-screen-button"/>
+          </div>
             <div className="authentication-2fa-text-area">
               <h3>Two-Factor Authenticator App</h3>
               <p>
@@ -73,9 +77,13 @@ export default function Authentication({
                 provided by your Authenticator App.
               </p>
             </div>
+            <div className="authentication-2fa-button">
+              <button>Send</button>
+            </div>
           </div>
           <div className="authentication-2fa-container">
-            <div className="authentication-2fa-icon">
+            <div className="authentication-2fa-icon-container">
+              <Icon className="authentication-2fa-icon" name="envelope" />
             </div>
             <div className="authentication-2fa-text-area">
               <h3>E-mail For Two-Factor Authenticator</h3>
@@ -84,6 +92,9 @@ export default function Authentication({
                 two-factor authentication (2FA). The security code will be sent
                 to the address associated with your account.
               </p>
+            </div>
+            <div className="authentication-2fa-button">
+              <button>Send</button>
             </div>
           </div>
         </div>
