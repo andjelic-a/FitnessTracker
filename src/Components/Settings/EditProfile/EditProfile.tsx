@@ -85,7 +85,7 @@ export default function EditProfile({
           </button>
         </div>
         <div className="edit-profile-username">
-          <p>Username</p>
+          <h3>Username</h3>
           <InputField
             maxLength={25}
             className="edit-profile-username-input"
@@ -93,7 +93,7 @@ export default function EditProfile({
           />
         </div>
         <div className="edit-profile-username">
-          <p>Name</p>
+          <h3>Name</h3>
           <InputField
             maxLength={25}
             className="edit-profile-username-input"
@@ -101,7 +101,7 @@ export default function EditProfile({
           />
         </div>
         <div className="edit-profile-bio">
-          <p>Bio</p>
+          <h3>Bio</h3>
           <textarea
             placeholder="Bio"
             onChange={(e) => {
