@@ -125,10 +125,16 @@
   justify-content: center;
   font-size: 2.2rem;
 
-  & p {
+  & h3 {
     user-select: none;
     font-size: 2.2rem;
     font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  & p {
+    font-size: 1.6rem;
+    color: rgb(180, 180, 180);
     margin-bottom: 2rem;
   }
 

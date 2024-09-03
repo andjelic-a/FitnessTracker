@@ -43,7 +43,11 @@ export default function Authentication({
           <button className="authentication-button">Save</button>
         </div>
         <div className="authentication-password">
-          <p>Change Password</p>
+          <h3>Change Password</h3>
+          <p>
+            For your security, we highly recommend that you choose a unique
+            password that you don't use for any other online account.
+          </p>
           <InputField
             maxLength={50}
             className="authentication-password-input"
@@ -66,9 +70,12 @@ export default function Authentication({
             security code each time you sign in.
           </p>
           <div className="authentication-2fa-container">
-          <div className="authentication-2fa-icon-container">
-            <Icon className="authentication-2fa-icon" name="mobile-screen-button"/>
-          </div>
+            <div className="authentication-2fa-icon-container">
+              <Icon
+                className="authentication-2fa-icon"
+                name="mobile-screen-button"
+              />
+            </div>
             <div className="authentication-2fa-text-area">
               <h3>Two-Factor Authenticator App</h3>
               <p>
