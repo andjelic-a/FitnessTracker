@@ -70,6 +70,7 @@
   & p {
     user-select: none;
     font-size: 2.2rem;
+    font-weight: 500;
     margin-bottom: 2rem;
   }
 
@@ -123,11 +124,11 @@
   flex-direction: column;
   justify-content: center;
   font-size: 2.2rem;
-  font-weight: 450;
 
   & p {
     user-select: none;
     font-size: 2.2rem;
+    font-weight: 500;
     margin-bottom: 2rem;
   }
 
@@ -154,5 +155,45 @@
         color: $dark-600;
       }
     }
+  }
+}
+
+.authentication-2fa {
+  margin-top: 3rem;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  & h3 {
+    font-size: 2.2rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  & p {
+    font-size: 1.6rem;
+    color: rgb(180, 180, 180);
+    margin-bottom: 2rem;
+  }
+}
+
+.authentication-2fa-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  border: 1px solid $dark-400;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 2rem;
+
+  & h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  & p {
+    font-size: 1.6rem;
+    margin-bottom: 0;
   }
 }
