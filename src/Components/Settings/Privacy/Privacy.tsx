@@ -18,7 +18,9 @@ export default function Privacy({
   setIsPrivacyOpen,
 }: PrivacyProps) {
   const [isFollowingDisabled, setIsFollowingDisabled] = useState(false);
-  const [isCompletedWorkoutsDisabled, setIsCompletedWorkoutsDisabled] = useState(false);
+  const [isCompletedWorkoutsDisabled, setIsCompletedWorkoutsDisabled] =
+    useState(false);
+  const [isStreakDisabled, setIsStreakDisabled] = useState(false);
 
   return (
     <div className={`privacy ${visible ? "privacy-show" : ""}`}>
@@ -89,7 +91,9 @@ export default function Privacy({
         <div className="privacy-container-button">
           <div
             className="privacy-container-button-background"
-            onClick={() => setIsCompletedWorkoutsDisabled(!isCompletedWorkoutsDisabled)}
+            onClick={() =>
+              setIsCompletedWorkoutsDisabled(!isCompletedWorkoutsDisabled)
+            }
           >
             <div
               className={`privacy-container-button-icon ${
@@ -99,6 +103,46 @@ export default function Privacy({
             <div
               className={`privacy-container-button-tail ${
                 isCompletedWorkoutsDisabled ? "button-disabled" : ""
+              }`}
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="privacy-container">
+        <div className="privacy-container-text">
+          <div className="privacy-container-text-header">
+            <h3>Streak Visibility</h3>
+            <div
+              className={`privacy-container-status-indicator ${
+                isStreakDisabled && "status-indicator-disabled"
+              }`}
+            >
+              {isStreakDisabled ? "Private" : "Public"}
+            </div>
+          </div>
+          <p>
+            Choose who can see your workout streak. If set to public, your
+            streak will be visible to everyone who visits your profile. If set
+            to private, only you can view your streak. You can adjust this
+            setting at any time, with changes taking effect immediately.
+          </p>
+        </div>
+        <div className="privacy-container-button">
+          <div
+            className="privacy-container-button-background"
+            onClick={() =>
+              setIsStreakDisabled(!isStreakDisabled)
+            }
+          >
+            <div
+              className={`privacy-container-button-icon ${
+                isStreakDisabled ? "button-disabled" : ""
+              }`}
+            ></div>
+            <div
+              className={`privacy-container-button-tail ${
+                isStreakDisabled ? "button-disabled" : ""
               }`}
             ></div>
           </div>
