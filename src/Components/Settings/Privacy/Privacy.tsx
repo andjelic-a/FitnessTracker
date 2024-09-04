@@ -17,7 +17,7 @@ export default function Privacy({
   setIsAuthenticationOpen,
   setIsPrivacyOpen,
 }: PrivacyProps) {
-  const [isButtonEnabled, setIsButtonEnabled] = useState(false);
+  const [isFollowingDisabled, setIsFollowingDisabled] = useState(false);
 
   return (
     <div className={`privacy ${visible ? "privacy-show" : ""}`}>
@@ -30,7 +30,10 @@ export default function Privacy({
       <h3>Privacy</h3>
       <div className="privacy-container">
         <div className="privacy-container-text">
-          <h3>Following</h3>
+          <div className="privacy-container-text-header">
+            <h3>Following</h3>
+            <div className={`privacy-container-status-indicator ${isFollowingDisabled && "status-indicator-disabled"}`}>{isFollowingDisabled ? "Private" : "Public"}</div>
+          </div>
           <p>
             You have control over the visibility of your following list. You can
             choose to make it either public or private. If set to public, anyone
@@ -41,10 +44,18 @@ export default function Privacy({
         <div className="privacy-container-button">
           <div
             className="privacy-container-button-background"
-            onClick={() => setIsButtonEnabled(!isButtonEnabled)}
+            onClick={() => setIsFollowingDisabled(!isFollowingDisabled)}
           >
-            <div className={`privacy-container-button-icon ${isButtonEnabled ? "button-enabled" : ""}`}></div>
-            <div className={`privacy-container-button-tail ${isButtonEnabled ? "button-enabled" : ""}`}></div>
+            <div
+              className={`privacy-container-button-icon ${
+                isFollowingDisabled ? "button-disabled" : ""
+              }`}
+            ></div>
+            <div
+              className={`privacy-container-button-tail ${
+                isFollowingDisabled ? "button-disabled" : ""
+              }`}
+            ></div>
           </div>
         </div>
       </div>

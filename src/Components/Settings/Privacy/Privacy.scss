@@ -76,6 +76,30 @@
     }
   }
 
+  .privacy-container-text-header{
+    display: flex;
+    align-items: center;
+
+    & .privacy-container-status-indicator {
+      margin-left: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.6rem;
+      width: 7rem;
+      height: 2.5rem;
+      border: 1px solid $primary-400;
+      border-radius: 5rem;
+      color: $primary-400;
+      transition: .2s;
+    }
+
+    & .status-indicator-disabled {
+      border-color: $dark-600;
+      color: $dark-600;
+    }
+  }
+
   .privacy-container-button {
     width: 15%;
     height: 100%;
@@ -87,7 +111,7 @@
       position: relative;
       width: 6rem;
       height: 2.5rem;
-      background-color: rgb(50, 172, 50);
+      background-color: $primary-200;
       border-radius: 5rem;
       overflow: hidden;
       cursor: pointer;
@@ -113,7 +137,7 @@
         transition: .4s;
       }
 
-      & .button-enabled {
+      & .button-disabled {
         transform: translate(-3.5rem);
       }
     }
