@@ -148,45 +148,73 @@ const Pins = memo<PinsProps>(({ pins }) => {
             if (isWaitingForResponse.current) return;
             isWaitingForResponse.current = true;
 
-            const promises: Promise<any>[] = [];
+            let promises: Promise<any>[] = [];
 
-            pins.forEach((pin) => {
-              if (selectedPins.findIndex((x) => x.id === pin.id) >= 0) return; //'Pin' is still selected
+            const deletedPins = pins.filter(
+              (x) => selectedPins.findIndex((y) => y.id === x.id) < 0
+            );
 
-              //User unselected/deleted the pin
+            const createdPins = selectedPins.filter(
+              (x) => pins.findIndex((y) => y.id === x.id) < 0
+            );
+
+            //Delete unchecked workout pins
+            if (deletedPins.some((x) => x.type === 0))
               promises.push(
-                sendAPIRequest(
-                  `/api/user/pins/${pin.type === 0 ? "workout" : "split"}/{id}`,
-                  {
-                    method: "delete",
-                    parameters: {
-                      id: pin.id,
-                    },
-                  }
-                )
+                sendAPIRequest(`/api/user/pins/workout`, {
+                  method: "delete",
+                  payload: {
+                    deletedPinIds: deletedPins
+                      .filter((x) => x.type === 0)
+                      .map((x) => x.id),
+                  },
+                })
               );
-            });
 
-            selectedPins.forEach((pin) => {
-              if (pins.findIndex((x) => x.id === pin.id) >= 0) return; //'Pin' was selected by default
-
-              //User selected a new pin
+            //Delete unchecked split pins
+            if (deletedPins.some((x) => x.type === 1))
               promises.push(
-                sendAPIRequest(
-                  `/api/user/pins/${pin.type === 0 ? "workout" : "split"}/{id}`,
-                  {
-                    method: "post",
-                    parameters: {
-                      id: pin.id,
-                    },
-                  }
-                )
+                sendAPIRequest(`/api/user/pins/split`, {
+                  method: "delete",
+                  payload: {
+                    deletedPinIds: deletedPins
+                      .filter((x) => x.type === 1)
+                      .map((x) => x.id),
+                  },
+                })
               );
-            });
 
             Promise.all(promises).then(() => {
-              isWaitingForResponse.current = false;
-              setIsOptionsMenuOpen(false);
+              promises = [];
+
+              if (createdPins.some((x) => x.type === 0))
+                promises.push(
+                  sendAPIRequest(`/api/user/pins/workout`, {
+                    method: "post",
+                    payload: {
+                      newPinIds: createdPins
+                        .filter((x) => x.type === 0)
+                        .map((x) => x.id),
+                    },
+                  })
+                );
+
+              if (createdPins.some((x) => x.type === 1))
+                promises.push(
+                  sendAPIRequest(`/api/user/pins/split`, {
+                    method: "post",
+                    payload: {
+                      newPinIds: createdPins
+                        .filter((x) => x.type === 1)
+                        .map((x) => x.id),
+                    },
+                  })
+                );
+
+              Promise.all(promises).then(() => {
+                isWaitingForResponse.current = false;
+                setIsOptionsMenuOpen(false);
+              });
             });
           }}
         >

@@ -4309,20 +4309,28 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/user/pins/workout/{id}": {
+    "/api/user/pins/workout": {
       post: {
         tags: ["User"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/CreatePinsRequestDTO";
+              };
             };
-          }
-        ];
+            "text/json": {
+              schema: {
+                $ref: "#/components/schemas/CreatePinsRequestDTO";
+              };
+            };
+            "application/*+json": {
+              schema: {
+                $ref: "#/components/schemas/CreatePinsRequestDTO";
+              };
+            };
+          };
+        };
         responses: {
           "201": {
             description: "Created";
@@ -4391,17 +4399,25 @@ type MappedEndpoints = {
       };
       delete: {
         tags: ["User"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/DeletePinsRequestDTO";
+              };
             };
-          }
-        ];
+            "text/json": {
+              schema: {
+                $ref: "#/components/schemas/DeletePinsRequestDTO";
+              };
+            };
+            "application/*+json": {
+              schema: {
+                $ref: "#/components/schemas/DeletePinsRequestDTO";
+              };
+            };
+          };
+        };
         responses: {
           "204": {
             description: "No Content";
@@ -4469,20 +4485,28 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/user/pins/split/{id}": {
+    "/api/user/pins/split": {
       post: {
         tags: ["User"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/CreatePinsRequestDTO";
+              };
             };
-          }
-        ];
+            "text/json": {
+              schema: {
+                $ref: "#/components/schemas/CreatePinsRequestDTO";
+              };
+            };
+            "application/*+json": {
+              schema: {
+                $ref: "#/components/schemas/CreatePinsRequestDTO";
+              };
+            };
+          };
+        };
         responses: {
           "201": {
             description: "Created";
@@ -4551,17 +4575,25 @@ type MappedEndpoints = {
       };
       delete: {
         tags: ["User"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/DeletePinsRequestDTO";
+              };
             };
-          }
-        ];
+            "text/json": {
+              schema: {
+                $ref: "#/components/schemas/DeletePinsRequestDTO";
+              };
+            };
+            "application/*+json": {
+              schema: {
+                $ref: "#/components/schemas/DeletePinsRequestDTO";
+              };
+            };
+          };
+        };
         responses: {
           "204": {
             description: "No Content";
@@ -9046,6 +9078,19 @@ type MappedEndpoints = {
         };
         additionalProperties: false;
       };
+      CreatePinsRequestDTO: {
+        type: "object";
+        properties: {
+          newPinIds: {
+            type: "array";
+            items: {
+              type: "string";
+              format: "uuid";
+            };
+          };
+        };
+        additionalProperties: false;
+      };
       CreateSetRequestDTO: {
         type: "object";
         properties: {
@@ -9149,6 +9194,19 @@ type MappedEndpoints = {
         enum: [0, 1, 2, 3, 4, 5, 6];
         type: "integer";
         format: "int32";
+      };
+      DeletePinsRequestDTO: {
+        type: "object";
+        properties: {
+          deletedPinIds: {
+            type: "array";
+            items: {
+              type: "string";
+              format: "uuid";
+            };
+          };
+        };
+        additionalProperties: false;
       };
       DetailedExerciseResponseDTO: {
         type: "object";
