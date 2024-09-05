@@ -84,6 +84,15 @@ const Pins = memo<PinsProps>(({ pins }) => {
               Select up to six public workouts or splits you'd like to show to
               anyone.
             </p>
+
+            <p
+              className="limit"
+              style={{
+                color: selectedPins.length >= 6 ? "red" : "inherit",
+              }}
+            >
+              {6 - selectedPins.length} remaining
+            </p>
           </div>
 
           <Async await={pinOptionsPromise ?? Promise.resolve([])}>
@@ -93,15 +102,17 @@ const Pins = memo<PinsProps>(({ pins }) => {
                   className="option"
                   key={x.name + "-" + x.type}
                   onClick={() => {
-                    if (selectedPins.findIndex((y) => x.id === y.id) < 0)
-                      setSelectedPins([
-                        ...selectedPins,
-                        {
-                          id: x.id,
-                          type: x.type,
-                        },
-                      ]);
-                    else
+                    if (selectedPins.findIndex((y) => x.id === y.id) < 0) {
+                      if (selectedPins.length < 6) {
+                        setSelectedPins([
+                          ...selectedPins,
+                          {
+                            id: x.id,
+                            type: x.type,
+                          },
+                        ]);
+                      }
+                    } else
                       setSelectedPins(
                         selectedPins.filter((y) => x.id !== y.id)
                       );
