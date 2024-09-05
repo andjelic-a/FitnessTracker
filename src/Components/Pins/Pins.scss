@@ -1,2 +1,76 @@
+@import "../../Palette.scss";
+
 .pins-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+
+  .pins-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 100;
+    }
+
+    button {
+      font-size: 1.5rem;
+      font-weight: 100;
+
+      background: none;
+      outline: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .pins-options-menu-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+
+    width: 40rem;
+    padding: 2rem;
+    background-color: $dark-200;
+
+    .pins-options-menu-header {
+      border-bottom: 1px solid $dark-600;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      h1 {
+        font-size: 2rem;
+        font-weight: 500;
+      }
+
+      p {
+        font-weight: 100;
+        font-size: 1.5rem;
+        color: #aaa;
+      }
+    }
+
+    .option {
+      font-size: 1.7rem;
+
+      input {
+        margin: 1rem;
+        color: $primary-300;
+      }
+    }
+  }
 }

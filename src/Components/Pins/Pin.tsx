@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
-import User from "../User/User";
 
 type PinProps = {
   pin: Schema<"SimplePinResponseDTO">;
@@ -20,10 +19,6 @@ export default function Pin({ pin }: PinProps) {
       </div>
 
       <div className="pin-description">{pin.description}</div>
-
-      <div className="pin-footer">
-        <User user={pin.creator} />
-      </div>
     </div>
   );
 }

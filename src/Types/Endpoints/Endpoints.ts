@@ -4309,169 +4309,86 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/user/pin/workout/{id}": {
-      post: {
-        tags: ["User"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          }
-        ];
-        responses: {
-          "201": {
-            description: "Created";
-          };
-          "400": {
-            description: "Bad Request";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "401": {
-            description: "Unauthorized";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-        };
-      };
-    };
-    "/api/user/pin/split/{id}": {
-      post: {
-        tags: ["User"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          }
-        ];
-        responses: {
-          "201": {
-            description: "Created";
-          };
-          "400": {
-            description: "Bad Request";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "401": {
-            description: "Unauthorized";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-        };
-      };
-    };
     "/api/user/pins/workout/{id}": {
+      post: {
+        tags: ["User"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+              format: "uuid";
+            };
+          }
+        ];
+        responses: {
+          "201": {
+            description: "Created";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
       delete: {
         tags: ["User"];
         parameters: [
@@ -4553,6 +4470,85 @@ type MappedEndpoints = {
       };
     };
     "/api/user/pins/split/{id}": {
+      post: {
+        tags: ["User"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+              format: "uuid";
+            };
+          }
+        ];
+        responses: {
+          "201": {
+            description: "Created";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
       delete: {
         tags: ["User"];
         parameters: [
@@ -4921,6 +4917,102 @@ type MappedEndpoints = {
           };
           "400": {
             description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    "/api/user/me/pins/options": {
+      get: {
+        tags: ["User"];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimplePinOptionResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimplePinOptionResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimplePinOptionResponseDTO";
+                  };
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "404": {
+            description: "Not Found";
             content: {
               "text/plain": {
                 schema: {
@@ -9556,6 +9648,26 @@ type MappedEndpoints = {
         };
         additionalProperties: false;
       };
+      SimplePinOptionResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "string";
+            format: "uuid";
+          };
+          name: {
+            type: "string";
+          };
+          likeCount: {
+            type: "integer";
+            format: "int32";
+          };
+          type: {
+            $ref: "#/components/schemas/PinType";
+          };
+        };
+        additionalProperties: false;
+      };
       SimplePinResponseDTO: {
         type: "object";
         properties: {
@@ -9568,9 +9680,6 @@ type MappedEndpoints = {
           };
           description: {
             type: "string";
-          };
-          creator: {
-            $ref: "#/components/schemas/SimpleUserResponseDTO";
           };
           type: {
             $ref: "#/components/schemas/PinType";
