@@ -76,51 +76,60 @@ const Pins = memo<PinsProps>(({ pins }) => {
       >
         <div className="pins-options-menu-header">
           <h1>Edit pinned items</h1>
-          <p>
-            Select up to six public workouts or splits you'd like to show to
-            anyone.
-          </p>
         </div>
 
-        <Async await={pinOptionsPromise ?? Promise.resolve([])}>
-          {(options) =>
-            options.map((x) => (
-              <div className="option" key={x.name + "-" + x.type}>
-                <div className="checkbox-container">
-                  <input
-                    type="checkbox"
-                    name={`${x.name}-${x.type}`}
-                    id={`${x.name}-${x.type}`}
-                    defaultChecked={
-                      selectedPins.findIndex((y) => x.id === y.id) >= 0
-                    }
-                    onChange={(e) => {
-                      if (e.target.checked)
-                        setSelectedPins([
-                          ...selectedPins,
-                          {
-                            id: x.id,
-                            type: x.type,
-                          },
-                        ]);
-                      else
-                        setSelectedPins(
-                          selectedPins.filter((y) => x.id !== y.id)
-                        );
-                    }}
-                  />
+        <div className="pins-options-menu-body">
+          <div className="info-section">
+            <p>
+              Select up to six public workouts or splits you'd like to show to
+              anyone.
+            </p>
+          </div>
 
-                  <label htmlFor={`${x.name}-${x.type}`}>{x.name}</label>
-                </div>
+          <Async await={pinOptionsPromise ?? Promise.resolve([])}>
+            {(options) =>
+              options.map((x) => (
+                <div
+                  className="option"
+                  key={x.name + "-" + x.type}
+                  onClick={() => {
+                    if (selectedPins.findIndex((y) => x.id === y.id) < 0)
+                      setSelectedPins([
+                        ...selectedPins,
+                        {
+                          id: x.id,
+                          type: x.type,
+                        },
+                      ]);
+                    else
+                      setSelectedPins(
+                        selectedPins.filter((y) => x.id !== y.id)
+                      );
+                  }}
+                >
+                  <div className="checkbox-container">
+                    <input
+                      type="checkbox"
+                      name={`${x.name}-${x.type}`}
+                      id={`${x.name}-${x.type}`}
+                      checked={
+                        selectedPins.findIndex((y) => x.id === y.id) >= 0
+                      }
+                      readOnly
+                    />
 
-                <div className="like-count-container">
-                  <p>{x.likeCount}</p>
-                  <Icon name="thumbs-up" />
+                    <label htmlFor={`${x.name}-${x.type}`}>{x.name}</label>
+                  </div>
+
+                  <div className="like-count-container">
+                    <p>{x.likeCount}</p>
+                    <Icon name="thumbs-up" />
+                  </div>
                 </div>
-              </div>
-            ))
-          }
-        </Async>
+              ))
+            }
+          </Async>
+        </div>
 
         <button
           className="save-button"
