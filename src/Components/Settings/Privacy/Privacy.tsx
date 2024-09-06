@@ -21,6 +21,7 @@ export default function Privacy({
   const [isCompletedWorkoutsDisabled, setIsCompletedWorkoutsDisabled] =
     useState(false);
   const [isStreakDisabled, setIsStreakDisabled] = useState(false);
+  const [isCurrentSplitDisabled, setIsCurrentSplitDisabled] = useState(false);
 
   return (
     <div className={`privacy ${visible ? "privacy-show" : ""}`}>
@@ -131,9 +132,7 @@ export default function Privacy({
         <div className="privacy-container-button">
           <div
             className="privacy-container-button-background"
-            onClick={() =>
-              setIsStreakDisabled(!isStreakDisabled)
-            }
+            onClick={() => setIsStreakDisabled(!isStreakDisabled)}
           >
             <div
               className={`privacy-container-button-icon ${
@@ -143,6 +142,45 @@ export default function Privacy({
             <div
               className={`privacy-container-button-tail ${
                 isStreakDisabled ? "button-disabled" : ""
+              }`}
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="privacy-container">
+        <div className="privacy-container-text">
+          <div className="privacy-container-text-header">
+            <h3>Current Split</h3>
+            <div
+              className={`privacy-container-status-indicator ${
+                isCurrentSplitDisabled && "status-indicator-disabled"
+              }`}
+            >
+              {isCurrentSplitDisabled ? "Private" : "Public"}
+            </div>
+          </div>
+          <p>
+            Control the visibility of your current workout split. If set to
+            public, anyone viewing your profile can see your active routine. If
+            set to private, only you will have access to this information. You
+            can update this setting at any time, with changes applied
+            immediately.
+          </p>
+        </div>
+        <div className="privacy-container-button">
+          <div
+            className="privacy-container-button-background"
+            onClick={() => setIsCurrentSplitDisabled(!isCurrentSplitDisabled)}
+          >
+            <div
+              className={`privacy-container-button-icon ${
+                isCurrentSplitDisabled ? "button-disabled" : ""
+              }`}
+            ></div>
+            <div
+              className={`privacy-container-button-tail ${
+                isCurrentSplitDisabled ? "button-disabled" : ""
               }`}
             ></div>
           </div>
