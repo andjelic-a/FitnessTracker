@@ -76,6 +76,10 @@ const Pins = memo<PinsProps>(({ pins }) => {
       >
         <div className="pins-options-menu-header">
           <h1>Edit pinned items</h1>
+
+          <button className="close-btn">
+            <Icon name="xmark" onClick={() => setIsOptionsMenuOpen(false)} />
+          </button>
         </div>
 
         <div className="pins-options-menu-body">
@@ -128,6 +132,8 @@ const Pins = memo<PinsProps>(({ pins }) => {
                       }
                       readOnly
                     />
+
+                    <Icon name={x.type === 0 ? "dumbbell" : "calendar-week"} />
 
                     <label htmlFor={`${x.name}-${x.type}`}>{x.name}</label>
                   </div>
