@@ -39,7 +39,7 @@ const Pins = memo<PinsProps>(({ pins }) => {
   return (
     <div className="pins-container">
       <div className="pins-header">
-        <h1>Pins</h1>
+        <h1>Pinned</h1>
         <button
           onClick={() => {
             setIsOptionsMenuOpen(!isOptionsMenuOpen);

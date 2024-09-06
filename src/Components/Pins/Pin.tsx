@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
+import Icon from "../Icon/Icon";
 
 type PinProps = {
   pin: Schema<"SimplePinResponseDTO">;
@@ -10,15 +11,16 @@ export default function Pin({ pin }: PinProps) {
     <div className="pin-container">
       <div className="pin-header">
         <Link to={`/${pin.type === 0 ? "workout" : "split"}/${pin.id}`}>
-          {pin.name}
-        </Link>
+          <Icon
+            className="pin-type-marker"
+            name={pin.type === 0 ? "dumbbell" : "calendar-week"}
+          />
 
-        <div className="pin-type-marker">
-          {pin.type === 0 ? "Workout" : "Split"}
-        </div>
+          <p>{pin.name}</p>
+        </Link>
       </div>
 
-      <div className="pin-description">{pin.description}</div>
+      <div className="pin-description">{pin.description.length > 150 ? pin.description.slice(0, 75) + "..." : pin.description}</div>
     </div>
   );
 }
