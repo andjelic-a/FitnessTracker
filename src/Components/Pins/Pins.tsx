@@ -1,7 +1,7 @@
+import "./Pins.scss";
+import Pin from "./Pin";
 import { memo, useEffect, useRef, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
-import Pin from "./Pin";
-import "./Pins.scss";
 import Async from "../Async/Async";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import ReactModal from "react-modal";

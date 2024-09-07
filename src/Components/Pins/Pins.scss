@@ -46,14 +46,21 @@
       padding: 1.5rem 1rem;
 
       display: grid;
-      grid-template-rows: max-content 1fr;
       gap: 0.5rem;
       grid-auto-flow: row;
+      grid-template-rows: max-content;
+
+      &:has(.pin-description) {
+        grid-template-rows: max-content 1fr;
+      }
 
       border: 1px solid $dark-400;
       border-radius: 0.7rem;
 
       .pin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         padding: 0 0.5rem;
 
         a {
@@ -67,7 +74,7 @@
           grid-auto-flow: column;
 
           &:hover,
-          &:has(:focus-visible) {
+          &:focus-visible {
             color: $primary-300;
           }
 
@@ -78,6 +85,25 @@
           i {
             font-size: 1.5rem;
             margin-right: 0.5rem;
+          }
+        }
+
+        .drag-handle {
+          outline: none;
+          border: none;
+          background: none;
+          color: #fff;
+          font-size: 2rem;
+
+          width: 2.7rem;
+          height: 2.7rem;
+          border-radius: 0.3rem;
+
+          display: grid;
+          place-items: center;
+
+          &:focus-visible {
+            outline: 1px solid $primary-300;
           }
         }
       }

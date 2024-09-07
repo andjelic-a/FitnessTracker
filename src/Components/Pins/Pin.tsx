@@ -18,9 +18,19 @@ export default function Pin({ pin }: PinProps) {
 
           <p>{pin.name}</p>
         </Link>
+
+        <button className="drag-handle">
+          <Icon name="grip-vertical" />
+        </button>
       </div>
 
-      <div className="pin-description">{pin.description.length > 150 ? pin.description.slice(0, 75) + "..." : pin.description}</div>
+      {pin.description.length > 0 && (
+        <div className="pin-description">
+          {pin.description.length > 150
+            ? pin.description.slice(0, 75) + "..."
+            : pin.description}
+        </div>
+      )}
     </div>
   );
 }
