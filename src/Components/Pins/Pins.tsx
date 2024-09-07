@@ -20,7 +20,7 @@ const Pins = memo<PinsProps>(({ pins }) => {
   const [selectedPins, setSelectedPins] = useState<
     {
       id: string;
-      type: number;
+      type: 0 | 1;
     }[]
   >([]);
   const isWaitingForResponse = useRef(false);
@@ -154,8 +154,6 @@ const Pins = memo<PinsProps>(({ pins }) => {
             if (isWaitingForResponse.current) return;
             isWaitingForResponse.current = true;
 
-            let promises: Promise<any>[] = [];
-
             const deletedPins = pins.filter(
               (x) => selectedPins.findIndex((y) => y.id === x.id) < 0
             );
@@ -164,64 +162,34 @@ const Pins = memo<PinsProps>(({ pins }) => {
               (x) => pins.findIndex((y) => y.id === x.id) < 0
             );
 
-            //Delete unchecked workout pins
-            if (deletedPins.some((x) => x.type === 0))
-              promises.push(
-                sendAPIRequest(`/api/user/pins/workout`, {
-                  method: "delete",
-                  payload: {
-                    deletedPinIds: deletedPins
-                      .filter((x) => x.type === 0)
-                      .map((x) => x.id),
-                  },
-                })
-              );
+            const deleteWorkoutPins = () =>
+              deletedPins.length === 0
+                ? Promise.resolve()
+                : sendAPIRequest(`/api/user/pins`, {
+                    method: "delete",
+                    payload: {
+                      deletedPins,
+                    },
+                  });
 
-            //Delete unchecked split pins
-            if (deletedPins.some((x) => x.type === 1))
-              promises.push(
-                sendAPIRequest(`/api/user/pins/split`, {
-                  method: "delete",
-                  payload: {
-                    deletedPinIds: deletedPins
-                      .filter((x) => x.type === 1)
-                      .map((x) => x.id),
-                  },
-                })
-              );
-
-            Promise.all(promises).then(() => {
-              promises = [];
-
-              if (createdPins.some((x) => x.type === 0))
-                promises.push(
-                  sendAPIRequest(`/api/user/pins/workout`, {
+            const createWorkoutPins = () =>
+              createdPins.length === 0
+                ? Promise.resolve()
+                : sendAPIRequest(`/api/user/pins`, {
                     method: "post",
                     payload: {
-                      newPinIds: createdPins
-                        .filter((x) => x.type === 0)
-                        .map((x) => x.id),
+                      newPins: createdPins,
                     },
-                  })
-                );
+                  });
 
-              if (createdPins.some((x) => x.type === 1))
-                promises.push(
-                  sendAPIRequest(`/api/user/pins/split`, {
-                    method: "post",
-                    payload: {
-                      newPinIds: createdPins
-                        .filter((x) => x.type === 1)
-                        .map((x) => x.id),
-                    },
-                  })
-                );
+            const closeMenu = () => {
+              isWaitingForResponse.current = false;
+              setIsOptionsMenuOpen(false);
+            };
 
-              Promise.all(promises).then(() => {
-                isWaitingForResponse.current = false;
-                setIsOptionsMenuOpen(false);
-              });
-            });
+            deleteWorkoutPins().then(
+              () => void createWorkoutPins().then(closeMenu)
+            );
           }}
         >
           Save
