@@ -37,6 +37,8 @@ const Pins = memo<PinsProps>(({ pins }) => {
   const [draggingPin, setDraggingPin] =
     useState<Schema<"PinResponseDTO"> | null>(null);
 
+  const [isWaitingForReorder, setIsWaitingForReorder] = useState(false);
+
   return (
     <DndContext
       onDragStart={({
@@ -53,18 +55,30 @@ const Pins = memo<PinsProps>(({ pins }) => {
           setDraggingPin(null);
         }, 150);
 
-        if (!over) return;
+        if (isWaitingForReorder || !over) return;
 
         const activeId = active.data.current?.pin.id;
         const overId = over.data.current?.pin.id;
 
         if (!activeId || !overId || activeId === overId) return;
 
-        setSelectedPins((prev) => {
-          const activeIndex = prev.findIndex((x) => x.id === activeId);
-          const overIndex = prev.findIndex((x) => x.id === overId);
-          return arrayMove(prev, activeIndex, overIndex);
-        });
+        const activeIndex = selectedPins.findIndex((x) => x.id === activeId);
+        const overIndex = selectedPins.findIndex((x) => x.id === overId);
+        const newOrder = arrayMove(selectedPins, activeIndex, overIndex);
+
+        setSelectedPins(newOrder);
+        setIsWaitingForReorder(true);
+
+        sendAPIRequest("/api/user/me/pins/reorder", {
+          method: "patch",
+          payload: {
+            newOrder: newOrder.map((x, i) => ({
+              id: x.id,
+              type: x.type,
+              newOrder: i + 1,
+            })),
+          },
+        }).then(() => void setIsWaitingForReorder(false));
       }}
     >
       <div className="pins-container">
