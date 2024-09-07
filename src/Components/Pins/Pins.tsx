@@ -30,9 +30,17 @@ const Pins = memo<PinsProps>(({ pins }) => {
   const [selectedPins, setSelectedPins] = useState<Schema<"PinResponseDTO">[]>(
     []
   );
+
+  const [selectedMenuPins, setSelectedMenuPins] = useState<
+    Schema<"PinResponseDTO">[]
+  >([]);
+
   const isWaitingForResponse = useRef(false);
 
-  useEffect(() => void setSelectedPins(pins), [pins]);
+  useEffect(() => {
+    setSelectedPins(pins);
+    setSelectedMenuPins(pins);
+  }, [pins]);
 
   const [draggingPin, setDraggingPin] =
     useState<Schema<"PinResponseDTO"> | null>(null);
@@ -45,12 +53,12 @@ const Pins = memo<PinsProps>(({ pins }) => {
     if (isWaitingForResponse.current) return;
     isWaitingForResponse.current = true;
 
-    const deletedPins = pins.filter(
-      (x) => selectedPins.findIndex((y) => y.id === x.id) < 0
+    const deletedPins = selectedPins.filter(
+      (x) => selectedMenuPins.findIndex((y) => y.id === x.id) < 0
     );
 
-    const createdPins = selectedPins.filter(
-      (x) => pins.findIndex((y) => y.id === x.id) < 0
+    const createdPins = selectedMenuPins.filter(
+      (x) => selectedPins.findIndex((y) => y.id === x.id) < 0
     );
 
     const deleteWorkoutPins = () =>
@@ -76,6 +84,7 @@ const Pins = memo<PinsProps>(({ pins }) => {
     const closeMenu = () => {
       isWaitingForResponse.current = false;
       handleCloseMenu();
+      setSelectedPins(selectedMenuPins);
     };
 
     deleteWorkoutPins().then(() => void createWorkoutPins().then(closeMenu));
@@ -94,7 +103,6 @@ const Pins = memo<PinsProps>(({ pins }) => {
 
   function handleOpenMenu() {
     setIsOptionsMenuOpen(!isOptionsMenuOpen);
-    preventPinsBodyHeightUpdates();
 
     if (!pinOptionsPromise)
       setPinOptionsPromise(
@@ -105,8 +113,8 @@ const Pins = memo<PinsProps>(({ pins }) => {
   }
 
   function handleCloseMenu() {
-    resetPinsBodyHeight();
     setIsOptionsMenuOpen(false);
+    resetPinsBodyHeight();
   }
 
   return (
@@ -120,10 +128,7 @@ const Pins = memo<PinsProps>(({ pins }) => {
         preventPinsBodyHeightUpdates();
         setDraggingPin(data.pin);
       }}
-      onDragCancel={() => {
-        setDraggingPin(null);
-        resetPinsBodyHeight();
-      }}
+      onDragCancel={() => void setDraggingPin(null)}
       onDragEnd={({ active, over }) => {
         setTimeout(() => void setDraggingPin(null), 150);
 
@@ -138,7 +143,6 @@ const Pins = memo<PinsProps>(({ pins }) => {
         const overIndex = selectedPins.findIndex((x) => x.id === overId);
         const newOrder = arrayMove(selectedPins, activeIndex, overIndex);
 
-        resetPinsBodyHeight();
         setSelectedPins(newOrder);
         setIsWaitingForReorder(true);
 
@@ -202,10 +206,10 @@ const Pins = memo<PinsProps>(({ pins }) => {
               <p
                 className="limit"
                 style={{
-                  color: selectedPins.length >= 6 ? "red" : "inherit",
+                  color: selectedMenuPins.length >= 6 ? "red" : "inherit",
                 }}
               >
-                {6 - selectedPins.length} remaining
+                {6 - selectedMenuPins.length} remaining
               </p>
             </div>
 
@@ -216,13 +220,15 @@ const Pins = memo<PinsProps>(({ pins }) => {
                     className="option"
                     key={x.name + "-" + x.type}
                     onClick={() => {
-                      if (selectedPins.findIndex((y) => x.id === y.id) < 0) {
-                        if (selectedPins.length < 6) {
-                          setSelectedPins([...selectedPins, x]);
+                      if (
+                        selectedMenuPins.findIndex((y) => x.id === y.id) < 0
+                      ) {
+                        if (selectedMenuPins.length < 6) {
+                          setSelectedMenuPins([...selectedMenuPins, x]);
                         }
                       } else
-                        setSelectedPins(
-                          selectedPins.filter((y) => x.id !== y.id)
+                        setSelectedMenuPins(
+                          selectedMenuPins.filter((y) => x.id !== y.id)
                         );
                     }}
                   >
@@ -232,7 +238,7 @@ const Pins = memo<PinsProps>(({ pins }) => {
                         name={`${x.name}-${x.type}`}
                         id={`${x.name}-${x.type}`}
                         checked={
-                          selectedPins.findIndex((y) => x.id === y.id) >= 0
+                          selectedMenuPins.findIndex((y) => x.id === y.id) >= 0
                         }
                         readOnly
                       />
