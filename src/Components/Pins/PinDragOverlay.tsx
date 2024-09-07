@@ -7,7 +7,7 @@ type PinDragOverlayProps = {
 
 export default function PinDragOverlay({ pin }: PinDragOverlayProps) {
   return (
-    <div className="pin-container" aria-hidden tabIndex={-1}>
+    <div className="pin-container dragging" aria-hidden tabIndex={-1}>
       <div className="pin-header">
         <a aria-disabled>
           <Icon
@@ -22,14 +22,6 @@ export default function PinDragOverlay({ pin }: PinDragOverlayProps) {
           <Icon name="grip-vertical" />
         </button>
       </div>
-
-      {pin.description.length > 0 && (
-        <div className="pin-description">
-          {pin.description.length > 150
-            ? pin.description.slice(0, 75) + "..."
-            : pin.description}
-        </div>
-      )}
     </div>
   );
 }

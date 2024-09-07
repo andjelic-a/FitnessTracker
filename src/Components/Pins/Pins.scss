@@ -46,6 +46,7 @@
   height: 100%;
   width: 100%;
   padding: 1.5rem 1rem;
+  background-color: $dark-100;
 
   display: grid;
   gap: 0.5rem;
@@ -117,6 +118,10 @@
   .pin-description {
     font-size: 1.8rem;
     padding: 0 0.5rem;
+  }
+
+  &.dragging {
+    outline: 1px solid #fff;
   }
 }
 

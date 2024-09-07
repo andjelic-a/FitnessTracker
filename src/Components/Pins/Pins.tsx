@@ -15,6 +15,7 @@ import {
 import { createPortal } from "react-dom";
 import PinDragOverlay from "./PinDragOverlay";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
+import { snapCenterToCursor } from "@dnd-kit/modifiers";
 
 type PinsProps = {
   pins: Schema<"PinResponseDTO">[];
@@ -56,15 +57,12 @@ const Pins = memo<PinsProps>(({ pins }) => {
 
         const activeId = active.data.current?.pin.id;
         const overId = over.data.current?.pin.id;
-        console.log(activeId, overId);
 
         if (!activeId || !overId || activeId === overId) return;
 
         setSelectedPins((prev) => {
           const activeIndex = prev.findIndex((x) => x.id === activeId);
           const overIndex = prev.findIndex((x) => x.id === overId);
-
-          console.log(activeIndex, overIndex);
           return arrayMove(prev, activeIndex, overIndex);
         });
       }}
@@ -91,7 +89,11 @@ const Pins = memo<PinsProps>(({ pins }) => {
         <div className="pins-body">
           <SortableContext items={selectedPins.map((x) => x.id)}>
             {selectedPins.map((x) => (
-              <Pin key={x.id} pin={x} />
+              <Pin
+                key={x.id}
+                pin={x}
+                collapsedDescription={draggingPin !== null}
+              />
             ))}
           </SortableContext>
         </div>
@@ -230,6 +232,7 @@ const Pins = memo<PinsProps>(({ pins }) => {
       {createPortal(
         <DragOverlay
           className="drag-overlay"
+          modifiers={[snapCenterToCursor]}
           dropAnimation={{
             ...defaultDropAnimation,
             duration: 150,
