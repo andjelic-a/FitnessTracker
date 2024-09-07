@@ -4825,7 +4825,7 @@ type MappedEndpoints = {
                 schema: {
                   type: "array";
                   items: {
-                    $ref: "#/components/schemas/SimplePinOptionResponseDTO";
+                    $ref: "#/components/schemas/PinResponseDTO";
                   };
                 };
               };
@@ -4833,7 +4833,7 @@ type MappedEndpoints = {
                 schema: {
                   type: "array";
                   items: {
-                    $ref: "#/components/schemas/SimplePinOptionResponseDTO";
+                    $ref: "#/components/schemas/PinResponseDTO";
                   };
                 };
               };
@@ -4841,7 +4841,7 @@ type MappedEndpoints = {
                 schema: {
                   type: "array";
                   items: {
-                    $ref: "#/components/schemas/SimplePinOptionResponseDTO";
+                    $ref: "#/components/schemas/PinResponseDTO";
                   };
                 };
               };
@@ -6059,7 +6059,7 @@ type MappedEndpoints = {
                 schema: {
                   type: "array";
                   items: {
-                    $ref: "#/components/schemas/SimplePinResponseDTO";
+                    $ref: "#/components/schemas/PinResponseDTO";
                   };
                 };
               };
@@ -6067,7 +6067,7 @@ type MappedEndpoints = {
                 schema: {
                   type: "array";
                   items: {
-                    $ref: "#/components/schemas/SimplePinResponseDTO";
+                    $ref: "#/components/schemas/PinResponseDTO";
                   };
                 };
               };
@@ -6075,7 +6075,7 @@ type MappedEndpoints = {
                 schema: {
                   type: "array";
                   items: {
-                    $ref: "#/components/schemas/SimplePinResponseDTO";
+                    $ref: "#/components/schemas/PinResponseDTO";
                   };
                 };
               };
@@ -6165,7 +6165,7 @@ type MappedEndpoints = {
                 schema: {
                   type: "array";
                   items: {
-                    $ref: "#/components/schemas/SimplePinResponseDTO";
+                    $ref: "#/components/schemas/PinResponseDTO";
                   };
                 };
               };
@@ -6173,7 +6173,7 @@ type MappedEndpoints = {
                 schema: {
                   type: "array";
                   items: {
-                    $ref: "#/components/schemas/SimplePinResponseDTO";
+                    $ref: "#/components/schemas/PinResponseDTO";
                   };
                 };
               };
@@ -6181,7 +6181,7 @@ type MappedEndpoints = {
                 schema: {
                   type: "array";
                   items: {
-                    $ref: "#/components/schemas/SimplePinResponseDTO";
+                    $ref: "#/components/schemas/PinResponseDTO";
                   };
                 };
               };
@@ -9413,6 +9413,33 @@ type MappedEndpoints = {
         };
         additionalProperties: false;
       };
+      PinResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "string";
+            format: "uuid";
+          };
+          name: {
+            type: "string";
+          };
+          description: {
+            type: "string";
+          };
+          type: {
+            $ref: "#/components/schemas/PinType";
+          };
+          order: {
+            type: "integer";
+            format: "int32";
+          };
+          likeCount: {
+            type: "integer";
+            format: "int32";
+          };
+        };
+        additionalProperties: false;
+      };
       PinType: {
         enum: [0, 1];
         type: "integer";
@@ -9548,49 +9575,6 @@ type MappedEndpoints = {
             type: "string";
           };
           muscleGroupId: {
-            type: "integer";
-            format: "int32";
-          };
-        };
-        additionalProperties: false;
-      };
-      SimplePinOptionResponseDTO: {
-        type: "object";
-        properties: {
-          id: {
-            type: "string";
-            format: "uuid";
-          };
-          name: {
-            type: "string";
-          };
-          likeCount: {
-            type: "integer";
-            format: "int32";
-          };
-          type: {
-            $ref: "#/components/schemas/PinType";
-          };
-        };
-        additionalProperties: false;
-      };
-      SimplePinResponseDTO: {
-        type: "object";
-        properties: {
-          id: {
-            type: "string";
-            format: "uuid";
-          };
-          name: {
-            type: "string";
-          };
-          description: {
-            type: "string";
-          };
-          type: {
-            $ref: "#/components/schemas/PinType";
-          };
-          order: {
             type: "integer";
             format: "int32";
           };
