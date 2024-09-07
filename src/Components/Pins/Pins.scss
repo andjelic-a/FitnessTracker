@@ -37,6 +37,7 @@
   .pins-body {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: max-content max-content max-content;
     grid-auto-flow: row;
     gap: 1rem;
   }

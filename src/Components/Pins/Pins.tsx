@@ -39,6 +39,76 @@ const Pins = memo<PinsProps>(({ pins }) => {
 
   const [isWaitingForReorder, setIsWaitingForReorder] = useState(false);
 
+  const pinsBodyRef = useRef<HTMLDivElement>(null);
+
+  function handleSelectionSave() {
+    if (isWaitingForResponse.current) return;
+    isWaitingForResponse.current = true;
+
+    const deletedPins = pins.filter(
+      (x) => selectedPins.findIndex((y) => y.id === x.id) < 0
+    );
+
+    const createdPins = selectedPins.filter(
+      (x) => pins.findIndex((y) => y.id === x.id) < 0
+    );
+
+    const deleteWorkoutPins = () =>
+      deletedPins.length === 0
+        ? Promise.resolve()
+        : sendAPIRequest(`/api/user/pins`, {
+            method: "delete",
+            payload: {
+              deletedPins,
+            },
+          });
+
+    const createWorkoutPins = () =>
+      createdPins.length === 0
+        ? Promise.resolve()
+        : sendAPIRequest(`/api/user/pins`, {
+            method: "post",
+            payload: {
+              newPins: createdPins,
+            },
+          });
+
+    const closeMenu = () => {
+      isWaitingForResponse.current = false;
+      handleCloseMenu();
+    };
+
+    deleteWorkoutPins().then(() => void createWorkoutPins().then(closeMenu));
+  }
+
+  function preventPinsBodyHeightUpdates() {
+    if (pinsBodyRef.current) {
+      const bodyRect = pinsBodyRef.current.getBoundingClientRect();
+      pinsBodyRef.current.style.minHeight = `${bodyRect.height}px`;
+    }
+  }
+
+  function resetPinsBodyHeight() {
+    if (pinsBodyRef.current) pinsBodyRef.current.style.minHeight = "";
+  }
+
+  function handleOpenMenu() {
+    setIsOptionsMenuOpen(!isOptionsMenuOpen);
+    preventPinsBodyHeightUpdates();
+
+    if (!pinOptionsPromise)
+      setPinOptionsPromise(
+        sendAPIRequest("/api/user/me/pins/options", {
+          method: "get",
+        }).then((x) => (x.code === "OK" ? x.content : []))
+      );
+  }
+
+  function handleCloseMenu() {
+    resetPinsBodyHeight();
+    setIsOptionsMenuOpen(false);
+  }
+
   return (
     <DndContext
       onDragStart={({
@@ -46,14 +116,16 @@ const Pins = memo<PinsProps>(({ pins }) => {
           data: { current: data },
         },
       }) => {
-        if (data?.type === "Pin") {
-          setDraggingPin(data.pin);
-        }
+        if (data?.type !== "Pin") return;
+        preventPinsBodyHeightUpdates();
+        setDraggingPin(data.pin);
+      }}
+      onDragCancel={() => {
+        setDraggingPin(null);
+        resetPinsBodyHeight();
       }}
       onDragEnd={({ active, over }) => {
-        setTimeout(() => {
-          setDraggingPin(null);
-        }, 150);
+        setTimeout(() => void setDraggingPin(null), 150);
 
         if (isWaitingForReorder || !over) return;
 
@@ -66,6 +138,7 @@ const Pins = memo<PinsProps>(({ pins }) => {
         const overIndex = selectedPins.findIndex((x) => x.id === overId);
         const newOrder = arrayMove(selectedPins, activeIndex, overIndex);
 
+        resetPinsBodyHeight();
         setSelectedPins(newOrder);
         setIsWaitingForReorder(true);
 
@@ -84,23 +157,10 @@ const Pins = memo<PinsProps>(({ pins }) => {
       <div className="pins-container">
         <div className="pins-header">
           <h1>Pinned</h1>
-          <button
-            onClick={() => {
-              setIsOptionsMenuOpen(!isOptionsMenuOpen);
-
-              if (!pinOptionsPromise)
-                setPinOptionsPromise(
-                  sendAPIRequest("/api/user/me/pins/options", {
-                    method: "get",
-                  }).then((x) => (x.code === "OK" ? x.content : []))
-                );
-            }}
-          >
-            Customize your pins
-          </button>
+          <button onClick={handleOpenMenu}>Customize your pins</button>
         </div>
 
-        <div className="pins-body">
+        <div className="pins-body" ref={pinsBodyRef}>
           <SortableContext items={selectedPins.map((x) => x.id)}>
             {selectedPins.map((x) => (
               <Pin
@@ -114,7 +174,7 @@ const Pins = memo<PinsProps>(({ pins }) => {
 
         <ReactModal
           isOpen={isOptionsMenuOpen}
-          onRequestClose={() => setIsOptionsMenuOpen(false)}
+          onRequestClose={handleCloseMenu}
           className={{
             afterOpen: "open",
             base: "pins-options-menu-container",
@@ -128,7 +188,7 @@ const Pins = memo<PinsProps>(({ pins }) => {
             <h1>Edit pinned items</h1>
 
             <button className="close-btn">
-              <Icon name="xmark" onClick={() => setIsOptionsMenuOpen(false)} />
+              <Icon name="xmark" onClick={handleCloseMenu} />
             </button>
           </div>
 
@@ -194,50 +254,7 @@ const Pins = memo<PinsProps>(({ pins }) => {
             </Async>
           </div>
 
-          <button
-            className="save-button"
-            onClick={() => {
-              if (isWaitingForResponse.current) return;
-              isWaitingForResponse.current = true;
-
-              const deletedPins = pins.filter(
-                (x) => selectedPins.findIndex((y) => y.id === x.id) < 0
-              );
-
-              const createdPins = selectedPins.filter(
-                (x) => pins.findIndex((y) => y.id === x.id) < 0
-              );
-
-              const deleteWorkoutPins = () =>
-                deletedPins.length === 0
-                  ? Promise.resolve()
-                  : sendAPIRequest(`/api/user/pins`, {
-                      method: "delete",
-                      payload: {
-                        deletedPins,
-                      },
-                    });
-
-              const createWorkoutPins = () =>
-                createdPins.length === 0
-                  ? Promise.resolve()
-                  : sendAPIRequest(`/api/user/pins`, {
-                      method: "post",
-                      payload: {
-                        newPins: createdPins,
-                      },
-                    });
-
-              const closeMenu = () => {
-                isWaitingForResponse.current = false;
-                setIsOptionsMenuOpen(false);
-              };
-
-              deleteWorkoutPins().then(
-                () => void createWorkoutPins().then(closeMenu)
-              );
-            }}
-          >
+          <button className="save-button" onClick={handleSelectionSave}>
             Save
           </button>
         </ReactModal>
