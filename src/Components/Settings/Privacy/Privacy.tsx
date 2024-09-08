@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SettingsMenu from "../SettingsMenu";
 import "./Privacy.scss";
+import sendAPIRequest from "../../../Data/SendAPIRequest";
 
 type PrivacyProps = {
   visible: boolean;
@@ -22,13 +23,53 @@ export default function Privacy({
     useState(false);
   const [isStreakDisabled, setIsStreakDisabled] = useState(false);
   const [isCurrentSplitDisabled, setIsCurrentSplitDisabled] = useState(false);
-
   const [isLikedWorkoutsDisabled, setIsLikedWorkoutsDisabled] = useState(false);
   const [isFavoriteWorkoutsDisabled, setIsFavoriteWorkoutsDisabled] =
     useState(false);
   const [isLikedSplitsDisabled, setIsLikedSplitsDisabled] = useState(false);
   const [isFavoriteSplitsDisabled, setIsFavoriteSplitsDisabled] =
     useState(false);
+
+  const loadedSettings = useRef<boolean>(false);
+
+  useEffect(() => {
+    if (loadedSettings.current) return;
+    loadedSettings.current = true;
+
+    sendAPIRequest("/api/user/me/settings", {
+      method: "get",
+    }).then((data) => {
+      const settings = data.code === "OK" ? data.content : null;
+      if (!settings) return;
+
+      setIsFollowingDisabled(!settings.publicFollowing);
+      setIsCompletedWorkoutsDisabled(!settings.publicCompletedWorkouts);
+      setIsStreakDisabled(!settings.publicStreak);
+      setIsCurrentSplitDisabled(!settings.publicCurrentSplit);
+      setIsLikedWorkoutsDisabled(!settings.publicLikedWorkouts);
+      setIsFavoriteWorkoutsDisabled(!settings.publicFavoriteWorkouts);
+      setIsLikedSplitsDisabled(!settings.publicLikedSplits);
+      setIsFavoriteSplitsDisabled(!settings.publicFavoriteSplits);
+
+      return settings;
+    });
+  }, []);
+
+  function handleSave() {
+    sendAPIRequest("/api/user/me/settings", {
+      method: "put",
+      payload: {
+        publicCompletedWorkouts: !isCompletedWorkoutsDisabled,
+        publicStreak: !isStreakDisabled,
+        publicCurrentSplit: !isCurrentSplitDisabled,
+        publicLikedWorkouts: !isLikedWorkoutsDisabled,
+        publicFavoriteSplits: !isFavoriteSplitsDisabled,
+        publicFavoriteWorkouts: !isFavoriteWorkoutsDisabled,
+        publicFollowing: !isFollowingDisabled,
+        publicLikedSplits: !isLikedSplitsDisabled,
+      },
+    });
+  }
 
   return (
     <div className={`privacy ${visible ? "privacy-show" : ""}`}>
@@ -355,6 +396,10 @@ export default function Privacy({
           </div>
         </div>
       </div>
+
+      <button className="privacy-save-button" onClick={handleSave}>
+        Save
+      </button>
     </div>
   );
 }
