@@ -193,6 +193,8 @@ export default function EditProfile({
         <div className="edit-profile-username">
           <h3>Name</h3>
           <InputField
+            name="name"
+            autoComplete="off"
             maxLength={25}
             className="edit-profile-username-input"
             placeholder="Name"
@@ -204,6 +206,8 @@ export default function EditProfile({
         <div className="edit-profile-bio">
           <h3>Bio</h3>
           <textarea
+            name="bio"
+            autoComplete="off"
             placeholder="Bio"
             onChange={(e) => {
               e.target.style.height = "auto";

@@ -2,6 +2,13 @@ import SettingsMenu from "../SettingsMenu";
 import InputField from "../../InputField/InputField";
 import Icon from "../../Icon/Icon";
 import "./Authentication.scss";
+import sendAPIRequest from "../../../Data/SendAPIRequest";
+import { useRef } from "react";
+import { logout } from "../../../Data/User";
+import {
+  validateEmail,
+  validatePassword,
+} from "../../../Pages/Authentication/Validate";
 
 type EditProfileProps = {
   visible: boolean;
@@ -18,6 +25,56 @@ export default function Authentication({
   setIsAuthenticationOpen,
   setIsPrivacyOpen,
 }: EditProfileProps) {
+  const oldEmailInputRef = useRef<HTMLInputElement>(null);
+  const newEmailInputRef = useRef<HTMLInputElement>(null);
+
+  const oldPasswordInputRef = useRef<HTMLInputElement>(null);
+  const newPasswordInputRef = useRef<HTMLInputElement>(null);
+
+  async function handlePasswordChangeSave() {
+    if (
+      !oldPasswordInputRef.current ||
+      !newPasswordInputRef.current ||
+      !validatePassword(oldPasswordInputRef.current.value.trim()) ||
+      !validatePassword(newPasswordInputRef.current.value.trim()) ||
+      oldPasswordInputRef.current.value.trim() ===
+        newPasswordInputRef.current.value.trim()
+    )
+      return;
+
+    const response = await sendAPIRequest("/api/user/me/password", {
+      method: "patch",
+      payload: {
+        newPassword: newPasswordInputRef.current.value.trim(),
+        oldPassword: oldPasswordInputRef.current.value.trim(),
+      },
+    });
+
+    if (response.code === "No Content") await logout();
+  }
+
+  async function handleEmailChangeSave() {
+    if (
+      !oldEmailInputRef.current ||
+      !newEmailInputRef.current ||
+      !validateEmail(oldEmailInputRef.current.value.trim()) ||
+      !validateEmail(newEmailInputRef.current.value.trim()) ||
+      oldEmailInputRef.current.value.trim() ===
+        newEmailInputRef.current.value.trim()
+    )
+      return;
+
+    const response = await sendAPIRequest("/api/user/me/email", {
+      method: "patch",
+      payload: {
+        newEmail: newEmailInputRef.current.value.trim(),
+        oldEmail: oldEmailInputRef.current.value.trim(),
+      },
+    });
+
+    if (response.code === "No Content") await logout(true);
+  }
+
   return (
     <div className={`authentication ${visible ? "authentication-show" : ""}`}>
       <SettingsMenu
@@ -34,13 +91,24 @@ export default function Authentication({
             maxLength={50}
             className="authentication-email-input"
             placeholder="Old email"
+            name="oldEmail"
+            autoComplete="off"
+            inputRef={oldEmailInputRef}
           />
           <InputField
             maxLength={50}
             className="authentication-email-input"
             placeholder="New email"
+            name="newEmail"
+            autoComplete="off"
+            inputRef={newEmailInputRef}
           />
-          <button className="authentication-button">Save</button>
+          <button
+            className="authentication-button"
+            onClick={handleEmailChangeSave}
+          >
+            Save
+          </button>
         </div>
         <div className="authentication-password">
           <h3>Change Password</h3>
@@ -53,14 +121,25 @@ export default function Authentication({
             className="authentication-password-input"
             placeholder="Old password"
             password
+            name="oldPassword"
+            autoComplete="off"
+            inputRef={oldPasswordInputRef}
           />
           <InputField
             maxLength={50}
             className="authentication-password-input"
             placeholder="New password"
             password
+            name="newPassword"
+            autoComplete="off"
+            inputRef={newPasswordInputRef}
           />
-          <button className="authentication-button">Save</button>
+          <button
+            className="authentication-button"
+            onClick={handlePasswordChangeSave}
+          >
+            Save
+          </button>
         </div>
         <div className="authentication-2fa">
           <h3>Two-Factor Authentication</h3>
