@@ -40,14 +40,19 @@ export default function EditProfile({
 
   const isImageChanged = useRef(false);
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  async function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setSelectedImage(imageUrl);
-      isImageChanged.current = true;
-    }
-  };
+    if (!file) return;
+
+    const compressedImage = await compressImage(file);
+    setSelectedImage(compressedImage);
+    isImageChanged.current = true;
+  }
+
+  function handleRemoveImage() {
+    setSelectedImage(null);
+    isImageChanged.current = true;
+  }
 
   const loadedInitial = useRef(false);
   useEffect(() => {
@@ -72,19 +77,14 @@ export default function EditProfile({
     if (!user) return;
 
     if (isImageChanged.current) {
-      const uncompressedImage = imageInputRef.current?.files?.[0];
-      const compressedImage = uncompressedImage
-        ? await compressImage(uncompressedImage)
-        : null;
-
       sendAPIRequest("/api/user/me/image", {
         method: "patch",
         payload: {
-          newImage: compressedImage,
+          newImage: selectedImage,
         },
       });
 
-      user.image = compressedImage;
+      user.image = selectedImage;
       isImageChanged.current = false;
     }
 
@@ -172,9 +172,22 @@ export default function EditProfile({
             <p className="edit-profile-user-details-info-name">name</p>
           </div>
 
-          <button onClick={() => imageInputRef.current?.click()}>
-            Change image
-          </button>
+          <div className="image-buttons-container">
+            <button onClick={() => imageInputRef.current?.click()}>
+              Change image
+            </button>
+
+            <button
+              className="edit-profile-image-remove"
+              onClick={handleRemoveImage}
+            >
+              <Icon name="trash" />
+
+              <p className="accessibility-only" aria-hidden={false}>
+                Remove image
+              </p>
+            </button>
+          </div>
         </div>
 
         <div className="edit-profile-username">

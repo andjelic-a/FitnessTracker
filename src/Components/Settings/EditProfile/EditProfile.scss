@@ -76,22 +76,32 @@
     color: $dark-600;
   }
 
-  & button {
-    position: relative;
+  .image-buttons-container {
+    display: flex;
+    gap: 1rem;
     margin-left: auto;
-    width: 12rem;
-    height: 3.5rem;
-    border-radius: 0.5rem;
-    font-size: 1.4rem;
-    outline: none;
-    border: none;
-    background-color: $primary-300;
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
 
-    &:hover {
-      background-color: $primary-400;
+    & button {
+      position: relative;
+      width: 12rem;
+      height: 3.5rem;
+      border-radius: 0.5rem;
+      font-size: 1.4rem;
+      outline: none;
+      border: none;
+      background-color: $primary-300;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $primary-400;
+      }
+    }
+
+    & .edit-profile-image-remove {
+      aspect-ratio: 1;
+      width: max-content;
     }
   }
 }
@@ -257,7 +267,7 @@
   overflow: hidden;
 
   & .edit-profile-gender-option {
-    width: calc(100%/3);
+    width: calc(100% / 3);
     height: 100%;
     display: flex;
     justify-content: center;
@@ -281,7 +291,7 @@
 .edit-profile-gender-background {
   position: absolute;
   height: 100%;
-  width: calc(100%/3);
+  width: calc(100% / 3);
   background-color: $dark-300;
   z-index: 0;
   transition: left 0.3s ease;
@@ -292,11 +302,11 @@
 }
 
 .edit-profile-gender-background.none {
-  left: calc(100%/3);
+  left: calc(100% / 3);
 }
 
 .edit-profile-gender-background.female {
-  left: calc(100%/3*2);
+  left: calc(100% / 3 * 2);
 }
 
 .edit-profile-save {
