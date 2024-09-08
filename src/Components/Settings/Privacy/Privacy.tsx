@@ -23,6 +23,13 @@ export default function Privacy({
   const [isStreakDisabled, setIsStreakDisabled] = useState(false);
   const [isCurrentSplitDisabled, setIsCurrentSplitDisabled] = useState(false);
 
+  const [isLikedWorkoutsDisabled, setIsLikedWorkoutsDisabled] = useState(false);
+  const [isFavoriteWorkoutsDisabled, setIsFavoriteWorkoutsDisabled] =
+    useState(false);
+  const [isLikedSplitsDisabled, setIsLikedSplitsDisabled] = useState(false);
+  const [isFavoriteSplitsDisabled, setIsFavoriteSplitsDisabled] =
+    useState(false);
+
   return (
     <div className={`privacy ${visible ? "privacy-show" : ""}`}>
       <SettingsMenu
@@ -31,7 +38,9 @@ export default function Privacy({
         setIsPrivacyOpen={setIsPrivacyOpen}
         onClose={onClose}
       />
+
       <h3>Privacy</h3>
+
       <div className="privacy-container">
         <div className="privacy-container-text">
           <div className="privacy-container-text-header">
@@ -181,6 +190,166 @@ export default function Privacy({
             <div
               className={`privacy-container-button-tail ${
                 isCurrentSplitDisabled ? "button-disabled" : ""
+              }`}
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="privacy-container">
+        <div className="privacy-container-text">
+          <div className="privacy-container-text-header">
+            <h3>Liked workouts</h3>
+            <div
+              className={`privacy-container-status-indicator ${
+                isLikedWorkoutsDisabled && "status-indicator-disabled"
+              }`}
+            >
+              {isLikedWorkoutsDisabled ? "Private" : "Public"}
+            </div>
+          </div>
+          <p>
+            Control the visibility of your current workout split. If set to
+            public, anyone viewing your profile can see your active routine. If
+            set to private, only you will have access to this information. You
+            can update this setting at any time, with changes applied
+            immediately.
+          </p>
+        </div>
+        <div className="privacy-container-button">
+          <div
+            className="privacy-container-button-background"
+            onClick={() => setIsLikedWorkoutsDisabled(!isLikedWorkoutsDisabled)}
+          >
+            <div
+              className={`privacy-container-button-icon ${
+                isLikedWorkoutsDisabled ? "button-disabled" : ""
+              }`}
+            ></div>
+            <div
+              className={`privacy-container-button-tail ${
+                isLikedWorkoutsDisabled ? "button-disabled" : ""
+              }`}
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="privacy-container">
+        <div className="privacy-container-text">
+          <div className="privacy-container-text-header">
+            <h3>Favorite workouts</h3>
+            <div
+              className={`privacy-container-status-indicator ${
+                isFavoriteWorkoutsDisabled && "status-indicator-disabled"
+              }`}
+            >
+              {isFavoriteWorkoutsDisabled ? "Private" : "Public"}
+            </div>
+          </div>
+          <p>
+            Control the visibility of your current workout split. If set to
+            public, anyone viewing your profile can see your active routine. If
+            set to private, only you will have access to this information. You
+            can update this setting at any time, with changes applied
+            immediately.
+          </p>
+        </div>
+        <div className="privacy-container-button">
+          <div
+            className="privacy-container-button-background"
+            onClick={() =>
+              setIsFavoriteWorkoutsDisabled(!isFavoriteWorkoutsDisabled)
+            }
+          >
+            <div
+              className={`privacy-container-button-icon ${
+                isFavoriteWorkoutsDisabled ? "button-disabled" : ""
+              }`}
+            ></div>
+            <div
+              className={`privacy-container-button-tail ${
+                isFavoriteWorkoutsDisabled ? "button-disabled" : ""
+              }`}
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="privacy-container">
+        <div className="privacy-container-text">
+          <div className="privacy-container-text-header">
+            <h3>Liked splits</h3>
+            <div
+              className={`privacy-container-status-indicator ${
+                isLikedSplitsDisabled && "status-indicator-disabled"
+              }`}
+            >
+              {isLikedSplitsDisabled ? "Private" : "Public"}
+            </div>
+          </div>
+          <p>
+            Control the visibility of your current workout split. If set to
+            public, anyone viewing your profile can see your active routine. If
+            set to private, only you will have access to this information. You
+            can update this setting at any time, with changes applied
+            immediately.
+          </p>
+        </div>
+        <div className="privacy-container-button">
+          <div
+            className="privacy-container-button-background"
+            onClick={() => setIsLikedSplitsDisabled(!isLikedSplitsDisabled)}
+          >
+            <div
+              className={`privacy-container-button-icon ${
+                isLikedSplitsDisabled ? "button-disabled" : ""
+              }`}
+            ></div>
+            <div
+              className={`privacy-container-button-tail ${
+                isLikedSplitsDisabled ? "button-disabled" : ""
+              }`}
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="privacy-container">
+        <div className="privacy-container-text">
+          <div className="privacy-container-text-header">
+            <h3>Favorite splits</h3>
+            <div
+              className={`privacy-container-status-indicator ${
+                isFavoriteSplitsDisabled && "status-indicator-disabled"
+              }`}
+            >
+              {isFavoriteSplitsDisabled ? "Private" : "Public"}
+            </div>
+          </div>
+          <p>
+            Control the visibility of your current workout split. If set to
+            public, anyone viewing your profile can see your active routine. If
+            set to private, only you will have access to this information. You
+            can update this setting at any time, with changes applied
+            immediately.
+          </p>
+        </div>
+        <div className="privacy-container-button">
+          <div
+            className="privacy-container-button-background"
+            onClick={() =>
+              setIsFavoriteSplitsDisabled(!isFavoriteSplitsDisabled)
+            }
+          >
+            <div
+              className={`privacy-container-button-icon ${
+                isFavoriteSplitsDisabled ? "button-disabled" : ""
+              }`}
+            ></div>
+            <div
+              className={`privacy-container-button-tail ${
+                isFavoriteSplitsDisabled ? "button-disabled" : ""
               }`}
             ></div>
           </div>
