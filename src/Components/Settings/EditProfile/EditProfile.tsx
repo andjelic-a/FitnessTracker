@@ -3,7 +3,10 @@ import SettingsMenu from "../SettingsMenu";
 import Icon from "../../Icon/Icon";
 import InputField from "../../InputField/InputField";
 import "./EditProfile.scss";
-import { getProfileCache } from "../../../Pages/Profile/ProfileCache";
+import {
+  getProfileCache,
+  setProfileCache,
+} from "../../../Pages/Profile/ProfileCache";
 import compressImage from "../../../Data/ImageCompression";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 
@@ -63,21 +66,26 @@ export default function EditProfile({
   }, []);
 
   async function handleSave() {
-    const cachedUserData = await getProfileCache()?.user;
+    const cache = getProfileCache();
+    const cachedUserData = await cache?.user;
     const user = cachedUserData?.code === "OK" ? cachedUserData?.content : null;
     if (!user) return;
 
     if (isImageChanged.current) {
       const uncompressedImage = imageInputRef.current?.files?.[0];
+      const compressedImage = uncompressedImage
+        ? await compressImage(uncompressedImage)
+        : null;
 
       sendAPIRequest("/api/user/me/image", {
         method: "patch",
         payload: {
-          newImage: uncompressedImage
-            ? await compressImage(uncompressedImage)
-            : null,
+          newImage: compressedImage,
         },
       });
+
+      user.image = compressedImage;
+      isImageChanged.current = false;
     }
 
     if (
@@ -90,6 +98,9 @@ export default function EditProfile({
           newName: nameInputRef.current.value.trim(),
         },
       });
+
+      user.name = nameInputRef.current.value.trim();
+      setDefaultNameValue(nameInputRef.current.value.trim());
     }
 
     if (
@@ -102,7 +113,15 @@ export default function EditProfile({
           newBio: bioInputRef.current.value.trim(),
         },
       });
+
+      user.bio = bioInputRef.current.value.trim();
+      setDefaultBioValue(bioInputRef.current.value.trim());
     }
+
+    setProfileCache({
+      ...cache!,
+      user: Promise.resolve({ code: "OK", content: user }),
+    });
   }
 
   return (
