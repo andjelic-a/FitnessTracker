@@ -1,64 +1,53 @@
+import { Schema } from "../../Types/Endpoints/SchemaParser";
 import "./ProfileHeader.scss";
-import Icon from "../Icon/Icon";
 import { useNavigate } from "react-router-dom";
 
 type ProfileHeaderProps = {
-  username: string;
-  image: string | null;
-  workouts: number;
-  followers: number;
-  following: number;
-  setFollowersOrFollowing: (type: "followers" | "following" | null) => void;
+  user: Schema<"DetailedUserResponseDTO">;
 };
 
-function ProfileHeader({
-  username,
-  image,
-  workouts,
-  followers,
-  following,
-  setFollowersOrFollowing,
-}: ProfileHeaderProps) {
-  const handleFollowersOrFollowingClick = (type: "followers" | "following") =>
-    void setFollowersOrFollowing(type);
+function ProfileHeader({ user }: ProfileHeaderProps) {
   const navigate = useNavigate();
 
   return (
     <div className="profile-header">
-      <div className="profile-picture">
+      <div className="profile-picture-container">
         <img
-          src={image ?? "/DefaultProfilePicture.png"}
-          alt={`Profile picture of a user named ${username}`}
+          src={user.image ?? "/DefaultProfilePicture.png"}
+          alt={`Profile picture of a user named ${user.name}`}
         />
       </div>
-      <div className="profile-user-information">
-        <div className="profile-user-username">
-          <p>{username}</p>
-          <Icon
-            className="profile-user-settings"
-            name="gear"
-            onClick={() => void navigate("settings")}
-          />
+
+      <div className="username-container">
+        <p className="nickname">{user.name}</p> {/*Todo: Add nickname*/}
+        <p className="username">{user.username}</p>
+      </div>
+
+      <button
+        className="edit-profile-btn"
+        onClick={() => void navigate("settings")}
+      >
+        Edit profile
+      </button>
+
+      <div className="stats-container">
+        <div className="followers-container">
+          <p className="stat">
+            <span className="value">{user.followers}</span> followers
+          </p>
+
+          <p className="dot">●</p>
+
+          <p className="stat">
+            <span className="value">{user.following}</span> following
+          </p>
         </div>
-        <div className="profile-user-stats">
-          <div className="profile-user-stats-stat">
-            <div className="profile-user-stats-name">Workouts</div>
-            <div className="profile-user-stats-num">{workouts ?? 0}</div>
-          </div>
-          <div
-            className="profile-user-stats-stat"
-            onClick={() => handleFollowersOrFollowingClick("followers")}
-          >
-            <div className="profile-user-stats-name">Followers</div>
-            <div className="profile-user-stats-num">{followers ?? 0}</div>
-          </div>
-          <div
-            className="profile-user-stats-stat"
-            onClick={() => handleFollowersOrFollowingClick("following")}
-          >
-            <div className="profile-user-stats-name">Following</div>
-            <div className="profile-user-stats-num">{following ?? 0}</div>
-          </div>
+
+        <div className="completed-workouts-container">
+          <p className="stat">
+            <span className="value">{user.totalCompletedWorkouts ?? 0}</span>{" "}
+            completed workouts
+          </p>
         </div>
       </div>
     </div>

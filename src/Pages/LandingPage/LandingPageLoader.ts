@@ -1,7 +1,7 @@
 import createLoader from "../../BetterRouter/CreateLoader";
 
-const landingPageLoader = createLoader("/exercises", () => {
+const landingPageLoader = createLoader(() => {
   return {};
-});
+}, "/exercises");
 
 export default landingPageLoader;

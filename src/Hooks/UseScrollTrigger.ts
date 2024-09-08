@@ -6,6 +6,7 @@ gsap.registerPlugin(Observer);
 export default function useScrollTrigger(
   box: RefObject<HTMLElement>,
   threshold: number,
+  axis: "y" | "x" = "y",
   onEnter?: () => void,
   onLeave?: () => void
 ) {
@@ -14,14 +15,17 @@ export default function useScrollTrigger(
   useEffect(() => {
     if (!box.current) return;
 
-    const scrollHeight = box.current.scrollHeight - box.current.clientHeight;
-    const triggerPoint = scrollHeight * threshold;
+    const scrollSize =
+      axis === "y"
+        ? box.current.scrollHeight - box.current.clientHeight
+        : box.current.scrollWidth - box.current.clientWidth;
 
+    const triggerPoint = scrollSize * threshold;
     const observer = Observer.create({
       target: box.current,
       type: "scroll",
       onChange: (self) => {
-        const currentScroll = self.scrollY();
+        const currentScroll = axis === "y" ? self.scrollY() : self.scrollX();
 
         // Check if the current scroll position crosses the 70% threshold
         if (

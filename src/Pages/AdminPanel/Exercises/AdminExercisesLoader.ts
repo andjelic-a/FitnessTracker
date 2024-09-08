@@ -1,7 +1,7 @@
 import createLoader from "../../../BetterRouter/CreateLoader";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 
-const adminExerciseLoader = createLoader("/admin/exercises", () => {
+const adminExerciseLoader = createLoader(() => {
   return {
     exercises: sendAPIRequest("/api/exercise", {
       method: "get",
@@ -11,6 +11,6 @@ const adminExerciseLoader = createLoader("/admin/exercises", () => {
       },
     }),
   };
-});
+}, "/admin/exercises");
 
 export default adminExerciseLoader;

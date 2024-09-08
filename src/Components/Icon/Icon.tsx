@@ -1,17 +1,20 @@
-import { DOMAttributes, forwardRef, HTMLAttributes } from "react";
+import { forwardRef } from "react";
+import { HTMLProps } from "../../Types/Utility/HTMLProps";
 
-interface IconProps
-  extends DOMAttributes<HTMLElement>,
-    HTMLAttributes<HTMLElement> {
+type IconProps = {
   className?: string;
   id?: string;
   name: string;
-}
+} & HTMLProps<HTMLElement>;
 
 const Icon = forwardRef<HTMLElement, IconProps>(
   ({ name, className, ...attributes }, ref) => {
     return (
-      <i className={`fa fa-${name} ${className}`} ref={ref} {...attributes}></i>
+      <i
+        className={`fa fa-${name}${className ? " " + className : ""}`}
+        ref={ref}
+        {...attributes}
+      ></i>
     );
   }
 );

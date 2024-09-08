@@ -26,16 +26,21 @@ export default async function sendAPIRequest<
   includeCredentials: boolean = false
 ): Promise<Response<Endpoint, T>> {
   const url = new URL(baseAPIUrl + endpoint);
+  const requestCopy = structuredClone(request);
 
-  if ("parameters" in request) {
-    Object.keys(request.parameters).forEach((key) => {
-      if (!("parameters" in request) || typeof request.parameters !== "object")
+  if ("parameters" in requestCopy) {
+    Object.keys(requestCopy.parameters).forEach((key) => {
+      if (
+        !("parameters" in requestCopy) ||
+        typeof requestCopy.parameters !== "object"
+      )
         return;
 
       if (
-        request.parameters[key as keyof typeof request.parameters] === undefined
+        requestCopy.parameters[key as keyof typeof requestCopy.parameters] ===
+        undefined
       ) {
-        delete (request.parameters as Record<string, string>)[key];
+        delete (requestCopy.parameters as Record<string, string>)[key];
         return;
       }
 
@@ -43,21 +48,22 @@ export default async function sendAPIRequest<
 
       url.href = url.href.replace(
         "%7B" + key + "%7D",
-        (request.parameters as Record<string, string>)[key]
+        (requestCopy.parameters as Record<string, string>)[key]
       );
 
-      delete (request.parameters as Record<string, string>)[key];
+      delete (requestCopy.parameters as Record<string, string>)[key];
     });
 
     url.search = new URLSearchParams(
-      request.parameters as Record<string, string>
+      requestCopy.parameters as Record<string, string>
     ).toString();
   }
 
-  const body = "payload" in request ? JSON.stringify(request.payload) : null;
+  const body =
+    "payload" in requestCopy ? JSON.stringify(requestCopy.payload) : null;
 
   let requestInit: RequestInit = {
-    method: request.method as string,
+    method: requestCopy.method as string,
     body: body,
     headers: {
       "Content-Type": "application/json",

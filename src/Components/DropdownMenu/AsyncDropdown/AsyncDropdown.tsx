@@ -4,6 +4,7 @@ import DropdownItem from "../DropdownItem";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import { SchemaNames } from "../../../Types/Endpoints/Endpoints";
 import Async from "../../Async/Async";
+import genericMemo from "../../../Utility/GenericMemo";
 
 type AsyncDropdownProps<T extends SchemaNames> = {
   placeholder: string;
@@ -12,52 +13,56 @@ type AsyncDropdownProps<T extends SchemaNames> = {
   onSelectionChanged?: (key: string) => void;
 };
 
-export default function AsyncDropdown<T extends SchemaNames>({
-  onRequest,
-  placeholder,
-  className,
-  onSelectionChanged,
-}: AsyncDropdownProps<T>) {
-  const [data, setData] = useState<Promise<Schema<T>[]> | null>(null);
+const AsyncDropdown = genericMemo(
+  <T extends SchemaNames>({
+    onRequest,
+    placeholder,
+    className,
+    onSelectionChanged,
+  }: AsyncDropdownProps<T>) => {
+    const [data, setData] = useState<Promise<Schema<T>[]> | null>(null);
 
-  return (
-    <>
-      {!data ? (
-        <Dropdown
-          placeholder={placeholder}
-          className={className ?? ""}
-          onOpen={() => setData(onRequest())}
-          children={null}
-        />
-      ) : (
-        <Async
-          await={data}
-          skeleton={
-            <Dropdown
-              placeholder={placeholder}
-              className={className ?? ""}
-              children={null}
-            />
-          }
-        >
-          {(resolvedData) => {
-            if (!resolvedData) return null;
-
-            return (
+    return (
+      <>
+        {!data ? (
+          <Dropdown
+            placeholder={placeholder}
+            className={className ?? ""}
+            onOpen={() => setData(onRequest())}
+            children={null}
+          />
+        ) : (
+          <Async
+            await={data}
+            skeleton={
               <Dropdown
                 placeholder={placeholder}
                 className={className ?? ""}
-                openOnStart
-                onSelectionChanged={onSelectionChanged}
-              >
-                {resolvedData?.map((x) => (
-                  <DropdownItem key={x.id}>{x.name}</DropdownItem>
-                ))}
-              </Dropdown>
-            );
-          }}
-        </Async>
-      )}
-    </>
-  );
-}
+                children={null}
+              />
+            }
+          >
+            {(resolvedData) => {
+              if (!resolvedData) return null;
+
+              return (
+                <Dropdown
+                  placeholder={placeholder}
+                  className={className ?? ""}
+                  openOnStart
+                  onSelectionChanged={onSelectionChanged}
+                >
+                  {resolvedData?.map((x) => (
+                    <DropdownItem key={x.id}>{x.name}</DropdownItem>
+                  ))}
+                </Dropdown>
+              );
+            }}
+          </Async>
+        )}
+      </>
+    );
+  }
+);
+
+export default AsyncDropdown;

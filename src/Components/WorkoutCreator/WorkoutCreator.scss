@@ -1,0 +1,361 @@
+@import "../../Palette.scss";
+
+.workout-creator-container {
+  &,
+  * {
+    user-select: none;
+  }
+
+  width: 80rem;
+  max-width: 85vw;
+  height: 50rem;
+  max-height: 85svh;
+
+  background-color: $dark-200;
+  border-radius: 0.5rem;
+  padding: 1rem 1.5rem;
+
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.4s, opacity 0.2s;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scrollbar-gutter: stable both-edges;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $dark-200;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $dark-500;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: $dark-600;
+  }
+
+  &.invalid-exercise-selection .add-exercise-btn {
+    background-color: red;
+
+    &:hover {
+      background-color: rgb(255, 100, 0);
+    }
+  }
+
+  .header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    .title {
+      width: 36rem;
+      height: 5rem;
+      border: none;
+      outline: none;
+      background-color: transparent;
+      color: white;
+      cursor: pointer;
+      font-size: 1.8rem;
+      font-weight: 550;
+      transition: 0.2s ease-in;
+      border-bottom: 3px solid $dark-600;
+
+      &:focus {
+        border-bottom: 3px solid rgb(199, 199, 199);
+
+        &::placeholder {
+          color: rgb(199, 199, 198);
+        }
+      }
+
+      &::placeholder {
+        font-size: 1.8rem;
+        transition: 0.2s ease-in;
+      }
+
+      &.invalid {
+        border-color: rgb(255, 0, 0) !important;
+
+        &::placeholder {
+          color: red !important;
+        }
+      }
+    }
+
+    .buttons {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      .workout-visibility-toggle {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+
+        position: relative;
+        font-size: 1.9rem;
+        color: $dark-600;
+
+        border: none;
+        outline: none;
+        background: none;
+        border-radius: 0.3rem;
+
+        min-width: max-content;
+        min-height: max-content;
+        aspect-ratio: 1;
+        border: 1rem solid transparent;
+
+        &:focus-visible {
+          outline: 1px solid $primary-300;
+        }
+      }
+
+      .save-btn,
+      .discard-btn {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        width: max-content;
+        height: max-content;
+        padding: 1rem 1.5rem;
+
+        border: none;
+        outline: none;
+        background-color: $primary-300;
+        border-radius: 0.5rem;
+
+        color: #fff;
+        font-size: 1.7rem;
+        font-weight: 100;
+
+        &:hover,
+        &:focus-visible {
+          background-color: $primary-400;
+        }
+
+        &:focus-visible {
+          outline: 2px solid #fff;
+        }
+      }
+
+      .discard-btn {
+        background-color: $primary-100;
+
+        &:hover,
+        &:focus-visible {
+          background-color: $primary-200;
+        }
+      }
+    }
+  }
+
+  .add-exercise-btn {
+    justify-self: center;
+
+    display: flex;
+    justify-content: center;
+    align-self: flex-start;
+    align-items: center;
+
+    min-width: max-content;
+    width: 60%;
+    padding: 0.5rem 0;
+
+    outline: none;
+    border: none;
+    border-radius: 0.2rem;
+    color: white;
+    background-color: $primary-300;
+    font-size: 1.6rem;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $primary-400;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #fff;
+    }
+  }
+
+  .description-container {
+    position: relative;
+    align-self: center;
+
+    margin-top: auto;
+    margin-bottom: 1rem;
+    width: 80%;
+    overflow: visible;
+
+    border: 2px solid $dark-600;
+    border-radius: 0.5rem;
+    transition: 0.2s;
+
+    &:focus-within {
+      border: 2px solid rgb(231, 231, 231);
+
+      .description-input-label {
+        top: -1.75rem;
+        font-size: 1.7rem;
+        color: rgb(231, 231, 231);
+      }
+    }
+
+    #description-input {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding: 1rem;
+
+      border: none;
+      outline: none;
+      background-color: transparent;
+      resize: none;
+      overflow: hidden;
+
+      font-family: sans-serif;
+      font-size: 1.8rem;
+      color: rgb(231, 231, 231);
+    }
+
+    .description-input-label {
+      position: absolute;
+      top: -1.5rem;
+      left: 1rem;
+      padding: 0 0.5rem;
+      white-space: nowrap;
+
+      color: $dark-600;
+      font-size: 1.8rem;
+      font-weight: 600;
+      background-color: $dark-200;
+      transition: 0.2s;
+    }
+  }
+
+  @media screen and (max-width: 999.98px) {
+    width: 65rem;
+    height: 60rem;
+  }
+
+  @media screen and (max-width: 799.98px) {
+    width: 55rem;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .header {
+      display: grid;
+      width: 100%;
+
+      grid-template-rows: 1fr max-content;
+      grid-template-columns: 1fr;
+      place-items: start end;
+      row-gap: 1rem;
+
+      .title {
+        width: 100%;
+      }
+    }
+
+    .description-container {
+      width: 100%;
+    }
+  }
+}
+
+.modal-portal:has(.workout-creator-closing-modal-overlay) {
+  opacity: 0;
+  transition: 300ms;
+
+  &:has(.open) {
+    opacity: 1;
+  }
+
+  &:has(.closing) {
+    opacity: 0;
+  }
+
+  .workout-creator-closing-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    backdrop-filter: blur(3px);
+
+    .workout-creator-closing-modal {
+      background-color: $dark-100;
+      position: fixed;
+
+      top: 50%;
+      left: 50%;
+
+      width: max-content;
+      height: max-content;
+      padding: 3rem;
+      border-radius: 1.5rem;
+
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      transition: 250ms;
+      transform: translate(-50%, -60%);
+
+      &.open {
+        transform: translate(-50%, -50%);
+      }
+
+      &.closing {
+        transform: translate(-50%, -65%);
+      }
+
+      .workout-creator-closing-modal-content-container {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        gap: 2rem;
+
+        .modal-buttons-container {
+          display: flex;
+          justify-content: center;
+          gap: 2rem;
+          width: 100%;
+
+          button {
+            width: 10rem;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            color: #fff;
+
+            outline: none;
+            border: none;
+            background-color: $primary-300;
+
+            &:hover,
+            &:focus-visible {
+              background-color: $primary-500;
+            }
+
+            &:focus-visible {
+              outline: 1px solid $primary-300;
+            }
+          }
+        }
+      }
+    }
+  }
+}

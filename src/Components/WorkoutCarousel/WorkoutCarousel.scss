@@ -1,0 +1,55 @@
+@import "../../Palette.scss";
+
+.workout-carousel-scroll-container {
+  min-height: max-content;
+  padding: 1rem 1rem;
+
+  border: 4px solid $dark-200;
+  border-radius: 5px;
+
+  *[data-overlayscrollbars-contents] {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 2rem;
+    gap: 2rem;
+    min-width: 100%;
+    height: max-content;
+
+    .empty {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.5rem;
+    }
+
+    &:has(.empty)::before {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 100%;
+
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: -1;
+
+      background-size: 100% 100%;
+      background-position: 0px 0px, 0px 0px;
+      background-image: repeating-radial-gradient(
+          75% 75% at 238% 218%,
+          #19191938 37%,
+          #2e2e2e38 49%,
+          #19191938 52%
+        ),
+        radial-gradient(160% 154% at 711px -303px, #191919 0%, #191919 99%);
+    }
+  }
+
+  .lazy-container,
+  .lazy-segment {
+    gap: 1rem;
+  }
+}

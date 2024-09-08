@@ -7,6 +7,7 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
+import Modal from "react-modal";
 import Error from "./Components/Error/Error.tsx";
 import Exercises from "./Pages/Exercises/Exercises.tsx";
 import FullExerciseDisplay from "./Components/FullExerciseDisplay/FullExerciseDisplay.tsx";
@@ -29,12 +30,11 @@ import EmailVerification from "./Pages/EmailVerification/EmailVerification.tsx";
 import emailVerificationLoader from "./Pages/EmailVerification/EmailVerificationLoader.ts";
 import LandingPage from "./Pages/LandingPage/LandingPage.tsx";
 import ForgotPassword from "./Pages/ForgotPasswordPage/ForgotPassword.tsx";
-import User from "./Pages/User/User.tsx";
+import UserPage from "./Pages/User/User.tsx";
 import userLoader from "./Pages/User/UserLoader.ts";
-import RoutineDisplay from "./Components/RoutineDisplay/RoutineDisplay.tsx";
-import routineDisplayLoader from "./Components/RoutineDisplay/RoutineDisplayLoader.ts";
-import CreateRoutineWindow from "./Components/WorkoutsContainer/CreateRoutine/CreateRoutine.tsx";
-import createRoutineLoader from "./Components/WorkoutsContainer/CreateRoutine/CreateRoutineLoader.ts";
+import WorkoutDisplay from "./Components/WorkoutDisplay/WorkoutDisplay.tsx";
+import workoutDisplayLoader from "./Components/WorkoutDisplay/WorkoutDisplayLoader.ts";
+import WorkoutCreator from "./Components/WorkoutCreator/WorkoutCreator.tsx";
 import landingPageLoader from "./Pages/LandingPage/LandingPageLoader.ts";
 import FollowContainer from "./Components/FollowContainer/FollowContainer.tsx";
 import profileFollowersContainerLoader from "./Components/FollowContainer/ProfileFollowersContainerLoader.ts";
@@ -44,7 +44,10 @@ import userPageFollowersContainerLoader from "./Components/FollowContainer/UserP
 import EquipmentAdminPanel from "./Pages/AdminPanel/Equipment/EquipmentAdminPanel.tsx";
 import adminEquipmentLoader from "./Pages/AdminPanel/Equipment/EquipmentAdminPanelLoader.ts";
 import Settings from "./Pages/Settings/Settings.tsx";
-import EditRoutine from "./Components/WorkoutsContainer/EditRoutine/EditRoutine.tsx";
+import StartedWorkout from "./Pages/StartedWorkout/StartedWorkout.tsx";
+import startedWorkoutLoader from "./Pages/StartedWorkout/StartedWorkoutLoader.ts";
+import WorkoutEditor from "./Components/WorkoutEditor/WorkoutEditor.tsx";
+import workoutCreatorLoader from "./Components/WorkoutCreator/WorkoutCreatorLoader.ts";
 
 const routes: RouteObject[] = [
   {
@@ -63,17 +66,17 @@ const routes: RouteObject[] = [
         loader: exerciseLoader,
       },
       {
-        path: "exercises/:exerciseId",
+        path: "exercises/:id",
         element: <FullExerciseDisplay />,
         loader: singleExerciseLoader,
       },
       {
-        path: "workouts",
-        element: <div>Workouts</div>,
+        path: "workout/:id",
+        element: <div>Workout</div>,
       },
       {
-        path: "workouts/:workoutId",
-        element: <div>workout</div>,
+        path: "split/:id",
+        element: <div>Split</div>,
       },
       {
         path: "me",
@@ -81,19 +84,24 @@ const routes: RouteObject[] = [
         loader: profileLoader,
         children: [
           {
+            path: "started-workout",
+            element: <StartedWorkout />,
+            loader: startedWorkoutLoader,
+          },
+          {
             path: "workout/:id",
-            element: <RoutineDisplay />,
-            loader: routineDisplayLoader,
+            element: <WorkoutDisplay />,
+            loader: workoutDisplayLoader,
           },
           {
             path: "workout/:id/edit",
-            element: <EditRoutine />,
-            loader: routineDisplayLoader,
+            element: <WorkoutEditor />,
+            loader: workoutDisplayLoader,
           },
           {
             path: "workout/new",
-            element: <CreateRoutineWindow />,
-            loader: createRoutineLoader,
+            element: <WorkoutCreator />,
+            loader: workoutCreatorLoader,
           },
           {
             path: "followers",
@@ -117,12 +125,8 @@ const routes: RouteObject[] = [
         loader: authenticationLoader,
       },
       {
-        path: "nutrition",
-        element: <div>Nutrition</div>,
-      },
-      {
-        path: "user/:userId",
-        element: <User />,
+        path: "user/:username",
+        element: <UserPage />,
         loader: userLoader,
         children: [
           {
@@ -184,106 +188,16 @@ const routes: RouteObject[] = [
   },
 ];
 
-export type RoutePathObjects = [
-  {
-    path: "/";
-    children: [
-      {
-        path: "/";
-      },
-      {
-        path: "exercises";
-      },
-      {
-        path: "exercises/:exerciseId";
-      },
-      {
-        path: "workouts";
-      },
-      {
-        path: "workouts/:workoutId";
-      },
-      {
-        path: "me";
-        children: [
-          {
-            path: ".";
-          },
-          {
-            path: "workout/:id";
-            children: [
-              {
-                path: "edit";
-              }
-            ];
-          },
-          {
-            path: "workout/new";
-          },
-          {
-            path: "followers";
-          },
-          {
-            path: "following";
-          }
-        ];
-      },
-      {
-        path: "authentication";
-      },
-      {
-        path: "nutrition";
-      },
-      {
-        path: "user/:userId";
-        children: [
-          {
-            path: "followers";
-          },
-          {
-            path: "following";
-          }
-        ];
-      },
-      {
-        path: "email-verification/:code";
-      },
-      {
-        path: "reset-password/:code";
-      },
-      {
-        path: "admin";
-        children: [
-          {
-            path: "";
-          },
-          {
-            path: "exercises";
-          },
-          {
-            path: "exercises/new";
-          },
-          {
-            path: "exercises/:exerciseId";
-          },
-          {
-            path: "muscles";
-          },
-          {
-            path: "equipment";
-          }
-        ];
-      }
-    ];
-  }
-];
-
 export type RouteObjects = typeof routes;
 
 const router = createBrowserRouter(routes);
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+const root = document.getElementById("root")!;
+
+ReactDOM.createRoot(root).render(
   <React.StrictMode>
     <RouterProvider router={router} />
   </React.StrictMode>
 );
+
+Modal.setAppElement("#root");

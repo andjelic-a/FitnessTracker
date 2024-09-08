@@ -1,30 +1,66 @@
-# React + TypeScript + Vite
+# Fitness Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+**Fitness Tracker** is a web application designed to help users create and log workouts using preset exercises managed by site administrators. Users can take advantage of shared workouts if they are marked as public, create personalized workout splits, and track their progress. The app supports progress tracking by allowing users to mark workouts as complete and input details like weight and repetitions for each set. Completed workouts contribute to a user's streak, similar to GitHub's streak feature, and are used to recommend new weights.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- **Create and Log Workouts:** Users can create personalized workouts using a set of pre-defined exercises. Public workouts can be shared and used by others.
+- **Workout Splits:** Create workout splits that appear on the user's profile, indicating the workout scheduled for each day.
+- **Progress Tracking:** Track progress by marking workouts as complete, logging weight and reps, and monitoring personal records.
+- **Exercise Tutorials:** Access exercise descriptions, which may include tutorials or linked YouTube videos.
+- **Streaks and Recommendations:** Maintain workout streaks and receive recommendations for new weights based on past performance.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Technologies Used
 
-- Configure the top-level `parserOptions` property like this:
+- **Frontend:**
+  - [React](https://reactjs.org/)
+  - [SCSS](https://sass-lang.com/)
+  - [TypeScript](https://www.typescriptlang.org/)
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+- **Backend:** 
+  - The backend is developed as a separate project and hosted in a [*different* GitHub repository](https://github.com/andrej235/fitnesstrackerbackend).
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Installation
+
+To set up the Fitness Tracker locally, follow these steps:
+
+1. **Prerequisites:**
+   - Ensure you have [Node.js](https://nodejs.org/) and npm installed.
+   - Clone the frontend repository:
+
+     ```bash
+     git clone https://github.com/your-username/fitness-tracker.git
+     cd fitness-tracker
+     ```
+
+2. **Install Dependencies:**
+
+   ```bash
+   npm install
+   ```
+   
+3. **Start the Development Server:**
+   
+   The project uses [Vite](https://vitejs.dev/) to run the development server:
+
+   ```bash
+   npm run dev
+
+5. **Backend Setup**:
+   Refer to the [backend repository](https://github.com/andrej235/fitnesstrackerbackend) for setup instructions.
+
+## Usage:
+   - Navigate to the website and sign up or log in.
+   - Create workouts using the available exercises or browse public workouts.
+   - Set up your workout split on your profile.
+   - Log your workout progress and view your streaks.
+
+## License:
+   This project is licensed under the MIT License.
+
+## Contributors:
+This project is developed and maintained by:
+   - [Andrej235](https://github.com/andrej235)
+   - [andjelic-a](https://github.com/andjelic-a)

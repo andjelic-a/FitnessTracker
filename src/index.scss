@@ -23,6 +23,21 @@
   -webkit-font-smoothing: antialiased;
 }
 
+.accessibility-only {
+  display: none !important;
+  position: absolute !important;
+}
+
+a.disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
+.drag-handle {
+  touch-action: none;
+  cursor: grab;
+}
+
 body {
   overflow: hidden;
 }
@@ -31,4 +46,21 @@ body {
   :root {
     font-size: 8px;
   }
+}
+
+.modal-portal {
+  position: fixed;
+  z-index: 1000000;
+
+  width: 100%;
+  height: 100%;
+}
+
+.drag-overlay * {
+  pointer-events: none;
+}
+
+.dragging,
+.drag-overlay {
+  cursor: grabbing;
 }

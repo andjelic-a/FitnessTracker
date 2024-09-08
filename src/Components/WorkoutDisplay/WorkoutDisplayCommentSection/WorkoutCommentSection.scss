@@ -1,0 +1,50 @@
+@import "../../../Palette.scss";
+
+.workout-display-comment-section {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  height: auto;
+  max-height: 40rem;
+  bottom: 0;
+  background-color: $dark-300;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: 1.5rem 1.5rem 0 0;
+  box-shadow: 0px -7.5px 15px $dark-100;
+
+  .comment-section-wrapper {
+    padding: 2rem;
+    overflow: auto;
+    width: 100%;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $dark-300;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $dark-500;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: $dark-600;
+    }
+
+    .workout-comments-body {
+      .lazy-container,
+      .lazy-container .lazy-segment {
+        flex-direction: column;
+        width: 100%;
+        width: fit-content;
+        gap: 3rem;
+      }
+    }
+  }
+}

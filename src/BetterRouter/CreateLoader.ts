@@ -1,9 +1,8 @@
 import { defer, LoaderFunctionArgs } from "react-router-dom";
-import { LoaderParams, Routes } from "./Routes";
-import sendAPIRequest from "../Data/SendAPIRequest";
+import { LoaderParams } from "./Routes";
 
 export type LoaderInit<
-  Route extends Routes,
+  Route extends string,
   T extends { [key: string]: any }
 > = (args: {
   params: LoaderParams<Route>;
@@ -26,9 +25,9 @@ export type LoaderReturnType<C extends Loader<any>> = C extends Loader<infer T>
   : unknown;
 
 export default function createLoader<
-  Route extends Routes,
+  Route extends string,
   T extends { [key: string]: any }
->(route: Route, loader: LoaderInit<Route, T>): Loader<T> {
+>(loader: LoaderInit<Route, T>, route?: Route): Loader<T> {
   return async (x: LoaderFunctionArgs) => {
     try {
       const data: T | Response | null = await loader({
@@ -40,7 +39,10 @@ export default function createLoader<
         ? data
         : (defer(data) as unknown as T);
     } catch (error) {
-      console.log(`Error occurred in loader on route ${route}.`, error);
+      console.error(
+        `Error occurred in loader${route ? ` on route "${route}"` : ""}.`,
+        error
+      );
       throw error;
     }
   };

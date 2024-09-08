@@ -1,0 +1,15 @@
+.set-creator-container {
+  width: 100%;
+  height: auto;
+
+  margin-top: 2rem;
+  margin-bottom: 5rem;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+
+  @media screen and (max-width: 799.98px) {
+    grid-template-columns: 1fr;
+  }
+}

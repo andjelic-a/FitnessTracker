@@ -9,7 +9,7 @@
   box-shadow: 0.5rem 2rem 5rem #000;
   overflow: hidden;
 
-  & .login-heading {
+  .login-heading {
     display: flex;
     justify-content: center;
     width: 100%;
@@ -18,7 +18,7 @@
     font-size: 3rem;
     font-weight: 700;
 
-    & label {
+    label {
       margin: 5rem;
       cursor: pointer;
       transition: 0.4s ease-in-out;
@@ -26,7 +26,7 @@
     }
   }
 
-  & .login-inputs {
+  .login-inputs {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -34,7 +34,7 @@
     width: 100%;
     gap: 0.5em;
 
-    & .input-field {
+    .input-field {
       width: 80%;
       height: 4.5rem;
       border-radius: 0.5rem;
@@ -49,7 +49,7 @@
       }
     }
 
-    & .error-message {
+    .error-message {
       opacity: 0;
       color: #f55;
       font-weight: 100;
@@ -59,7 +59,7 @@
     }
   }
 
-  & .login-buttons {
+  .login-buttons {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -69,7 +69,7 @@
     height: 23%;
     width: 100%;
 
-    & button {
+    button {
       width: 16rem;
       height: 5rem;
       border-radius: 0.5rem;
@@ -84,12 +84,12 @@
       transition: 0.2s ease-in;
     }
 
-    & button:hover {
+    button:hover {
       background-color: $dark-600;
       box-shadow: 0.05rem 0.2rem 0.5rem #0000001b;
     }
 
-    & a {
+    a {
       font-size: 0.8em;
       text-decoration: none;
       color: white;

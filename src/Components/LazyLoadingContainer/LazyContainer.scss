@@ -1,0 +1,22 @@
+.lazy-container {
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+
+  .lazy-segment {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+
+    .lazy-loading-threshold-marker {
+      width: 0px !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+
+      position: absolute !important;
+      left: 70% !important;
+      top: 70% !important;
+      z-index: -1 !important;
+    }
+  }
+}
