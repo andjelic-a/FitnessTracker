@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import WindowFC from "../../Components/WindowWrapper/WindowFC";
 import EditProfile from "../../Components/Settings/EditProfile/EditProfile";
 import Authentication from "../../Components/Settings/Authentication/Authentication";
@@ -14,14 +13,8 @@ import {
 } from "react-reverse-portal";
 
 type SettingsTab = "edit" | "auth" | "privacy";
-const Settings = WindowFC(({}, wrapperRef) => {
-  const navigate = useNavigate();
-
+const Settings = WindowFC(({}, wrapperRef, close) => {
   const [openTab, setOpenTab] = useState<SettingsTab>("edit");
-
-  const handleCancel = () => {
-    navigate(-1);
-  };
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
@@ -102,7 +95,7 @@ const Settings = WindowFC(({}, wrapperRef) => {
           Log out
         </div>
 
-        <div onClick={handleCancel} className="settings-item">
+        <div onClick={() => close()} className="settings-item">
           Cancel
         </div>
       </div>
