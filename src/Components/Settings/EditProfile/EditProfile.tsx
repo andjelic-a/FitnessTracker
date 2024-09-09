@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import SettingsMenu from "../SettingsMenu";
 import Icon from "../../Icon/Icon";
 import InputField from "../../InputField/InputField";
 import "./EditProfile.scss";
@@ -10,21 +9,7 @@ import {
 import compressImage from "../../../Data/ImageCompression";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 
-type EditProfileProps = {
-  visible: boolean;
-  setIsEditProfileOpen: (isVisible: boolean) => void;
-  setIsAuthenticationOpen: (isVisible: boolean) => void;
-  setIsPrivacyOpen: (isVisible: boolean) => void;
-  onClose: () => void;
-};
-
-export default function EditProfile({
-  visible,
-  onClose,
-  setIsEditProfileOpen,
-  setIsAuthenticationOpen,
-  setIsPrivacyOpen,
-}: EditProfileProps) {
+export default function EditProfile() {
   const [isImageHovered, setIsImageHovered] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedGender, setSelectedGender] = useState<
@@ -125,13 +110,7 @@ export default function EditProfile({
   }
 
   return (
-    <div className={`edit-profile ${visible ? "edit-profile-show" : ""}`}>
-      <SettingsMenu
-        onClose={onClose}
-        setIsEditProfileOpen={setIsEditProfileOpen}
-        setIsAuthenticationOpen={setIsAuthenticationOpen}
-        setIsPrivacyOpen={setIsPrivacyOpen}
-      />
+    <div className="edit-profile">
       <div className="edit-profile-content">
         <h3>Edit profile</h3>
 

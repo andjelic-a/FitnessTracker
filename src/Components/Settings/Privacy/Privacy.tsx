@@ -1,23 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import SettingsMenu from "../SettingsMenu";
 import "./Privacy.scss";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 
-type PrivacyProps = {
-  visible: boolean;
-  setIsEditProfileOpen: (isVisible: boolean) => void;
-  setIsAuthenticationOpen: (isVisible: boolean) => void;
-  setIsPrivacyOpen: (isVisible: boolean) => void;
-  onClose: () => void;
-};
-
-export default function Privacy({
-  visible,
-  onClose,
-  setIsEditProfileOpen,
-  setIsAuthenticationOpen,
-  setIsPrivacyOpen,
-}: PrivacyProps) {
+export default function Privacy() {
   const [isFollowingDisabled, setIsFollowingDisabled] = useState(false);
   const [isCompletedWorkoutsDisabled, setIsCompletedWorkoutsDisabled] =
     useState(false);
@@ -72,14 +57,7 @@ export default function Privacy({
   }
 
   return (
-    <div className={`privacy ${visible ? "privacy-show" : ""}`}>
-      <SettingsMenu
-        setIsEditProfileOpen={setIsEditProfileOpen}
-        setIsAuthenticationOpen={setIsAuthenticationOpen}
-        setIsPrivacyOpen={setIsPrivacyOpen}
-        onClose={onClose}
-      />
-
+    <div className="privacy">
       <h3>Privacy</h3>
 
       <div className="privacy-container">

@@ -1,4 +1,3 @@
-import SettingsMenu from "../SettingsMenu";
 import InputField from "../../InputField/InputField";
 import Icon from "../../Icon/Icon";
 import "./Authentication.scss";
@@ -10,21 +9,7 @@ import {
   validatePassword,
 } from "../../../Pages/Authentication/Validate";
 
-type EditProfileProps = {
-  visible: boolean;
-  setIsEditProfileOpen: (isVisible: boolean) => void;
-  setIsAuthenticationOpen: (isVisible: boolean) => void;
-  setIsPrivacyOpen: (isVisible: boolean) => void;
-  onClose: () => void;
-};
-
-export default function Authentication({
-  visible,
-  onClose,
-  setIsEditProfileOpen,
-  setIsAuthenticationOpen,
-  setIsPrivacyOpen,
-}: EditProfileProps) {
+export default function Authentication() {
   const oldEmailInputRef = useRef<HTMLInputElement>(null);
   const newEmailInputRef = useRef<HTMLInputElement>(null);
 
@@ -76,13 +61,7 @@ export default function Authentication({
   }
 
   return (
-    <div className={`authentication ${visible ? "authentication-show" : ""}`}>
-      <SettingsMenu
-        onClose={onClose}
-        setIsEditProfileOpen={setIsEditProfileOpen}
-        setIsAuthenticationOpen={setIsAuthenticationOpen}
-        setIsPrivacyOpen={setIsPrivacyOpen}
-      />
+    <div className="authentication">
       <div className="authentication-content">
         <h3>Authentication</h3>
         <div className="authentication-email">
