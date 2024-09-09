@@ -160,11 +160,11 @@ const Pins = memo<PinsProps>(({ pins }) => {
     >
       <div className="pins-container">
         <div className="pins-header">
-          <h1>Pinned</h1>
-          <button onClick={handleOpenMenu}>Customize your pins</button>
+          {pins.length > 0 && <h1>Pinned</h1>}
+          <button draggable="false" className={`${pins.length > 0 ? "pins-header-btn" : ""}`} onClick={handleOpenMenu}>Customize your pins</button>
         </div>
 
-        <div className="pins-body" ref={pinsBodyRef}>
+        {pins.length > 0 && <div className="pins-body" ref={pinsBodyRef}>
           <SortableContext items={selectedPins.map((x) => x.id)}>
             {selectedPins.map((x) => (
               <Pin
@@ -174,7 +174,7 @@ const Pins = memo<PinsProps>(({ pins }) => {
               />
             ))}
           </SortableContext>
-        </div>
+        </div>}
 
         <ReactModal
           isOpen={isOptionsMenuOpen}

@@ -7,30 +7,37 @@
   width: 100%;
 
   .pins-header {
+    position: relative;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     padding: 0 2rem;
 
-    h1 {
+    & h1 {
       font-size: 2rem;
       font-weight: 100;
     }
 
-    button {
-      font-size: 1.5rem;
-      font-weight: 100;
+    & button {
+      position: absolute;
+      top: 6rem;
+      right: 0;
+      font-size: 1.4rem;
 
       background: none;
       outline: none;
       border: none;
-      color: #fff;
+      color: rgb(190, 190, 190);
       cursor: pointer;
 
       &:hover,
       &:focus-visible {
         text-decoration: underline;
       }
+    }
+
+    & .pins-header-btn {
+      top: calc(50% - 1.4rem/2);
     }
   }
 
