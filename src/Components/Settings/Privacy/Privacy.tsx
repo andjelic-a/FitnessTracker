@@ -95,10 +95,9 @@ export default function Privacy({
             </div>
           </div>
           <p>
-            You have control over the visibility of your following list. You can
-            choose to make it either public or private. If set to public, anyone
-            who visits your profile can see the accounts you follow.If set to
-            private, your following list will only be visible to you.
+            {isFollowingDisabled
+              ? "Only you can see who you follow and who follows you."
+              : "Others can see who you follow and who follows you."}
           </p>
         </div>
         <div className="privacy-container-button">
@@ -133,10 +132,9 @@ export default function Privacy({
             </div>
           </div>
           <p>
-            Decide who can view your completed workouts. If public, anyone
-            visiting your profile can see your progress. If private, only you
-            will have access to this information. You can change this setting at
-            any time, and your preference will be applied immediately.
+            {isCompletedWorkoutsDisabled
+              ? "Your completed workouts, along with your overall progress, are hidden from everyone."
+              : "Your completed workouts, along with your overall progress, are visible to everyone."}
           </p>
         </div>
         <div className="privacy-container-button">
@@ -173,10 +171,9 @@ export default function Privacy({
             </div>
           </div>
           <p>
-            Choose who can see your workout streak. If set to public, your
-            streak will be visible to everyone who visits your profile. If set
-            to private, only you can view your streak. You can adjust this
-            setting at any time, with changes taking effect immediately.
+            {isStreakDisabled
+              ? "Your activity streak is hidden from everyone."
+              : "Your activity streak is visible to everyone. Other users can see how consistently you've been working out"}
           </p>
         </div>
         <div className="privacy-container-button">
@@ -211,11 +208,9 @@ export default function Privacy({
             </div>
           </div>
           <p>
-            Control the visibility of your current workout split. If set to
-            public, anyone viewing your profile can see your active routine. If
-            set to private, only you will have access to this information. You
-            can update this setting at any time, with changes applied
-            immediately.
+            {isCurrentSplitDisabled
+              ? "The split you are currently using is hidden from everyone."
+              : "The split you are currently using is visible to everyone."}
           </p>
         </div>
         <div className="privacy-container-button">
@@ -250,11 +245,9 @@ export default function Privacy({
             </div>
           </div>
           <p>
-            Control the visibility of your current workout split. If set to
-            public, anyone viewing your profile can see your active routine. If
-            set to private, only you will have access to this information. You
-            can update this setting at any time, with changes applied
-            immediately.
+            {isLikedWorkoutsDisabled
+              ? "Your liked workouts are hidden from everyone."
+              : "Your liked workouts are visible to everyone. Share the workouts you find motivating and effective."}
           </p>
         </div>
         <div className="privacy-container-button">
@@ -289,11 +282,9 @@ export default function Privacy({
             </div>
           </div>
           <p>
-            Control the visibility of your current workout split. If set to
-            public, anyone viewing your profile can see your active routine. If
-            set to private, only you will have access to this information. You
-            can update this setting at any time, with changes applied
-            immediately.
+            {isFavoriteWorkoutsDisabled
+              ? "Your favorite workouts are hidden from everyone."
+              : "Your favorite workouts are visible to everyone. Showcase your top workout routines to inspire others."}
           </p>
         </div>
         <div className="privacy-container-button">
@@ -330,11 +321,9 @@ export default function Privacy({
             </div>
           </div>
           <p>
-            Control the visibility of your current workout split. If set to
-            public, anyone viewing your profile can see your active routine. If
-            set to private, only you will have access to this information. You
-            can update this setting at any time, with changes applied
-            immediately.
+            {isLikedSplitsDisabled
+              ? "Your liked splits are hidden from everyone."
+              : "Your liked splits are visible to everyone. Share the splits you find effective and easy to follow."}
           </p>
         </div>
         <div className="privacy-container-button">
@@ -369,11 +358,9 @@ export default function Privacy({
             </div>
           </div>
           <p>
-            Control the visibility of your current workout split. If set to
-            public, anyone viewing your profile can see your active routine. If
-            set to private, only you will have access to this information. You
-            can update this setting at any time, with changes applied
-            immediately.
+            {isFavoriteSplitsDisabled
+              ? "Your favorite splits are hidden from everyone."
+              : "Your favorite splits are visible to everyone. Showcase the splits that you found to work best for you."}
           </p>
         </div>
         <div className="privacy-container-button">
