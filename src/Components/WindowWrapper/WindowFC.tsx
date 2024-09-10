@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import AnimatedLayout, { AnimatedLayoutVariants } from "./AnimatedLayout";
 import ReactModal from "react-modal";
 import FocusTrap from "focus-trap-react";
+import "./WindowFC.scss";
 
 type WindowFCProps = {
   animationTriggers?: AnimatedLayoutVariants;
