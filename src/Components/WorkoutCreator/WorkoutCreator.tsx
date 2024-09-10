@@ -12,8 +12,9 @@ import { Tooltip } from "react-tooltip";
 import CurrentEditingWorkoutSetsContext from "../../Contexts/CurrentEditingWorkoutSetsContext";
 
 const WorkoutCreator = WindowFC(
-  ({}, wrapperRef, onClose, setModalConfirmationOpeningCondition) => {
+  ({}, onClose, setModalConfirmationOpeningCondition) => {
     const newWorkoutsContext = useContext(NewWorkoutsContext);
+    const wrapperRef = useRef<HTMLDivElement>(null);
 
     const [isPublic, setIsPublic] = useState<boolean>(false);
     const [currentSets, setCurrentSets] = useState<WorkoutItemData[]>([]);
@@ -119,7 +120,7 @@ const WorkoutCreator = WindowFC(
           name: newWorkout.content.name,
           isPublic: newWorkout.content.isPublic,
           creator: {
-            id: user.id,
+            username: user.username,
             name: user.name,
             image: user.image,
           },

@@ -1,5 +1,4 @@
-import React, { RefObject, useEffect, useRef, useState } from "react";
-import useOutsideClick from "../../Hooks/UseOutsideClick";
+import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence, useIsPresent } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import AnimatedLayout, { AnimatedLayoutVariants } from "./AnimatedLayout";
@@ -24,14 +23,12 @@ const WindowFC =
   <T extends {}>(
     component: (
       props: T,
-      wrapperRef: RefObject<HTMLDivElement>,
       close: (force?: boolean) => void,
       setModalConfirmationOpeningCondition?: (condition: () => boolean) => void
     ) => React.JSX.Element,
     windowProps?: WindowFCProps
   ) =>
   (props: T) => {
-    const wrapperRef = useRef<HTMLDivElement>(null);
     const exists = useIsPresent();
     const navigate = useNavigate();
     const handleClose = (force?: boolean) => {
@@ -51,8 +48,6 @@ const WindowFC =
     const setModalOpeningCondition = (condition: () => boolean): void =>
       void (modalCondition.current = condition);
 
-    useOutsideClick(wrapperRef, handleClose, "left");
-
     useEffect(() => {
       function closeOnESC(event: KeyboardEvent) {
         if (event.key === "Escape") handleClose();
@@ -70,12 +65,17 @@ const WindowFC =
             fallbackFocus: document.body,
           }}
         >
-          <div className="window-wrapper">
+          <div
+            className="window-wrapper"
+            onClick={(e) => {
+              if ((e.target as HTMLElement).className === "window-wrapper")
+                handleClose();
+            }}
+          >
             <AnimatedLayout variants={windowProps?.animationTriggers}>
               <AnimatePresence>
                 {component(
                   props,
-                  wrapperRef,
                   handleClose,
                   windowProps?.closeConfirmationModal
                     ? setModalOpeningCondition

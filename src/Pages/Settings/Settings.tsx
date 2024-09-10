@@ -1,8 +1,8 @@
 import WindowFC from "../../Components/WindowWrapper/WindowFC";
 import "./Settings.scss";
 
-const Settings = WindowFC(({}, wrapperRef) => {
-  return <div ref={wrapperRef}>Settings</div>;
+const Settings = WindowFC(() => {
+  return <div>Settings</div>;
 });
 
 export default Settings;

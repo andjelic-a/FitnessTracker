@@ -20,7 +20,7 @@ import {
 import { motion } from "framer-motion";
 import ConfirmModalDialog from "../ConfirmModalDialog/ConfirmModalDialog";
 
-const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
+const WorkoutDisplay = WindowFC(({}, close) => {
   const loaderData = useLoaderData<typeof workoutDisplayLoader>();
   const navigate = useNavigate();
 
@@ -155,7 +155,7 @@ const WorkoutDisplay = WindowFC(({}, wrapperRef, close) => {
     <>
       <InPortal node={commentSectionPortalNode} children={commentSection} />
 
-      <div ref={wrapperRef} className="workout-display-container">
+      <div className="workout-display-container">
         <div className="workout-display">
           <Async await={loaderData?.workout}>
             {(workout) => {
