@@ -1,10 +1,10 @@
 import React, { RefObject, useRef, useState } from "react";
-import WindowWrapper from "./WindowWrapper";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
-import { useIsPresent } from "framer-motion";
+import { AnimatePresence, useIsPresent } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { AnimatedLayoutVariants } from "./AnimatedLayout";
+import AnimatedLayout, { AnimatedLayoutVariants } from "./AnimatedLayout";
 import ReactModal from "react-modal";
+import FocusTrap from "focus-trap-react";
 
 type WindowFCProps = {
   animationTriggers?: AnimatedLayoutVariants;
@@ -55,16 +55,27 @@ const WindowFC =
 
     return (
       <>
-        <WindowWrapper animationTriggers={windowProps?.animationTriggers}>
-          {component(
-            props,
-            wrapperRef,
-            handleClose,
-            windowProps?.closeConfirmationModal
-              ? setModalOpeningCondition
-              : undefined
-          )}
-        </WindowWrapper>
+        <FocusTrap
+          paused={isModalOpen}
+          focusTrapOptions={{
+            fallbackFocus: document.body,
+          }}
+        >
+          <div className="window-wrapper">
+            <AnimatedLayout variants={windowProps?.animationTriggers}>
+              <AnimatePresence>
+                {component(
+                  props,
+                  wrapperRef,
+                  handleClose,
+                  windowProps?.closeConfirmationModal
+                    ? setModalOpeningCondition
+                    : undefined
+                )}
+              </AnimatePresence>
+            </AnimatedLayout>
+          </div>
+        </FocusTrap>
 
         {windowProps?.closeConfirmationModal && (
           <ReactModal
@@ -73,13 +84,17 @@ const WindowFC =
             portalClassName="modal-portal"
             onRequestClose={() => void setIsModalOpen(false)}
           >
-            {windowProps.closeConfirmationModal.children(
-              () => void setIsModalOpen(false),
-              () => {
-                setIsModalOpen(false);
-                handleClose(true);
-              }
-            )}
+            <FocusTrap focusTrapOptions={{ allowOutsideClick: true }}>
+              <div>
+                {windowProps.closeConfirmationModal.children(
+                  () => void setIsModalOpen(false),
+                  () => {
+                    setIsModalOpen(false);
+                    handleClose(true);
+                  }
+                )}
+              </div>
+            </FocusTrap>
           </ReactModal>
         )}
       </>
