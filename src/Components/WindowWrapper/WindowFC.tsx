@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { AnimatePresence, useIsPresent } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import AnimatedLayout, { AnimatedLayoutVariants } from "./AnimatedLayout";
@@ -48,21 +48,13 @@ const WindowFC =
     const setModalOpeningCondition = (condition: () => boolean): void =>
       void (modalCondition.current = condition);
 
-    useEffect(() => {
-      function closeOnESC(event: KeyboardEvent) {
-        if (event.key === "Escape") handleClose();
-      }
-
-      document.addEventListener("keydown", closeOnESC);
-      return () => document.removeEventListener("keydown", closeOnESC);
-    }, []);
-
     return (
       <>
         <FocusTrap
           paused={isModalOpen}
           focusTrapOptions={{
             fallbackFocus: document.body,
+            escapeDeactivates: false,
           }}
         >
           <div
@@ -70,6 +62,9 @@ const WindowFC =
             onClick={(e) => {
               if ((e.target as HTMLElement).className === "window-wrapper")
                 handleClose();
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") handleClose();
             }}
           >
             <AnimatedLayout variants={windowProps?.animationTriggers}>
