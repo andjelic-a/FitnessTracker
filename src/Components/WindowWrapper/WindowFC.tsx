@@ -1,4 +1,4 @@
-import React, { RefObject, useRef, useState } from "react";
+import React, { RefObject, useEffect, useRef, useState } from "react";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
 import { AnimatePresence, useIsPresent } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -52,6 +52,15 @@ const WindowFC =
       void (modalCondition.current = condition);
 
     useOutsideClick(wrapperRef, handleClose, "left");
+
+    useEffect(() => {
+      function closeOnESC(event: KeyboardEvent) {
+        if (event.key === "Escape") handleClose();
+      }
+
+      document.addEventListener("keydown", closeOnESC);
+      return () => document.removeEventListener("keydown", closeOnESC);
+    }, []);
 
     return (
       <>
