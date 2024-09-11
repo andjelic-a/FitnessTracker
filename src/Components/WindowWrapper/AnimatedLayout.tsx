@@ -1,4 +1,3 @@
-import "./WindowWrapper.scss";
 import { motion as Motion, Variant, Variants } from "framer-motion";
 import { ReactNode, useMemo } from "react";
 

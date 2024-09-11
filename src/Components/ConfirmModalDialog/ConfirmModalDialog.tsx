@@ -1,6 +1,7 @@
 import "./ConfirmModalDialog.scss";
 import ReactModal from "react-modal";
 import React from "react";
+import FocusTrap from "focus-trap-react";
 
 type ConfirmModalDialog = {
   children: React.ReactNode;
@@ -36,18 +37,20 @@ export default function ConfirmModalDialog({
 
       <h2>{children}</h2>
 
-      <div className="modal-buttons-container">
-        <button
-          onClick={() => {
-            console.log("deny");
-            onDeny();
-          }}
-        >
-          No
-        </button>
+      <FocusTrap>
+        <div className="modal-buttons-container">
+          <button
+            onClick={() => {
+              console.log("deny");
+              onDeny();
+            }}
+          >
+            No
+          </button>
 
-        <button onClick={onConfirm}>Yes</button>
-      </div>
+          <button onClick={onConfirm}>Yes</button>
+        </div>
+      </FocusTrap>
     </ReactModal>
   );
 }

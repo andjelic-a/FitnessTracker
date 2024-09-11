@@ -13,7 +13,7 @@ import CurrentEditingWorkoutSetsContext from "../../Contexts/CurrentEditingWorko
 import extractSets from "../../Utility/ExtractSetsFromWorkout";
 
 const WorkoutEditor = WindowFC(
-  ({}, wrapperRef, onClose, setModalConfirmationOpeningCondition) => {
+  ({}, onClose, setModalConfirmationOpeningCondition) => {
     const loaderData = useLoaderData<typeof workoutDisplayLoader>();
 
     const [isPublic, setIsPublic] = useState<boolean>(false);
@@ -24,6 +24,7 @@ const WorkoutEditor = WindowFC(
     const originalWorkout = useRef<Schema<"DetailedWorkoutResponseDTO"> | null>(
       null
     );
+    const wrapperRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
       setModalConfirmationOpeningCondition?.(

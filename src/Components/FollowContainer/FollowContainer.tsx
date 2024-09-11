@@ -17,7 +17,7 @@ type FollowContainerProps = {
 };
 
 const FollowContainer = WindowFC<FollowContainerProps>(
-  ({ followersOrFollowing }, wrapperRef) => {
+  ({ followersOrFollowing }) => {
     const navigate = useNavigate();
 
     const [searchParams, setSearchParams] = useSearchParams();
@@ -114,7 +114,6 @@ const FollowContainer = WindowFC<FollowContainerProps>(
       <div
         id="follow-container"
         className={`follow-container ${!followersOrFollowing ? "hidden" : ""}`}
-        ref={wrapperRef}
       >
         <div className="follow-container-header">
           {followersOrFollowing === "followers" ? "Followers" : "Following"}
@@ -140,16 +139,16 @@ const FollowContainer = WindowFC<FollowContainerProps>(
                 : loaderData.following
             }
           >
-            {(userDTOs) => {
+            {(userDTOs: Schema<"SimpleUserResponseDTO">[]) => {
               return userDTOs.map((x) => (
                 <div
                   className="follow-container-user"
-                  key={x.id}
-                  onClick={() => void navigate(`/user/${x.id}`)}
+                  key={x.username}
+                  onClick={() => void navigate(`/user/${x.username}`)}
                 >
                   <img
                     src={x.image ?? "/DefaultProfilePicture.png"}
-                    alt={`Profile picture of a user named ${x.name}`}
+                    alt={`Profile picture of a user named ${x.username}`}
                   />
                   <p>{x.name}</p>
                 </div>
@@ -161,28 +160,30 @@ const FollowContainer = WindowFC<FollowContainerProps>(
     );
   },
   {
-    enter: {
-      position: "absolute",
-      top: "0",
-      left: "100%",
-      x: "-100%",
-      opacity: 1,
-      scaleY: 1,
-    },
-    exit: {
-      position: "absolute",
-      top: "0",
-      left: "100%",
-      x: "0",
-      opacity: 0.7,
-    },
-    hidden: {
-      position: "absolute",
-      top: "0",
-      left: "100%",
-      x: "0",
-      opacity: 0.7,
-      scaleY: 0.9,
+    animationTriggers: {
+      enter: {
+        position: "absolute",
+        top: "0",
+        left: "100%",
+        x: "-100%",
+        opacity: 1,
+        scaleY: 1,
+      },
+      exit: {
+        position: "absolute",
+        top: "0",
+        left: "100%",
+        x: "0",
+        opacity: 0.7,
+      },
+      hidden: {
+        position: "absolute",
+        top: "0",
+        left: "100%",
+        x: "0",
+        opacity: 0.7,
+        scaleY: 0.9,
+      },
     },
   }
 );
