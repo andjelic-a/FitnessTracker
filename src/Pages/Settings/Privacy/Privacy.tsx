@@ -57,7 +57,7 @@ export default function Privacy() {
   }
 
   return (
-    <div className="privacy">
+    <div className="settings-tab privacy">
       <h3>Privacy</h3>
 
       <div className="privacy-container">

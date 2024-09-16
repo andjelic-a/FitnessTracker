@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 import WindowFC from "../../Components/WindowWrapper/WindowFC";
-import EditProfile from "../../Components/Settings/EditProfile/EditProfile";
-import Authentication from "../../Components/Settings/Authentication/Authentication";
-import Privacy from "../../Components/Settings/Privacy/Privacy";
+import EditProfile from "./EditProfile/EditProfile";
+import Authentication from "./Authentication/Authentication";
+import Privacy from "./Privacy/Privacy";
 import { logout } from "../../Data/User";
 import "./Settings.scss";
 import {
@@ -78,7 +78,7 @@ const Settings = WindowFC(({}, wrapperRef, close) => {
       <InPortal node={tabPortals["auth"]} children={tabNodes["auth"]} />
       <InPortal node={tabPortals["privacy"]} children={tabNodes["privacy"]} />
 
-      <div className="settings">
+      <div className="settings-sidebar">
         <div onClick={() => setOpenTab("edit")} className="settings-item">
           Edit profile
         </div>
@@ -87,7 +87,7 @@ const Settings = WindowFC(({}, wrapperRef, close) => {
           Authentication
         </div>
 
-        <div className="settings-item" onClick={() => setOpenTab("privacy")}>
+        <div onClick={() => setOpenTab("privacy")} className="settings-item">
           Privacy
         </div>
 
