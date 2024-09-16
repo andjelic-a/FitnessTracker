@@ -13,7 +13,7 @@ import {
 } from "react-reverse-portal";
 
 type SettingsTab = "edit" | "auth" | "privacy";
-const Settings = WindowFC(({}, wrapperRef, close) => {
+const Settings = WindowFC(({}, close) => {
   const [openTab, setOpenTab] = useState<SettingsTab>("edit");
 
   useEffect(() => {
@@ -73,7 +73,7 @@ const Settings = WindowFC(({}, wrapperRef, close) => {
   );
 
   return (
-    <div ref={wrapperRef} className="settings-container">
+    <div className="settings-container">
       <InPortal node={tabPortals["edit"]} children={tabNodes["edit"]} />
       <InPortal node={tabPortals["auth"]} children={tabNodes["auth"]} />
       <InPortal node={tabPortals["privacy"]} children={tabNodes["privacy"]} />

@@ -4,11 +4,11 @@ import useLoaderData from "../../BetterRouter/UseLoaderData";
 import startedWorkoutLoader from "./StartedWorkoutLoader";
 import Async from "../../Components/Async/Async";
 
-const StartedWorkout = WindowFC(({}, wrapperRef) => {
+const StartedWorkout = WindowFC(() => {
   const loaderData = useLoaderData<typeof startedWorkoutLoader>();
 
   return (
-    <div ref={wrapperRef} className="started-workout">
+    <div className="started-workout">
       <Async await={loaderData?.todaysWorkout}>
         {(workout) => {
           if (workout?.code !== "OK") return null;
