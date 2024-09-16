@@ -6,6 +6,7 @@ export type ProfileData = {
   latestWeekOfActivity: Promise<
     APIResponse<"/api/user/me/streak/week/{date}", "get">
   >;
+  pins: Promise<APIResponse<"/api/user/me/pins", "get">>;
 };
 
 let profileCache: ProfileData | null = null;

@@ -1,0 +1,84 @@
+@import "../../Palette.scss";
+
+.settings-container {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  width: 90vw;
+  background-color: $dark-200;
+  border-radius: 1rem;
+
+  .settings-sidebar {
+    width: 40rem;
+    height: 100%;
+    padding: 2rem 0;
+
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    &::after {
+      content: "";
+      display: block;
+      position: absolute;
+
+      right: 0;
+      top: 50%;
+      transform: translate(0, -50%);
+      height: 95%;
+      width: 3px;
+      background-color: $dark-300;
+    }
+
+    .settings-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 5rem;
+      border-bottom: 1px solid $dark-300;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $dark-300;
+      }
+
+      &:last-child {
+        border: none;
+      }
+    }
+  }
+
+  .settings-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: 0.3s;
+    overflow-y: auto;
+    width: 100%;
+    max-height: 50rem;
+    border-radius: 0 1rem 10rem 0;
+    padding-top: 3rem;
+
+    h3 {
+      font-size: 2.8rem;
+      font-weight: 500;
+    }
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $dark-200;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $dark-500;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: $dark-600;
+    }
+  }
+}

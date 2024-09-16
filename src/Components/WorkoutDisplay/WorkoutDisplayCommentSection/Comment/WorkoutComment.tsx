@@ -7,6 +7,7 @@ import formatDateSince from "../../../../Utility/FormatDateSince";
 import CommentInputField from "../CommentInputField/CommentInputField";
 import { getProfileCache } from "../../../../Pages/Profile/ProfileCache";
 import { AnimatePresence, motion } from "framer-motion";
+import formatCount from "../../../../Utility/FormatCount";
 
 type WorkoutCommentProps = {
   comment: Schema<"SimpleWorkoutCommentResponseDTO">;
@@ -318,7 +319,7 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
                   onClick={handleLikeClick}
                   className={`like-btn ${isLiked ? "active" : ""}`}
                 />
-                {likeCount > 0 && <p>{likeCount}</p>}
+                {likeCount > 0 && <p>{formatCount(likeCount)}</p>}
               </div>
               <button className="reply-btn" onClick={handleReplyBtnClick}>
                 Reply
@@ -344,13 +345,13 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
               ))}
 
             {!props.isReply && replyCount > 0 && (
-              <>
+              <> 
                 <div
                   className="reply-count-container"
                   onClick={handleRepliesClick}
                 >
                   <Icon name={`caret-${repliesExpanded ? "up" : "down"}`} />
-                  <p>{replyCount} replies</p>
+                  <p>{formatCount(replyCount)} replies</p>
                 </div>
 
                 <AnimatePresence>

@@ -59,3 +59,8 @@ body {
 .drag-overlay * {
   pointer-events: none;
 }
+
+.dragging,
+.drag-overlay {
+  cursor: grabbing;
+}

@@ -10,6 +10,7 @@ import ProfileWorkoutTabs from "../../Components/ProfileWorkoutTabs/ProfileWorko
 import { useState } from "react";
 import { NewWorkoutsContext } from "../../Contexts/NewWorkoutsContext";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
+import Pins from "../../Components/Pins/Pins";
 
 export default function Profile() {
   const loaderData = useLoaderData<typeof profileLoader>();
@@ -38,6 +39,14 @@ export default function Profile() {
                 <ProfileHeader user={loadedUserData.content} />
 
                 <div className="profile-body">
+                  <Async await={loaderData.pins}>
+                    {(pins) => {
+                      if (pins.code !== "OK") return null;
+
+                      return <Pins pins={pins.content} />;
+                    }}
+                  </Async>
+
                   <ProfileWorkoutTabs
                     latestActivity={loaderData.latestWeekOfActivity.then(
                       (x) => (x.code === "OK" ? x.content : null)!

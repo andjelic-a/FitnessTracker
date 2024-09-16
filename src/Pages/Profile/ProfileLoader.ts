@@ -33,6 +33,7 @@ const profileLoader = createLoader(async () => {
         })(),
       },
     }),
+    pins: sendAPIRequest("/api/user/me/pins", { method: "get" }),
   };
 
   setProfileCache(newData);

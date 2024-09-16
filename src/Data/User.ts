@@ -91,7 +91,13 @@ export async function register(
   return true;
 }
 
-export async function logout(): Promise<void> {
+export async function logout(clientSideOnly: boolean = false): Promise<void> {
+  if (clientSideOnly) {
+    localStorage.removeItem("token");
+    window.location.reload();
+    return;
+  }
+
   const bearer = await getJWT();
   if (bearer === null) return;
   sendAPIRequest(
@@ -104,4 +110,5 @@ export async function logout(): Promise<void> {
   );
 
   localStorage.removeItem("token");
+  window.location.reload();
 }

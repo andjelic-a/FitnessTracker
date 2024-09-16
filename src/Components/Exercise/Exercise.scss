@@ -1,0 +1,123 @@
+@import "../../Palette.scss";
+
+.exercise {
+  position: absolute;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  width: 80rem;
+  height: 50rem;
+  top: 0;
+  left: 0;
+  background-color: $dark-200;
+  border-radius: 0.5rem;
+  overflow-y: scroll;
+  z-index: 0;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.2s linear;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $dark-200;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $dark-500;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: $dark-600;
+  }
+}
+
+.exercise-open {
+  visibility: visible;
+  opacity: 1;
+  z-index: 2;
+}
+
+.exercise-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  min-height: 8rem;
+  border-bottom: 5px solid $dark-500;
+  margin-bottom: 5rem;
+  margin-top: 1rem;
+  font-size: 2rem;
+}
+
+.exercise-header-exit {
+  position: fixed;
+  right: 1.7rem;
+  top: 1.7rem;
+  font-size: 2.8rem;
+  cursor: pointer;
+
+  &:hover {
+    color: $primary-300;
+  }
+}
+
+.exercise-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 90%;
+  margin-bottom: 2rem;
+
+  & .exercise-body-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50rem;
+    height: 30rem;
+    border-radius: 1rem;
+    background-color: white;
+    margin-bottom: 5rem;
+
+    & img {
+      height: 30rem;
+    }
+  }
+
+  & .exercise-body-muscles {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    font-size: 1.8rem;
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 4rem;
+
+    & div {
+      width: 20rem;
+      height: auto;
+      border-radius: 0.2rem;
+      border: none;
+      color: white;
+
+      & h3 {
+        color: $dark-600;
+      }
+    }
+  }
+
+  & .exercise-body-description {
+    margin-top: 2rem;
+    font-size: 1.8rem;
+    padding: 0.5rem;
+
+    & h3 {
+      color: $dark-600;
+    }
+  }
+}
