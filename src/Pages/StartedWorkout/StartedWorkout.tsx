@@ -4,14 +4,38 @@ import startedWorkoutLoader from "./StartedWorkoutLoader";
 import Async from "../../Components/Async/Async";
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/scss/alice-carousel.scss";
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useMemo, useRef, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import { extractSetsNoMapping } from "../../Utility/ExtractSetsFromWorkout";
 import StartedWorkoutSet from "./StartedWorkoutSet";
+import sendAPIRequest from "../../Data/SendAPIRequest";
+import { useNavigate } from "react-router-dom";
 
 export default function StartedWorkout() {
   const loaderData = useLoaderData<typeof startedWorkoutLoader>();
   const [completedSets, setCompletedSets] = useState<CompletedSet[]>([]);
+  const navigate = useNavigate();
+  const sentRequest = useRef(false);
+
+  async function handleSave() {
+    if (sentRequest.current) return;
+    sentRequest.current = true;
+
+    await sendAPIRequest("/api/user/me/split/today/completeworkout", {
+      method: "post",
+      payload: {
+        completedSets: completedSets
+          .flatMap((x) => x.sets)
+          .map((x) => ({
+            setId: x.id,
+            repsCompleted: x.reps,
+            weightUsed: x.weight,
+          })),
+      },
+    });
+
+    navigate(-1);
+  }
 
   return (
     <div className="started-workout-container">
@@ -28,6 +52,8 @@ export default function StartedWorkout() {
           );
         }}
       </Async>
+
+      <button onClick={handleSave}>Save</button>
     </div>
   );
 }

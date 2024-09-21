@@ -30,6 +30,8 @@ export default function StartedWorkoutSet({
               completedInfo?.sets.find((x) => x.id === innerSet.id) ?? null
             }
             setCompletedInfo={(newCompletedSet) => {
+              if (newCompletedSet.reps <= 0) return;
+
               const newSets = completedInfo?.sets.slice() ?? [];
               const currentIndex = newSets.findIndex(
                 (x) => x.id === newCompletedSet.id
