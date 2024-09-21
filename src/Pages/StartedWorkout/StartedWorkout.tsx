@@ -4,15 +4,14 @@ import startedWorkoutLoader from "./StartedWorkoutLoader";
 import Async from "../../Components/Async/Async";
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/scss/alice-carousel.scss";
-import { useMemo } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
-import extractSets, {
-  extractSetsNoMapping,
-} from "../../Utility/ExtractSetsFromWorkout";
+import { extractSetsNoMapping } from "../../Utility/ExtractSetsFromWorkout";
 import StartedWorkoutSet from "./StartedWorkoutSet";
 
 export default function StartedWorkout() {
   const loaderData = useLoaderData<typeof startedWorkoutLoader>();
+  const [completedSets, setCompletedSets] = useState<CompletedSet[]>([]);
 
   return (
     <div className="started-workout-container">
@@ -20,29 +19,60 @@ export default function StartedWorkout() {
         {(workout) => {
           if (workout?.code !== "OK") return null;
 
-          return <StartedWorkoutCarousel workout={workout.content} />;
+          return (
+            <StartedWorkoutCarousel
+              workout={workout.content}
+              completedSets={completedSets}
+              setCompletedSets={setCompletedSets}
+            />
+          );
         }}
       </Async>
     </div>
   );
 }
 
+export type CompletedSet = {
+  id: string;
+  sets: {
+    id: string;
+    reps: number;
+    weight: number;
+  }[];
+};
+
+type StartedWorkoutCarouselProps = {
+  workout: Schema<"DetailedWorkoutResponseDTO">;
+  completedSets: CompletedSet[];
+  setCompletedSets: Dispatch<SetStateAction<CompletedSet[]>>;
+};
+
 function StartedWorkoutCarousel({
   workout,
-}: {
-  workout: Schema<"DetailedWorkoutResponseDTO">;
-}) {
-  const items = useMemo(
-    () =>
-      extractSetsNoMapping(workout).map((x) => (
-        <StartedWorkoutSet set={x} key={x.id} />
-      )),
-    [workout]
-  );
+  completedSets,
+  setCompletedSets,
+}: StartedWorkoutCarouselProps) {
+  const sets = useMemo(() => extractSetsNoMapping(workout), [workout]);
+
+  const items = sets.map((x) => (
+    <StartedWorkoutSet
+      set={x}
+      key={x.id}
+      completedInfo={completedSets.find((y) => y.id === x.id) ?? null}
+      setCompletedInfo={(set) => {
+        setCompletedSets((sets) => {
+          const currentIndex = sets.findIndex((x) => x.id === set.id);
+          if (currentIndex >= 0) sets[currentIndex] = set;
+          else sets.push(set);
+
+          return sets.slice();
+        });
+      }}
+    />
+  ));
 
   return (
     <AliceCarousel
-      mouseTracking
       keyboardNavigation
       items={items}
       renderPrevButton={({ isDisabled }) => (
@@ -51,7 +81,6 @@ function StartedWorkoutCarousel({
       renderNextButton={({ isDisabled }) => (
         <button disabled={isDisabled}>Next</button>
       )}
-      renderSlideInfo={({ item, itemsCount }) => `${item}\\${itemsCount}`}
     />
   );
 }

@@ -9,7 +9,36 @@
   align-items: center;
 
   .started-workout-set {
-    background-color: blueviolet;
-    height: 15rem;
+    padding: 5rem;
+
+    display: grid;
+    gap: 2rem;
+    grid-template-rows: max-content 1fr;
+    grid-template-columns: max-content 1fr;
+    grid-template-areas: "image title" "image sets";
+
+    h1 {
+      font-size: 3rem;
+      grid-area: title;
+    }
+
+    img {
+      width: 40rem;
+      grid-area: image;
+    }
+
+    .started-sets {
+      grid-area: sets;
+
+      .started-set {
+        display: flex;
+        gap: 2rem;
+
+        .set-info {
+          display: flex;
+          gap: 1rem;
+        }
+      }
+    }
   }
 }
