@@ -159,7 +159,7 @@ export default function ProfileWorkoutTabs({
                 split.workouts.findIndex(
                   (x) => x.day === new Date().getUTCDay()
                 ) !== -1 && (
-                  <button onClick={() => navigate("started-workout")}>
+                  <button onClick={() => navigate("/started-workout")}>
                     Start today's workout
                   </button>
                 )}

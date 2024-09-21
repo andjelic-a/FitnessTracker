@@ -84,11 +84,6 @@ const routes: RouteObject[] = [
         loader: profileLoader,
         children: [
           {
-            path: "started-workout",
-            element: <StartedWorkout />,
-            loader: startedWorkoutLoader,
-          },
-          {
             path: "workout/:id",
             element: <WorkoutDisplay />,
             loader: workoutDisplayLoader,
@@ -118,6 +113,11 @@ const routes: RouteObject[] = [
             element: <Settings />,
           },
         ],
+      },
+      {
+        path: "started-workout",
+        element: <StartedWorkout />,
+        loader: startedWorkoutLoader,
       },
       {
         path: "authentication",
