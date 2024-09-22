@@ -110,7 +110,7 @@
 
       &:hover,
       &:focus-visible {
-        background-color: transparentize($color: $dark-500, $amount: 0.7);
+        background-color: adjust-color($color: $dark-500, $alpha: -0.7);
       }
 
       &.selected {

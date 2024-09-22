@@ -1,11 +1,6 @@
 @import "../../Palette.scss";
 
 .workout-display-container {
-  &,
-  * {
-    user-select: none;
-  }
-
   position: relative;
   background-color: $dark-200;
   border-radius: 0.5rem;
@@ -15,6 +10,11 @@
   max-width: 85vw;
   height: 50rem;
   max-height: 85svh;
+
+  &,
+  * {
+    user-select: none;
+  }
 
   &:has(.workout-display-comment-section) .workout-display {
     overflow-y: hidden;
