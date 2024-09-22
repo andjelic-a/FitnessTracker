@@ -10,18 +10,58 @@ import { extractSetsNoMapping } from "../../Utility/ExtractSetsFromWorkout";
 import StartedWorkoutSet from "./StartedWorkoutSet";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import { useNavigate } from "react-router-dom";
+import ConfirmModalDialog from "../../Components/ConfirmModalDialog/ConfirmModalDialog";
 
 export default function StartedWorkout() {
   const loaderData = useLoaderData<typeof startedWorkoutLoader>();
   const [completedSets, setCompletedSets] = useState<CompletedSet[]>([]);
   const navigate = useNavigate();
   const sentRequest = useRef(false);
+  const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] =
+    useState(false);
+  const [validationStatus, setValidationStatus] = useState<{
+    status: "invalid" | "not-complete" | "valid";
+    completedPercent: number;
+  }>({
+    status: "invalid",
+    completedPercent: -1,
+  });
 
-  async function handleSave() {
+  async function validateSets(): Promise<"invalid" | "not-complete" | "valid"> {
+    if (completedSets.length === 0) return "invalid";
+
+    const workoutResponse = await loaderData?.todaysWorkout;
+    if (workoutResponse?.code !== "OK") return "invalid";
+
+    const sets = workoutResponse.content.sets;
+    const flatCompletedSets = completedSets.flatMap((x) => x.sets);
+
+    let status: "not-complete" | "valid" =
+      sets.length > flatCompletedSets.length ? "not-complete" : "valid";
+
+    setValidationStatus({
+      status: status,
+      completedPercent: Math.round(
+        (flatCompletedSets.length / sets.length) * 100
+      ),
+    });
+
+    return status;
+  }
+
+  async function handleSaveBtnClick() {
     if (sentRequest.current) return;
-    sentRequest.current = true;
+    const validation = await validateSets();
 
-    await sendAPIRequest("/api/user/me/split/today/completeworkout", {
+    if (validation === "invalid") return;
+    setIsConfirmationDialogOpen(true);
+  }
+
+  function save() {
+    if (sentRequest.current) return;
+
+    sentRequest.current = true;
+    return sendAPIRequest("/api/user/me/split/today/completeworkout", {
       method: "post",
       payload: {
         completedSets: completedSets
@@ -33,8 +73,6 @@ export default function StartedWorkout() {
           })),
       },
     });
-
-    navigate(-1);
   }
 
   return (
@@ -51,9 +89,47 @@ export default function StartedWorkout() {
                 setCompletedSets={setCompletedSets}
               />
 
-              <button onClick={handleSave} className="save-button">
+              <button onClick={handleSaveBtnClick} className="save-button">
                 Save
               </button>
+
+              <ConfirmModalDialog
+                isOpen={isConfirmationDialogOpen}
+                onConfirm={async () => {
+                  await save();
+                  navigate(-1);
+                }}
+                onDeny={() => setIsConfirmationDialogOpen(false)}
+                confirmBtnText="Finish"
+                denyBtnText={
+                  validationStatus.status === "valid"
+                    ? "Not yet"
+                    : validationStatus.completedPercent >= 50
+                    ? "Keep pushing"
+                    : "Keep going"
+                }
+              >
+                {validationStatus.status === "valid" ? (
+                  <>
+                    <span>Congratulations on completing your workout!</span>
+                    <span>Are you ready to finish and save your progress?</span>
+                  </>
+                ) : validationStatus.completedPercent >= 50 ? (
+                  <>
+                    <span>You're almost there!</span>
+                    <span>You still have some sets remaining.</span>
+                    <span>
+                      Would you like to finish or keep pushing through?
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span>Great effort!</span>
+                    <span>You've completed part of your workout.</span>
+                    <span>Do you want to finish now or keep going?</span>
+                  </>
+                )}
+              </ConfirmModalDialog>
             </>
           );
         }}
