@@ -5,18 +5,20 @@
   height: 100%;
   background-color: $dark-100;
 
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-
   .started-workout-set {
-    padding: 5rem;
+    padding: 5rem 5rem 0 5rem;
 
     display: grid;
     gap: 2rem;
     grid-template-rows: max-content 1fr;
     grid-template-columns: max-content 1fr;
     grid-template-areas: "image title" "image sets";
+
+    @media screen and (max-width: 799.98px) {
+      grid-template-rows: max-content max-content 1fr;
+      grid-template-columns: 1fr;
+      grid-template-areas: "image" "title" "sets";
+    }
 
     a {
       grid-area: title;
@@ -36,6 +38,7 @@
 
     img {
       width: 40rem;
+      max-width: 100%;
       grid-area: image;
     }
 
@@ -100,5 +103,13 @@
       cursor: not-allowed;
       background-color: $primary-200;
     }
+  }
+
+  .save-button {
+    position: absolute;
+    margin: 2rem;
+    right: 0;
+    font-size: 1.5rem;
+    padding: 0.5rem 10rem;
   }
 }
