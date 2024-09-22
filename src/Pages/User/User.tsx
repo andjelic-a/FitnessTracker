@@ -1,13 +1,11 @@
 import "./User.scss";
 import { useEffect, useState } from "react";
-import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
 import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
 import userLoader from "./UserLoader";
 import Async from "../../Components/Async/Async";
 import AnimatedOutlet from "../../Components/WindowWrapper/AnimatedOutlet";
-import { useNavigate } from "react-router-dom";
 
 export default function UserPage() {
   const data = useLoaderData<typeof userLoader>();
@@ -21,13 +19,13 @@ export default function UserPage() {
   }, [data]);
 
   async function onToggleFollow(
-    userId: string,
+    username: string,
     isFollowingFromRequest: boolean,
     followersFromRequest: number
   ) {
     sendAPIRequest("/api/user/{id}/follow", {
       method: isFollowing ?? isFollowingFromRequest ? "delete" : "post",
-      parameters: { id: userId },
+      parameters: { id: username },
     });
 
     setFollowers(
@@ -37,7 +35,7 @@ export default function UserPage() {
     setIsFollowing(!(isFollowing ?? isFollowingFromRequest));
   }
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   return (
     <Async await={data.user}>
@@ -47,14 +45,7 @@ export default function UserPage() {
         return (
           <div className="profile">
             <div className="profile-user-container">
-              <ProfileHeader
-                image={userData.content.image}
-                username={userData.content.name}
-                workouts={userData.content.totalCompletedWorkouts}
-                followers={followers ?? userData.content.followers}
-                following={userData.content.following}
-                setFollowersOrFollowing={(x) => void navigate(x as string)}
-              />
+              {/* <ProfileHeader user={userData.content} /> */}
 
               <button
                 onClick={() => {
@@ -64,7 +55,7 @@ export default function UserPage() {
                   }
 
                   onToggleFollow(
-                    userData.content.id,
+                    userData.content.username,
                     userData.content.isFollowing,
                     userData.content.followers
                   );
@@ -85,8 +76,6 @@ export default function UserPage() {
 
                   return (
                     <ActivityGrid
-                      userId={userData.content.id}
-                      latestActivity={streakData.content}
                       joinedAt={new Date(userData.content.joinedAt)}
                     />
                   );
