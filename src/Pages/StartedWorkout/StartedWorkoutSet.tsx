@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
+import { CompositionEvent, useRef, useState } from "react";
 import { extractSetsNoMapping } from "../../Utility/ExtractSetsFromWorkout";
 import { CompletedSet } from "./StartedWorkout";
+import { Link } from "react-router-dom";
 
 type StartedWorkoutSetsProps = {
   set: ReturnType<typeof extractSetsNoMapping>[number];
@@ -20,7 +21,9 @@ export default function StartedWorkoutSet({
         alt={`Image of exercise named ${set.exercise.name}`}
       />
 
-      <h1>{set.exercise.name}</h1>
+      <Link to={`/exercises/${set.exercise.id}`}>
+        <h1>{set.exercise.name}</h1>
+      </Link>
 
       <div className="started-sets">
         {set.sets.map((innerSet) => (
@@ -68,6 +71,17 @@ function SingleSet({
   const repsInputRef = useRef<HTMLInputElement>(null);
   const weightInputRef = useRef<HTMLInputElement>(null);
 
+  function handleBeforeInput(e: CompositionEvent<HTMLInputElement>) {
+    const str = e.currentTarget.value;
+    const sub = e.data;
+    const posStart = e.currentTarget.selectionStart || 0;
+    const posEnd = e.currentTarget.selectionEnd || posStart;
+    const nextValue = `${str.slice(0, posStart)}${sub}${str.slice(posEnd)}`;
+
+    const parsed = +nextValue;
+    if (isNaN(parsed) || parsed <= 0) e?.preventDefault();
+  }
+
   return (
     <div className="started-set" key={set.id}>
       <p className="set-info">
@@ -79,7 +93,11 @@ function SingleSet({
             : "Failure"}
         </span>
 
-        <span>{`${set.topRepRange}-${set.bottomRepRange}`}</span>
+        <span>
+          {set.bottomRepRange === set.topRepRange
+            ? set.bottomRepRange
+            : `${set.bottomRepRange}-${set.topRepRange}`}
+        </span>
       </p>
 
       {isEditing ? (
@@ -89,6 +107,9 @@ function SingleSet({
             autoComplete="off"
             defaultValue={completedInfo?.reps}
             ref={repsInputRef}
+            placeholder="Completed reps: "
+            name="reps"
+            onBeforeInput={handleBeforeInput}
           />
 
           <input
@@ -96,6 +117,9 @@ function SingleSet({
             autoComplete="off"
             defaultValue={completedInfo?.weight}
             ref={weightInputRef}
+            placeholder="Used weight in KG: "
+            name="weight"
+            onBeforeInput={handleBeforeInput}
           />
         </div>
       ) : !completedInfo ? (
