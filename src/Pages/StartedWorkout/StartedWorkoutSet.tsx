@@ -79,7 +79,7 @@ function SingleSet({
     const nextValue = `${str.slice(0, posStart)}${sub}${str.slice(posEnd)}`;
 
     const parsed = +nextValue;
-    if (isNaN(parsed) || parsed <= 0) e?.preventDefault();
+    if (isNaN(parsed) || parsed < 0) e?.preventDefault();
   }
 
   return (
@@ -107,20 +107,25 @@ function SingleSet({
             autoComplete="off"
             defaultValue={completedInfo?.reps}
             ref={repsInputRef}
-            placeholder="Completed reps: "
             name="reps"
             onBeforeInput={handleBeforeInput}
+            placeholder="0"
+            autoFocus
           />
+
+          <span> x </span>
 
           <input
             type="text"
             autoComplete="off"
             defaultValue={completedInfo?.weight}
             ref={weightInputRef}
-            placeholder="Used weight in KG: "
             name="weight"
             onBeforeInput={handleBeforeInput}
+            placeholder="0"
           />
+
+          <span>KG</span>
         </div>
       ) : !completedInfo ? (
         <></>
@@ -133,6 +138,7 @@ function SingleSet({
       )}
 
       <button
+        className="set-complete-button"
         onClick={() => {
           if (isEditing)
             setCompletedInfo({

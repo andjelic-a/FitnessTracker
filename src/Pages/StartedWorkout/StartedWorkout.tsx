@@ -44,16 +44,20 @@ export default function StartedWorkout() {
           if (workout?.code !== "OK") return null;
 
           return (
-            <StartedWorkoutCarousel
-              workout={workout.content}
-              completedSets={completedSets}
-              setCompletedSets={setCompletedSets}
-            />
+            <>
+              <StartedWorkoutCarousel
+                workout={workout.content}
+                completedSets={completedSets}
+                setCompletedSets={setCompletedSets}
+              />
+
+              <button onClick={handleSave} className="save-button">
+                Save
+              </button>
+            </>
           );
         }}
       </Async>
-
-      <button onClick={handleSave}>Save</button>
     </div>
   );
 }
@@ -102,10 +106,14 @@ function StartedWorkoutCarousel({
       keyboardNavigation
       items={items}
       renderPrevButton={({ isDisabled }) => (
-        <button disabled={isDisabled}>Prev</button>
+        <button className="prev-button" disabled={isDisabled}>
+          Prev
+        </button>
       )}
       renderNextButton={({ isDisabled }) => (
-        <button disabled={isDisabled}>Next</button>
+        <button className="next-button" disabled={isDisabled}>
+          Next
+        </button>
       )}
     />
   );

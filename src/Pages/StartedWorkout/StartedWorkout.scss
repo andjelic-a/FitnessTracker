@@ -18,9 +18,20 @@
     grid-template-columns: max-content 1fr;
     grid-template-areas: "image title" "image sets";
 
-    h1 {
-      font-size: 3rem;
+    a {
       grid-area: title;
+      color: #fff;
+      text-decoration: none;
+      outline: none;
+
+      h1 {
+        font-size: 3rem;
+      }
+
+      &:hover,
+      &:focus-visible {
+        color: $primary-400;
+      }
     }
 
     img {
@@ -30,6 +41,9 @@
 
     .started-sets {
       grid-area: sets;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
 
       .started-set {
         display: flex;
@@ -39,7 +53,52 @@
           display: flex;
           gap: 1rem;
         }
+
+        .complete-inputs {
+          input {
+            width: 5rem;
+            padding: 0.25rem 0.7rem;
+            outline: none;
+            border: none;
+            border-bottom: 1px solid #fff;
+            background: none;
+            color: #fff;
+            font-size: 1.5rem;
+            text-align: end;
+
+            &:focus-within {
+              outline: 1px solid $primary-400;
+            }
+          }
+        }
       }
+    }
+  }
+
+  .prev-button,
+  .next-button,
+  .save-button,
+  .set-complete-button {
+    border: none;
+    outline: none;
+    background: none;
+    color: #fff;
+    cursor: pointer;
+
+    background-color: $primary-300;
+    padding: 0.5rem 2rem;
+    border-radius: 1rem;
+    font-size: 1.4rem;
+
+    &:hover:not(:disabled),
+    &:focus-visible {
+      background-color: $primary-400;
+      outline: 1px solid #fff;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      background-color: $primary-200;
     }
   }
 }
