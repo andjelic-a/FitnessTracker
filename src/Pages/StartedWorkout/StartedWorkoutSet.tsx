@@ -21,7 +21,7 @@ export default function StartedWorkoutSet({
         alt={`Image of exercise named ${set.exercise.name}`}
       />
 
-      <Link to={`/exercises/${set.exercise.id}`}>
+      <Link target="_blank" to={`/exercises/${set.exercise.id}`}>
         <h1>{set.exercise.name}</h1>
       </Link>
 
