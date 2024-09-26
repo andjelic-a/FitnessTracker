@@ -65,21 +65,21 @@ const Pins = memo<PinsProps>(({ pins }) => {
       deletedPins.length === 0
         ? Promise.resolve()
         : sendAPIRequest(`/api/user/pins`, {
-            method: "delete",
-            payload: {
-              deletedPins,
-            },
-          });
+          method: "delete",
+          payload: {
+            deletedPins,
+          },
+        });
 
     const createWorkoutPins = () =>
       createdPins.length === 0
         ? Promise.resolve()
         : sendAPIRequest(`/api/user/pins`, {
-            method: "post",
-            payload: {
-              newPins: createdPins,
-            },
-          });
+          method: "post",
+          payload: {
+            newPins: createdPins,
+          },
+        });
 
     const closeMenu = () => {
       isWaitingForResponse.current = false;
@@ -160,11 +160,18 @@ const Pins = memo<PinsProps>(({ pins }) => {
     >
       <div className="pins-container">
         <div className="pins-header">
-          {pins.length > 0 && <h1>Pinned</h1>}
-          <button draggable="false" className={`${pins.length > 0 ? "pins-header-btn" : ""}`} onClick={handleOpenMenu}>Customize your pins</button>
+          {selectedPins.length > 0 ? <h1>Pinned</h1> : <h1></h1>}
+          <button
+            draggable="false"
+            className={`customize-button ${selectedPins.length > 0 ? "upper-right" : "lower-right"}`}
+            onClick={handleOpenMenu}
+          >
+            Customize your pins
+          </button>
         </div>
 
-        {pins.length > 0 && <div className="pins-body" ref={pinsBodyRef}>
+
+        {selectedPins.length > 0 && <div className="pins-body" ref={pinsBodyRef}>
           <SortableContext items={selectedPins.map((x) => x.id)}>
             {selectedPins.map((x) => (
               <Pin

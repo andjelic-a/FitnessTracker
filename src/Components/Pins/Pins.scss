@@ -18,17 +18,15 @@
       font-weight: 100;
     }
 
-    & button {
+    & .customize-button {
       position: absolute;
-      top: 6rem;
-      right: 0;
       font-size: 1.4rem;
-
       background: none;
       outline: none;
       border: none;
       color: rgb(190, 190, 190);
       cursor: pointer;
+      transition: text-decoration 0.3s;
 
       &:hover,
       &:focus-visible {
@@ -36,10 +34,17 @@
       }
     }
 
-    & .pins-header-btn {
-      top: calc(50% - 1.4rem/2);
+    & .upper-right {
+      top: 2rem;
+      right: 1rem;
+    }
+
+    & .lower-right {
+      bottom: -3rem;
+      right: 1rem;
     }
   }
+
 
   .pins-body {
     display: grid;
