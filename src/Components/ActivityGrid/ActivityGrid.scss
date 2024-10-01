@@ -9,7 +9,8 @@
     "body . side"
     ". . side";
 
-  max-width: 100%;
+  width: 100%;
+  max-width: 100rem;
 
   .activity-grid-header {
     grid-area: head;
@@ -30,8 +31,8 @@
 
     .activity-grid-items {
       display: grid;
-      grid-template-rows: repeat(3, 3rem);
-      grid-template-columns: repeat(18, 3rem);
+      grid-template-rows: repeat(3, 1fr);
+      grid-template-columns: repeat(18, 1fr);
       grid-auto-flow: column;
       row-gap: 1rem;
       column-gap: 1rem;
@@ -48,8 +49,16 @@
         background-color: $dark-200;
         border-radius: 5px;
 
+        aspect-ratio: 1 / 1;
         width: 100%;
-        height: 100%;
+
+        .activity-icon {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
 
         &.fill-0 {
           background-color: $dark-200;
@@ -59,22 +68,18 @@
           @for $completed from 1 through $total {
             &.fill-#{$completed}-of-#{$total} {
               $percentage: calc(100 / $total) * $completed * 1%;
-              background: linear-gradient(
-                to top,
-                $primary-300 $percentage,
-                $dark-200 $percentage
-              );
+              background: linear-gradient(to top,
+                  $primary-300 $percentage,
+                  $dark-200 $percentage );
             }
           }
         }
 
         &.fill-red {
-          background: linear-gradient(
-            to top,
-            orange,
-            $primary-100,
-            $primary-600
-          );
+          background: linear-gradient(to top,
+              orange,
+              $primary-100,
+              $primary-600 );
         }
       }
     }

@@ -37,11 +37,6 @@ export default function Pin({ pin, collapsedDescription }: PinProps) {
     >
       <div className="pin-header">
         <Link to={`/${pin.type === 0 ? "workout" : "split"}/${pin.id}`}>
-          <Icon
-            className="pin-type-marker"
-            name={pin.type === 0 ? "dumbbell" : "calendar-week"}
-          />
-
           <p>{pin.name}</p>
         </Link>
 

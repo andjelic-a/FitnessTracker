@@ -35,7 +35,7 @@
     }
 
     & .upper-right {
-      top: 2rem;
+      top: calc(50% - 0.7rem);
       right: 1rem;
     }
 
@@ -49,15 +49,13 @@
   .pins-body {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: max-content max-content max-content;
+    grid-template-rows: repeat(3,1fr);
     grid-auto-flow: row;
     gap: 1rem;
   }
 }
 
 .pin-container {
-  height: 100%;
-  width: 100%;
   padding: 1.5rem 1rem;
   background-color: $dark-100;
 
