@@ -11,7 +11,7 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    padding: 0 2rem;
+    padding: 0 1rem;
 
     & h1 {
       font-size: 2rem;
@@ -49,13 +49,15 @@
   .pins-body {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(3,1fr);
+    grid-template-rows: repeat(3,min(1fr, max-content));
     grid-auto-flow: row;
     gap: 1rem;
   }
 }
 
 .pin-container {
+  height: 9rem;
+  position: relative;
   padding: 1.5rem 1rem;
   background-color: $dark-100;
 
@@ -105,24 +107,28 @@
         font-size: 1.8rem;
       }
     }
+  }
 
-    .drag-handle {
-      outline: none;
-      border: none;
-      background: none;
-      color: #fff;
-      font-size: 2rem;
+  .drag-handle {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    outline: none;
+    border: none;
+    background: none;
+    color: #fff;
+    font-size: 2rem;
 
-      width: 2.7rem;
-      height: 2.7rem;
-      border-radius: 0.3rem;
+    width: 2.7rem;
+    height: 2.7rem;
+    border-radius: 0.3rem;
 
-      display: grid;
-      place-items: center;
+    display: grid;
+    place-items: center;
 
-      &:focus-visible {
-        outline: 1px solid $primary-300;
-      }
+    &:focus-visible {
+      outline: 1px solid $primary-300;
     }
   }
 

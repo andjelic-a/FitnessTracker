@@ -39,14 +39,6 @@ export default function Pin({ pin, collapsedDescription }: PinProps) {
         <Link to={`/${pin.type === 0 ? "workout" : "split"}/${pin.id}`}>
           <p>{pin.name}</p>
         </Link>
-
-        <button className="drag-handle" {...listeners} {...attributes}>
-          <Icon name="grip-vertical" />
-
-          <p className="accessibility-only" aria-hidden={false}>
-            Drag to reorder
-          </p>
-        </button>
       </div>
 
       {!collapsedDescription && pin.description.length > 0 && (
@@ -56,6 +48,14 @@ export default function Pin({ pin, collapsedDescription }: PinProps) {
             : pin.description}
         </div>
       )}
+
+      <button className="drag-handle" {...listeners} {...attributes}>
+        <Icon name="grip-vertical" />
+
+        <p className="accessibility-only" aria-hidden={false}>
+          Drag to reorder
+        </p>
+      </button>
     </div>
   );
 }
