@@ -6,10 +6,9 @@ import { CSS } from "@dnd-kit/utilities";
 
 type PinProps = {
   pin: Schema<"PinResponseDTO">;
-  collapsedDescription: boolean;
 };
 
-export default function Pin({ pin, collapsedDescription }: PinProps) {
+export default function Pin({ pin }: PinProps) {
   const {
     setNodeRef,
     attributes,
@@ -43,13 +42,7 @@ export default function Pin({ pin, collapsedDescription }: PinProps) {
         </Link>
       </div>
 
-      {!collapsedDescription && pin.description.length > 0 && (
-        <div className="pin-description">
-          {pin.description.length > 150
-            ? pin.description.slice(0, 75) + "..."
-            : pin.description}
-        </div>
-      )}
+      <div className="pin-description">{pin.description}</div>
 
       <div className="pin-footer">
         <div className="pin-likes">
