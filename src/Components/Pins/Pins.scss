@@ -46,11 +46,10 @@
     }
   }
 
-
   .pins-body {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(3,min(1fr, max-content));
+    grid-template-rows: repeat(3, min(1fr, max-content));
     grid-auto-flow: row;
     gap: 1rem;
   }
@@ -104,9 +103,15 @@
         margin-right: 0.5rem;
       }
 
-      p {
+      h3 {
         font-size: 1.8rem;
         font-weight: 500;
+      }
+
+      .pin-type {
+        font-size: 1.8rem;
+        font-weight: 400;
+        color: $dark-600;
       }
     }
   }
@@ -153,14 +158,14 @@
     align-items: center;
     font-weight: 600;
 
-    .pin-likes{
+    .pin-likes {
       width: 50%;
       display: flex;
       justify-content: space-evenly;
       align-items: center;
     }
 
-    .pin-favorites{
+    .pin-favorites {
       width: 50%;
       display: flex;
       justify-content: space-evenly;
