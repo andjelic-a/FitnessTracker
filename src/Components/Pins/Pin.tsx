@@ -49,6 +49,17 @@ export default function Pin({ pin, collapsedDescription }: PinProps) {
         </div>
       )}
 
+      <div className="pin-footer">
+        <div className="pin-likes">
+          <Icon name="thumbs-up" />
+          0
+        </div>
+        <div className="pin-favorites">
+          <Icon name="bookmark" />
+          0
+        </div>
+      </div>
+
       <button className="drag-handle" {...listeners} {...attributes}>
         <Icon name="grip-vertical" />
 
