@@ -4,6 +4,7 @@ import { APIResponse } from "../Types/Endpoints/ResponseParser";
 import { getJWT } from "./User";
 
 const baseAPIUrl = "http://localhost:5054";
+//const baseAPIUrl = "http://192.168.0.100:5054";
 
 type Response<
   Endpoint extends Endpoints,

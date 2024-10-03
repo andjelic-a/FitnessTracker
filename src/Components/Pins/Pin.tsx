@@ -6,10 +6,9 @@ import { CSS } from "@dnd-kit/utilities";
 
 type PinProps = {
   pin: Schema<"PinResponseDTO">;
-  collapsedDescription: boolean;
 };
 
-export default function Pin({ pin, collapsedDescription }: PinProps) {
+export default function Pin({ pin }: PinProps) {
   const {
     setNodeRef,
     attributes,
@@ -37,30 +36,30 @@ export default function Pin({ pin, collapsedDescription }: PinProps) {
     >
       <div className="pin-header">
         <Link to={`/${pin.type === 0 ? "workout" : "split"}/${pin.id}`}>
-          <Icon
-            className="pin-type-marker"
-            name={pin.type === 0 ? "dumbbell" : "calendar-week"}
-          />
-
-          <p>{pin.name}</p>
+          <h3>{pin.name}</h3>
+          &nbsp;
+          <p className="pin-type">{pin.type === 0 ? "(Workout)" : "(Split)"}</p>
         </Link>
-
-        <button className="drag-handle" {...listeners} {...attributes}>
-          <Icon name="grip-vertical" />
-
-          <p className="accessibility-only" aria-hidden={false}>
-            Drag to reorder
-          </p>
-        </button>
       </div>
 
-      {!collapsedDescription && pin.description.length > 0 && (
-        <div className="pin-description">
-          {pin.description.length > 150
-            ? pin.description.slice(0, 75) + "..."
-            : pin.description}
+      <div className="pin-description">{pin.description}</div>
+
+      <div className="pin-footer">
+        <div className="pin-likes">
+          <Icon name="thumbs-up" />0
         </div>
-      )}
+        <div className="pin-favorites">
+          <Icon name="bookmark" />0
+        </div>
+      </div>
+
+      <button className="drag-handle" {...listeners} {...attributes}>
+        <Icon name="grip-vertical" />
+
+        <p className="accessibility-only" aria-hidden={false}>
+          Drag to reorder
+        </p>
+      </button>
     </div>
   );
 }
