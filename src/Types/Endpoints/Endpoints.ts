@@ -6210,6 +6210,140 @@ type MappedEndpoints = {
         };
       };
     };
+    "/api/user/me/settings": {
+      get: {
+        tags: ["User"];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/UserSettingsResponseDTO";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/UserSettingsResponseDTO";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/UserSettingsResponseDTO";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+      put: {
+        tags: ["User"];
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateUserSettingsRequestDTO";
+              };
+            };
+            "text/json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateUserSettingsRequestDTO";
+              };
+            };
+            "application/*+json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateUserSettingsRequestDTO";
+              };
+            };
+          };
+        };
+        responses: {
+          "204": {
+            description: "No Content";
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
     "/api/user/me/split/today": {
       get: {
         tags: ["User"];
@@ -6386,7 +6520,7 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/user/me/changepassword": {
+    "/api/user/me/password": {
       patch: {
         tags: ["User"];
         requestBody: {
@@ -6404,6 +6538,115 @@ type MappedEndpoints = {
             "application/*+json": {
               schema: {
                 $ref: "#/components/schemas/UpdatePasswordUserRequestDTO";
+              };
+            };
+          };
+        };
+        responses: {
+          "204": {
+            description: "No Content";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "403": {
+            description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    "/api/user/me/email": {
+      patch: {
+        tags: ["User"];
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateUserEmailRequestDTO";
+              };
+            };
+            "text/json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateUserEmailRequestDTO";
+              };
+            };
+            "application/*+json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateUserEmailRequestDTO";
               };
             };
           };
@@ -6563,6 +6806,273 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    "/api/user/me/name": {
+      patch: {
+        tags: ["User"];
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateUserNameRequestDTO";
+              };
+            };
+            "text/json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateUserNameRequestDTO";
+              };
+            };
+            "application/*+json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateUserNameRequestDTO";
+              };
+            };
+          };
+        };
+        responses: {
+          "204": {
+            description: "No Content";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    "/api/user/me/bio": {
+      patch: {
+        tags: ["User"];
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateUserBioRequestDTO";
+              };
+            };
+            "text/json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateUserBioRequestDTO";
+              };
+            };
+            "application/*+json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateUserBioRequestDTO";
+              };
+            };
+          };
+        };
+        responses: {
+          "204": {
+            description: "No Content";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    "/api/user/me/image": {
+      patch: {
+        tags: ["User"];
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateUserImageRequestDTO";
+              };
+            };
+            "text/json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateUserImageRequestDTO";
+              };
+            };
+            "application/*+json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateUserImageRequestDTO";
+              };
+            };
+          };
+        };
+        responses: {
+          "204": {
+            description: "No Content";
+          };
+          "400": {
+            description: "Bad Request";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
             content: {
               "text/plain": {
                 schema: {
@@ -9339,6 +9849,9 @@ type MappedEndpoints = {
             type: "string";
             format: "date-time";
           };
+          gender: {
+            $ref: "#/components/schemas/Gender";
+          };
         };
         additionalProperties: false;
       };
@@ -9433,6 +9946,11 @@ type MappedEndpoints = {
           };
         };
         additionalProperties: false;
+      };
+      Gender: {
+        enum: [0, 1];
+        type: "integer";
+        format: "int32";
       };
       LoginUserRequestDTO: {
         type: "object";
@@ -9961,12 +10479,112 @@ type MappedEndpoints = {
         };
         additionalProperties: false;
       };
+      UpdateUserBioRequestDTO: {
+        type: "object";
+        properties: {
+          newBio: {
+            type: "string";
+          };
+        };
+        additionalProperties: false;
+      };
+      UpdateUserEmailRequestDTO: {
+        type: "object";
+        properties: {
+          oldEmail: {
+            type: "string";
+          };
+          newEmail: {
+            type: "string";
+          };
+        };
+        additionalProperties: false;
+      };
+      UpdateUserImageRequestDTO: {
+        type: "object";
+        properties: {
+          newImage: {
+            type: "string";
+            nullable: true;
+          };
+        };
+        additionalProperties: false;
+      };
+      UpdateUserNameRequestDTO: {
+        type: "object";
+        properties: {
+          newName: {
+            type: "string";
+          };
+        };
+        additionalProperties: false;
+      };
+      UpdateUserSettingsRequestDTO: {
+        type: "object";
+        properties: {
+          publicFollowing: {
+            type: "boolean";
+          };
+          publicCompletedWorkouts: {
+            type: "boolean";
+          };
+          publicStreak: {
+            type: "boolean";
+          };
+          publicCurrentSplit: {
+            type: "boolean";
+          };
+          publicLikedWorkouts: {
+            type: "boolean";
+          };
+          publicFavoriteWorkouts: {
+            type: "boolean";
+          };
+          publicLikedSplits: {
+            type: "boolean";
+          };
+          publicFavoriteSplits: {
+            type: "boolean";
+          };
+        };
+        additionalProperties: false;
+      };
       UserProfilePictureResponseDTO: {
         type: "object";
         properties: {
           image: {
             type: "string";
             nullable: true;
+          };
+        };
+        additionalProperties: false;
+      };
+      UserSettingsResponseDTO: {
+        type: "object";
+        properties: {
+          publicFollowing: {
+            type: "boolean";
+          };
+          publicCompletedWorkouts: {
+            type: "boolean";
+          };
+          publicStreak: {
+            type: "boolean";
+          };
+          publicCurrentSplit: {
+            type: "boolean";
+          };
+          publicLikedWorkouts: {
+            type: "boolean";
+          };
+          publicFavoriteWorkouts: {
+            type: "boolean";
+          };
+          publicLikedSplits: {
+            type: "boolean";
+          };
+          publicFavoriteSplits: {
+            type: "boolean";
           };
         };
         additionalProperties: false;

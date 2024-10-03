@@ -1,3 +1,4 @@
+import { APIResponse } from "../Types/Endpoints/ResponseParser";
 import sendAPIRequest from "./SendAPIRequest";
 
 export function isJWTExpired(jwt: string) {
@@ -12,13 +13,17 @@ export function isJWTExpired(jwt: string) {
   return exp * 1000 < Date.now();
 }
 
+let currentRefreshPromise: Promise<
+  APIResponse<"/api/user/refresh", "post">
+> | null;
+
 export async function getJWT(): Promise<string | null> {
   const jwt = localStorage.getItem("token");
   if (jwt === null) return null;
 
   if (!isJWTExpired(jwt)) return jwt;
 
-  const response = await sendAPIRequest(
+  currentRefreshPromise ??= sendAPIRequest(
     "/api/user/refresh",
     {
       method: "post",
@@ -26,6 +31,9 @@ export async function getJWT(): Promise<string | null> {
     jwt,
     true
   );
+
+  const response = await currentRefreshPromise;
+  currentRefreshPromise = null;
 
   if (response.code === "Created") {
     localStorage.setItem("token", response.content.token);
@@ -83,7 +91,13 @@ export async function register(
   return true;
 }
 
-export async function logout(): Promise<void> {
+export async function logout(clientSideOnly: boolean = false): Promise<void> {
+  if (clientSideOnly) {
+    localStorage.removeItem("token");
+    window.location.reload();
+    return;
+  }
+
   const bearer = await getJWT();
   if (bearer === null) return;
   sendAPIRequest(
@@ -96,4 +110,5 @@ export async function logout(): Promise<void> {
   );
 
   localStorage.removeItem("token");
+  window.location.reload();
 }

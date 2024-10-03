@@ -1,0 +1,196 @@
+@import "../../../Palette.scss";
+
+.authentication {
+  .authentication-email {
+    margin-top: 3rem;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 2.2rem;
+    font-weight: 450;
+
+    & p {
+      user-select: none;
+      font-size: 2.2rem;
+      font-weight: 500;
+      margin-bottom: 2rem;
+    }
+
+    & .authentication-email-input {
+      margin-bottom: 1rem;
+      width: 100%;
+      min-height: 5rem;
+      background-color: transparent;
+      outline: 1px solid $dark-400;
+      border: none;
+
+      &:has(:focus) {
+        background-color: transparent;
+        outline: 2px solid $dark-600;
+      }
+
+      & input {
+        font-size: 1.8rem;
+        &::placeholder {
+          font-size: 1.8rem;
+        }
+
+        &:focus::placeholder {
+          color: $dark-600;
+        }
+      }
+    }
+  }
+
+  .authentication-button {
+    margin-top: 1rem;
+    width: 10rem;
+    height: 3.75rem;
+    border-radius: 0.5rem;
+    font-size: 1.6rem;
+    border: none;
+    outline: none;
+    background-color: $primary-300;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $primary-400;
+    }
+  }
+
+  .authentication-password {
+    margin-top: 3rem;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 2.2rem;
+
+    & h3 {
+      user-select: none;
+      font-size: 2.2rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    & p {
+      font-size: 1.6rem;
+      color: rgb(180, 180, 180);
+      margin-bottom: 2rem;
+    }
+
+    & .authentication-password-input {
+      margin-bottom: 1rem;
+      width: 100%;
+      min-height: 5rem;
+      background-color: transparent;
+      outline: 1px solid $dark-400;
+      border: none;
+
+      &:has(:focus) {
+        background-color: transparent;
+        outline: 2px solid $dark-600;
+      }
+
+      & input {
+        font-size: 1.8rem;
+        &::placeholder {
+          font-size: 1.8rem;
+        }
+
+        &:focus::placeholder {
+          color: $dark-600;
+        }
+      }
+    }
+  }
+
+  .authentication-2fa {
+    margin-top: 3rem;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    & h3 {
+      font-size: 2.2rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      user-select: none;
+    }
+
+    & p {
+      font-size: 1.6rem;
+      color: rgb(180, 180, 180);
+      margin-bottom: 2rem;
+    }
+  }
+
+  .authentication-2fa-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    border: 1px solid $dark-400;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 2rem;
+
+    & h3 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      user-select: none;
+    }
+
+    & p {
+      font-size: 1.6rem;
+      margin-bottom: 0;
+    }
+  }
+
+  .authentication-2fa-icon-container {
+    width: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & .authentication-2fa-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 4rem;
+      width: 7rem;
+      height: 7rem;
+      border-radius: 50%;
+      background-color: $dark-400;
+    }
+  }
+
+  .authentication-2fa-text-area {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 1.6rem;
+  }
+
+  .authentication-2fa-button {
+    width: 15%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & button {
+      width: 7rem;
+      height: 4rem;
+      border-radius: 0.5rem;
+      background-color: $dark-400;
+      color: white;
+      border: none;
+      outline: none;
+      cursor: pointer;
+    }
+  }
+}

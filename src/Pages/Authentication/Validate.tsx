@@ -1,4 +1,4 @@
-export function ValidateEmail(email: string | undefined | null): boolean {
+export function validateEmail(email: string | undefined | null): boolean {
   if (!email) return false;
 
   const re =
@@ -6,14 +6,14 @@ export function ValidateEmail(email: string | undefined | null): boolean {
   return re.test(email.trim());
 }
 
-export function ValidatePassword(password: string | undefined | null): boolean {
+export function validatePassword(password: string | undefined | null): boolean {
   if (!password) return false;
 
   const re = /^(?=.*\d)(?=.*[a-z]).{8,}$/;
   return re.test(password);
 }
 
-export function ValidateUsername(username: string | undefined | null): boolean {
+export function validateUsername(username: string | undefined | null): boolean {
   if (!username) return false;
 
   const re = /^[a-zA-Z0-9]{3,}$/;

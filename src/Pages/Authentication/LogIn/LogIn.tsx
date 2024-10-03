@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import InputField from "../../../Components/InputField/InputField";
 import "./LogIn.scss";
 import SignUp from "../SignUp/SignUp.tsx";
-import { ValidateEmail, ValidatePassword } from "../Validate";
+import { validateEmail, validatePassword } from "../Validate";
 import sendAPIRequest from "../../../Data/SendAPIRequest.ts";
 
 export default function Login() {
@@ -26,14 +26,14 @@ export default function Login() {
     let emailValid: boolean = true;
     let passwordValid: boolean = true;
 
-    if (!ValidateEmail(emailField.current?.value)) {
+    if (!validateEmail(emailField.current?.value)) {
       emailContainer.current!.classList.add("invalid");
       emailValid = false;
     } else {
       emailContainer.current!.classList.remove("invalid");
     }
 
-    if (!ValidatePassword(passwordField.current?.value)) {
+    if (!validatePassword(passwordField.current?.value)) {
       passwordContainer.current!.classList.add("invalid");
       passwordValid = false;
     } else {
@@ -68,7 +68,7 @@ export default function Login() {
           className="input-field"
           iconName="envelope"
           onEnter={(enteredText) => {
-            if (ValidateEmail(enteredText)) {
+            if (validateEmail(enteredText)) {
               emailContainer.current!.classList.remove("invalid");
               passwordField.current?.focus();
             } else emailContainer.current!.classList.add("invalid");

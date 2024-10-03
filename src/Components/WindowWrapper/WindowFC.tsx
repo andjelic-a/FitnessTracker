@@ -1,10 +1,10 @@
-import React, { RefObject, useRef, useState } from "react";
-import WindowWrapper from "./WindowWrapper";
-import useOutsideClick from "../../Hooks/UseOutsideClick";
-import { useIsPresent } from "framer-motion";
+import React, { useRef, useState } from "react";
+import { AnimatePresence, useIsPresent } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { AnimatedLayoutVariants } from "./AnimatedLayout";
+import AnimatedLayout, { AnimatedLayoutVariants } from "./AnimatedLayout";
 import ReactModal from "react-modal";
+import FocusTrap from "focus-trap-react";
+import "./WindowFC.scss";
 
 type WindowFCProps = {
   animationTriggers?: AnimatedLayoutVariants;
@@ -24,14 +24,12 @@ const WindowFC =
   <T extends {}>(
     component: (
       props: T,
-      wrapperRef: RefObject<HTMLDivElement>,
       close: (force?: boolean) => void,
       setModalConfirmationOpeningCondition?: (condition: () => boolean) => void
     ) => React.JSX.Element,
     windowProps?: WindowFCProps
   ) =>
   (props: T) => {
-    const wrapperRef = useRef<HTMLDivElement>(null);
     const exists = useIsPresent();
     const navigate = useNavigate();
     const handleClose = (force?: boolean) => {
@@ -51,20 +49,38 @@ const WindowFC =
     const setModalOpeningCondition = (condition: () => boolean): void =>
       void (modalCondition.current = condition);
 
-    useOutsideClick(wrapperRef, handleClose, "left");
-
     return (
       <>
-        <WindowWrapper animationTriggers={windowProps?.animationTriggers}>
-          {component(
-            props,
-            wrapperRef,
-            handleClose,
-            windowProps?.closeConfirmationModal
-              ? setModalOpeningCondition
-              : undefined
-          )}
-        </WindowWrapper>
+        <FocusTrap
+          paused={isModalOpen}
+          focusTrapOptions={{
+            fallbackFocus: document.body,
+            escapeDeactivates: false,
+          }}
+        >
+          <div
+            className="window-wrapper"
+            onClick={(e) => {
+              if ((e.target as HTMLElement).className === "window-wrapper")
+                handleClose();
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") handleClose();
+            }}
+          >
+            <AnimatedLayout variants={windowProps?.animationTriggers}>
+              <AnimatePresence>
+                {component(
+                  props,
+                  handleClose,
+                  windowProps?.closeConfirmationModal
+                    ? setModalOpeningCondition
+                    : undefined
+                )}
+              </AnimatePresence>
+            </AnimatedLayout>
+          </div>
+        </FocusTrap>
 
         {windowProps?.closeConfirmationModal && (
           <ReactModal
@@ -73,13 +89,17 @@ const WindowFC =
             portalClassName="modal-portal"
             onRequestClose={() => void setIsModalOpen(false)}
           >
-            {windowProps.closeConfirmationModal.children(
-              () => void setIsModalOpen(false),
-              () => {
-                setIsModalOpen(false);
-                handleClose(true);
-              }
-            )}
+            <FocusTrap focusTrapOptions={{ allowOutsideClick: true }}>
+              <div>
+                {windowProps.closeConfirmationModal.children(
+                  () => void setIsModalOpen(false),
+                  () => {
+                    setIsModalOpen(false);
+                    handleClose(true);
+                  }
+                )}
+              </div>
+            </FocusTrap>
           </ReactModal>
         )}
       </>

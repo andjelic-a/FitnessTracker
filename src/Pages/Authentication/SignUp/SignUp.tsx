@@ -3,7 +3,7 @@ import InputField from "../../../Components/InputField/InputField";
 import { useRef } from "react";
 import { register } from "../../../Data/User";
 import { useNavigate } from "react-router-dom";
-import { ValidateEmail, ValidatePassword, ValidateUsername } from "../Validate";
+import { validateEmail, validatePassword, validateUsername } from "../Validate";
 
 interface SignUpProps {
   isActive: boolean;
@@ -29,21 +29,21 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
     let emailValid: boolean = true;
     let passwordValid: boolean = true;
 
-    if (!ValidateUsername(usernameField.current?.value)) {
+    if (!validateUsername(usernameField.current?.value)) {
       usernameContainer.current!.classList.add("invalid");
       usernameValid = false;
     } else {
       usernameContainer.current!.classList.remove("invalid");
     }
 
-    if (!ValidateEmail(emailField.current?.value)) {
+    if (!validateEmail(emailField.current?.value)) {
       emailContainer.current!.classList.add("invalid");
       emailValid = false;
     } else {
       emailContainer.current!.classList.remove("invalid");
     }
 
-    if (!ValidatePassword(passwordField.current?.value)) {
+    if (!validatePassword(passwordField.current?.value)) {
       passwordContainer.current!.classList.add("invalid");
       passwordValid = false;
     } else {
@@ -76,7 +76,7 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
           className="input-field"
           iconName="user"
           onEnter={(enteredText) => {
-            if (ValidateUsername(enteredText)) {
+            if (validateUsername(enteredText)) {
               usernameContainer.current!.classList.remove("invalid");
               emailField.current?.focus();
             } else usernameContainer.current!.classList.add("invalid");
@@ -92,7 +92,7 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
           className="input-field"
           iconName="envelope"
           onEnter={(enteredText) => {
-            if (ValidateEmail(enteredText)) {
+            if (validateEmail(enteredText)) {
               emailContainer.current!.classList.remove("invalid");
               passwordField.current?.focus();
             } else emailContainer.current!.classList.add("invalid");
