@@ -297,11 +297,16 @@
             }
 
             label {
+              display: flex;
               white-space: nowrap;
               overflow: hidden;
               text-overflow: ellipsis;
               max-width: 100%;
               pointer-events: none;
+
+              p {
+                color: $dark-600;
+              }
             }
 
             i {

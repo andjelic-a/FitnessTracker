@@ -65,21 +65,21 @@ const Pins = memo<PinsProps>(({ pins }) => {
       deletedPins.length === 0
         ? Promise.resolve()
         : sendAPIRequest(`/api/user/pins`, {
-          method: "delete",
-          payload: {
-            deletedPins,
-          },
-        });
+            method: "delete",
+            payload: {
+              deletedPins,
+            },
+          });
 
     const createWorkoutPins = () =>
       createdPins.length === 0
         ? Promise.resolve()
         : sendAPIRequest(`/api/user/pins`, {
-          method: "post",
-          payload: {
-            newPins: createdPins,
-          },
-        });
+            method: "post",
+            payload: {
+              newPins: createdPins,
+            },
+          });
 
     const closeMenu = () => {
       isWaitingForResponse.current = false;
@@ -163,25 +163,24 @@ const Pins = memo<PinsProps>(({ pins }) => {
           {selectedPins.length > 0 ? <h1>Pinned</h1> : <h1></h1>}
           <button
             draggable="false"
-            className={`customize-button ${selectedPins.length > 0 ? "upper-right" : "lower-right"}`}
+            className={`customize-button ${
+              selectedPins.length > 0 ? "upper-right" : "lower-right"
+            }`}
             onClick={handleOpenMenu}
           >
             Customize your pins
           </button>
         </div>
 
-
-        {selectedPins.length > 0 && <div className="pins-body" ref={pinsBodyRef}>
-          <SortableContext items={selectedPins.map((x) => x.id)}>
-            {selectedPins.map((x) => (
-              <Pin
-                key={x.id}
-                pin={x}
-                collapsedDescription={draggingPin !== null}
-              />
-            ))}
-          </SortableContext>
-        </div>}
+        {selectedPins.length > 0 && (
+          <div className="pins-body" ref={pinsBodyRef}>
+            <SortableContext items={selectedPins.map((x) => x.id)}>
+              {selectedPins.map((x) => (
+                <Pin key={x.id} pin={x} />
+              ))}
+            </SortableContext>
+          </div>
+        )}
 
         <ReactModal
           isOpen={isOptionsMenuOpen}
@@ -250,11 +249,11 @@ const Pins = memo<PinsProps>(({ pins }) => {
                         readOnly
                       />
 
-                      <Icon
-                        name={x.type === 0 ? "dumbbell" : "calendar-week"}
-                      />
-
-                      <label htmlFor={`${x.name}-${x.type}`}>{x.name}</label>
+                      <label htmlFor={`${x.name}-${x.type}`}>
+                        {x.name}
+                        &nbsp;
+                        <p>{x.type === 0 ? "(Workout)" : "(Split)"}</p>
+                      </label>
                     </div>
 
                     <div className="like-count-container">
