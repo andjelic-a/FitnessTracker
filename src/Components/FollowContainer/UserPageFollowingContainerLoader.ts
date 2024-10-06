@@ -3,17 +3,17 @@ import createLoader from "../../BetterRouter/CreateLoader";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 
 const userPageFollowingContainerLoader = createLoader(
-  ({ params: { userId }, request }) => {
-    if (!userId) return redirect("/");
+  ({ params: { username }, request }) => {
+    if (!username) return redirect("/");
 
     const searchParams = new URL(request.url).searchParams;
 
     return {
       type: "following",
-      following: sendAPIRequest("/api/user/{id}/following", {
+      following: sendAPIRequest("/api/user/{username}/following", {
         method: "get",
         parameters: {
-          id: userId,
+          username,
           limit: 10,
           offset: 0,
           name: searchParams.get("search") ?? undefined,
@@ -21,7 +21,7 @@ const userPageFollowingContainerLoader = createLoader(
       }).then((x) => (x.code === "OK" ? x.content : [])),
     };
   },
-  "/user/:userId/following"
+  "/user/:username/following"
 );
 
 export default userPageFollowingContainerLoader;

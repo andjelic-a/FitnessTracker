@@ -35,6 +35,7 @@ export function ExerciseSelectorOption({
 
       <Link
         to={`/exercises/${exercise.id}`}
+        target="_blank"
         className="view-details-link"
         data-tooltip-id={`link-tooltip-${exercise.id}`}
       >
