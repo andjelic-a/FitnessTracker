@@ -1,8 +1,14 @@
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import WindowFC from "../WindowWrapper/WindowFC";
 import "./SplitCreator.scss";
 import Icon from "../Icon/Icon";
 import { Tooltip } from "react-tooltip";
+import {
+  createHtmlPortalNode,
+  InPortal,
+  OutPortal,
+} from "react-reverse-portal";
+import SplitWorkoutSelector from "../SplitWorkoutSelector/SplitWorkoutSelector";
 
 const SplitCreator = WindowFC(({}, onClose) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -16,8 +22,35 @@ const SplitCreator = WindowFC(({}, onClose) => {
     console.log("saved");
   }
 
+  const [isWorkoutSelectorOpen, setIsWorkoutSelectorOpen] = useState(false);
+  const workoutSelectorPortalNode = useMemo(() => createHtmlPortalNode(), []);
+
+  function handleOpenWorkoutSelector() {
+    if (!wrapperRef.current) return;
+
+    wrapperRef.current.style.overflow = "hidden";
+    wrapperRef.current.scrollTop = 0;
+    setIsWorkoutSelectorOpen(true);
+  }
+
+  function handleCloseWorkoutSelector() {
+    if (!wrapperRef.current) return;
+
+    wrapperRef.current.style.overflow = "auto";
+    wrapperRef.current.scrollTop = 0;
+    setIsWorkoutSelectorOpen(false);
+  }
+
   return (
     <div className="split-creator-container" ref={wrapperRef}>
+      <InPortal node={workoutSelectorPortalNode}>
+        <SplitWorkoutSelector
+          onClose={handleCloseWorkoutSelector}
+          onConfirmSelection={console.log}
+          replaceMode={false}
+        />
+      </InPortal>
+
       <div className="header">
         <input
           ref={titleInputRef}
@@ -58,6 +91,9 @@ const SplitCreator = WindowFC(({}, onClose) => {
           </button>
         </div>
       </div>
+
+      <button onClick={handleOpenWorkoutSelector}>Select</button>
+      {isWorkoutSelectorOpen && <OutPortal node={workoutSelectorPortalNode} />}
 
       <div className="description-container">
         <textarea

@@ -2682,6 +2682,128 @@ type MappedEndpoints = {
         };
       };
     };
+    "/api/split/me/workoutoptions": {
+      get: {
+        tags: ["Split"];
+        parameters: [
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "searchTerm";
+            in: "query";
+            schema: {
+              type: "string";
+            };
+          },
+          {
+            name: "publicOnly";
+            in: "query";
+            schema: {
+              type: "boolean";
+            };
+          },
+          {
+            name: "favoriteOnly";
+            in: "query";
+            schema: {
+              type: "boolean";
+            };
+          },
+          {
+            name: "personalOnly";
+            in: "query";
+            schema: {
+              type: "boolean";
+            };
+          }
+        ];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutOptionResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutOptionResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutOptionResponseDTO";
+                  };
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
     "/api/split/{id}/like": {
       post: {
         tags: ["Split"];
@@ -10411,6 +10533,32 @@ type MappedEndpoints = {
           workoutId: {
             type: "string";
             format: "uuid";
+          };
+        };
+        additionalProperties: false;
+      };
+      SimpleWorkoutOptionResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "string";
+            format: "uuid";
+          };
+          name: {
+            type: "string";
+          };
+          description: {
+            type: "string";
+          };
+          isPublic: {
+            type: "boolean";
+          };
+          likeCount: {
+            type: "integer";
+            format: "int32";
+          };
+          creator: {
+            $ref: "#/components/schemas/SimpleUserResponseDTO";
           };
         };
         additionalProperties: false;
