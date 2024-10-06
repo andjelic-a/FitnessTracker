@@ -2,17 +2,17 @@ import { redirect } from "react-router-dom";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import createLoader from "../../BetterRouter/CreateLoader";
 
-const workoutDisplayLoader = createLoader(({ params: { id } }) => {
+const splitDisplayLoader = createLoader(({ params: { id } }) => {
   if (!id) return redirect("/me");
 
   return {
-    workout: sendAPIRequest("/api/workout/{id}/detailed", {
+    workout: sendAPIRequest("/api/split/{id}/detailed", {
       method: "get",
       parameters: {
         id,
       },
     }),
   };
-}, "/me/workout/:id");
+}, "/me/split/:id");
 
-export default workoutDisplayLoader;
+export default splitDisplayLoader;

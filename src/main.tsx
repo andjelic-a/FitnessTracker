@@ -48,6 +48,10 @@ import StartedWorkout from "./Pages/StartedWorkout/StartedWorkout.tsx";
 import startedWorkoutLoader from "./Pages/StartedWorkout/StartedWorkoutLoader.ts";
 import WorkoutEditor from "./Components/WorkoutEditor/WorkoutEditor.tsx";
 import workoutCreatorLoader from "./Components/WorkoutCreator/WorkoutCreatorLoader.ts";
+import SplitDisplay from "./Components/SplitDisplay/SplitDisplay.tsx";
+import splitDisplayLoader from "./Components/SplitDisplay/SplitDisplayLoader.ts";
+import SplitCreator from "./Components/SplitCreator/SplitCreator.tsx";
+import SplitEditor from "./Components/SplitEditor/SplitEditor.tsx";
 
 const routes: RouteObject[] = [
   {
@@ -84,19 +88,36 @@ const routes: RouteObject[] = [
         loader: profileLoader,
         children: [
           {
-            path: "workout/:id",
-            element: <WorkoutDisplay />,
-            loader: workoutDisplayLoader,
-          },
-          {
-            path: "workout/:id/edit",
-            element: <WorkoutEditor />,
-            loader: workoutDisplayLoader,
-          },
-          {
             path: "workout/new",
             element: <WorkoutCreator />,
             loader: workoutCreatorLoader,
+          },
+          {
+            path: "workout/:id",
+            element: <WorkoutDisplay />,
+            loader: workoutDisplayLoader,
+            children: [
+              {
+                path: "edit",
+                element: <WorkoutEditor />,
+              },
+            ],
+          },
+          {
+            path: "split/new",
+            element: <SplitCreator />,
+            loader: workoutCreatorLoader,
+          },
+          {
+            path: "split/:id",
+            element: <SplitDisplay />,
+            loader: splitDisplayLoader,
+            children: [
+              {
+                path: "split/:id/edit",
+                element: <SplitEditor />,
+              },
+            ],
           },
           {
             path: "followers",
