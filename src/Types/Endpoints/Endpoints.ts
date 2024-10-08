@@ -1768,6 +1768,23 @@ type MappedEndpoints = {
         responses: {
           "201": {
             description: "Created";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/NewSplitResponseDTO";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/NewSplitResponseDTO";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/NewSplitResponseDTO";
+                };
+              };
+            };
           };
           "400": {
             description: "Bad Request";
@@ -10182,6 +10199,22 @@ type MappedEndpoints = {
           };
           password: {
             type: "string";
+          };
+        };
+        additionalProperties: false;
+      };
+      NewSplitResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "string";
+            format: "uuid";
+          };
+          name: {
+            type: "string";
+          };
+          isPublic: {
+            type: "boolean";
           };
         };
         additionalProperties: false;
