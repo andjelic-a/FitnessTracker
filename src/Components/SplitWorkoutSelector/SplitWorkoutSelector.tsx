@@ -10,13 +10,11 @@ type WorkoutSchema = Schema<"SimpleWorkoutOptionResponseDTO">;
 type ChooseWorkoutWindowProps = {
   onClose: () => void;
   onConfirmSelection: (workout: WorkoutSchema) => void;
-  replaceMode?: boolean;
 };
 
 export default function SplitWorkoutSelector({
   onClose,
   onConfirmSelection,
-  replaceMode,
 }: ChooseWorkoutWindowProps) {
   const [selectedWorkout, setSelectedWorkout] = useState<WorkoutSchema | null>(
     null
@@ -177,7 +175,7 @@ export default function SplitWorkoutSelector({
 
       <div className="footer">
         <button className="choose-workout-button" onClick={handleConfirm}>
-          {replaceMode ? "Replace" : "Add"}
+          Replace
         </button>
 
         <button
