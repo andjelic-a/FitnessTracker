@@ -6,7 +6,7 @@ const splitDisplayLoader = createLoader(({ params: { id } }) => {
   if (!id) return redirect("/me");
 
   return {
-    workout: sendAPIRequest("/api/split/{id}/detailed", {
+    split: sendAPIRequest("/api/split/{id}/detailed", {
       method: "get",
       parameters: {
         id,

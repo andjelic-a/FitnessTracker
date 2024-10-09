@@ -13,15 +13,7 @@ import { Schema } from "../../Types/Endpoints/SchemaParser";
 import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
 import { getProfileCache } from "../../Pages/Profile/ProfileCache";
 import sendAPIRequest from "../../Data/SendAPIRequest";
-
-type Day =
-  | "Monday"
-  | "Tuesday"
-  | "Wednesday"
-  | "Thursday"
-  | "Friday"
-  | "Saturday"
-  | "Sunday";
+import { Day } from "../../Types/Utility/Day";
 
 const SplitCreator = WindowFC(
   ({}, onClose, setModalConfirmationOpeningCondition) => {

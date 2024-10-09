@@ -9810,7 +9810,6 @@ type MappedEndpoints = {
           };
           description: {
             type: "string";
-            nullable: true;
           };
           isPublic: {
             type: "boolean";
@@ -10484,7 +10483,6 @@ type MappedEndpoints = {
           };
           description: {
             type: "string";
-            nullable: true;
           };
           isPublic: {
             type: "boolean";
@@ -10681,7 +10679,6 @@ type MappedEndpoints = {
           };
           description: {
             type: "string";
-            nullable: true;
           };
           isPublic: {
             type: "boolean";
