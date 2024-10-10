@@ -8,7 +8,7 @@ import Async from "../Async/Async";
 import WindowFC from "../WindowWrapper/WindowFC";
 import { useNavigate } from "react-router-dom";
 import sendAPIRequest from "../../Data/SendAPIRequest";
-import WorkoutCommentSection from "./WorkoutDisplayCommentSection/WorkoutCommentSection";
+import CommentSection from "./WorkoutDisplayCommentSection/WorkoutCommentSection";
 import formatCount from "../../Utility/FormatCount";
 import { AnimatePresence } from "framer-motion";
 import { extractSetsNoMapping } from "../../Utility/ExtractSetsFromWorkout";
@@ -119,8 +119,9 @@ const WorkoutDisplay = WindowFC(({}, close) => {
     if (workoutId.current.length === 0) return <></>;
 
     return (
-      <WorkoutCommentSection
-        workoutId={workoutId.current}
+      <CommentSection
+        type="workout"
+        id={workoutId.current}
         onRequireClose={handleCloseCommentPopup}
         onCreateNewComment={() => void setCommentCount((prev) => prev + 1)}
       />

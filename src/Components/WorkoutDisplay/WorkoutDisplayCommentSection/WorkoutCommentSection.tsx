@@ -3,7 +3,7 @@ import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import { memo, useMemo, useRef, useState } from "react";
 import useOutsideClick from "../../../Hooks/UseOutsideClick";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
-import WorkoutComment from "./Comment/WorkoutComment";
+import Comment from "./Comment/WorkoutComment";
 import CommentInputField from "./CommentInputField/CommentInputField";
 import { getProfileCache } from "../../../Pages/Profile/ProfileCache";
 import LazyLoadingContainer, {
@@ -11,33 +11,39 @@ import LazyLoadingContainer, {
 } from "../../LazyLoadingContainer/LazyLoadingContainer";
 import { Request } from "../../../Types/Endpoints/RequestParser";
 
-type WorkoutCommentSectionProps = {
-  workoutId: string;
+type CommentSectionProps = {
+  id: string;
+  type: "workout" | "split";
   onRequireClose: () => void;
   onCreateNewComment: () => void;
 };
 
-const WorkoutCommentSection = memo<WorkoutCommentSectionProps>(
-  ({ workoutId, onRequireClose, onCreateNewComment }) => {
+type CommentSchema =
+  | Schema<"SimpleWorkoutCommentResponseDTO">
+  | Schema<"SimpleSplitCommentResponseDTO">;
+
+const CommentSection = memo<CommentSectionProps>(
+  ({ id, type, onRequireClose, onCreateNewComment }) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const scrollableWrapperRef = useRef<HTMLDivElement>(null);
     const commentInputFieldRef = useRef<HTMLTextAreaElement>(null);
 
     useOutsideClick(wrapperRef, onRequireClose);
 
-    const [newComments, setNewComments] = useState<
-      Schema<"SimpleWorkoutCommentResponseDTO">[]
-    >([]);
+    const [newComments, setNewComments] = useState<CommentSchema[]>([]);
 
     async function handleCreateComment(
       newComment: Schema<"CreateWorkoutCommentRequestDTO">
     ) {
       const response = await sendAPIRequest(
-        "/api/workout/{workoutId}/comment",
+        type === "workout"
+          ? "/api/workout/{workoutId}/comment"
+          : "/api/split/{splitId}/comment",
         {
           method: "post",
           parameters: {
-            workoutId,
+            workoutId: id,
+            splitId: id,
           },
           payload: newComment,
         }
@@ -53,34 +59,38 @@ const WorkoutCommentSection = memo<WorkoutCommentSectionProps>(
 
       onCreateNewComment();
 
-      const newCommentSimulatedResponse: Schema<"SimpleWorkoutCommentResponseDTO"> =
-        {
-          id: response.content,
-          createdAt: new Date().toISOString(),
-          creator: user.content,
-          isCreator: true,
-          isLiked: false,
-          likeCount: 0,
-          replyCount: 0,
-          text: newComment.comment,
-          workoutId,
-        };
+      const newCommentSimulatedResponse: CommentSchema = {
+        id: response.content.newCommentId,
+        createdAt: new Date().toISOString(),
+        creator: user.content,
+        isCreator: true,
+        isLiked: false,
+        likeCount: 0,
+        replyCount: 0,
+        text: newComment.comment,
+        workoutId: id,
+        splitId: id,
+      };
 
       setNewComments((prev) => [newCommentSimulatedResponse, ...prev]);
     }
 
     const baseRequest = useMemo<
-      OnlyGet<Request<"/api/workout/{workoutId}/comment">>
+      OnlyGet<
+        | Request<"/api/workout/{workoutId}/comment">
+        | Request<"/api/split/{splitId}/comment">
+      >
     >(
       () => ({
         method: "get",
         parameters: {
-          workoutId,
+          workoutId: id,
+          splitId: id,
           limit: 10,
           offset: 0,
         },
       }),
-      [workoutId]
+      [id]
     );
 
     const commentElements = useMemo(
@@ -90,17 +100,22 @@ const WorkoutCommentSection = memo<WorkoutCommentSectionProps>(
             newComments.length === 0 ? undefined : (
               <>
                 {newComments.map((comment) => (
-                  <WorkoutComment
-                    onCreateNewReply={onCreateNewComment}
+                  <Comment
                     key={comment.id}
+                    type={type}
+                    onCreateNewReply={onCreateNewComment}
                     comment={comment}
-                    workoutId={workoutId}
+                    workoutId={id}
                   />
                 ))}
               </>
             )
           }
-          endpoint="/api/workout/{workoutId}/comment"
+          endpoint={
+            type === "workout"
+              ? "/api/workout/{workoutId}/comment"
+              : "/api/split/{splitId}/comment"
+          }
           baseAPIRequest={baseRequest}
           onSegmentLoad={(comments, segmentIndex) => {
             if (comments.code !== "OK" || comments.content.length === 0) {
@@ -112,11 +127,12 @@ const WorkoutCommentSection = memo<WorkoutCommentSectionProps>(
             return (
               <>
                 {comments.content.map((x) => (
-                  <WorkoutComment
+                  <Comment
                     key={x.id}
+                    type={type}
                     onCreateNewReply={onCreateNewComment}
                     comment={x}
-                    workoutId={workoutId}
+                    workoutId={id}
                   />
                 ))}
               </>
@@ -155,4 +171,4 @@ const WorkoutCommentSection = memo<WorkoutCommentSectionProps>(
   }
 );
 
-export default WorkoutCommentSection;
+export default CommentSection;

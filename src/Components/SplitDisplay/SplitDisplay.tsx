@@ -8,8 +8,16 @@ import Icon from "../Icon/Icon";
 import extractWorkoutsFromSplit from "../../Utility/ExtractWorkoutsFromSplit";
 import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
 import formatCount from "../../Utility/FormatCount";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import sendAPIRequest from "../../Data/SendAPIRequest";
+import { AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import {
+  createHtmlPortalNode,
+  InPortal,
+  OutPortal,
+} from "react-reverse-portal";
+import CommentSection from "../WorkoutDisplay/WorkoutDisplayCommentSection/WorkoutCommentSection";
 
 const SplitDisplay = WindowFC(() => {
   const loaderData = useLoaderData<typeof splitDisplayLoader>();
@@ -33,7 +41,7 @@ const SplitDisplay = WindowFC(() => {
     isWaitingForResponse.current = true;
 
     loaderData?.split?.then((currentSplit) => {
-      if (currentSplit.code !== "OK") return;
+      if (currentSplit?.code !== "OK") return;
 
       isWaitingForResponse.current = false;
       splitId.current = currentSplit.content.id;
@@ -79,12 +87,32 @@ const SplitDisplay = WindowFC(() => {
     setIsFavorited((prevState) => !prevState);
   };
 
+  function handleCloseCommentPopup() {
+    setIsCommentSectionOpen(false);
+  }
+
+  const commentSectionPortalNode = useMemo(() => createHtmlPortalNode(), []);
+  const commentSection = useMemo(() => {
+    if (splitId.current.length === 0) return <></>;
+
+    return (
+      <CommentSection
+        type="split"
+        id={splitId.current}
+        onRequireClose={handleCloseCommentPopup}
+        onCreateNewComment={() => void setCommentCount((prev) => prev + 1)}
+      />
+    );
+  }, [splitId.current]);
+
   return (
     <div className="split-display-container">
+      <InPortal node={commentSectionPortalNode} children={commentSection} />
+
       <div className="split-display">
         <Async await={loaderData?.split}>
           {(split) => {
-            if (split.code !== "OK") return null;
+            if (split?.code !== "OK") return null;
 
             return (
               <>
@@ -214,6 +242,28 @@ const SplitDisplay = WindowFC(() => {
           }}
         </Async>
       </div>
+
+      <AnimatePresence>
+        {isCommentSectionOpen && (
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 300,
+            }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{
+              opacity: 0,
+              y: 300,
+            }}
+            transition={{
+              duration: 0.3,
+              type: "just",
+            }}
+          >
+            <OutPortal node={commentSectionPortalNode} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 });
