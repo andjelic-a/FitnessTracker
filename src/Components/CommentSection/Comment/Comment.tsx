@@ -1,13 +1,13 @@
-import "./WorkoutComment.scss";
-import { Schema } from "../../../../Types/Endpoints/SchemaParser";
-import Icon from "../../../Icon/Icon";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import sendAPIRequest from "../../../../Data/SendAPIRequest";
-import formatDateSince from "../../../../Utility/FormatDateSince";
-import CommentInputField from "../CommentInputField/CommentInputField";
-import { getProfileCache } from "../../../../Pages/Profile/ProfileCache";
+import { Schema } from "../../../Types/Endpoints/SchemaParser";
+import sendAPIRequest from "../../../Data/SendAPIRequest";
+import { getProfileCache } from "../../../Pages/Profile/ProfileCache";
+import Icon from "../../Icon/Icon";
 import { AnimatePresence, motion } from "framer-motion";
-import formatCount from "../../../../Utility/FormatCount";
+import formatDateSince from "../../../Utility/FormatDateSince";
+import formatCount from "../../../Utility/FormatCount";
+import CommentInputField from "../CommentInputField/CommentInputField";
+import "./Comment.scss";
 
 type CommentProps = {
   type: "workout" | "split";
@@ -17,7 +17,7 @@ type CommentProps = {
 
 type ParentProps = {
   isReply?: false;
-  workoutId: string;
+  id: string;
 };
 
 type ReplyProps = {
@@ -77,8 +77,8 @@ const Comment = React.memo<CommentProps>(
           method: "get",
           parameters: {
             commentId: comment.id,
-            workoutId: props.workoutId,
-            splitId: props.workoutId,
+            workoutId: props.id,
+            splitId: props.id,
             limit: 10,
             offset: 0,
           },
@@ -116,8 +116,8 @@ const Comment = React.memo<CommentProps>(
           method: "get",
           parameters: {
             commentId: comment.id,
-            workoutId: props.workoutId,
-            splitId: props.workoutId,
+            workoutId: props.id,
+            splitId: props.id,
             limit: 10,
             offset: awaitReplies.replies.length - awaitReplies.newRepliesCount,
           },
@@ -237,7 +237,7 @@ const Comment = React.memo<CommentProps>(
         likeCount: 0,
         replyCount: 0,
         text: newReply.comment,
-        workoutId: props.workoutId,
+        workoutId: props.id,
       };
 
       setReplies((prev) =>
@@ -390,8 +390,8 @@ const Comment = React.memo<CommentProps>(
                   <p>{formatCount(replyCount)} replies</p>
                 </div>
 
-                <AnimatePresence>
                   {repliesExpanded && <>{replyElements}</>}
+                <AnimatePresence>
                 </AnimatePresence>
               </>
             )}

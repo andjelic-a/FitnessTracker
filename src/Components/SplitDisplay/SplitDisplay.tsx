@@ -17,7 +17,7 @@ import {
   InPortal,
   OutPortal,
 } from "react-reverse-portal";
-import CommentSection from "../WorkoutDisplay/WorkoutDisplayCommentSection/WorkoutCommentSection";
+import CommentSection from "../CommentSection/CommentSection";
 
 const SplitDisplay = WindowFC(() => {
   const loaderData = useLoaderData<typeof splitDisplayLoader>();

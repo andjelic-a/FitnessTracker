@@ -1,15 +1,15 @@
-import "./WorkoutCommentSection.scss";
-import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import { memo, useMemo, useRef, useState } from "react";
-import useOutsideClick from "../../../Hooks/UseOutsideClick";
-import sendAPIRequest from "../../../Data/SendAPIRequest";
-import Comment from "./Comment/WorkoutComment";
-import CommentInputField from "./CommentInputField/CommentInputField";
-import { getProfileCache } from "../../../Pages/Profile/ProfileCache";
+import { Schema } from "../../Types/Endpoints/SchemaParser";
+import "./CommentSection.scss";
+import useOutsideClick from "../../Hooks/UseOutsideClick";
+import sendAPIRequest from "../../Data/SendAPIRequest";
+import { Request } from "../../Types/Endpoints/RequestParser";
 import LazyLoadingContainer, {
   OnlyGet,
-} from "../../LazyLoadingContainer/LazyLoadingContainer";
-import { Request } from "../../../Types/Endpoints/RequestParser";
+} from "../LazyLoadingContainer/LazyLoadingContainer";
+import { getProfileCache } from "../../Pages/Profile/ProfileCache";
+import Comment from "./Comment/Comment";
+import CommentInputField from "./CommentInputField/CommentInputField";
 
 type CommentSectionProps = {
   id: string;
@@ -105,7 +105,7 @@ const CommentSection = memo<CommentSectionProps>(
                     type={type}
                     onCreateNewReply={onCreateNewComment}
                     comment={comment}
-                    workoutId={id}
+                    id={id}
                   />
                 ))}
               </>
@@ -132,7 +132,7 @@ const CommentSection = memo<CommentSectionProps>(
                     type={type}
                     onCreateNewReply={onCreateNewComment}
                     comment={x}
-                    workoutId={id}
+                    id={id}
                   />
                 ))}
               </>
