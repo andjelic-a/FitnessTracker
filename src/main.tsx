@@ -86,6 +86,10 @@ const routes: RouteObject[] = [
         path: "me",
         element: <Profile />,
         loader: profileLoader,
+        shouldRevalidate: ({ currentUrl: { pathname } }) => {
+          console.log(pathname.includes("activate-split"));
+          return true;
+        },
         children: [
           {
             path: "workout/new",
@@ -96,12 +100,11 @@ const routes: RouteObject[] = [
             path: "workout/:id",
             element: <WorkoutDisplay />,
             loader: workoutDisplayLoader,
-            children: [
-              {
-                path: "edit",
-                element: <WorkoutEditor />,
-              },
-            ],
+          },
+          {
+            path: "workout/:id/edit",
+            element: <WorkoutEditor />,
+            loader: workoutDisplayLoader,
           },
           {
             path: "split/new",
@@ -114,10 +117,15 @@ const routes: RouteObject[] = [
             loader: splitDisplayLoader,
             children: [
               {
-                path: "split/:id/edit",
-                element: <SplitEditor />,
+                path: "activate-split",
+                element: <></>,
               },
             ],
+          },
+          {
+            path: "split/:id/edit",
+            element: <SplitEditor />,
+            loader: splitDisplayLoader,
           },
           {
             path: "followers",

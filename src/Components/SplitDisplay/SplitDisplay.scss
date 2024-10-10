@@ -133,6 +133,11 @@
           &:focus-visible {
             outline: 2px solid #fff;
           }
+
+          &.split-display-activate {
+            width: max-content;
+            padding: 0 1rem;
+          }
         }
       }
     }

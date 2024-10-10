@@ -3,7 +3,7 @@ import WindowFC from "../WindowWrapper/WindowFC";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
 import splitDisplayLoader from "./SplitDisplayLoader";
 import Async from "../Async/Async";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Icon from "../Icon/Icon";
 import extractWorkoutsFromSplit from "../../Utility/ExtractWorkoutsFromSplit";
 import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
@@ -18,8 +18,13 @@ import {
   OutPortal,
 } from "react-reverse-portal";
 import CommentSection from "../CommentSection/CommentSection";
+import ConfirmModalDialog from "../ConfirmModalDialog/ConfirmModalDialog";
+import {
+  getProfileCache,
+  setProfileCache,
+} from "../../Pages/Profile/ProfileCache";
 
-const SplitDisplay = WindowFC(() => {
+const SplitDisplay = WindowFC(({}, close) => {
   const loaderData = useLoaderData<typeof splitDisplayLoader>();
   const navigate = useNavigate();
 
@@ -34,6 +39,9 @@ const SplitDisplay = WindowFC(() => {
 
   const isWaitingForResponse = useRef<boolean>(false);
   const splitId = useRef<string>("");
+
+  const [isConfirmActivationModalOpen, setIsConfirmActivationModalOpen] =
+    useState(false);
 
   useEffect(() => {
     if (splitId.current.length > 0) return;
@@ -105,6 +113,35 @@ const SplitDisplay = WindowFC(() => {
     );
   }, [splitId.current]);
 
+  async function handleActivate() {
+    if (isWaitingForResponse.current || splitId.current.length === 0) return;
+    isWaitingForResponse.current = true;
+
+    navigate("activate-split");
+    setIsConfirmActivationModalOpen(false);
+    sendRequest();
+  }
+
+  async function sendRequest() {
+    const data = await loaderData.split;
+
+    if (data.code !== "OK") {
+      navigate(-1);
+      return;
+    }
+
+    const split = data.content;
+
+    await sendAPIRequest("/api/user/me/split", {
+      method: "patch",
+      payload: {
+        splitId: split.id,
+      },
+    });
+
+    navigate(-2);
+  }
+
   return (
     <div className="split-display-container">
       <InPortal node={commentSectionPortalNode} children={commentSection} />
@@ -132,14 +169,13 @@ const SplitDisplay = WindowFC(() => {
                     </button>
 
                     <button
-                      className="split-display-delete"
-                      // onClick={() => void setIsConfirmDeletionModalOpen(true)}
+                      className="split-display-activate"
+                      onClick={() => {
+                        if (!isWaitingForResponse.current)
+                          setIsConfirmActivationModalOpen(true);
+                      }}
                     >
-                      <Icon name="trash" />
-
-                      <p className="accessibility-only" aria-hidden={false}>
-                        Delete
-                      </p>
+                      <p>Set as active</p>
                     </button>
                   </div>
                 </div>
@@ -264,6 +300,18 @@ const SplitDisplay = WindowFC(() => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <ConfirmModalDialog
+        isOpen={isConfirmActivationModalOpen}
+        onConfirm={handleActivate}
+        onDeny={() => void setIsConfirmActivationModalOpen(false)}
+      >
+        Are you sure you want to set this split as your active split?
+        <br />
+        This will <i>reset</i> all of your progress this week
+      </ConfirmModalDialog>
+
+      <Outlet />
     </div>
   );
 });
