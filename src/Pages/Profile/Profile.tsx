@@ -25,7 +25,7 @@ export default function Profile() {
         >;
       }
     | null
-  >(null);
+  >(null); //TODO: replace null with skeleton layout
 
   useEffect(() => {
     if (!loaderData) return;
@@ -93,8 +93,7 @@ function InnerProfile({
           split={loaderDataState.user.content.currentSplit}
         />
 
-        {(loaderDataState.pins.code !== "OK" ||
-          loaderDataState.user.code !== "OK") && (
+        {loaderDataState.user.code === "OK" && (
           <ActivityGrid
             joinedAt={new Date(loaderDataState.user.content.joinedAt)}
           />
