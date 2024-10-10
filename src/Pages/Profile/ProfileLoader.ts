@@ -5,8 +5,6 @@ import { getProfileCache, ProfileData, setProfileCache } from "./ProfileCache";
 import createLoader from "../../BetterRouter/CreateLoader";
 
 const profileLoader = createLoader(async () => {
-  console.log("Profile loader called");
-
   if (!(await getJWT())) {
     setProfileCache(null);
     return redirect("/authentication");

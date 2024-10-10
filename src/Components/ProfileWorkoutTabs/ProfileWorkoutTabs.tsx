@@ -15,8 +15,8 @@ import { useNavigate } from "react-router-dom";
 gsap.registerPlugin(Flip);
 
 type ProfileWorkoutTabsProps = {
-  latestActivity: Promise<Schema<"DetailedWeekOfCompletedWorkoutsResponseDTO">>;
-  split: Promise<Schema<"DetailedUserSplitResponseDTO"> | null>;
+  latestActivity: Schema<"DetailedWeekOfCompletedWorkoutsResponseDTO"> | null;
+  split: Schema<"DetailedUserSplitResponseDTO"> | null;
 };
 
 type Tab = "split" | "created" | "favorite" | "liked";
@@ -97,7 +97,7 @@ export default function ProfileWorkoutTabs({
       favorite: <FavoriteWorkoutsTab searchTerm={searchTerm} />,
       liked: <LikedWorkoutsTab searchTerm={searchTerm} />,
     }),
-    [searchTerm]
+    [searchTerm, split, latestActivity]
   );
 
   function handleSearch() {
@@ -152,20 +152,13 @@ export default function ProfileWorkoutTabs({
       </portals.InPortal>
 
       <portals.InPortal node={startWorkoutBtnPortalNode}>
-        <Async await={split}>
-          {(split) => (
-            <>
-              {split &&
-                split.workouts.findIndex(
-                  (x) => x.day === new Date().getUTCDay()
-                ) !== -1 && (
-                  <button onClick={() => navigate("/started-workout")}>
-                    Start today's workout
-                  </button>
-                )}
-            </>
+        {split &&
+          split.workouts.findIndex((x) => x.day === new Date().getUTCDay()) !==
+            -1 && (
+            <button onClick={() => navigate("/started-workout")}>
+              Start today's workout
+            </button>
           )}
-        </Async>
       </portals.InPortal>
 
       <div className="tabs-header">
