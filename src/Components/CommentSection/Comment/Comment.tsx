@@ -1,22 +1,23 @@
-import "./WorkoutComment.scss";
-import { Schema } from "../../../../Types/Endpoints/SchemaParser";
-import Icon from "../../../Icon/Icon";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import sendAPIRequest from "../../../../Data/SendAPIRequest";
-import formatDateSince from "../../../../Utility/FormatDateSince";
-import CommentInputField from "../CommentInputField/CommentInputField";
-import { getProfileCache } from "../../../../Pages/Profile/ProfileCache";
+import { Schema } from "../../../Types/Endpoints/SchemaParser";
+import sendAPIRequest from "../../../Data/SendAPIRequest";
+import { getProfileCache } from "../../../Pages/Profile/ProfileCache";
+import Icon from "../../Icon/Icon";
 import { AnimatePresence, motion } from "framer-motion";
-import formatCount from "../../../../Utility/FormatCount";
+import formatDateSince from "../../../Utility/FormatDateSince";
+import formatCount from "../../../Utility/FormatCount";
+import CommentInputField from "../CommentInputField/CommentInputField";
+import "./Comment.scss";
 
-type WorkoutCommentProps = {
-  comment: Schema<"SimpleWorkoutCommentResponseDTO">;
+type CommentProps = {
+  type: "workout" | "split";
+  comment: CommentSchema;
   onCreateNewReply: () => void;
 } & (ParentProps | ReplyProps);
 
 type ParentProps = {
   isReply?: false;
-  workoutId: string;
+  id: string;
 };
 
 type ReplyProps = {
@@ -28,8 +29,12 @@ type ReplyProps = {
   ) => void;
 };
 
-const WorkoutComment = React.memo<WorkoutCommentProps>(
-  ({ comment, onCreateNewReply, ...props }) => {
+type CommentSchema =
+  | Schema<"SimpleWorkoutCommentResponseDTO">
+  | Schema<"SimpleSplitCommentResponseDTO">;
+
+const Comment = React.memo<CommentProps>(
+  ({ comment, onCreateNewReply, type, ...props }) => {
     const isWaitingForResponse = useRef<boolean>(false);
     const commentInputFieldRef = useRef<HTMLTextAreaElement>(null);
 
@@ -41,7 +46,7 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
     const [repliesExpanded, setRepliesExpanded] = useState<boolean>(false);
 
     const [replies, setReplies] = useState<{
-      replies: Schema<"SimpleWorkoutCommentResponseDTO">[];
+      replies: CommentSchema[];
       newRepliesCount: number;
       reachedEnd: boolean;
     } | null>(null);
@@ -65,12 +70,15 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
         return;
 
       const data = await sendAPIRequest(
-        "/api/workout/{workoutId}/comment/{commentId}/reply",
+        type === "workout"
+          ? "/api/workout/{workoutId}/comment/{commentId}/reply"
+          : "/api/split/{splitId}/comment/{commentId}/reply",
         {
           method: "get",
           parameters: {
             commentId: comment.id,
-            workoutId: props.workoutId,
+            workoutId: props.id,
+            splitId: props.id,
             limit: 10,
             offset: 0,
           },
@@ -101,12 +109,15 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
       if (!awaitReplies || awaitReplies.reachedEnd) return;
 
       const data = await sendAPIRequest(
-        "/api/workout/{workoutId}/comment/{commentId}/reply",
+        type === "workout"
+          ? "/api/workout/{workoutId}/comment/{commentId}/reply"
+          : "/api/split/{splitId}/comment/{commentId}/reply",
         {
           method: "get",
           parameters: {
             commentId: comment.id,
-            workoutId: props.workoutId,
+            workoutId: props.id,
+            splitId: props.id,
             limit: 10,
             offset: awaitReplies.replies.length - awaitReplies.newRepliesCount,
           },
@@ -129,16 +140,27 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
       if (isWaitingForResponse.current) return;
       isWaitingForResponse.current = true;
 
-      if (!isLiked)
-        sendAPIRequest("/api/workout/{workoutId}/comment/{id}/like", {
-          method: "post",
-          parameters: {
-            id: comment.id,
-            workoutId: comment.workoutId,
-          },
-        }).then(() => void (isWaitingForResponse.current = false));
-      else
-        sendAPIRequest("/api/workout/comment/{id}/like", {
+      if (!isLiked) {
+        if (type === "workout") {
+          if (!("workoutId" in comment)) return;
+
+          sendAPIRequest("/api/workout/{workoutId}/comment/{id}/like", {
+            method: "post",
+            parameters: {
+              id: comment.id,
+              workoutId: comment.workoutId,
+            },
+          }).then(() => void (isWaitingForResponse.current = false));
+        } else
+          sendAPIRequest("/api/split/comment/{id}/like", {
+            //TODO: Check
+            method: "post",
+            parameters: {
+              id: comment.id,
+            },
+          });
+      } else
+        sendAPIRequest(`/api/${type}/comment/{id}/like`, {
           method: "delete",
           parameters: {
             id: comment.id,
@@ -161,24 +183,38 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
     async function handleCreateReply(
       newReply: Schema<"CreateWorkoutCommentRequestDTO">
     ) {
-      const response = await sendAPIRequest(
-        "/api/workout/{workoutId}/comment/{commentId}/reply",
-        {
-          method: "post",
-          parameters: {
-            workoutId: comment.workoutId,
-            commentId: props.isReply ? props.parentId : comment.id,
-          },
-          payload: newReply,
-        }
-      );
+      const response =
+        type === "workout"
+          ? await sendAPIRequest(
+              "/api/workout/{workoutId}/comment/{commentId}/reply",
+              {
+                method: "post",
+                parameters: {
+                  workoutId: "workoutId" in comment ? comment.workoutId : "",
+                  commentId: props.isReply ? props.parentId : comment.id,
+                },
+                payload: newReply,
+              }
+            )
+          : await sendAPIRequest(
+              "/api/split/{splitId}/comment/{commentId}/reply",
+              {
+                method: "post",
+                parameters: {
+                  splitId: "splitId" in comment ? comment.splitId : "",
+                  commentId: props.isReply ? props.parentId : comment.id,
+                },
+                payload: newReply,
+              }
+            );
 
       if (response.code !== "Created") return;
 
       onCreateNewReply();
 
-      if (!props.isReply) handleNewReplyUIUpdate(newReply, response.content);
-      else props.onReplyToChild(newReply, response.content);
+      if (!props.isReply)
+        handleNewReplyUIUpdate(newReply, response.content.newCommentId);
+      else props.onReplyToChild(newReply, response.content.newCommentId);
       setIsReplying(false);
     }
 
@@ -192,18 +228,17 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
       const user = await userData.user;
       if (user.code !== "OK") return;
 
-      const newCommentSimulatedResponse: Schema<"SimpleWorkoutCommentResponseDTO"> =
-        {
-          id: newReplyId,
-          createdAt: new Date().toISOString(),
-          creator: user.content,
-          isCreator: true,
-          isLiked: false,
-          likeCount: 0,
-          replyCount: 0,
-          text: newReply.comment,
-          workoutId: props.workoutId,
-        };
+      const newCommentSimulatedResponse: CommentSchema = {
+        id: newReplyId,
+        createdAt: new Date().toISOString(),
+        creator: user.content,
+        isCreator: true,
+        isLiked: false,
+        likeCount: 0,
+        replyCount: 0,
+        text: newReply.comment,
+        workoutId: props.id,
+      };
 
       setReplies((prev) =>
         prev
@@ -241,7 +276,8 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
       return (
         <div className="comment-replies-container">
           {replies.replies.map((reply) => (
-            <WorkoutComment
+            <Comment
+              type={type}
               key={reply.id}
               onCreateNewReply={onCreateNewReply}
               isReply
@@ -345,7 +381,7 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
               ))}
 
             {!props.isReply && replyCount > 0 && (
-              <> 
+              <>
                 <div
                   className="reply-count-container"
                   onClick={handleRepliesClick}
@@ -354,8 +390,8 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
                   <p>{formatCount(replyCount)} replies</p>
                 </div>
 
-                <AnimatePresence>
                   {repliesExpanded && <>{replyElements}</>}
+                <AnimatePresence>
                 </AnimatePresence>
               </>
             )}
@@ -366,4 +402,4 @@ const WorkoutComment = React.memo<WorkoutCommentProps>(
   }
 );
 
-export default WorkoutComment;
+export default Comment;

@@ -1768,6 +1768,23 @@ type MappedEndpoints = {
         responses: {
           "201": {
             description: "Created";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/NewSplitResponseDTO";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/NewSplitResponseDTO";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/NewSplitResponseDTO";
+                };
+              };
+            };
           };
           "400": {
             description: "Bad Request";
@@ -1908,6 +1925,23 @@ type MappedEndpoints = {
         responses: {
           "201": {
             description: "Created";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/NewSplitCommentResponseDTO";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/NewSplitCommentResponseDTO";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/NewSplitCommentResponseDTO";
+                };
+              };
+            };
           };
           "400": {
             description: "Bad Request";
@@ -2158,6 +2192,23 @@ type MappedEndpoints = {
         responses: {
           "201": {
             description: "Created";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/NewSplitCommentResponseDTO";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/NewSplitCommentResponseDTO";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/NewSplitCommentResponseDTO";
+                };
+              };
+            };
           };
           "400": {
             description: "Bad Request";
@@ -2641,6 +2692,128 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    "/api/split/me/workoutoptions": {
+      get: {
+        tags: ["Split"];
+        parameters: [
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "searchTerm";
+            in: "query";
+            schema: {
+              type: "string";
+            };
+          },
+          {
+            name: "publicOnly";
+            in: "query";
+            schema: {
+              type: "boolean";
+            };
+          },
+          {
+            name: "favoriteOnly";
+            in: "query";
+            schema: {
+              type: "boolean";
+            };
+          },
+          {
+            name: "personalOnly";
+            in: "query";
+            schema: {
+              type: "boolean";
+            };
+          }
+        ];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutOptionResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutOptionResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutOptionResponseDTO";
+                  };
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
             content: {
               "text/plain": {
                 schema: {
@@ -7365,17 +7538,17 @@ type MappedEndpoints = {
             content: {
               "text/plain": {
                 schema: {
-                  type: "string";
+                  $ref: "#/components/schemas/NewWorkoutCommentResponseDTO";
                 };
               };
               "application/json": {
                 schema: {
-                  type: "string";
+                  $ref: "#/components/schemas/NewWorkoutCommentResponseDTO";
                 };
               };
               "text/json": {
                 schema: {
-                  type: "string";
+                  $ref: "#/components/schemas/NewWorkoutCommentResponseDTO";
                 };
               };
             };
@@ -7632,17 +7805,17 @@ type MappedEndpoints = {
             content: {
               "text/plain": {
                 schema: {
-                  type: "string";
+                  $ref: "#/components/schemas/NewWorkoutCommentResponseDTO";
                 };
               };
               "application/json": {
                 schema: {
-                  type: "string";
+                  $ref: "#/components/schemas/NewWorkoutCommentResponseDTO";
                 };
               };
               "text/json": {
                 schema: {
-                  type: "string";
+                  $ref: "#/components/schemas/NewWorkoutCommentResponseDTO";
                 };
               };
             };
@@ -9671,7 +9844,6 @@ type MappedEndpoints = {
           };
           description: {
             type: "string";
-            nullable: true;
           };
           isPublic: {
             type: "boolean";
@@ -10064,6 +10236,42 @@ type MappedEndpoints = {
         };
         additionalProperties: false;
       };
+      NewSplitCommentResponseDTO: {
+        type: "object";
+        properties: {
+          newCommentId: {
+            type: "string";
+            format: "uuid";
+          };
+        };
+        additionalProperties: false;
+      };
+      NewSplitResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "string";
+            format: "uuid";
+          };
+          name: {
+            type: "string";
+          };
+          isPublic: {
+            type: "boolean";
+          };
+        };
+        additionalProperties: false;
+      };
+      NewWorkoutCommentResponseDTO: {
+        type: "object";
+        properties: {
+          newCommentId: {
+            type: "string";
+            format: "uuid";
+          };
+        };
+        additionalProperties: false;
+      };
       NewWorkoutResponseDTO: {
         type: "object";
         properties: {
@@ -10329,7 +10537,6 @@ type MappedEndpoints = {
           };
           description: {
             type: "string";
-            nullable: true;
           };
           isPublic: {
             type: "boolean";
@@ -10411,6 +10618,32 @@ type MappedEndpoints = {
           workoutId: {
             type: "string";
             format: "uuid";
+          };
+        };
+        additionalProperties: false;
+      };
+      SimpleWorkoutOptionResponseDTO: {
+        type: "object";
+        properties: {
+          id: {
+            type: "string";
+            format: "uuid";
+          };
+          name: {
+            type: "string";
+          };
+          description: {
+            type: "string";
+          };
+          isPublic: {
+            type: "boolean";
+          };
+          likeCount: {
+            type: "integer";
+            format: "int32";
+          };
+          creator: {
+            $ref: "#/components/schemas/SimpleUserResponseDTO";
           };
         };
         additionalProperties: false;
@@ -10500,7 +10733,6 @@ type MappedEndpoints = {
           };
           description: {
             type: "string";
-            nullable: true;
           };
           isPublic: {
             type: "boolean";

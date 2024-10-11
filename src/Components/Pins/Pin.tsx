@@ -35,7 +35,7 @@ export default function Pin({ pin }: PinProps) {
       }}
     >
       <div className="pin-header">
-        <Link to={`/${pin.type === 0 ? "workout" : "split"}/${pin.id}`}>
+        <Link to={`${pin.type === 0 ? "workout" : "split"}/${pin.id}`}>
           <h3>{pin.name}</h3>
           &nbsp;
           <p className="pin-type">{pin.type === 0 ? "(Workout)" : "(Split)"}</p>

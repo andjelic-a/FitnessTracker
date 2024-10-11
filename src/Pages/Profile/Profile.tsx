@@ -2,15 +2,14 @@ import "./Profile.scss";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
 import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
 import AnimatedOutlet from "../../Components/WindowWrapper/AnimatedOutlet";
-import ProfileSkeleton from "./Skeletons/ProfileSkeleton";
 import profileLoader from "./ProfileLoader";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
-import Async from "../../Components/Async/Async";
 import ProfileWorkoutTabs from "../../Components/ProfileWorkoutTabs/ProfileWorkoutTabs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NewWorkoutsContext } from "../../Contexts/NewWorkoutsContext";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import Pins from "../../Components/Pins/Pins";
+import { LoaderReturnType } from "../../BetterRouter/CreateLoader";
 
 export default function Profile() {
   const loaderData = useLoaderData<typeof profileLoader>();
@@ -18,6 +17,33 @@ export default function Profile() {
   const [newWorkouts, setNewWorkouts] = useState<
     Schema<"SimpleWorkoutResponseDTO">[]
   >([]);
+
+  const [loaderDataState, setLoaderDataState] = useState<
+    | {
+        [key in keyof LoaderReturnType<typeof profileLoader>]: Awaited<
+          LoaderReturnType<typeof profileLoader>[key]
+        >;
+      }
+    | null
+  >(null);
+
+  useEffect(() => {
+    if (!loaderData) return;
+
+    Promise.all([
+      loaderData.user,
+      loaderData.pins,
+      loaderData.latestWeekOfActivity,
+      loaderData.streak,
+    ]).then((x) => {
+      setLoaderDataState({
+        user: x[0],
+        pins: x[1],
+        latestWeekOfActivity: x[2],
+        streak: x[3],
+      });
+    });
+  }, [loaderData]);
 
   return (
     <NewWorkoutsContext.Provider
@@ -30,54 +56,49 @@ export default function Profile() {
       <AnimatedOutlet />
 
       <div className="profile">
-        <Async await={loaderData.user} skeleton={<ProfileSkeleton />}>
-          {(loadedUserData: Awaited<typeof loaderData.user>) => {
-            if (loadedUserData.code !== "OK") return null;
-
-            return (
-              <>
-                <ProfileHeader user={loadedUserData.content} />
-
-                <div className="profile-body">
-                  <Async await={loaderData.pins}>
-                    {(pins) => {
-                      if (pins.code !== "OK") return null;
-
-                      return <Pins pins={pins.content} />;
-                    }}
-                  </Async>
-
-                  <ProfileWorkoutTabs
-                    latestActivity={loaderData.latestWeekOfActivity.then(
-                      (x) => (x.code === "OK" ? x.content : null)!
-                    )}
-                    split={loaderData.user.then((x) =>
-                      x.code === "OK" ? x.content.currentSplit : null
-                    )}
-                  />
-
-                  <Async
-                    await={loaderData.streak}
-                    skeleton={<ProfileSkeleton />}
-                  >
-                    {(loadedStreakData) => {
-                      if (loadedStreakData.code !== "OK") return null;
-
-                      return (
-                        <>
-                          <ActivityGrid
-                            joinedAt={new Date(loadedUserData.content.joinedAt)}
-                          />
-                        </>
-                      );
-                    }}
-                  </Async>
-                </div>
-              </>
-            );
-          }}
-        </Async>
+        <InnerProfile loaderDataState={loaderDataState} />
       </div>
     </NewWorkoutsContext.Provider>
+  );
+}
+
+function InnerProfile({
+  loaderDataState,
+}: {
+  loaderDataState:
+    | {
+        [key in keyof LoaderReturnType<typeof profileLoader>]: Awaited<
+          LoaderReturnType<typeof profileLoader>[key]
+        >;
+      }
+    | null;
+}) {
+  if (loaderDataState?.user.code !== "OK") return <></>;
+
+  return (
+    <>
+      <ProfileHeader user={loaderDataState.user.content} />
+
+      <div className="profile-body">
+        {loaderDataState.pins.code === "OK" && (
+          <Pins pins={loaderDataState.pins.content} />
+        )}
+
+        <ProfileWorkoutTabs
+          latestActivity={
+            loaderDataState.latestWeekOfActivity.code === "OK"
+              ? loaderDataState.latestWeekOfActivity.content
+              : null
+          }
+          split={loaderDataState.user.content.currentSplit}
+        />
+
+        {loaderDataState.user.code === "OK" && (
+          <ActivityGrid
+            joinedAt={new Date(loaderDataState.user.content.joinedAt)}
+          />
+        )}
+      </div>
+    </>
   );
 }
