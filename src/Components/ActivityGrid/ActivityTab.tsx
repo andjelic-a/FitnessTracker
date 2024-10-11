@@ -1,50 +1,36 @@
-import { memo, useEffect, useMemo, useRef, useState } from "react";
-import sendAPIRequest from "../../Data/SendAPIRequest";
+import { memo, useMemo } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import ActivityItems from "./ActivityItems";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
+import Async from "../Async/Async";
 
 type ActivityTabProps = {
   year: number | "latest";
+  data: Promise<Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[]>;
 };
 
-const ActivityTab = memo<ActivityTabProps>(({ year }) => {
-  const promiseRef = useRef<Promise<any> | null>(null);
-  const [activity, setActivity] = useState<
-    Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[] | null
-  >(null);
-
-  useEffect(() => {
-    if (promiseRef.current) return;
-
-    promiseRef.current = sendAPIRequest("/api/user/me/streak", {
-      method: "get",
-      parameters: {
-        year: year === "latest" ? undefined : year,
-      },
-    }).then((x) => {
-      if (x.code === "Too Many Requests") promiseRef.current = null;
-      if (x.code === "OK") setActivity(x.content);
-    });
-  }, [year]);
-
+const ActivityTab = memo<ActivityTabProps>(({ year, data }) => {
   const tabItems = useMemo(
-    () => <ActivityItems streak={activity} year={year} />,
-    [activity]
+    () => (
+      <Async await={data}>
+        {(x) => <ActivityItems streak={x} year={year} />}
+      </Async>
+    ),
+    [data]
   );
 
-  const completedWorkoutsCount = useMemo(
+  /*   const completedWorkoutsCount = useMemo(
     () =>
       activity
         ? activity.reduce((total, current) => total + current.completedCount, 0)
         : 0,
     [activity]
-  );
+  ); */
 
   return (
     <>
       <h3 className="activity-grid-header">
-        <b>{completedWorkoutsCount}</b> workouts completed in
+        <b>{/* completedWorkoutsCount */ 0}</b> workouts completed in
         {year === "latest" ? " the last year" : ` ${year}`}
       </h3>
 
