@@ -1,7 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./ActivityGrid.scss";
 import "overlayscrollbars/overlayscrollbars.css";
 import ActivityTab from "./ActivityTab";
+import { Schema } from "../../Types/Endpoints/SchemaParser";
+import sendAPIRequest from "../../Data/SendAPIRequest";
 
 type ActivityGrid = {
   joinedAt: Date;
@@ -24,17 +26,70 @@ function ActivityGrid({ joinedAt }: ActivityGrid) {
 
   const activityTabNames = useMemo(() => getYearOptions(), [joinedAt]);
 
+  const [tabData, setTabData] = useState<
+    | {
+        [key in "latest" | number]: Promise<
+          Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[]
+        > | null;
+      }
+    | null
+  >(null);
+
+  useEffect(() => {
+    setTabData((prev) => {
+      const newTabData = {} as any;
+
+      activityTabNames.forEach((tabName) => {
+        newTabData[tabName] = prev?.[tabName] ?? null;
+      });
+
+      newTabData.latest ??= sendAPIRequest("/api/user/me/streak", {
+        method: "get",
+        parameters: {},
+      }).then((x) => (x.code === "OK" ? x.content : []));
+      return newTabData;
+    });
+  }, [activityTabNames]);
+
+  function handleSetShowing(option: number | "latest") {
+    if (!tabData) return;
+
+    if (tabData[option]) {
+      tabData[option].then(() => void setShowing(option));
+      return;
+    }
+
+    const response = sendAPIRequest("/api/user/me/streak", {
+      method: "get",
+      parameters: {
+        year: option === "latest" ? undefined : option,
+      },
+    })
+      .then((x) => (x.code === "OK" ? x.content : []))
+      .then((x) => {
+        setShowing(option);
+        return x;
+      });
+
+    setTabData((prev) => {
+      prev![option] = response;
+      return prev;
+    });
+  }
+
   return (
     <div className="activity-grid-container">
       <>
-        <ActivityTab year={showing} key={showing} />
+        {tabData && tabData[showing] && (
+          <ActivityTab year={showing} key={showing} data={tabData[showing]} />
+        )}
 
         <div className="year-options-sidebar">
           {activityTabNames.map((option) => (
             <button
               className={"option" + (option === showing ? " selected" : "")}
               key={option}
-              onClick={() => void setShowing(option)}
+              onClick={() => handleSetShowing(option)}
             >
               {option}
             </button>
