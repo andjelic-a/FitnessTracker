@@ -52,8 +52,6 @@ import SplitDisplay from "./Components/SplitDisplay/SplitDisplay.tsx";
 import splitDisplayLoader from "./Components/SplitDisplay/SplitDisplayLoader.ts";
 import SplitCreator from "./Components/SplitCreator/SplitCreator.tsx";
 import SplitEditor from "./Components/SplitEditor/SplitEditor.tsx";
-import ActivateSplit from "./Components/SplitDisplay/ActivateSplit.tsx";
-import activatesplitLoader from "./Components/SplitDisplay/ActivateSplitLoader.ts";
 
 const routes: RouteObject[] = [
   {
@@ -83,11 +81,6 @@ const routes: RouteObject[] = [
       {
         path: "split/:id",
         element: <div>Split</div>,
-      },
-      {
-        path: "activate-split/:id",
-        element: <ActivateSplit />,
-        loader: activatesplitLoader,
       },
       {
         path: "me",

@@ -19,6 +19,10 @@ import {
 } from "react-reverse-portal";
 import CommentSection from "../CommentSection/CommentSection";
 import ConfirmModalDialog from "../ConfirmModalDialog/ConfirmModalDialog";
+import {
+  getProfileCache,
+  setProfileCache,
+} from "../../Pages/Profile/ProfileCache";
 
 const SplitDisplay = WindowFC(() => {
   const loaderData = useLoaderData<typeof splitDisplayLoader>();
@@ -113,7 +117,25 @@ const SplitDisplay = WindowFC(() => {
     if (isWaitingForResponse.current || splitId.current.length === 0) return;
     isWaitingForResponse.current = true;
 
-    navigate(`/activate-split/${splitId.current}`);
+    const cache = getProfileCache();
+    if (cache === null) {
+      navigate(`/activate-split/${splitId.current}`);
+      setIsConfirmActivationModalOpen(false);
+      return;
+    }
+
+    const user = await cache.user;
+    const split = await loaderData.split;
+
+    if (user.code === "OK" && split.code === "OK")
+      user.content.currentSplit = split.content;
+
+    setProfileCache({
+      ...cache,
+      user: Promise.resolve(user),
+    });
+
+    navigate(`/me`);
     setIsConfirmActivationModalOpen(false);
   }
 

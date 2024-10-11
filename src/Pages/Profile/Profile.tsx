@@ -25,7 +25,7 @@ export default function Profile() {
         >;
       }
     | null
-  >(null); //TODO: replace null with skeleton layout
+  >(null);
 
   useEffect(() => {
     if (!loaderData) return;
