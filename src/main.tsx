@@ -86,9 +86,7 @@ const routes: RouteObject[] = [
         path: "me",
         element: <Profile />,
         loader: profileLoader,
-        shouldRevalidate: (a) => {
-          return a.currentUrl.pathname.includes("me/split/");
-        },
+        shouldRevalidate: (a) => a.currentUrl.pathname.includes("me/split/"),
         children: [
           {
             path: "workout/new",

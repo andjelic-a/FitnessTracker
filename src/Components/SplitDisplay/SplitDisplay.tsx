@@ -137,6 +137,13 @@ const SplitDisplay = WindowFC(() => {
 
     navigate(`/me`);
     setIsConfirmActivationModalOpen(false);
+
+    sendAPIRequest("/api/user/me/split", {
+      method: "patch",
+      payload: {
+        splitId: splitId.current,
+      },
+    });
   }
 
   return (
