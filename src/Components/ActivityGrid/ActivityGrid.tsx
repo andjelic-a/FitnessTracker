@@ -51,11 +51,11 @@ function ActivityGrid({ joinedAt }: ActivityGrid) {
     });
   }, [activityTabNames]);
 
-  async function handleSetShowing(option: number | "latest") {
+  function handleSetShowing(option: number | "latest") {
     if (!tabData) return;
 
     if (tabData[option]) {
-      setShowing(option);
+      tabData[option].then(() => void setShowing(option));
       return;
     }
 
