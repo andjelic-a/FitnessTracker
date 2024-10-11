@@ -40,7 +40,10 @@ const ActivityTab = memo<ActivityTabProps>(({ year, data }) => {
           },
         }}
       >
-        <Async await={data}>
+        <Async
+          await={data}
+          skeleton={<ActivityItems streak={null} year={year} />}
+        >
           {(x) => <ActivityItems streak={x} year={year} />}
         </Async>
       </OverlayScrollbarsComponent>
