@@ -101,6 +101,22 @@ const SplitEditor = WindowFC(
       });
     }, [loaderData]);
 
+    function checkForBasicChanges() {
+      return (
+        originalSplit.current &&
+        titleInputRef.current &&
+        descriptionTextAreaRef.current &&
+        (originalSplit.current.name.trim() !==
+          titleInputRef.current.value.trim() ||
+          originalSplit.current.description.trim() !==
+            descriptionTextAreaRef.current.value.trim())
+      );
+    }
+
+    function checkForWorkoutChanges() {
+      return false;
+    }
+
     async function handleSaveClick() {
       const userResponse = await getProfileCache()?.user;
       const user = userResponse?.code !== "OK" ? null : userResponse?.content;
@@ -141,13 +157,6 @@ const SplitEditor = WindowFC(
         payload: newSplit,
       }).then((x) => {
         if (x.code !== "Created") return;
-
-        //TODO: Implement simulated response
-        /* const simulatedResponse: Schema<"SimpleSplitResponseDTO"> = {
-        creator: user,
-        ...x.content,
-      }; */
-
         onClose(true);
       });
     }
@@ -159,7 +168,7 @@ const SplitEditor = WindowFC(
 
     useEffect(() => {
       setModalConfirmationOpeningCondition?.(
-        () => validateTitle() || validateWorkouts()
+        () => checkForBasicChanges() || checkForWorkoutChanges()
       );
     }, [selectedWorkouts]);
 
