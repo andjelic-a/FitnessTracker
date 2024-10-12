@@ -81,13 +81,13 @@ const SplitCreator = WindowFC(
           .filter((x) => x.selected !== null)
           .map((x) => ({
             day: [
+              "Sunday",
               "Monday",
               "Tuesday",
               "Wednesday",
               "Thursday",
               "Friday",
               "Saturday",
-              "Sunday",
             ].indexOf(x.day) as 0 | 1 | 2 | 3 | 4 | 5 | 6,
             workoutId: x.selected!.id,
           })),
