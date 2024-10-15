@@ -216,17 +216,53 @@
   }
 
   .body {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
     justify-content: center;
     gap: 2rem;
 
-    .workout {
-      width: 100%;
-      height: 100%;
+    .day-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .day-container:last-child {
+      grid-column: 1 / -1;
 
-      display: grid;
+      .day-container-wrapper:last-child {
+        width: calc(100%/2);
+      }
+    }
+
+    .day-container-wrapper{
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 10rem;
+      background-color: $dark-300;
+      border-radius: 0.5rem;
+      box-shadow: 6px 8px 15px $dark-100;
+
+      h3 {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.8rem;
+        font-weight: 500;
+      }
+
+      .workout {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
     }
   }
 }

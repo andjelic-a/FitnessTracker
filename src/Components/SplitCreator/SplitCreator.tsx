@@ -219,19 +219,21 @@ const SplitCreator = WindowFC(
           <div className="body">
             {selectedWorkouts.map((x) => (
               <div className="day-container" key={x.day}>
-                <p>{x.day}</p>
+                <div className="day-container-wrapper">
+                  <h3>{x.day}</h3>
 
-                <div className="workout">
-                  {x.selected === null ? (
-                    <p className="rest">Rest</p>
-                  ) : (
-                    <WorkoutPreview workout={x.selected} />
-                  )}
+                  <div className="workout">
+                    {x.selected === null ? (
+                      <p className="rest">Rest</p>
+                    ) : (
+                      <WorkoutPreview workout={x.selected} />
+                    )}
+                  </div>
+
+                  <button className="day-container-button" onClick={() => handleOpenWorkoutSelector(x.day)}>
+                    Replace
+                  </button>
                 </div>
-
-                <button onClick={() => handleOpenWorkoutSelector(x.day)}>
-                  Replace
-                </button>
               </div>
             ))}
           </div>
