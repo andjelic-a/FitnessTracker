@@ -54,6 +54,7 @@ const SplitCreator = WindowFC(
       },
     ]);
     const [isPublic, setIsPublic] = useState<boolean>(false);
+    const [hoveredDay, setHoveredDay] = useState<string | null>(null);
 
     const titleInputRef = useRef<HTMLInputElement | null>(null);
     const descriptionTextAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -230,7 +231,12 @@ const SplitCreator = WindowFC(
                     )}
                   </div>
 
-                  <button className="day-container-button" onClick={() => handleOpenWorkoutSelector(x.day)}>
+                  <button
+                    className={`day-container-button ${hoveredDay === x.day ? "" : "hide"}`}
+                    onClick={() => handleOpenWorkoutSelector(x.day)}
+                    onMouseEnter={() => setHoveredDay(x.day)}
+                    onMouseLeave={() => setHoveredDay(null)}
+                  >
                     Replace
                   </button>
                 </div>
