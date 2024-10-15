@@ -86,10 +86,7 @@ const ActivityItems = memo<ActivityItemsProps>(({ streak, year }) => {
       return newArray;
     }, [streak, year]);
 
-  const processedStreak = useMemo(
-    () => getProcessedStreak(),
-    [getProcessedStreak]
-  );
+  const processedStreak = useMemo(getProcessedStreak, [getProcessedStreak]);
 
   const emptyStreak = useMemo(() => new Array(52).fill({}), []);
 

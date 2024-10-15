@@ -48,6 +48,10 @@ import StartedWorkout from "./Pages/StartedWorkout/StartedWorkout.tsx";
 import startedWorkoutLoader from "./Pages/StartedWorkout/StartedWorkoutLoader.ts";
 import WorkoutEditor from "./Components/WorkoutEditor/WorkoutEditor.tsx";
 import workoutCreatorLoader from "./Components/WorkoutCreator/WorkoutCreatorLoader.ts";
+import SplitDisplay from "./Components/SplitDisplay/SplitDisplay.tsx";
+import splitDisplayLoader from "./Components/SplitDisplay/SplitDisplayLoader.ts";
+import SplitCreator from "./Components/SplitCreator/SplitCreator.tsx";
+import SplitEditor from "./Components/SplitEditor/SplitEditor.tsx";
 
 const routes: RouteObject[] = [
   {
@@ -82,11 +86,12 @@ const routes: RouteObject[] = [
         path: "me",
         element: <Profile />,
         loader: profileLoader,
+        shouldRevalidate: (a) => a.currentUrl.pathname.includes("me/split/"),
         children: [
           {
-            path: "started-workout",
-            element: <StartedWorkout />,
-            loader: startedWorkoutLoader,
+            path: "workout/new",
+            element: <WorkoutCreator />,
+            loader: workoutCreatorLoader,
           },
           {
             path: "workout/:id",
@@ -99,9 +104,19 @@ const routes: RouteObject[] = [
             loader: workoutDisplayLoader,
           },
           {
-            path: "workout/new",
-            element: <WorkoutCreator />,
+            path: "split/new",
+            element: <SplitCreator />,
             loader: workoutCreatorLoader,
+          },
+          {
+            path: "split/:id",
+            element: <SplitDisplay />,
+            loader: splitDisplayLoader,
+          },
+          {
+            path: "split/:id/edit",
+            element: <SplitEditor />,
+            loader: splitDisplayLoader,
           },
           {
             path: "followers",
@@ -118,6 +133,11 @@ const routes: RouteObject[] = [
             element: <Settings />,
           },
         ],
+      },
+      {
+        path: "started-workout",
+        element: <StartedWorkout />,
+        loader: startedWorkoutLoader,
       },
       {
         path: "authentication",

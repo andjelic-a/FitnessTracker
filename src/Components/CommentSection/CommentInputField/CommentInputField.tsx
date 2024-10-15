@@ -1,8 +1,8 @@
+import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import { RefObject, useEffect, useRef, useState } from "react";
-import { Schema } from "../../../../Types/Endpoints/SchemaParser";
 import "./CommentInputField.scss";
-import Async from "../../../Async/Async";
-import { getProfileCache } from "../../../../Pages/Profile/ProfileCache";
+import Async from "../../Async/Async";
+import { getProfileCache } from "../../../Pages/Profile/ProfileCache";
 
 type CommentInputFieldProps = {
   textAreaRef: RefObject<HTMLTextAreaElement>;

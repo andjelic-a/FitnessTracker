@@ -6,7 +6,7 @@ type UserProps = {
   user: Schema<"SimpleUserResponseDTO">;
 };
 
-export default function User({ user: { id, name, image } }: UserProps) {
+export default function User({ user: { username, name, image } }: UserProps) {
   const navigate = useNavigate();
 
   return (
@@ -14,7 +14,7 @@ export default function User({ user: { id, name, image } }: UserProps) {
       className="user-container"
       onClick={(e) => {
         e.preventDefault();
-        navigate(`/user/${id}`);
+        navigate(`/user/${username}`);
       }}
     >
       <img

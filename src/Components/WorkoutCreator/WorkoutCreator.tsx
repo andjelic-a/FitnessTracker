@@ -247,7 +247,7 @@ const WorkoutCreator = WindowFC(
         shouldFocusAfterRender: true,
         shouldReturnFocusAfterClose: true,
         aria: {
-          describedby: "workout-creator-closing-modal-title",
+          describedby: "#workout-creator-closing-modal-title",
         },
       },
     },

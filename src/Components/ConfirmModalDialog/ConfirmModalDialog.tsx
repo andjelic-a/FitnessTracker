@@ -8,6 +8,8 @@ type ConfirmModalDialog = {
   isOpen: boolean;
   onConfirm: () => void;
   onDeny: () => void;
+  confirmBtnText?: string;
+  denyBtnText?: string;
 };
 
 export default function ConfirmModalDialog({
@@ -15,6 +17,8 @@ export default function ConfirmModalDialog({
   isOpen,
   onConfirm,
   onDeny,
+  confirmBtnText,
+  denyBtnText,
 }: ConfirmModalDialog) {
   return (
     <ReactModal
@@ -39,16 +43,8 @@ export default function ConfirmModalDialog({
 
       <FocusTrap>
         <div className="modal-buttons-container">
-          <button
-            onClick={() => {
-              console.log("deny");
-              onDeny();
-            }}
-          >
-            No
-          </button>
-
-          <button onClick={onConfirm}>Yes</button>
+          <button onClick={onDeny}>{denyBtnText ?? "No"}</button>
+          <button onClick={onConfirm}>{confirmBtnText ?? "Yes"}</button>
         </div>
       </FocusTrap>
     </ReactModal>

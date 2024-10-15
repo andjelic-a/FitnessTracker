@@ -6,8 +6,8 @@ import CurrentSplitDayDisplay from "./CurrentSplitDayDisplay";
 import WorkoutCarousel from "../WorkoutCarousel/WorkoutCarousel";
 
 type CurrentSplitDisplayProps = {
-  split: Schema<"DetailedUserSplitResponseDTO">;
-  latestActivity: Schema<"DetailedWeekOfCompletedWorkoutsResponseDTO">;
+  split: Schema<"DetailedUserSplitResponseDTO"> | null;
+  latestActivity: Schema<"DetailedWeekOfCompletedWorkoutsResponseDTO"> | null;
 };
 
 type SplitWorkout = {
@@ -41,6 +41,8 @@ export default function CurrentSplitDisplay({
   const [workouts, setWorkouts] = useState<SplitWorkout[]>([]);
 
   useEffect(() => {
+    if (!split) return;
+
     const a = extractWorkouts(split);
     setWorkouts([...a.slice(1), a[0]]);
     // setWorkouts(a);
@@ -70,7 +72,11 @@ export default function CurrentSplitDisplay({
 
     if (workout.day > today) return "pending";
 
-    if (latestActivity.completedWorkouts.includes(workout.day)) return "done";
+    if (
+      latestActivity &&
+      latestActivity.completedWorkouts.includes(workout.day)
+    )
+      return "done";
 
     if (workout.day === today) return "pending-today";
 

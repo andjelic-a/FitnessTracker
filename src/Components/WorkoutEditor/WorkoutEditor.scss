@@ -1,11 +1,6 @@
 @import "../../Palette.scss";
 
 .workout-editor-container {
-  &,
-  * {
-    user-select: none;
-  }
-
   width: 80rem;
   max-width: 85vw;
   height: 50rem;
@@ -23,6 +18,11 @@
   overflow-x: hidden;
 
   scrollbar-gutter: stable both-edges;
+
+  &,
+  * {
+    user-select: none;
+  }
 
   &::-webkit-scrollbar {
     width: 8px;

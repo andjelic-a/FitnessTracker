@@ -1,45 +1,23 @@
-import { memo, useEffect, useMemo, useRef, useState } from "react";
-import sendAPIRequest from "../../Data/SendAPIRequest";
+import { memo, useEffect, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import ActivityItems from "./ActivityItems";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
+import Async from "../Async/Async";
 
 type ActivityTabProps = {
   year: number | "latest";
+  data: Promise<Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[]>;
 };
 
-const ActivityTab = memo<ActivityTabProps>(({ year }) => {
-  const promiseRef = useRef<Promise<any> | null>(null);
-  const [activity, setActivity] = useState<
-    Schema<"SimpleWeekOfCompletedWorkoutsResponseDTO">[] | null
-  >(null);
-
+const ActivityTab = memo<ActivityTabProps>(({ year, data }) => {
+  const [completedWorkoutsCount, setCompletedWorkoutsCount] = useState(0);
   useEffect(() => {
-    if (promiseRef.current) return;
-
-    promiseRef.current = sendAPIRequest("/api/user/me/streak", {
-      method: "get",
-      parameters: {
-        year: year === "latest" ? undefined : year,
-      },
-    }).then((x) => {
-      if (x.code === "Too Many Requests") promiseRef.current = null;
-      if (x.code === "OK") setActivity(x.content);
-    });
-  }, [year]);
-
-  const tabItems = useMemo(
-    () => <ActivityItems streak={activity} year={year} />,
-    [activity]
-  );
-
-  const completedWorkoutsCount = useMemo(
-    () =>
-      activity
-        ? activity.reduce((total, current) => total + current.completedCount, 0)
-        : 0,
-    [activity]
-  );
+    data.then((x) =>
+      setCompletedWorkoutsCount(
+        x.reduce((total, current) => total + current.completedCount, 0)
+      )
+    );
+  }, [data]);
 
   return (
     <>
@@ -62,7 +40,12 @@ const ActivityTab = memo<ActivityTabProps>(({ year }) => {
           },
         }}
       >
-        {tabItems}
+        <Async
+          await={data}
+          skeleton={<ActivityItems streak={null} year={year} />}
+        >
+          {(x) => <ActivityItems streak={x} year={year} />}
+        </Async>
       </OverlayScrollbarsComponent>
     </>
   );
