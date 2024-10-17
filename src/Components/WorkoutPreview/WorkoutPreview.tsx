@@ -26,24 +26,24 @@ export default function WorkoutPreview({
       className={"workout-preview " + (className ? className : "")}
       {...attr}
     >
-      <div className="header" {...headerProps}>
-        <p className="name" onClick={() => navigate(`workout/${workout.id}`)}>
+      <div className="workout-preview-header" {...headerProps}>
+        <p className="workout-preview-header-name" onClick={() => navigate(`workout/${workout.id}`)}>
           {workout.name}
         </p>
         {!workout.isPublic && <p className="private-label">Private</p>}
       </div>
 
-      <div className="body" {...bodyProps}>
+      <div className="workout-preview-body" {...bodyProps}>
         <p>
           {workout.description
             ? workout.description.length > 150
-              ? workout.description.slice(0, 150) + "..."
+              ? workout.description.slice(0, 70) + "..."
               : workout.description
             : ""}
         </p>
       </div>
 
-      <div className="footer" {...footerProps}>
+      <div className="workout-preview-footer" {...footerProps}>
         <User user={workout.creator} />
       </div>
     </div>
