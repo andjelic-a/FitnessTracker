@@ -225,14 +225,19 @@ const SplitCreator = WindowFC(
 
                   <div className="workout">
                     {x.selected === null ? (
-                      <p className="rest">Rest</p>
+                      <>
+                        <Icon className="rest-icon" name="mug-hot" />
+                        <p className="rest">Rest</p>
+                      </>
                     ) : (
                       <WorkoutPreview workout={x.selected} />
                     )}
                   </div>
 
                   <button
-                    className={`day-container-button ${hoveredDay === x.day ? "" : "hide"}`}
+                    className={`day-container-button ${
+                      hoveredDay === x.day ? "" : "hide"
+                    }`}
                     onClick={() => handleOpenWorkoutSelector(x.day)}
                     onMouseEnter={() => setHoveredDay(x.day)}
                     onMouseLeave={() => setHoveredDay(null)}
