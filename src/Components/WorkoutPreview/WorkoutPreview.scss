@@ -2,18 +2,20 @@
 
 .workout-preview {
   position: absolute;
-  top: 1vh;
-  left: 1vh;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem;
+  top: 0;
 
   .workout-preview-header {
+    position: relative;
     width: 100%;
     display: flex;
+    justify-content: space-between;
     font-size: 1.8rem;
-    position: relative;
-    top: 0vh;
-    left: 0vh;
   }
 
   .workout-preview-body {
@@ -23,11 +25,16 @@
     align-items: flex-start;
     font-size: 1.6rem;
     font-weight: normal;
+    overflow: hidden;
+  
+    p {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
+  
 
   .workout-preview-footer {
-    position: absolute;
-    bottom: 1.6rem;
     display: flex;
     justify-content: space-between;
     align-items: center;

@@ -1,5 +1,6 @@
 import "./WorkoutPreview.scss";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
+import Icon from "../Icon/Icon";
 import User from "../User/User";
 import { useNavigate } from "react-router-dom";
 import { HTMLProps } from "../../Types/Utility/HTMLProps";
@@ -27,10 +28,17 @@ export default function WorkoutPreview({
       {...attr}
     >
       <div className="workout-preview-header" {...headerProps}>
-        <p className="workout-preview-header-name" onClick={() => navigate(`workout/${workout.id}`)}>
+        <p
+          className="workout-preview-header-name"
+          onClick={() => navigate(`workout/${workout.id}`)}
+        >
           {workout.name}
         </p>
-        {!workout.isPublic && <p className="private-label">Private</p>}
+        {!workout.isPublic && (
+          <p className="private-label">
+            <Icon name="lock" />
+          </p>
+        )}
       </div>
 
       <div className="workout-preview-body" {...bodyProps}>
