@@ -1,6 +1,6 @@
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import { RestStatus, WorkoutStatus } from "./CurrentSplitDisplay";
-import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
+import MiniWorkoutPreview from "../WorkoutPreview/MiniWorkoutPreview";
 import { useMemo } from "react";
 import Icon from "../Icon/Icon";
 import { Tooltip } from "react-tooltip";
@@ -48,7 +48,7 @@ export default function CurrentSplitDayDisplay({
         </div>
       ) : (
         <div className="workout-container">
-          <WorkoutPreview
+          <MiniWorkoutPreview
             footerProps={{
               "data-day": days[day],
             }}
