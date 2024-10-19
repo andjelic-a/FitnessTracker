@@ -186,14 +186,21 @@ const SplitDisplay = WindowFC(() => {
 
                 <div className="split-display-body">
                   {extractWorkoutsFromSplit(split.content).map((workout) => (
-                    <div className="workout" key={workout.day}>
-                      <h1>{workout.day}</h1>
+                    <div className="workout-container" key={workout.day}>
+                      <div className="workout-container-wrapper">
+                        <h3>{workout.day}</h3>
 
-                      {workout.workout === null ? (
-                        <p>Rest</p>
-                      ) : (
-                        <WorkoutPreview workout={workout.workout} />
-                      )}
+                        <div className="workout">
+                          {workout.workout === null ? (
+                            <>
+                            <Icon className="rest-icon" name="mug-hot" />
+                            <p className="rest">Rest</p>
+                          </>
+                          ) : (
+                            <WorkoutPreview workout={workout.workout} />
+                          )}
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>

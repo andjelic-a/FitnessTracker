@@ -45,7 +45,7 @@ export default function WorkoutPreview({
         <p>
           {workout.description
             ? workout.description.length > 150
-              ? workout.description.slice(0, 70) + "..."
+              ? workout.description.slice(0, 75) + "..."
               : workout.description
             : ""}
         </p>
