@@ -24,12 +24,12 @@ export default function MiniWorkoutPreview({
 
   return (
     <div
-      className={"workout-preview " + (className ? className : "")}
+      className={"mini-workout-preview " + (className ? className : "")}
       {...attr}
     >
-      <div className="workout-preview-header" {...headerProps}>
+      <div className="mini-workout-preview-header" {...headerProps}>
         <p
-          className="workout-preview-header-name"
+          className="mini-workout-preview-header-name"
           onClick={() => navigate(`workout/${workout.id}`)}
         >
           {workout.name}
@@ -41,7 +41,7 @@ export default function MiniWorkoutPreview({
         )}
       </div>
 
-      <div className="workout-preview-body" {...bodyProps}>
+      <div className="mini-workout-preview-body" {...bodyProps}>
         <p>
           {workout.description
             ? workout.description.length > 150
@@ -51,7 +51,7 @@ export default function MiniWorkoutPreview({
         </p>
       </div>
 
-      <div className="workout-preview-footer" {...footerProps}>
+      <div className="mini-workout-preview-footer" {...footerProps}>
         <User user={workout.creator} />
       </div>
     </div>

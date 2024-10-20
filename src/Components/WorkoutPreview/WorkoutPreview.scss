@@ -26,13 +26,12 @@
     font-size: 1.6rem;
     font-weight: normal;
     overflow: hidden;
-  
+
     p {
       overflow: hidden;
       text-overflow: ellipsis;
     }
   }
-  
 
   .workout-preview-footer {
     display: flex;
@@ -41,4 +40,13 @@
     font-size: 1rem;
     font-weight: normal;
   }
+}
+
+.mini-workout-preview {
+  cursor: default;
+  height: 13rem;
+  width: 26rem;
+
+  border: 2px solid $dark-200;
+  border-radius: 0.5rem;
 }
