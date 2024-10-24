@@ -41,16 +41,6 @@ export default function MiniWorkoutPreview({
         )}
       </div>
 
-      <div className="mini-workout-preview-body" {...bodyProps}>
-        <p>
-          {workout.description
-            ? workout.description.length > 150
-              ? workout.description.slice(0, 75) + "..."
-              : workout.description
-            : ""}
-        </p>
-      </div>
-
       <div className="mini-workout-preview-footer" {...footerProps}>
         <User user={workout.creator} />
       </div>
