@@ -54,8 +54,17 @@
   border-radius: 0.5rem;
 
   .mini-workout-preview-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     font-size: 2rem;
     color: #aaa;
+
+    .mini-workout-preview-header-day {
+      font-size: 1.2rem;
+      font-weight: 100;
+    }
   }
 
   .mini-workout-preview-footer {

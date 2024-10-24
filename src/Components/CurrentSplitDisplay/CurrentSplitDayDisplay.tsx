@@ -54,6 +54,7 @@ export default function CurrentSplitDayDisplay({
             }}
             workout={props.workout}
             className={"workout " + props.status}
+            day={days[day]}
           />
 
           {props.status === "skipped" && (
@@ -69,7 +70,7 @@ export default function CurrentSplitDayDisplay({
               </div>
 
               <p className="accessibility-only" aria-hidden={false}>
-                Looks like you missed a workout. Let’s aim to complete the next     
+                Looks like you missed a workout. Let’s aim to complete the next
                 one. Consistency is key!
               </p>
 

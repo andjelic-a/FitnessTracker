@@ -10,6 +10,7 @@ type WorkoutPreviewDisplayProps = {
   headerProps?: HTMLProps<HTMLDivElement>;
   bodyProps?: HTMLProps<HTMLDivElement>;
   footerProps?: HTMLProps<HTMLDivElement>;
+  day?: string;
 } & HTMLProps<HTMLDivElement>;
 
 export default function MiniWorkoutPreview({
@@ -18,6 +19,7 @@ export default function MiniWorkoutPreview({
   headerProps,
   bodyProps,
   footerProps,
+  day,
   ...attr
 }: WorkoutPreviewDisplayProps) {
   const navigate = useNavigate();
@@ -39,6 +41,7 @@ export default function MiniWorkoutPreview({
             <Icon name="lock" />
           </p>
         )}
+        <p className="mini-workout-preview-header-day">{day}</p>
       </div>
 
       <div className="mini-workout-preview-footer" {...footerProps}>
