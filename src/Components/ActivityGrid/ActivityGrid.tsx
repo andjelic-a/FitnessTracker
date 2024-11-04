@@ -6,10 +6,11 @@ import { Schema } from "../../Types/Endpoints/SchemaParser";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 
 type ActivityGrid = {
+  username?: string;
   joinedAt: Date;
 };
 
-function ActivityGrid({ joinedAt }: ActivityGrid) {
+function ActivityGrid({ username, joinedAt }: ActivityGrid) {
   const [showing, setShowing] = useState<"latest" | number>("latest");
 
   function getYears(): number[] {
@@ -43,10 +44,15 @@ function ActivityGrid({ joinedAt }: ActivityGrid) {
         newTabData[tabName] = prev?.[tabName] ?? null;
       });
 
-      newTabData.latest ??= sendAPIRequest("/api/user/me/streak", {
-        method: "get",
-        parameters: {},
-      }).then((x) => (x.code === "OK" ? x.content : []));
+      newTabData.latest ??= sendAPIRequest(
+        `/api/user/${username ? "{username}" : "me"}/streak`,
+        {
+          method: "get",
+          parameters: {
+            username: username!,
+          },
+        }
+      ).then((x) => (x.code === "OK" ? x.content : []));
       return newTabData;
     });
   }, [activityTabNames]);
@@ -59,12 +65,16 @@ function ActivityGrid({ joinedAt }: ActivityGrid) {
       return;
     }
 
-    const response = sendAPIRequest("/api/user/me/streak", {
-      method: "get",
-      parameters: {
-        year: option === "latest" ? undefined : option,
-      },
-    })
+    const response = sendAPIRequest(
+      `/api/user/${username ? "{username}" : "me"}/streak`,
+      {
+        method: "get",
+        parameters: {
+          year: option === "latest" ? undefined : option,
+          username,
+        },
+      }
+    )
       .then((x) => (x.code === "OK" ? x.content : []))
       .then((x) => {
         setShowing(option);

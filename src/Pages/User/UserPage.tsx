@@ -78,6 +78,7 @@ function InnerProfile({
 
         {loaderDataState.user.code === "OK" && (
           <ActivityGrid
+            username={loaderDataState.user.content.username}
             joinedAt={new Date(loaderDataState.user.content.joinedAt)}
           />
         )}
