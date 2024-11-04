@@ -16,6 +16,12 @@
     display: flex;
     justify-content: space-between;
     font-size: 1.8rem;
+
+    .workout-preview-header-name {
+      max-width: 40%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   .workout-preview-body {
