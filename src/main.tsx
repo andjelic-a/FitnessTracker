@@ -30,7 +30,7 @@ import EmailVerification from "./Pages/EmailVerification/EmailVerification.tsx";
 import emailVerificationLoader from "./Pages/EmailVerification/EmailVerificationLoader.ts";
 import LandingPage from "./Pages/LandingPage/LandingPage.tsx";
 import ForgotPassword from "./Pages/ForgotPasswordPage/ForgotPassword.tsx";
-import UserPage from "./Pages/User/User.tsx";
+import UserPage from "./Pages/User/UserPage.tsx";
 import userLoader from "./Pages/User/UserLoader.ts";
 import WorkoutDisplay from "./Components/WorkoutDisplay/WorkoutDisplay.tsx";
 import workoutDisplayLoader from "./Components/WorkoutDisplay/WorkoutDisplayLoader.ts";
