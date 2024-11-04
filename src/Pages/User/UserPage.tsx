@@ -1,90 +1,87 @@
 import "./User.scss";
-import { useEffect, useState } from "react";
-import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
-import sendAPIRequest from "../../Data/SendAPIRequest";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
 import userLoader from "./UserLoader";
-import Async from "../../Components/Async/Async";
-import AnimatedOutlet from "../../Components/WindowWrapper/AnimatedOutlet";
+import { LoaderReturnType } from "../../BetterRouter/CreateLoader";
+import { useEffect, useState } from "react";
+import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
+import ProfileWorkoutTabs from "../../Components/ProfileWorkoutTabs/ProfileWorkoutTabs";
+import Pins from "../../Components/Pins/Pins";
+import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
 
 export default function UserPage() {
-  const data = useLoaderData<typeof userLoader>();
+  const loaderData = useLoaderData<typeof userLoader>();
 
-  const [isFollowing, setIsFollowing] = useState<boolean | null>(null);
-  const [followers, setFollowers] = useState<number | null>(null);
+  const [loaderDataState, setLoaderDataState] = useState<
+    | {
+        [key in keyof LoaderReturnType<typeof userLoader>]: Awaited<
+          LoaderReturnType<typeof userLoader>[key]
+        >;
+      }
+    | null
+  >(null);
 
   useEffect(() => {
-    setFollowers(null);
-    setIsFollowing(null);
-  }, [data]);
+    if (!loaderData) return;
 
-  async function onToggleFollow(
-    username: string,
-    isFollowingFromRequest: boolean,
-    followersFromRequest: number
-  ) {
-    sendAPIRequest("/api/user/{id}/follow", {
-      method: isFollowing ?? isFollowingFromRequest ? "delete" : "post",
-      parameters: { id: username },
+    Promise.all([
+      loaderData.user,
+      loaderData.pins,
+      loaderData.latestWeekOfActivity,
+      loaderData.streak,
+    ]).then((x) => {
+      setLoaderDataState({
+        user: x[0],
+        pins: x[1],
+        latestWeekOfActivity: x[2],
+        streak: x[3],
+      });
     });
-
-    setFollowers(
-      (followers ?? followersFromRequest) +
-        (isFollowing ?? isFollowingFromRequest ? -1 : 1)
-    );
-    setIsFollowing(!(isFollowing ?? isFollowingFromRequest));
-  }
-
-  // const navigate = useNavigate();
+  }, [loaderData]);
 
   return (
-    <Async await={data.user}>
-      {(userData) => {
-        if (userData.code !== "OK") return null;
+    <div className="profile">
+      <InnerProfile loaderDataState={loaderDataState} />
+    </div>
+  );
+}
 
-        return (
-          <div className="profile">
-            <div className="profile-user-container">
-              {/* <ProfileHeader user={userData.content} /> */}
+function InnerProfile({
+  loaderDataState,
+}: {
+  loaderDataState:
+    | {
+        [key in keyof LoaderReturnType<typeof userLoader>]: Awaited<
+          LoaderReturnType<typeof userLoader>[key]
+        >;
+      }
+    | null;
+}) {
+  if (loaderDataState?.user.code !== "OK") return <></>;
 
-              <button
-                onClick={() => {
-                  if (userData.content.isMe) {
-                    console.log("Hi");
-                    return;
-                  }
+  return (
+    <>
+      <ProfileHeader user={loaderDataState.user.content} />
 
-                  onToggleFollow(
-                    userData.content.username,
-                    userData.content.isFollowing,
-                    userData.content.followers
-                  );
-                }}
-              >
-                {userData.content.isMe
-                  ? "It's me!"
-                  : isFollowing ?? userData.content.isFollowing
-                  ? "Unfollow"
-                  : "Follow"}
-              </button>
+      <div className="profile-body">
+        {loaderDataState.pins.code === "OK" && (
+          <Pins pins={loaderDataState.pins.content} />
+        )}
 
-              <AnimatedOutlet />
+        <ProfileWorkoutTabs
+          latestActivity={
+            loaderDataState.latestWeekOfActivity.code === "OK"
+              ? loaderDataState.latestWeekOfActivity.content
+              : null
+          }
+          split={loaderDataState.user.content.currentSplit}
+        />
 
-              <Async await={data.streak}>
-                {(streakData) => {
-                  if (streakData.code !== "OK") return null;
-
-                  return (
-                    <ActivityGrid
-                      joinedAt={new Date(userData.content.joinedAt)}
-                    />
-                  );
-                }}
-              </Async>
-            </div>
-          </div>
-        );
-      }}
-    </Async>
+        {loaderDataState.user.code === "OK" && (
+          <ActivityGrid
+            joinedAt={new Date(loaderDataState.user.content.joinedAt)}
+          />
+        )}
+      </div>
+    </>
   );
 }

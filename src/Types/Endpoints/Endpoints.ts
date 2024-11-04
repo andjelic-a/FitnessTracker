@@ -6643,6 +6643,92 @@ type MappedEndpoints = {
         };
       };
     };
+    "/api/user/{username}/streak/week/{date}": {
+      get: {
+        tags: ["User"];
+        parameters: [
+          {
+            name: "username";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+            };
+          },
+          {
+            name: "date";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+              format: "date-time";
+            };
+          }
+        ];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedWeekOfCompletedWorkoutsResponseDTO";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedWeekOfCompletedWorkoutsResponseDTO";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedWeekOfCompletedWorkoutsResponseDTO";
+                };
+              };
+            };
+          };
+          "404": {
+            description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
     "/api/user/me/split/today": {
       get: {
         tags: ["User"];
@@ -9978,9 +10064,6 @@ type MappedEndpoints = {
           bio: {
             type: "string";
           };
-          isMe: {
-            type: "boolean";
-          };
           followers: {
             type: "integer";
             format: "int32";
@@ -9993,12 +10076,21 @@ type MappedEndpoints = {
             type: "integer";
             format: "int32";
           };
+          isMe: {
+            type: "boolean";
+          };
           isFollowing: {
             type: "boolean";
           };
           joinedAt: {
             type: "string";
             format: "date-time";
+          };
+          currentSplit: {
+            $ref: "#/components/schemas/DetailedUserSplitResponseDTO";
+          };
+          gender: {
+            $ref: "#/components/schemas/Gender";
           };
         };
         additionalProperties: false;
