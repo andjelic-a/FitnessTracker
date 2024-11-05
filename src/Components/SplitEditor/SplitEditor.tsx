@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import WindowFC from "../WindowWrapper/WindowFC";
 import "./SplitEditor.scss";
 import Icon from "../Icon/Icon";
@@ -11,15 +11,16 @@ import {
 import SplitWorkoutSelector from "../SplitWorkoutSelector/SplitWorkoutSelector";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
-import { getProfileCache } from "../../Pages/Profile/ProfileCache";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import { Day } from "../../Types/Utility/Day";
 import splitDisplayLoader from "../SplitDisplay/SplitDisplayLoader";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
+import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 
 const SplitEditor = WindowFC(
   ({}, onClose, setModalConfirmationOpeningCondition) => {
     const loaderData = useLoaderData<typeof splitDisplayLoader>();
+    const basicInfo = useContext(basicProfileInfoContext);
 
     const wrapperRef = useRef<HTMLDivElement>(null);
     const [selectedWorkouts, setSelectedWorkouts] = useState<
@@ -118,14 +119,11 @@ const SplitEditor = WindowFC(
     }
 
     async function handleSaveClick() {
-      const userResponse = await getProfileCache()?.user;
-      const user = userResponse?.code !== "OK" ? null : userResponse?.content;
-
       let isValid = validateTitle();
       isValid = validateWorkouts() && isValid;
 
       if (
-        !user ||
+        !basicInfo ||
         !descriptionTextAreaRef.current ||
         !titleInputRef.current ||
         !isValid

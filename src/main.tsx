@@ -34,7 +34,6 @@ import UserPage from "./Pages/User/UserPage.tsx";
 import userLoader from "./Pages/User/UserLoader.ts";
 import WorkoutDisplay from "./Components/WorkoutDisplay/WorkoutDisplay.tsx";
 import workoutDisplayLoader from "./Components/WorkoutDisplay/WorkoutDisplayLoader.ts";
-import WorkoutCreator from "./Components/WorkoutCreator/WorkoutCreator.tsx";
 import landingPageLoader from "./Pages/LandingPage/LandingPageLoader.ts";
 import FollowContainer from "./Components/FollowContainer/FollowContainer.tsx";
 import profileFollowersContainerLoader from "./Components/FollowContainer/ProfileFollowersContainerLoader.ts";
@@ -47,11 +46,11 @@ import Settings from "./Pages/Settings/Settings.tsx";
 import StartedWorkout from "./Pages/StartedWorkout/StartedWorkout.tsx";
 import startedWorkoutLoader from "./Pages/StartedWorkout/StartedWorkoutLoader.ts";
 import WorkoutEditor from "./Components/WorkoutEditor/WorkoutEditor.tsx";
-import workoutCreatorLoader from "./Components/WorkoutCreator/WorkoutCreatorLoader.ts";
 import SplitDisplay from "./Components/SplitDisplay/SplitDisplay.tsx";
 import splitDisplayLoader from "./Components/SplitDisplay/SplitDisplayLoader.ts";
 import SplitCreator from "./Components/SplitCreator/SplitCreator.tsx";
 import SplitEditor from "./Components/SplitEditor/SplitEditor.tsx";
+import WorkoutCreator from "./Components/WorkoutCreator/WorkoutCreator.tsx";
 
 const routes: RouteObject[] = [
   {
@@ -91,7 +90,6 @@ const routes: RouteObject[] = [
           {
             path: "workout/new",
             element: <WorkoutCreator />,
-            loader: workoutCreatorLoader,
           },
           {
             path: "workout/:id",
@@ -106,7 +104,6 @@ const routes: RouteObject[] = [
           {
             path: "split/new",
             element: <SplitCreator />,
-            loader: workoutCreatorLoader,
           },
           {
             path: "split/:id",

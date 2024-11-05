@@ -5267,17 +5267,17 @@ type MappedEndpoints = {
             content: {
               "text/plain": {
                 schema: {
-                  $ref: "#/components/schemas/UserProfileBasicInfoResponseDTO";
+                  $ref: "#/components/schemas/SimpleUserResponseDTO";
                 };
               };
               "application/json": {
                 schema: {
-                  $ref: "#/components/schemas/UserProfileBasicInfoResponseDTO";
+                  $ref: "#/components/schemas/SimpleUserResponseDTO";
                 };
               };
               "text/json": {
                 schema: {
-                  $ref: "#/components/schemas/UserProfileBasicInfoResponseDTO";
+                  $ref: "#/components/schemas/SimpleUserResponseDTO";
                 };
               };
             };
@@ -10999,19 +10999,6 @@ type MappedEndpoints = {
           completionCount: {
             type: "integer";
             format: "int32";
-          };
-        };
-        additionalProperties: false;
-      };
-      UserProfileBasicInfoResponseDTO: {
-        type: "object";
-        properties: {
-          username: {
-            type: "string";
-          };
-          image: {
-            type: "string";
-            nullable: true;
           };
         };
         additionalProperties: false;

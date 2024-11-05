@@ -7,12 +7,13 @@ import { Schema } from "../../Types/Endpoints/SchemaParser";
 import WindowFC from "../WindowWrapper/WindowFC";
 import WorkoutSetCreator from "../WorkoutSetCreator/WorkoutSetCreator";
 import { NewWorkoutsContext } from "../../Contexts/NewWorkoutsContext";
-import { getProfileCache } from "../../Pages/Profile/ProfileCache";
 import { Tooltip } from "react-tooltip";
 import CurrentEditingWorkoutSetsContext from "../../Contexts/CurrentEditingWorkoutSetsContext";
+import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 
 const WorkoutCreator = WindowFC(
   ({}, onClose, setModalConfirmationOpeningCondition) => {
+    const basicInfo = useContext(basicProfileInfoContext);
     const newWorkoutsContext = useContext(NewWorkoutsContext);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -49,14 +50,11 @@ const WorkoutCreator = WindowFC(
     };
 
     const handleSaveClick = async () => {
-      const userResponse = await getProfileCache()?.user;
-      const user = userResponse?.code !== "OK" ? null : userResponse?.content;
-
       let isValid = validateTitle();
       isValid = validateSets() && isValid;
 
       if (
-        !user ||
+        !basicInfo ||
         !descriptionTextAreaRef.current ||
         !titleInputRef.current ||
         !isValid
@@ -119,11 +117,7 @@ const WorkoutCreator = WindowFC(
           id: newWorkout.content.id,
           name: newWorkout.content.name,
           isPublic: newWorkout.content.isPublic,
-          creator: {
-            username: user.username,
-            name: user.name,
-            image: user.image,
-          },
+          creator: basicInfo,
           description: "",
         };
 

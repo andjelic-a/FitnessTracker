@@ -11,7 +11,7 @@ export const scrollPositionContext = createContext(0);
 function App() {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [basicProfileInfo, setBasicProfileInfo] =
-    useState<Schema<"UserProfileBasicInfoResponseDTO"> | null>(null);
+    useState<Schema<"SimpleUserResponseDTO"> | null>(null);
   const sentBasicProfileInfoRequest = useRef(false);
 
   useEffect(() => {

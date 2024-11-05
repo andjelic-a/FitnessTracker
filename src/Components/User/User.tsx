@@ -1,7 +1,8 @@
 import "./User.scss";
 import { useNavigate } from "react-router-dom";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
-import { getProfileCache } from "../../Pages/Profile/ProfileCache";
+import { useContext } from "react";
+import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 
 type UserProps = {
   user: Schema<"SimpleUserResponseDTO">;
@@ -9,17 +10,16 @@ type UserProps = {
 
 export default function User({ user: { username, name, image } }: UserProps) {
   const navigate = useNavigate();
+  const basicInfo = useContext(basicProfileInfoContext);
 
   return (
     <div
       className="user-container"
       onClick={(e) => {
         e.preventDefault();
-        getProfileCache()?.user.then((user) => {
-          if (user.code !== "OK" || user.content.username !== username)
-            navigate(`/user/${username}`);
-          else navigate("/me");
-        });
+
+        if (basicInfo?.username !== username) navigate(`/user/${username}`);
+        else navigate("/me");
       }}
     >
       <img
