@@ -2,7 +2,7 @@ import "./FollowContainer.scss";
 import AnimatedLayout from "../WindowWrapper/AnimatedLayout";
 import { AnimatePresence } from "framer-motion";
 import LazyLoadingContainer from "../LazyLoadingContainer/LazyLoadingContainer";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 type FollowContainerProps = {
   followersOrFollowing: "followers" | "following";
@@ -14,6 +14,7 @@ function FollowContainer({
   followersOrFollowing,
 }: FollowContainerProps) {
   const navigate = useNavigate();
+  const params = useParams();
 
   return (
     <AnimatePresence>
@@ -39,12 +40,17 @@ function FollowContainer({
         >
           <div className="follow-container">
             <LazyLoadingContainer
-              endpoint={`/api/user/me/${followersOrFollowing}`}
+              endpoint={
+                "username" in params
+                  ? `/api/user/{username}/${followersOrFollowing}`
+                  : `/api/user/me/${followersOrFollowing}`
+              }
               baseAPIRequest={{
                 method: "get",
                 parameters: {
                   limit: 10,
                   offset: 0,
+                  username: "username" in params ? params.username : undefined,
                 },
               }}
               onSegmentLoad={(segmentResponse) => {
