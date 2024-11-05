@@ -7,9 +7,11 @@ import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
 import ProfileWorkoutTabs from "../../Components/ProfileWorkoutTabs/ProfileWorkoutTabs";
 import Pins from "../../Components/Pins/Pins";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
+import { useNavigate } from "react-router-dom";
 
 export default function UserPage() {
   const loaderData = useLoaderData<typeof userLoader>();
+  const navigate = useNavigate();
 
   const [loaderDataState, setLoaderDataState] = useState<
     | {
@@ -29,6 +31,8 @@ export default function UserPage() {
       loaderData.latestWeekOfActivity,
       loaderData.streak,
     ]).then((x) => {
+      if (x[0].code === "OK" && x[0].content.isMe) navigate("/me");
+
       setLoaderDataState({
         user: x[0],
         pins: x[1],
