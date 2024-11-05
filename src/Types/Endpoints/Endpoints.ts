@@ -5258,7 +5258,7 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/user/me/profilepicture": {
+    "/api/user/me/basic": {
       get: {
         tags: ["User"];
         responses: {
@@ -5267,17 +5267,17 @@ type MappedEndpoints = {
             content: {
               "text/plain": {
                 schema: {
-                  $ref: "#/components/schemas/UserProfilePictureResponseDTO";
+                  $ref: "#/components/schemas/UserProfileBasicInfoResponseDTO";
                 };
               };
               "application/json": {
                 schema: {
-                  $ref: "#/components/schemas/UserProfilePictureResponseDTO";
+                  $ref: "#/components/schemas/UserProfileBasicInfoResponseDTO";
                 };
               };
               "text/json": {
                 schema: {
-                  $ref: "#/components/schemas/UserProfilePictureResponseDTO";
+                  $ref: "#/components/schemas/UserProfileBasicInfoResponseDTO";
                 };
               };
             };
@@ -11003,9 +11003,12 @@ type MappedEndpoints = {
         };
         additionalProperties: false;
       };
-      UserProfilePictureResponseDTO: {
+      UserProfileBasicInfoResponseDTO: {
         type: "object";
         properties: {
+          username: {
+            type: "string";
+          };
           image: {
             type: "string";
             nullable: true;
