@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import "./ProfileHeader.scss";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +24,13 @@ type ProfileHeaderProps = {
 
 function ProfileHeader({ user, ...props }: ProfileHeaderProps) {
   const navigate = useNavigate();
+  const [followingCount, setFollowingCount] = useState(0);
+  const [followersCount, setFollowersCount] = useState(0);
+
+  useEffect(() => {
+    setFollowingCount(user.following);
+    setFollowersCount(user.followers);
+  }, [user]);
 
   return (
     <div className="profile-header">
@@ -48,7 +56,13 @@ function ProfileHeader({ user, ...props }: ProfileHeaderProps) {
       )}
 
       {"includeFollowButton" in props && (
-        <button className="follow-btn" onClick={props.handleFollow}>
+        <button
+          className="follow-btn"
+          onClick={() => {
+            props.handleFollow?.();
+            setFollowersCount((x) => x + (props.isFollowing ? -1 : 1));
+          }}
+        >
           {props.isFollowing ? "Unfollow" : "Follow"}
         </button>
       )}
@@ -56,13 +70,13 @@ function ProfileHeader({ user, ...props }: ProfileHeaderProps) {
       <div className="stats-container">
         <div className="followers-container">
           <p className="stat">
-            <span className="value">{user.followers}</span> followers
+            <span className="value">{followersCount}</span> followers
           </p>
 
           <p className="dot">●</p>
 
           <p className="stat">
-            <span className="value">{user.following}</span> following
+            <span className="value">{followingCount}</span> following
           </p>
         </div>
 
