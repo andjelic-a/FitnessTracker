@@ -5405,7 +5405,7 @@ type MappedEndpoints = {
         tags: ["User"];
         parameters: [
           {
-            name: "name";
+            name: "searchTerm";
             in: "query";
             schema: {
               type: "string";
@@ -5655,7 +5655,7 @@ type MappedEndpoints = {
         tags: ["User"];
         parameters: [
           {
-            name: "name";
+            name: "searchTerm";
             in: "query";
             schema: {
               type: "string";

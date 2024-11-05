@@ -3,6 +3,7 @@ import AnimatedLayout from "../WindowWrapper/AnimatedLayout";
 import { AnimatePresence } from "framer-motion";
 import LazyLoadingContainer from "../LazyLoadingContainer/LazyLoadingContainer";
 import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 
 type FollowContainerProps = {
   followersOrFollowing: "followers" | "following";
@@ -15,6 +16,36 @@ function FollowContainer({
 }: FollowContainerProps) {
   const navigate = useNavigate();
   const params = useParams();
+  const searchBarRef = useRef<HTMLInputElement>(null);
+
+  const [baseRequestParameters, setBaseRequestParameters] = useState<{
+    limit: number;
+    offset: number;
+    username: string | undefined;
+    searchTerm: string | undefined;
+  }>({
+    limit: 10,
+    offset: 0,
+    username: "username" in params ? params.username : undefined,
+    searchTerm: undefined,
+  });
+
+  function constructRequestParameters() {
+    setBaseRequestParameters((x) => ({
+      ...x,
+      username: "username" in params ? params.username : undefined,
+      searchTerm:
+        searchBarRef.current && searchBarRef.current.value.trim().length > 0
+          ? searchBarRef.current.value.trim()
+          : undefined,
+    }));
+  }
+
+  useEffect(constructRequestParameters, [
+    followersOrFollowing,
+    params,
+    searchBarRef,
+  ]);
 
   return (
     <AnimatePresence>
@@ -39,6 +70,12 @@ function FollowContainer({
           }}
         >
           <div className="follow-container">
+            <div className="follow-container-search">
+              <input type="text" placeholder="Search" ref={searchBarRef} />
+
+              <button onClick={constructRequestParameters}>Search</button>
+            </div>
+
             <LazyLoadingContainer
               endpoint={
                 "username" in params
@@ -47,11 +84,7 @@ function FollowContainer({
               }
               baseAPIRequest={{
                 method: "get",
-                parameters: {
-                  limit: 10,
-                  offset: 0,
-                  username: "username" in params ? params.username : undefined,
-                },
+                parameters: baseRequestParameters,
               }}
               onSegmentLoad={(segmentResponse) => {
                 if (segmentResponse.code !== "OK") return;
@@ -73,6 +106,7 @@ function FollowContainer({
                     ))}
                   </>
                 );
+                ``;
               }}
               stopCondition={(x) =>
                 (x.code !== "OK" && x.code !== "Too Many Requests") ||
@@ -80,7 +114,6 @@ function FollowContainer({
               }
             />
           </div>
-          ;
         </AnimatedLayout>
       )}
     </AnimatePresence>
