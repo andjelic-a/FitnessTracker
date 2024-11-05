@@ -4657,17 +4657,16 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/user/{id}/follow": {
+    "/api/user/{username}/follow": {
       post: {
         tags: ["User"];
         parameters: [
           {
-            name: "id";
+            name: "username";
             in: "path";
             required: true;
             schema: {
               type: "string";
-              format: "uuid";
             };
           }
         ];
@@ -4741,12 +4740,11 @@ type MappedEndpoints = {
         tags: ["User"];
         parameters: [
           {
-            name: "id";
+            name: "username";
             in: "path";
             required: true;
             schema: {
               type: "string";
-              format: "uuid";
             };
           }
         ];

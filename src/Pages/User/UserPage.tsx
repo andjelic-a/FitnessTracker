@@ -2,12 +2,13 @@ import "./User.scss";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
 import userLoader from "./UserLoader";
 import { LoaderReturnType } from "../../BetterRouter/CreateLoader";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
 import ProfileWorkoutTabs from "../../Components/ProfileWorkoutTabs/ProfileWorkoutTabs";
 import Pins from "../../Components/Pins/Pins";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
 import { useNavigate } from "react-router-dom";
+import sendAPIRequest from "../../Data/SendAPIRequest";
 
 export default function UserPage() {
   const loaderData = useLoaderData<typeof userLoader>();
@@ -62,9 +63,35 @@ function InnerProfile({
 }) {
   if (loaderDataState?.user.code !== "OK") return <></>;
 
+  const [isFollowing, setIsFollowing] = useState<boolean>(
+    loaderDataState.user.content.isFollowing
+  );
+  const isWaitingForResponse = useRef(false);
+
+  function handleFollowToggle() {
+    if (loaderDataState?.user.code !== "OK") return;
+
+    if (isWaitingForResponse.current) return;
+    isWaitingForResponse.current = true;
+
+    setIsFollowing(!isFollowing);
+
+    sendAPIRequest("/api/user/{username}/follow", {
+      method: isFollowing ? "delete" : "post",
+      parameters: {
+        username: loaderDataState.user.content.username,
+      },
+    }).then(() => void (isWaitingForResponse.current = false));
+  }
+
   return (
     <>
-      <ProfileHeader user={loaderDataState.user.content} />
+      <ProfileHeader
+        user={loaderDataState.user.content}
+        includeFollowButton
+        handleFollow={handleFollowToggle}
+        isFollowing={isFollowing}
+      />
 
       <div className="profile-body">
         {loaderDataState.pins.code === "OK" && (

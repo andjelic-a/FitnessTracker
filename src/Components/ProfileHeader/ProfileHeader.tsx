@@ -4,10 +4,24 @@ import { useNavigate } from "react-router-dom";
 
 type ProfileHeaderProps = {
   user: Schema<"DetailedUserResponseDTO">;
-  includeEditButton?: boolean;
-};
+} & (
+  | {
+      includeEditButton: boolean;
 
-function ProfileHeader({ user, includeEditButton }: ProfileHeaderProps) {
+      includeFollowButton?: never;
+      isFollowing?: never;
+      handleFollow?: never;
+    }
+  | {
+      includeEditButton?: never;
+
+      includeFollowButton: boolean;
+      isFollowing: boolean;
+      handleFollow: () => void;
+    }
+);
+
+function ProfileHeader({ user, ...props }: ProfileHeaderProps) {
   const navigate = useNavigate();
 
   return (
@@ -20,16 +34,22 @@ function ProfileHeader({ user, includeEditButton }: ProfileHeaderProps) {
       </div>
 
       <div className="username-container">
-        <p className="nickname">{user.name}</p> {/*Todo: Add nickname*/}
+        <p className="nickname">{user.name}</p>
         <p className="username">{user.username}</p>
       </div>
 
-      {includeEditButton && (
+      {"includeEditButton" in props && (
         <button
           className="edit-profile-btn"
           onClick={() => void navigate("settings")}
         >
           Edit profile
+        </button>
+      )}
+
+      {"includeFollowButton" in props && (
+        <button className="follow-btn" onClick={props.handleFollow}>
+          {props.isFollowing ? "Unfollow" : "Follow"}
         </button>
       )}
 
