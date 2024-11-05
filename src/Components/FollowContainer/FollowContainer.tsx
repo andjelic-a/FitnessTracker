@@ -1,6 +1,8 @@
 import "./FollowContainer.scss";
 import AnimatedLayout from "../WindowWrapper/AnimatedLayout";
 import { AnimatePresence } from "framer-motion";
+import LazyLoadingContainer from "../LazyLoadingContainer/LazyLoadingContainer";
+import { useNavigate } from "react-router-dom";
 
 type FollowContainerProps = {
   followersOrFollowing: "followers" | "following";
@@ -8,10 +10,10 @@ type FollowContainerProps = {
 };
 
 function FollowContainer({
-  followersOrFollowing,
   isOpen,
+  followersOrFollowing,
 }: FollowContainerProps) {
-  console.log("rerender");
+  const navigate = useNavigate();
 
   return (
     <AnimatePresence>
@@ -27,23 +29,52 @@ function FollowContainer({
               zIndex: 1000,
             },
             exit: {
-              position: "absolute",
-              top: "0",
-              left: "100%",
               x: "0",
-              zIndex: 1000,
             },
             hidden: {
-              position: "absolute",
-              top: "0",
-              left: "100%",
               x: "0",
               opacity: 0.7,
-              zIndex: 1000,
             },
           }}
         >
-          <div className="follow-container">{followersOrFollowing}</div>;
+          <div className="follow-container">
+            <LazyLoadingContainer
+              endpoint={`/api/user/me/${followersOrFollowing}`}
+              baseAPIRequest={{
+                method: "get",
+                parameters: {
+                  limit: 10,
+                  offset: 0,
+                },
+              }}
+              onSegmentLoad={(segmentResponse) => {
+                if (segmentResponse.code !== "OK") return;
+
+                return (
+                  <>
+                    {segmentResponse.content.map((x) => (
+                      <div
+                        className="follow-container-user"
+                        key={x.username}
+                        onClick={() => void navigate(`/user/${x.username}`)}
+                      >
+                        <img
+                          src={x.image ?? "/DefaultProfilePicture.png"}
+                          alt={`Profile picture of a user named ${x.username}`}
+                        />
+                        <p>{x.name}</p>
+                      </div>
+                    ))}
+                  </>
+                );
+              }}
+              stopCondition={(x) =>
+                (x.code !== "OK" && x.code !== "Too Many Requests") ||
+                (x.code === "OK" && x.content.length < 10)
+              }
+            />
+          </div>
+          ;
         </AnimatedLayout>
       )}
     </AnimatePresence>

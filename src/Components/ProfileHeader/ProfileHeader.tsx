@@ -29,8 +29,9 @@ function ProfileHeader({ user, ...props }: ProfileHeaderProps) {
   const [followingCount, setFollowingCount] = useState(0);
   const [followersCount, setFollowersCount] = useState(0);
 
-  const [isFollowersContainerOpen, setIsFollowersContainerOpen] =
-    useState(false);
+  const [followTabOpen, setFollowTabOpen] = useState<
+    "followers" | "following" | null
+  >(null);
 
   useEffect(() => {
     setFollowingCount(user.following);
@@ -38,11 +39,7 @@ function ProfileHeader({ user, ...props }: ProfileHeaderProps) {
   }, [user]);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  useOutsideClick(
-    containerRef,
-    () => setIsFollowersContainerOpen(false),
-    "left"
-  );
+  useOutsideClick(containerRef, () => setFollowTabOpen(null), "left");
 
   return (
     <div className="profile-header" ref={containerRef}>
@@ -83,7 +80,7 @@ function ProfileHeader({ user, ...props }: ProfileHeaderProps) {
         <div className="followers-container">
           <button
             className="stat"
-            onClick={() => setIsFollowersContainerOpen(true)}
+            onClick={() => setFollowTabOpen("followers")}
           >
             <span className="value">{followersCount}</span> followers
           </button>
@@ -92,7 +89,7 @@ function ProfileHeader({ user, ...props }: ProfileHeaderProps) {
 
           <button
             className="stat"
-            onClick={() => setIsFollowersContainerOpen(true)}
+            onClick={() => setFollowTabOpen("following")}
           >
             <span className="value">{followingCount}</span> following
           </button>
@@ -107,8 +104,8 @@ function ProfileHeader({ user, ...props }: ProfileHeaderProps) {
       </div>
 
       <FollowContainer
-        isOpen={isFollowersContainerOpen}
-        followersOrFollowing="followers"
+        isOpen={followTabOpen !== null}
+        followersOrFollowing={followTabOpen ?? "followers"}
       />
     </div>
   );
