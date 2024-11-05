@@ -35,11 +35,6 @@ import userLoader from "./Pages/User/UserLoader.ts";
 import WorkoutDisplay from "./Components/WorkoutDisplay/WorkoutDisplay.tsx";
 import workoutDisplayLoader from "./Components/WorkoutDisplay/WorkoutDisplayLoader.ts";
 import landingPageLoader from "./Pages/LandingPage/LandingPageLoader.ts";
-import FollowContainer from "./Components/FollowContainer/FollowContainer.tsx";
-import profileFollowersContainerLoader from "./Components/FollowContainer/ProfileFollowersContainerLoader.ts";
-import profileFollowingContainerLoader from "./Components/FollowContainer/ProfileFollowingContainerLoader.ts";
-import userPageFollowingContainerLoader from "./Components/FollowContainer/UserPageFollowingContainerLoader.ts";
-import userPageFollowersContainerLoader from "./Components/FollowContainer/UserPageFollowersContainerLoader.ts";
 import EquipmentAdminPanel from "./Pages/AdminPanel/Equipment/EquipmentAdminPanel.tsx";
 import adminEquipmentLoader from "./Pages/AdminPanel/Equipment/EquipmentAdminPanelLoader.ts";
 import Settings from "./Pages/Settings/Settings.tsx";
@@ -116,16 +111,6 @@ const routes: RouteObject[] = [
             loader: splitDisplayLoader,
           },
           {
-            path: "followers",
-            element: <FollowContainer followersOrFollowing="followers" />,
-            loader: profileFollowersContainerLoader,
-          },
-          {
-            path: "following",
-            element: <FollowContainer followersOrFollowing="following" />,
-            loader: profileFollowingContainerLoader,
-          },
-          {
             path: "settings",
             element: <Settings />,
           },
@@ -145,18 +130,6 @@ const routes: RouteObject[] = [
         path: "user/:username",
         element: <UserPage />,
         loader: userLoader,
-        children: [
-          {
-            path: "followers",
-            element: <FollowContainer followersOrFollowing="followers" />,
-            loader: userPageFollowersContainerLoader,
-          },
-          {
-            path: "following",
-            element: <FollowContainer followersOrFollowing="following" />,
-            loader: userPageFollowingContainerLoader,
-          },
-        ],
       },
       {
         path: "email-verification/:code",

@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import "./ProfileHeader.scss";
 import { useNavigate } from "react-router-dom";
+import FollowContainer from "../FollowContainer/FollowContainer";
+import useOutsideClick from "../../Hooks/UseOutsideClick";
 
 type ProfileHeaderProps = {
   user: Schema<"DetailedUserResponseDTO">;
@@ -27,13 +29,23 @@ function ProfileHeader({ user, ...props }: ProfileHeaderProps) {
   const [followingCount, setFollowingCount] = useState(0);
   const [followersCount, setFollowersCount] = useState(0);
 
+  const [isFollowersContainerOpen, setIsFollowersContainerOpen] =
+    useState(false);
+
   useEffect(() => {
     setFollowingCount(user.following);
     setFollowersCount(user.followers);
   }, [user]);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  useOutsideClick(
+    containerRef,
+    () => setIsFollowersContainerOpen(false),
+    "left"
+  );
+
   return (
-    <div className="profile-header">
+    <div className="profile-header" ref={containerRef}>
       <div className="profile-picture-container">
         <img
           src={user.image ?? "/DefaultProfilePicture.png"}
@@ -69,15 +81,21 @@ function ProfileHeader({ user, ...props }: ProfileHeaderProps) {
 
       <div className="stats-container">
         <div className="followers-container">
-          <p className="stat">
+          <button
+            className="stat"
+            onClick={() => setIsFollowersContainerOpen(true)}
+          >
             <span className="value">{followersCount}</span> followers
-          </p>
+          </button>
 
           <p className="dot">●</p>
 
-          <p className="stat">
+          <button
+            className="stat"
+            onClick={() => setIsFollowersContainerOpen(true)}
+          >
             <span className="value">{followingCount}</span> following
-          </p>
+          </button>
         </div>
 
         <div className="completed-workouts-container">
@@ -87,6 +105,11 @@ function ProfileHeader({ user, ...props }: ProfileHeaderProps) {
           </p>
         </div>
       </div>
+
+      <FollowContainer
+        isOpen={isFollowersContainerOpen}
+        followersOrFollowing="followers"
+      />
     </div>
   );
 }

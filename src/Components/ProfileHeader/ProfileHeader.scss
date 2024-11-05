@@ -96,10 +96,14 @@
       gap: 0.75rem;
     }
 
-    p.stat {
+    .stat {
       color: $dark-600;
       font-weight: 100;
       font-size: 1.5rem;
+      text-decoration: none;
+      border: 0;
+      outline: 0;
+      background: none;
 
       .value {
         color: #fff;
