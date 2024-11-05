@@ -77,11 +77,11 @@ function InnerProfile({
 
   return (
     <>
-      <ProfileHeader user={loaderDataState.user.content} />
+      <ProfileHeader includeEditButton user={loaderDataState.user.content} />
 
       <div className="profile-body">
         {loaderDataState.pins.code === "OK" && (
-          <Pins pins={loaderDataState.pins.content} />
+          <Pins pins={loaderDataState.pins.content} includeEditButtons />
         )}
 
         <ProfileWorkoutTabs

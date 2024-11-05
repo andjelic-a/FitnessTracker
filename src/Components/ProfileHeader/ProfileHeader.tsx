@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 type ProfileHeaderProps = {
   user: Schema<"DetailedUserResponseDTO">;
+  includeEditButton?: boolean;
 };
 
-function ProfileHeader({ user }: ProfileHeaderProps) {
+function ProfileHeader({ user, includeEditButton }: ProfileHeaderProps) {
   const navigate = useNavigate();
 
   return (
@@ -23,12 +24,14 @@ function ProfileHeader({ user }: ProfileHeaderProps) {
         <p className="username">{user.username}</p>
       </div>
 
-      <button
-        className="edit-profile-btn"
-        onClick={() => void navigate("settings")}
-      >
-        Edit profile
-      </button>
+      {includeEditButton && (
+        <button
+          className="edit-profile-btn"
+          onClick={() => void navigate("settings")}
+        >
+          Edit profile
+        </button>
+      )}
 
       <div className="stats-container">
         <div className="followers-container">
