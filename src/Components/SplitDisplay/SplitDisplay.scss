@@ -90,7 +90,8 @@
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        min-width: 15rem;
+        min-width: 15rem; 
+        max-width: 100%;
         width: auto;
         height: 5rem;
         border: none;
@@ -101,6 +102,7 @@
         font-weight: 550;
         border-bottom: 3px solid $dark-600;
         padding: 0 2rem;
+        overflow: hidden;
       }
 
       .buttons {
