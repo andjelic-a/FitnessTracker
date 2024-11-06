@@ -248,7 +248,7 @@ const SplitCreator = WindowFC(
             ))}
           </div>
 
-          <Description placeholder="Split description" isInputEnabled = {true} />
+          <Description placeholder="Split description" isInputEnabled={true} />
 
           {/*<div className="description-container">
             <textarea

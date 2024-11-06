@@ -7,6 +7,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Icon from "../Icon/Icon";
 import extractWorkoutsFromSplit from "../../Utility/ExtractWorkoutsFromSplit";
 import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
+import Description from "../Description/Description";
 import formatCount from "../../Utility/FormatCount";
 import { useEffect, useMemo, useRef, useState } from "react";
 import sendAPIRequest from "../../Data/SendAPIRequest";
@@ -206,7 +207,8 @@ const SplitDisplay = WindowFC(() => {
                 </div>
 
                 <div className="split-display-footer">
-                  {split.content.description.trim().length > 0 && (
+                  <Description placeholder="Split Description" text={split.content.description.trim()} isInputEnabled={false}/>
+                  {/*{split.content.description.trim().length > 0 && (
                     <div className="split-display-description-container">
                       <div className="split-display-description">
                         <label className="split-display-description-placeholder">
@@ -216,7 +218,7 @@ const SplitDisplay = WindowFC(() => {
                         {split.content.description}
                       </div>
                     </div>
-                  )}
+                  )}*/}
 
                   <div className="icon-container">
                     <div className="split-display-interaction-container">
