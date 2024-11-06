@@ -48,9 +48,10 @@ function FollowContainer({
   ]);
 
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isOpen && (
         <AnimatedLayout
+          key={followersOrFollowing}
           variants={{
             enter: {
               position: "absolute",
@@ -62,6 +63,9 @@ function FollowContainer({
             },
             exit: {
               x: "0",
+              transition: {
+                duration: 0.175,
+              },
             },
             hidden: {
               x: "0",
