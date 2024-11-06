@@ -41,7 +41,8 @@
     }
   }
 
-  .edit-profile-btn {
+  .edit-profile-btn,
+  .follow-btn {
     width: 100%;
     margin: 0.5rem 0 0.25rem 0;
 
@@ -95,10 +96,14 @@
       gap: 0.75rem;
     }
 
-    p.stat {
+    .stat {
       color: $dark-600;
       font-weight: 100;
       font-size: 1.5rem;
+      text-decoration: none;
+      border: 0;
+      outline: 0;
+      background: none;
 
       .value {
         color: #fff;
@@ -131,7 +136,8 @@
       align-items: flex-start;
     }
 
-    .edit-profile-btn {
+    .edit-profile-btn,
+    .follow-btn {
       height: 3.75rem;
       font-size: 1.6rem;
     }
@@ -187,7 +193,8 @@
       width: 100%;
     }
 
-    .edit-profile-btn {
+    .edit-profile-btn,
+    .follow-btn {
       grid-area: btn;
       height: 3.25rem;
       font-size: 1.5rem;

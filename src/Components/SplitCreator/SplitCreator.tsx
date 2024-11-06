@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import WindowFC from "../WindowWrapper/WindowFC";
 import "./SplitCreator.scss";
 import Icon from "../Icon/Icon";
@@ -11,13 +11,14 @@ import {
 import SplitWorkoutSelector from "../SplitWorkoutSelector/SplitWorkoutSelector";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
-import { getProfileCache } from "../../Pages/Profile/ProfileCache";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import { Day } from "../../Types/Utility/Day";
+import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 
 const SplitCreator = WindowFC(
   ({}, onClose, setModalConfirmationOpeningCondition) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
+    const basicInfo = useContext(basicProfileInfoContext);
     const [selectedWorkouts, setselectedWorkouts] = useState<
       {
         day: Day;
@@ -60,14 +61,11 @@ const SplitCreator = WindowFC(
     const descriptionTextAreaRef = useRef<HTMLTextAreaElement>(null);
 
     async function handleSaveClick() {
-      const userResponse = await getProfileCache()?.user;
-      const user = userResponse?.code !== "OK" ? null : userResponse?.content;
-
       let isValid = validateTitle();
       isValid = validateWorkouts() && isValid;
 
       if (
-        !user ||
+        !basicInfo ||
         !descriptionTextAreaRef.current ||
         !titleInputRef.current ||
         !isValid
@@ -82,13 +80,13 @@ const SplitCreator = WindowFC(
           .filter((x) => x.selected !== null)
           .map((x) => ({
             day: [
+              "Sunday",
               "Monday",
               "Tuesday",
               "Wednesday",
               "Thursday",
               "Friday",
               "Saturday",
-              "Sunday",
             ].indexOf(x.day) as 0 | 1 | 2 | 3 | 4 | 5 | 6,
             workoutId: x.selected!.id,
           })),

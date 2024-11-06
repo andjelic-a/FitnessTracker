@@ -1,0 +1,26 @@
+@import "../../Palette.scss";
+
+.toggle {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  border: none;
+  outline: none;
+  background-color: $dark-400;
+  color: #fff;
+
+  width: max-content;
+  height: max-content;
+  padding: 0.7rem 1.3rem;
+  border-radius: 0.5rem;
+
+  &:hover,
+  &:focus-visible {
+    outline: 1px solid $primary-300;
+  }
+
+  &[data-toggled="true"] {
+    background-color: $primary-200;
+  }
+}

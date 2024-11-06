@@ -1,8 +1,7 @@
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
-import { RefObject, useEffect, useRef, useState } from "react";
+import { RefObject, useContext, useEffect, useRef, useState } from "react";
 import "./CommentInputField.scss";
-import Async from "../../Async/Async";
-import { getProfileCache } from "../../../Pages/Profile/ProfileCache";
+import basicProfileInfoContext from "../../../Contexts/BasicProfileInfoContext";
 
 type CommentInputFieldProps = {
   textAreaRef: RefObject<HTMLTextAreaElement>;
@@ -24,6 +23,7 @@ export default function CommentInputField({
   textAreaRef: inputRef,
   ...props
 }: CommentInputFieldProps) {
+  const basicInfo = useContext(basicProfileInfoContext);
   const submitBtnRef = useRef<HTMLButtonElement>(null);
   const [isButtonContainerVisible, setIsButtonContainerVisible] =
     useState(true);
@@ -86,18 +86,10 @@ export default function CommentInputField({
       }
     >
       <div className="image-container">
-        <Async await={getProfileCache()?.user!}>
-          {(user) => {
-            if (user.code !== "OK") return null;
-
-            return (
-              <img
-                src={user.content.image ?? "/DefaultProfilePicture.png"}
-                alt={`Profile picture of a user named ${user.content.name}`}
-              />
-            );
-          }}
-        </Async>
+        <img
+          src={basicInfo?.image ?? "/DefaultProfilePicture.png"}
+          alt={`Your profile picture`}
+        />
       </div>
 
       <div className="main">
