@@ -209,6 +209,7 @@ const WorkoutDisplay = WindowFC(({}, close) => {
                     <Description
                       placeholder="Workout Description"
                       text={workout.content.description?.trim()}
+                      isInputEnabled = {false}
                     />
 
                     <div className="icon-container">

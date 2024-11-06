@@ -14,6 +14,7 @@ import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import { Day } from "../../Types/Utility/Day";
 import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
+import Description from "../Description/Description";
 
 const SplitCreator = WindowFC(
   ({}, onClose, setModalConfirmationOpeningCondition) => {
@@ -247,7 +248,9 @@ const SplitCreator = WindowFC(
             ))}
           </div>
 
-          <div className="description-container">
+          <Description placeholder="Split description" isInputEnabled = {true} />
+
+          {/*<div className="description-container">
             <textarea
               id="description-input"
               ref={descriptionTextAreaRef}
@@ -265,7 +268,7 @@ const SplitCreator = WindowFC(
             >
               Split description
             </label>
-          </div>
+          </div>*/}
         </div>
       </>
     );
