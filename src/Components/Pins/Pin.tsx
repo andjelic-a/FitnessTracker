@@ -6,9 +6,10 @@ import { CSS } from "@dnd-kit/utilities";
 
 type PinProps = {
   pin: Schema<"PinResponseDTO">;
+  includeDragHandle: boolean;
 };
 
-export default function Pin({ pin }: PinProps) {
+export default function Pin({ pin, includeDragHandle }: PinProps) {
   const {
     setNodeRef,
     attributes,
@@ -27,7 +28,7 @@ export default function Pin({ pin }: PinProps) {
   return (
     <div
       className="pin-container"
-      ref={setNodeRef}
+      ref={includeDragHandle ? setNodeRef : undefined}
       style={{
         transition,
         transform: CSS.Translate.toString(transform),
@@ -53,13 +54,15 @@ export default function Pin({ pin }: PinProps) {
         </div>
       </div>
 
-      <button className="drag-handle" {...listeners} {...attributes}>
-        <Icon name="grip-vertical" />
+      {includeDragHandle && (
+        <button className="drag-handle" {...listeners} {...attributes}>
+          <Icon name="grip-vertical" />
 
-        <p className="accessibility-only" aria-hidden={false}>
-          Drag to reorder
-        </p>
-      </button>
+          <p className="accessibility-only" aria-hidden={false}>
+            Drag to reorder
+          </p>
+        </button>
+      )}
     </div>
   );
 }

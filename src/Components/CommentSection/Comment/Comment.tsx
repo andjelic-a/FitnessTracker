@@ -1,13 +1,13 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
-import { getProfileCache } from "../../../Pages/Profile/ProfileCache";
 import Icon from "../../Icon/Icon";
 import { AnimatePresence, motion } from "framer-motion";
 import formatDateSince from "../../../Utility/FormatDateSince";
 import formatCount from "../../../Utility/FormatCount";
 import CommentInputField from "../CommentInputField/CommentInputField";
 import "./Comment.scss";
+import basicProfileInfoContext from "../../../Contexts/BasicProfileInfoContext";
 
 type CommentProps = {
   type: "workout" | "split";
@@ -35,6 +35,8 @@ type CommentSchema =
 
 const Comment = React.memo<CommentProps>(
   ({ comment, onCreateNewReply, type, ...props }) => {
+    const basicInfo = useContext(basicProfileInfoContext);
+
     const isWaitingForResponse = useRef<boolean>(false);
     const commentInputFieldRef = useRef<HTMLTextAreaElement>(null);
 
@@ -222,16 +224,12 @@ const Comment = React.memo<CommentProps>(
       newReply: Schema<"CreateWorkoutCommentRequestDTO">,
       newReplyId: string
     ) {
-      const userData = getProfileCache();
-      if (props.isReply || !userData) return;
-
-      const user = await userData.user;
-      if (user.code !== "OK") return;
+      if (props.isReply || !basicInfo) return;
 
       const newCommentSimulatedResponse: CommentSchema = {
         id: newReplyId,
         createdAt: new Date().toISOString(),
-        creator: user.content,
+        creator: basicInfo,
         isCreator: true,
         isLiked: false,
         likeCount: 0,
@@ -390,9 +388,8 @@ const Comment = React.memo<CommentProps>(
                   <p>{formatCount(replyCount)} replies</p>
                 </div>
 
-                  {repliesExpanded && <>{replyElements}</>}
-                <AnimatePresence>
-                </AnimatePresence>
+                {repliesExpanded && <>{replyElements}</>}
+                <AnimatePresence></AnimatePresence>
               </>
             )}
           </div>

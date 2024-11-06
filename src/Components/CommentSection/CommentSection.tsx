@@ -1,4 +1,4 @@
-import { memo, useMemo, useRef, useState } from "react";
+import { memo, useContext, useMemo, useRef, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import "./CommentSection.scss";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
@@ -7,9 +7,9 @@ import { Request } from "../../Types/Endpoints/RequestParser";
 import LazyLoadingContainer, {
   OnlyGet,
 } from "../LazyLoadingContainer/LazyLoadingContainer";
-import { getProfileCache } from "../../Pages/Profile/ProfileCache";
 import Comment from "./Comment/Comment";
 import CommentInputField from "./CommentInputField/CommentInputField";
+import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 
 type CommentSectionProps = {
   id: string;
@@ -24,6 +24,8 @@ type CommentSchema =
 
 const CommentSection = memo<CommentSectionProps>(
   ({ id, type, onRequireClose, onCreateNewComment }) => {
+    const basicInfo = useContext(basicProfileInfoContext);
+
     const wrapperRef = useRef<HTMLDivElement>(null);
     const scrollableWrapperRef = useRef<HTMLDivElement>(null);
     const commentInputFieldRef = useRef<HTMLTextAreaElement>(null);
@@ -35,6 +37,8 @@ const CommentSection = memo<CommentSectionProps>(
     async function handleCreateComment(
       newComment: Schema<"CreateWorkoutCommentRequestDTO">
     ) {
+      if (!basicInfo) return;
+
       const response = await sendAPIRequest(
         type === "workout"
           ? "/api/workout/{workoutId}/comment"
@@ -51,18 +55,12 @@ const CommentSection = memo<CommentSectionProps>(
 
       if (response.code !== "Created") return;
 
-      const userData = getProfileCache();
-      if (!userData) return;
-
-      const user = await userData.user;
-      if (user.code !== "OK") return;
-
       onCreateNewComment();
 
       const newCommentSimulatedResponse: CommentSchema = {
         id: response.content.newCommentId,
         createdAt: new Date().toISOString(),
-        creator: user.content,
+        creator: basicInfo,
         isCreator: true,
         isLiked: false,
         likeCount: 0,

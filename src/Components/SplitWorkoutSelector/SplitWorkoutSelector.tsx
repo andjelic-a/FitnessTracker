@@ -4,12 +4,19 @@ import sendAPIRequest from "../../Data/SendAPIRequest";
 import Icon from "../Icon/Icon";
 import WorkoutSelectorSegment from "./WorkoutSelectorSegment";
 import "./SplitWorkoutSelector.scss";
+import Toggle from "../Toggle/Toggle";
 
 type WorkoutSchema = Schema<"SimpleWorkoutOptionResponseDTO">;
 
 type ChooseWorkoutWindowProps = {
   onClose: () => void;
   onConfirmSelection: (workout: WorkoutSchema) => void;
+};
+
+type Filters = {
+  favoriteOnly: boolean;
+  publicOnly: boolean;
+  personalOnly: boolean;
 };
 
 export default function SplitWorkoutSelector({
@@ -42,9 +49,7 @@ export default function SplitWorkoutSelector({
 
     return {
       searchTerm: name,
-      favoriteOnly: false, //Todo: implement this
-      publicOnly: false,
-      personalOnly: false,
+      ...filters.current,
     };
   }
 
@@ -131,6 +136,12 @@ export default function SplitWorkoutSelector({
     onClose();
   }
 
+  const filters = useRef<Filters>({
+    favoriteOnly: false,
+    publicOnly: false,
+    personalOnly: false,
+  });
+
   return (
     <div className="workout-selector">
       <div className="workout-selector-header">
@@ -154,7 +165,23 @@ export default function SplitWorkoutSelector({
           </button>
         </div>
 
-        <div className="filters-container">TODO: implement filters</div>
+        <div className="filters-container">
+          <Toggle
+            text="Favorites"
+            onToggle={(x) => void (filters.current.favoriteOnly = x)}
+          />
+
+          <Toggle
+            text="Created by me"
+            onToggle={(x) => void (filters.current.personalOnly = x)}
+          />
+
+          <Toggle
+            text="Public only"
+            onToggle={(x) => void (filters.current.publicOnly = x)}
+            defaultValue={true}
+          />
+        </div>
       </div>
 
       <div

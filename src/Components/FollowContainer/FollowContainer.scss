@@ -1,7 +1,7 @@
 @import "../../Palette.scss";
 
 .follow-container {
-  z-index: 5;
+  z-index: 5123;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,14 +11,7 @@
   background-color: $dark-300;
   transition: 0.2s;
 
-  &.hidden {
-    z-index: -1;
-    opacity: 0;
-    visibility: 0;
-    transform: translate(100%, 0);
-  }
-
-  & .follow-container-header {
+  .follow-container-header {
     width: 80%;
     height: 4rem;
     display: flex;
@@ -29,14 +22,14 @@
     margin-top: 2rem;
   }
 
-  & .follow-container-search {
+  .follow-container-search {
     width: 80%;
     height: 6rem;
     display: flex;
     justify-content: center;
     align-items: center;
 
-    & input {
+    input {
       width: 100%;
       height: 3rem;
       border-radius: 0.5rem;
@@ -53,7 +46,7 @@
     }
   }
 
-  & .follow-container-user {
+  .follow-container-user {
     width: 100%;
     height: 6rem;
     padding: 0 2rem;

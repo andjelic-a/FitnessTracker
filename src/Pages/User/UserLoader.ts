@@ -18,6 +18,28 @@ const userLoader = createLoader(({ params: { username } }) => {
         username,
       },
     }),
+    latestWeekOfActivity: sendAPIRequest(
+      "/api/user/{username}/streak/week/{date}",
+      {
+        method: "get",
+        parameters: {
+          date: (() => {
+            const today = new Date();
+            const formatted = `${today.getUTCFullYear()}-${
+              today.getUTCMonth() + 1
+            }-${today.getUTCDate()}`;
+            return formatted;
+          })(),
+          username,
+        },
+      }
+    ),
+    pins: sendAPIRequest("/api/user/{username}/pins", {
+      method: "get",
+      parameters: {
+        username,
+      },
+    }),
   };
 }, "/user/:username");
 

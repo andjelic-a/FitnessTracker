@@ -19,9 +19,10 @@ import { snapCenterToCursor } from "@dnd-kit/modifiers";
 
 type PinsProps = {
   pins: Schema<"PinResponseDTO">[];
+  includeEditButtons?: boolean;
 };
 
-const Pins = memo<PinsProps>(({ pins }) => {
+const Pins = memo<PinsProps>(({ pins, includeEditButtons }) => {
   const [pinOptionsPromise, setPinOptionsPromise] = useState<Promise<
     Schema<"PinResponseDTO">[]
   > | null>(null);
@@ -161,22 +162,28 @@ const Pins = memo<PinsProps>(({ pins }) => {
       <div className="pins-container">
         <div className="pins-header">
           {selectedPins.length > 0 ? <h1>Pinned</h1> : <h1></h1>}
-          <button
-            draggable="false"
-            className={`customize-button ${
-              selectedPins.length > 0 ? "upper-right" : "lower-right"
-            }`}
-            onClick={handleOpenMenu}
-          >
-            Customize your pins
-          </button>
+          {includeEditButtons && (
+            <button
+              draggable="false"
+              className={`customize-button ${
+                selectedPins.length > 0 ? "upper-right" : "lower-right"
+              }`}
+              onClick={handleOpenMenu}
+            >
+              Customize your pins
+            </button>
+          )}
         </div>
 
         {selectedPins.length > 0 && (
           <div className="pins-body" ref={pinsBodyRef}>
             <SortableContext items={selectedPins.map((x) => x.id)}>
               {selectedPins.map((x) => (
-                <Pin key={x.id} pin={x} />
+                <Pin
+                  key={x.id}
+                  pin={x}
+                  includeDragHandle={includeEditButtons ?? false}
+                />
               ))}
             </SortableContext>
           </div>

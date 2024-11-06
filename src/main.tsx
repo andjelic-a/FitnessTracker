@@ -30,28 +30,22 @@ import EmailVerification from "./Pages/EmailVerification/EmailVerification.tsx";
 import emailVerificationLoader from "./Pages/EmailVerification/EmailVerificationLoader.ts";
 import LandingPage from "./Pages/LandingPage/LandingPage.tsx";
 import ForgotPassword from "./Pages/ForgotPasswordPage/ForgotPassword.tsx";
-import UserPage from "./Pages/User/User.tsx";
+import UserPage from "./Pages/User/UserPage.tsx";
 import userLoader from "./Pages/User/UserLoader.ts";
 import WorkoutDisplay from "./Components/WorkoutDisplay/WorkoutDisplay.tsx";
 import workoutDisplayLoader from "./Components/WorkoutDisplay/WorkoutDisplayLoader.ts";
-import WorkoutCreator from "./Components/WorkoutCreator/WorkoutCreator.tsx";
 import landingPageLoader from "./Pages/LandingPage/LandingPageLoader.ts";
-import FollowContainer from "./Components/FollowContainer/FollowContainer.tsx";
-import profileFollowersContainerLoader from "./Components/FollowContainer/ProfileFollowersContainerLoader.ts";
-import profileFollowingContainerLoader from "./Components/FollowContainer/ProfileFollowingContainerLoader.ts";
-import userPageFollowingContainerLoader from "./Components/FollowContainer/UserPageFollowingContainerLoader.ts";
-import userPageFollowersContainerLoader from "./Components/FollowContainer/UserPageFollowersContainerLoader.ts";
 import EquipmentAdminPanel from "./Pages/AdminPanel/Equipment/EquipmentAdminPanel.tsx";
 import adminEquipmentLoader from "./Pages/AdminPanel/Equipment/EquipmentAdminPanelLoader.ts";
 import Settings from "./Pages/Settings/Settings.tsx";
 import StartedWorkout from "./Pages/StartedWorkout/StartedWorkout.tsx";
 import startedWorkoutLoader from "./Pages/StartedWorkout/StartedWorkoutLoader.ts";
 import WorkoutEditor from "./Components/WorkoutEditor/WorkoutEditor.tsx";
-import workoutCreatorLoader from "./Components/WorkoutCreator/WorkoutCreatorLoader.ts";
 import SplitDisplay from "./Components/SplitDisplay/SplitDisplay.tsx";
 import splitDisplayLoader from "./Components/SplitDisplay/SplitDisplayLoader.ts";
 import SplitCreator from "./Components/SplitCreator/SplitCreator.tsx";
 import SplitEditor from "./Components/SplitEditor/SplitEditor.tsx";
+import WorkoutCreator from "./Components/WorkoutCreator/WorkoutCreator.tsx";
 
 const routes: RouteObject[] = [
   {
@@ -91,7 +85,6 @@ const routes: RouteObject[] = [
           {
             path: "workout/new",
             element: <WorkoutCreator />,
-            loader: workoutCreatorLoader,
           },
           {
             path: "workout/:id",
@@ -106,7 +99,6 @@ const routes: RouteObject[] = [
           {
             path: "split/new",
             element: <SplitCreator />,
-            loader: workoutCreatorLoader,
           },
           {
             path: "split/:id",
@@ -117,16 +109,6 @@ const routes: RouteObject[] = [
             path: "split/:id/edit",
             element: <SplitEditor />,
             loader: splitDisplayLoader,
-          },
-          {
-            path: "followers",
-            element: <FollowContainer followersOrFollowing="followers" />,
-            loader: profileFollowersContainerLoader,
-          },
-          {
-            path: "following",
-            element: <FollowContainer followersOrFollowing="following" />,
-            loader: profileFollowingContainerLoader,
           },
           {
             path: "settings",
@@ -148,18 +130,6 @@ const routes: RouteObject[] = [
         path: "user/:username",
         element: <UserPage />,
         loader: userLoader,
-        children: [
-          {
-            path: "followers",
-            element: <FollowContainer followersOrFollowing="followers" />,
-            loader: userPageFollowersContainerLoader,
-          },
-          {
-            path: "following",
-            element: <FollowContainer followersOrFollowing="following" />,
-            loader: userPageFollowingContainerLoader,
-          },
-        ],
       },
       {
         path: "email-verification/:code",
