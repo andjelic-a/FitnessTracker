@@ -19,6 +19,7 @@ import {
 import { motion } from "framer-motion";
 import ConfirmModalDialog from "../ConfirmModalDialog/ConfirmModalDialog";
 import CommentSection from "../CommentSection/CommentSection";
+import Description from "../Description/Description";
 
 const WorkoutDisplay = WindowFC(({}, close) => {
   const loaderData = useLoaderData<typeof workoutDisplayLoader>();
@@ -205,17 +206,10 @@ const WorkoutDisplay = WindowFC(({}, close) => {
                   </div>
 
                   <div className="workout-display-footer">
-                    {workout.content.description?.trim() && (
-                      <div className="workout-display-description-container">
-                        <div className="workout-display-description">
-                          <label className="workout-display-description-placeholder">
-                            Workout Description
-                          </label>
-
-                          {workout.content.description}
-                        </div>
-                      </div>
-                    )}
+                    <Description
+                      placeholder="Workout Description"
+                      text={workout.content.description?.trim()}
+                    />
 
                     <div className="icon-container">
                       <div className="workout-display-interaction-container">

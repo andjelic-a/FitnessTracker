@@ -1,0 +1,36 @@
+@import "../../Palette.scss";
+
+.description-container {
+    position: relative;
+    margin-top: auto;
+    align-self: center;
+    width: 80%;
+    min-height: 5rem;
+    height: auto;
+    border-radius: 0.5rem;
+    border: 2px solid $dark-600;
+    margin-bottom: 0rem;
+    overflow: visible;
+
+    .description {
+      position: relative;
+      width: 100%;
+      height: auto;
+      font-size: 1.8rem;
+      color: rgb(231, 231, 231);
+      padding: 1rem;
+      overflow: visible;
+
+      .description-placeholder {
+        position: absolute;
+        font-size: 1.8rem;
+        font-weight: 600;
+        top: -1.5rem;
+        left: 1rem;
+        background-color: $dark-200;
+        padding: 0 0.5rem;
+        white-space: nowrap;
+        color: $dark-600;
+      }
+    }
+  }
