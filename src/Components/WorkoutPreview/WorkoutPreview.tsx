@@ -30,7 +30,6 @@ export default function WorkoutPreview({
         <p className="name" onClick={() => navigate(`workout/${workout.id}`)}>
           {workout.name}
         </p>
-        {!workout.isPublic && <p className="private-label">Private</p>}
       </div>
 
       <div className="body" {...bodyProps}>

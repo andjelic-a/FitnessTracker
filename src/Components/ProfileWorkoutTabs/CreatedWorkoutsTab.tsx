@@ -45,7 +45,6 @@ const CreatedWorkoutsTab = memo<CreatedWorkoutsTabProps>(({ searchTerm }) => {
         }}
         stopCondition={(response) =>
           response.code === "Unauthorized" ||
-          response.code === "Forbidden" ||
           (response.code === "OK" && response.content.length < 10)
         }
         before={

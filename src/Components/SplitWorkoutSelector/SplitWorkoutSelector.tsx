@@ -15,7 +15,6 @@ type ChooseWorkoutWindowProps = {
 
 type Filters = {
   favoriteOnly: boolean;
-  publicOnly: boolean;
   personalOnly: boolean;
 };
 
@@ -40,7 +39,6 @@ export default function SplitWorkoutSelector({
 
   function getFilters(): {
     favoriteOnly?: boolean;
-    publicOnly?: boolean;
     personalOnly?: boolean;
     searchTerm?: string;
   } {
@@ -138,7 +136,6 @@ export default function SplitWorkoutSelector({
 
   const filters = useRef<Filters>({
     favoriteOnly: false,
-    publicOnly: false,
     personalOnly: false,
   });
 
@@ -174,12 +171,6 @@ export default function SplitWorkoutSelector({
           <Toggle
             text="Created by me"
             onToggle={(x) => void (filters.current.personalOnly = x)}
-          />
-
-          <Toggle
-            text="Public only"
-            onToggle={(x) => void (filters.current.publicOnly = x)}
-            defaultValue={true}
           />
         </div>
       </div>

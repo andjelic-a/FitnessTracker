@@ -19,7 +19,7 @@ export default function Exercise({ setIsOpen, isOpen }: ExerciseProps) {
       </div>
       <div className="exercise-body">
         <div className="exercise-body-image-container">
-          <img src="../../public/DefaultProfilePicture.png" />
+          <img src="/DefaultProfilePicture.png" />
         </div>
         <div className="exercise-body-muscles">
           <div>
