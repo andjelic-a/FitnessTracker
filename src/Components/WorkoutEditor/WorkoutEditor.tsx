@@ -8,15 +8,12 @@ import sendAPIRequest from "../../Data/SendAPIRequest";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import Icon from "../Icon/Icon";
 import WorkoutSetCreator from "../WorkoutSetCreator/WorkoutSetCreator";
-import { Tooltip } from "react-tooltip";
 import CurrentEditingWorkoutSetsContext from "../../Contexts/CurrentEditingWorkoutSetsContext";
 import extractSets from "../../Utility/ExtractSetsFromWorkout";
 
 const WorkoutEditor = WindowFC(
   ({}, onClose, setModalConfirmationOpeningCondition) => {
     const loaderData = useLoaderData<typeof workoutDisplayLoader>();
-
-    const [isPublic, setIsPublic] = useState<boolean>(false);
     const [currentSets, setCurrentSets] = useState<WorkoutItemData[]>([]);
 
     const titleInputRef = useRef<HTMLInputElement | null>(null);
@@ -190,26 +187,6 @@ const WorkoutEditor = WindowFC(
             />
 
             <div className="buttons">
-              <button
-                className="workout-visibility-toggle"
-                onClick={() => setIsPublic(!isPublic)}
-                data-tooltip-content={isPublic ? "Public" : "Private"}
-                data-tooltip-id="workout-visibility-tooltip"
-                data-tooltip-place="left"
-              >
-                <Icon
-                  aria-hidden
-                  className="lock"
-                  name={isPublic ? "unlock" : "lock"}
-                />
-
-                <p aria-hidden={false} className="accessibility-only">
-                  {isPublic ? "Public" : "Private"}
-                </p>
-
-                <Tooltip id="workout-visibility-tooltip" />
-              </button>
-
               <button onClick={() => onClose()} className="discard-btn">
                 <p>Discard</p>
               </button>

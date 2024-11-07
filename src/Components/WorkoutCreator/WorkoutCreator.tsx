@@ -7,7 +7,6 @@ import { Schema } from "../../Types/Endpoints/SchemaParser";
 import WindowFC from "../WindowWrapper/WindowFC";
 import WorkoutSetCreator from "../WorkoutSetCreator/WorkoutSetCreator";
 import { NewWorkoutsContext } from "../../Contexts/NewWorkoutsContext";
-import { Tooltip } from "react-tooltip";
 import CurrentEditingWorkoutSetsContext from "../../Contexts/CurrentEditingWorkoutSetsContext";
 import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 
@@ -17,7 +16,6 @@ const WorkoutCreator = WindowFC(
     const newWorkoutsContext = useContext(NewWorkoutsContext);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
-    const [isPublic, setIsPublic] = useState<boolean>(false);
     const [currentSets, setCurrentSets] = useState<WorkoutItemData[]>([]);
 
     const titleInputRef = useRef<HTMLInputElement | null>(null);
@@ -142,26 +140,6 @@ const WorkoutCreator = WindowFC(
             />
 
             <div className="buttons">
-              <button
-                className="workout-visibility-toggle"
-                onClick={() => setIsPublic(!isPublic)}
-                data-tooltip-content={isPublic ? "Public" : "Private"}
-                data-tooltip-id="workout-visibility-tooltip"
-                data-tooltip-place="left"
-              >
-                <Icon
-                  aria-hidden
-                  className="lock"
-                  name={isPublic ? "unlock" : "lock"}
-                />
-
-                <p aria-hidden={false} className="accessibility-only">
-                  {isPublic ? "Public" : "Private"}
-                </p>
-
-                <Tooltip id="workout-visibility-tooltip" />
-              </button>
-
               <button onClick={() => onClose()} className="discard-btn">
                 <p>Discard</p>
               </button>
