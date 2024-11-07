@@ -1,5 +1,5 @@
 import "./Description.scss";
-import { forwardRef, useEffect } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 
 type DescriptionProps = {
   placeholder?: string;
@@ -9,12 +9,17 @@ type DescriptionProps = {
 
 const Description = forwardRef<HTMLTextAreaElement, DescriptionProps>(
   ({ placeholder, text, isInputEnabled }: DescriptionProps, ref) => {
+    const localRef = useRef<HTMLTextAreaElement | null>(null);
+
+    const textareaRef = ref || localRef;
+
     useEffect(() => {
-      if (ref && "current" in ref && ref.current) {
-        ref.current.style.height = "auto";
-        ref.current.style.height = `${ref.current.scrollHeight}px`;
+      const textarea = textareaRef instanceof Function ? null : textareaRef.current;
+      if (textarea) {
+        textarea.style.height = "auto";
+        textarea.style.height = `${textarea.scrollHeight}px`;
       }
-    }, [text, ref]);
+    }, [text]);
 
     return (
       <div className="description-container">
@@ -23,11 +28,13 @@ const Description = forwardRef<HTMLTextAreaElement, DescriptionProps>(
           <textarea
             id="description-input"
             rows={1}
-            ref={ref}
-            value={isInputEnabled ? text : text}
+            ref={textareaRef}
+            value={text}
             onChange={(e) => {
-              e.target.style.height = "auto";
-              e.target.style.height = `${e.target.scrollHeight}px`;
+              if (isInputEnabled) {
+                e.target.style.height = "auto";
+                e.target.style.height = `${e.target.scrollHeight}px`;
+              }
             }}
             aria-labelledby="description-input-label"
             disabled={!isInputEnabled}
