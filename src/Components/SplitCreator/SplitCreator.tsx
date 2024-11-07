@@ -116,7 +116,7 @@ const SplitCreator = WindowFC(
 
     useEffect(() => {
       setModalConfirmationOpeningCondition?.(
-        () => validateTitle() || validateWorkouts()
+        () => validateTitle() || validateWorkouts() || validateDescription()
       );
     }, [selectedWorkouts]);
 
@@ -131,6 +131,16 @@ const SplitCreator = WindowFC(
       }
 
       titleInputRef.current?.classList.remove("invalid");
+      return true;
+    }
+
+    function validateDescription(): boolean {
+      if(!descriptionTextAreaRef.current?.value) {
+        descriptionTextAreaRef.current?.classList.add("invalid");
+        return false;
+      }
+
+      descriptionTextAreaRef.current?.classList.remove("invalid");
       return true;
     }
 
