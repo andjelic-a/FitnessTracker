@@ -12,6 +12,7 @@ import FavoriteWorkoutsTab from "./FavoriteWorkoutsTab";
 import LikedWorkoutsTab from "./LikedWorkoutsTab";
 import Icon from "../Icon/Icon";
 import { useNavigate } from "react-router-dom";
+import Dropdown from "../DropdownMenu/Dropdown";
 gsap.registerPlugin(Flip);
 
 type ProfileWorkoutTabsProps = {
@@ -194,11 +195,20 @@ export default function ProfileWorkoutTabs({
           </div>
         </div>
 
-        {openTab === "split" ? (
+        {/* {openTab === "split" ? (
           <portals.OutPortal node={startWorkoutBtnPortalNode} />
         ) : (
           <portals.OutPortal node={searchBarPortalNode} />
-        )}
+        )} */}
+
+        <Dropdown
+          values={{
+            Value1: 1,
+            Value2: 2,
+            Value3: 3,
+          }}
+          defaultValue={"Value3"}
+        ></Dropdown>
       </div>
 
       <div className="tabs-body">
