@@ -62,7 +62,6 @@ const WorkoutCreator = WindowFC(
         return;
 
       const newWorkout: Schema<"CreateWorkoutRequestDTO"> = {
-        isPublic: isPublic,
         name: titleInputRef.current.value,
         description: descriptionTextAreaRef.current.value,
         sets: currentSets
@@ -116,7 +115,6 @@ const WorkoutCreator = WindowFC(
         const simulatedResponse: Schema<"SimpleWorkoutResponseDTO"> = {
           id: newWorkout.content.id,
           name: newWorkout.content.name,
-          isPublic: newWorkout.content.isPublic,
           creator: basicInfo,
           description: "",
         };

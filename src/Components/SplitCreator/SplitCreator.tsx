@@ -73,7 +73,6 @@ const SplitCreator = WindowFC(
 
       const newSplit: Schema<"CreateSplitRequestDTO"> = {
         description: descriptionTextAreaRef.current.value,
-        isPublic: isPublic,
         name: titleInputRef.current.value,
         workouts: selectedWorkouts
           .filter((x) => x.selected !== null)

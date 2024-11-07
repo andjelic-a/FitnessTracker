@@ -43,7 +43,6 @@ const WorkoutEditor = WindowFC(
 
         originalWorkout.current = x.content;
         setCurrentSets(extractSets(x.content));
-        setIsPublic(x.content.isPublic);
         titleInputRef.current!.value = x.content.name;
         descriptionTextAreaRef.current!.value = x.content.description;
       });
@@ -78,7 +77,6 @@ const WorkoutEditor = WindowFC(
       if (updatedWorkout.name.trim() !== original.name.trim()) return true;
       if (updatedWorkout.description?.trim() !== original.description.trim())
         return true;
-      if (updatedWorkout.isPublic !== original.isPublic) return true;
       if (updatedWorkout.sets.length !== original.sets.length) return true;
 
       for (let i = 0; i < updatedWorkout.sets.length; i++) {
@@ -98,7 +96,6 @@ const WorkoutEditor = WindowFC(
 
     function assembleWorkout(): Schema<"UpdateFullWorkoutRequestDTO"> {
       const updatedWorkout: Schema<"UpdateFullWorkoutRequestDTO"> = {
-        isPublic: isPublic,
         name: titleInputRef.current?.value ?? "",
         description: descriptionTextAreaRef.current?.value ?? "",
         sets: currentSets

@@ -96,7 +96,6 @@ const SplitEditor = WindowFC(
           workouts.map((x, i) => ({ day: days[i], selected: x }))
         );
 
-        setIsPublic(x.content.isPublic);
         titleInputRef.current!.value = x.content.name;
         descriptionTextAreaRef.current!.value = x.content.description;
       });
@@ -132,7 +131,6 @@ const SplitEditor = WindowFC(
 
       const newSplit: Schema<"CreateSplitRequestDTO"> = {
         description: descriptionTextAreaRef.current.value,
-        isPublic: isPublic,
         name: titleInputRef.current.value,
         workouts: selectedWorkouts
           .filter((x) => x.selected !== null)
