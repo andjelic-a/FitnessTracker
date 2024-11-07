@@ -1,5 +1,5 @@
 import "./Description.scss";
-import { useRef, useEffect } from "react";
+import { forwardRef, useEffect } from "react";
 
 type DescriptionProps = {
   placeholder?: string;
@@ -7,37 +7,35 @@ type DescriptionProps = {
   isInputEnabled: boolean;
 };
 
-export default function Description({
-  placeholder,
-  text,
-  isInputEnabled,
-}: DescriptionProps) {
-  const descriptionTextAreaRef = useRef<HTMLTextAreaElement | null>(null);
+const Description = forwardRef<HTMLTextAreaElement, DescriptionProps>(
+  ({ placeholder, text, isInputEnabled }: DescriptionProps, ref) => {
+    useEffect(() => {
+      if (ref && "current" in ref && ref.current) {
+        ref.current.style.height = "auto";
+        ref.current.style.height = `${ref.current.scrollHeight}px`;
+      }
+    }, [text, ref]);
 
-  useEffect(() => {
-    if (descriptionTextAreaRef.current) {
-      descriptionTextAreaRef.current.style.height = 'auto';
-      descriptionTextAreaRef.current.style.height = `${descriptionTextAreaRef.current.scrollHeight}px`;
-    }
-  }, [text]);
-
-  return (
-    <div className="description-container">
-      <div className="description">
-        <label className="description-placeholder">{placeholder}</label>
-        <textarea
-          id="description-input"
-          rows={1}
-          ref={descriptionTextAreaRef}
-          value={isInputEnabled ? text : text}
-          onChange={(e) => {
-            e.target.style.height = "auto";
-            e.target.style.height = `${e.target.scrollHeight}px`;
-          }}
-          aria-labelledby="description-input-label"
-          disabled={!isInputEnabled}
-        />
+    return (
+      <div className="description-container">
+        <div className="description">
+          <label className="description-placeholder">{placeholder}</label>
+          <textarea
+            id="description-input"
+            rows={1}
+            ref={ref}
+            value={isInputEnabled ? text : text}
+            onChange={(e) => {
+              e.target.style.height = "auto";
+              e.target.style.height = `${e.target.scrollHeight}px`;
+            }}
+            aria-labelledby="description-input-label"
+            disabled={!isInputEnabled}
+          />
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
+);
+
+export default Description;

@@ -248,27 +248,7 @@ const SplitCreator = WindowFC(
             ))}
           </div>
 
-          <Description placeholder="Split description" isInputEnabled={true} />
-
-          {/*<div className="description-container">
-            <textarea
-              id="description-input"
-              ref={descriptionTextAreaRef}
-              onChange={(e) => {
-                e.target.style.height = "auto";
-                e.target.style.height = `${e.target.scrollHeight}px`;
-              }}
-              aria-labelledby="description-input-label"
-            />
-
-            <label
-              htmlFor="description-input"
-              className="description-input-label"
-              id="description-input-label"
-            >
-              Split description
-            </label>
-          </div>*/}
+          <Description ref={descriptionTextAreaRef} placeholder="Split description" isInputEnabled={true} />
         </div>
       </>
     );
