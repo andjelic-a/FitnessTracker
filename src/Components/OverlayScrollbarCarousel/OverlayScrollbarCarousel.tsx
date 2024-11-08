@@ -1,18 +1,18 @@
-import "./WorkoutCarousel.scss";
+import "./OverlayScrollbarCarousel.scss";
 import { ReactNode } from "react";
 
 import "overlayscrollbars/overlayscrollbars.css";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 
-type WorkoutCarouselProps = {
+type OverlayScrollbarCarouselProps = {
   children: ReactNode;
   className?: string;
 };
 
-export default function WorkoutCarousel({
+export default function OverlayScrollbarCarousel({
   children,
   className,
-}: WorkoutCarouselProps) {
+}: OverlayScrollbarCarouselProps) {
   return (
     <OverlayScrollbarsComponent
       className={

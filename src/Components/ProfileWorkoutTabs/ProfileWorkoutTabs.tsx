@@ -6,12 +6,13 @@ import gsap from "gsap";
 import Flip from "gsap/dist/Flip";
 import CurrentSplitDisplay from "../CurrentSplitDisplay/CurrentSplitDisplay";
 import Async from "../Async/Async";
-import WorkoutCarousel from "../WorkoutCarousel/WorkoutCarousel";
+import OverlayScrollbarCarousel from "../OverlayScrollbarCarousel/OverlayScrollbarCarousel";
 import CreatedWorkoutsTab from "./CreatedWorkoutsTab";
 import Icon from "../Icon/Icon";
 import Dropdown from "../DropdownMenu/Dropdown";
 import LazyLoadingContainer from "../LazyLoadingContainer/LazyLoadingContainer";
 import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
+import SplitPreview from "../SplitPreview/SplitPreview";
 gsap.registerPlugin(Flip);
 
 type ProfileWorkoutTabsProps = {
@@ -52,11 +53,11 @@ export default function ProfileWorkoutTabs({
             return split ? (
               <CurrentSplitDisplay latestActivity={activity} split={split} />
             ) : (
-              <WorkoutCarousel>
+              <OverlayScrollbarCarousel>
                 <div className="empty">
                   <p>No split currently in use</p>
                 </div>
-              </WorkoutCarousel>
+              </OverlayScrollbarCarousel>
             );
           }}
         </Async>
@@ -157,9 +158,46 @@ export default function ProfileWorkoutTabs({
       </div>
 
       <div className="tabs-body">
-        {openTab === "splits" && memoizedTabs.splits}
+        {openTab === "splits" &&
+          (endpoint === null ? (
+            memoizedTabs.splits
+          ) : (
+            <OverlayScrollbarCarousel>
+              <LazyLoadingContainer
+                key={endpoint}
+                endpoint={endpoint}
+                baseAPIRequest={{
+                  method: "get",
+                  parameters: {
+                    limit: 10,
+                    offset: 0,
+                  },
+                }}
+                onSegmentLoad={(segmentData) => {
+                  if (
+                    segmentData.code !== "OK" ||
+                    segmentData.content.length === 0
+                  )
+                    return <p className="empty">Nothing to see here...</p>;
+
+                  return (
+                    <>
+                      {segmentData.content.map((x) => (
+                        <SplitPreview key={x.id} split={x as any} />
+                      ))}
+                    </>
+                  );
+                }}
+                stopCondition={(response) =>
+                  response.code === "Unauthorized" ||
+                  (response.code === "OK" && response.content.length < 10)
+                }
+              />
+            </OverlayScrollbarCarousel>
+          ))}
+
         {openTab === "workouts" && endpoint && (
-          <WorkoutCarousel>
+          <OverlayScrollbarCarousel>
             <LazyLoadingContainer
               key={endpoint}
               endpoint={endpoint}
@@ -190,7 +228,7 @@ export default function ProfileWorkoutTabs({
                 (response.code === "OK" && response.content.length < 10)
               }
             />
-          </WorkoutCarousel>
+          </OverlayScrollbarCarousel>
         )}
       </div>
     </div>

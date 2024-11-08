@@ -3,7 +3,7 @@ import { Schema } from "../../Types/Endpoints/SchemaParser";
 import { v4 } from "uuid";
 import { useEffect, useState } from "react";
 import CurrentSplitDayDisplay from "./CurrentSplitDayDisplay";
-import WorkoutCarousel from "../WorkoutCarousel/WorkoutCarousel";
+import OverlayScrollbarCarousel from "../OverlayScrollbarCarousel/OverlayScrollbarCarousel";
 
 type CurrentSplitDisplayProps = {
   split: Schema<"DetailedUserSplitResponseDTO"> | null;
@@ -93,7 +93,7 @@ export default function CurrentSplitDisplay({
   }
 
   return (
-    <WorkoutCarousel className="current-split-workouts">
+    <OverlayScrollbarCarousel className="current-split-workouts">
       {workouts.map((x, i) =>
         x.splitWorkout ? (
           <CurrentSplitDayDisplay
@@ -112,6 +112,6 @@ export default function CurrentSplitDisplay({
           />
         )
       )}
-    </WorkoutCarousel>
+    </OverlayScrollbarCarousel>
   );
 }
