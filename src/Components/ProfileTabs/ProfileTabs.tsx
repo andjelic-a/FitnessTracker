@@ -1,4 +1,4 @@
-import "./ProfileWorkoutTabs.scss";
+import "./ProfileTabs.scss";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import * as portals from "react-reverse-portal";
@@ -7,7 +7,6 @@ import Flip from "gsap/dist/Flip";
 import CurrentSplitDisplay from "../CurrentSplitDisplay/CurrentSplitDisplay";
 import Async from "../Async/Async";
 import OverlayScrollbarCarousel from "../OverlayScrollbarCarousel/OverlayScrollbarCarousel";
-import CreatedWorkoutsTab from "./CreatedWorkoutsTab";
 import Icon from "../Icon/Icon";
 import Dropdown from "../DropdownMenu/Dropdown";
 import LazyLoadingContainer from "../LazyLoadingContainer/LazyLoadingContainer";
@@ -15,17 +14,17 @@ import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
 import SplitPreview from "../SplitPreview/SplitPreview";
 gsap.registerPlugin(Flip);
 
-type ProfileWorkoutTabsProps = {
+type ProfileTabsProps = {
   latestActivity: Schema<"DetailedWeekOfCompletedWorkoutsResponseDTO"> | null;
   split: Schema<"DetailedUserSplitResponseDTO"> | null;
 };
 
 type Tab = "splits" | "workouts";
 
-export default function ProfileWorkoutTabs({
+export default function ProfileTabs({
   latestActivity,
   split,
-}: ProfileWorkoutTabsProps) {
+}: ProfileTabsProps) {
   const [openTab, setOpenTab] = useState<Tab>("splits");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const searchBarRef = useRef<HTMLInputElement>(null);
@@ -62,7 +61,7 @@ export default function ProfileWorkoutTabs({
           }}
         </Async>
       ),
-      workouts: <CreatedWorkoutsTab searchTerm={searchTerm} />,
+      workouts: <></>,
     }),
     [searchTerm, split, latestActivity]
   );
