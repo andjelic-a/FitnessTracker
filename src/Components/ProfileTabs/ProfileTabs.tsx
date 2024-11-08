@@ -42,28 +42,23 @@ export default function ProfileTabs({
     []
   );
 
-  const memoizedTabs = useMemo<{
-    [key in Tab]: React.JSX.Element;
-  }>(
-    () => ({
-      splits: (
-        <Async await={Promise.all([latestActivity, split])}>
-          {([activity, split]) => {
-            return split ? (
-              <CurrentSplitDisplay latestActivity={activity} split={split} />
-            ) : (
-              <OverlayScrollbarCarousel>
-                <div className="empty">
-                  <p>No split currently in use</p>
-                </div>
-              </OverlayScrollbarCarousel>
-            );
-          }}
-        </Async>
-      ),
-      workouts: <></>,
-    }),
-    [searchTerm, split, latestActivity]
+  const memoizedCurrentSplitDisplay = useMemo<React.JSX.Element>(
+    () => (
+      <Async await={Promise.all([latestActivity, split])}>
+        {([activity, split]) => {
+          return split ? (
+            <CurrentSplitDisplay latestActivity={activity} split={split} />
+          ) : (
+            <OverlayScrollbarCarousel>
+              <div className="empty">
+                <p>No split currently in use</p>
+              </div>
+            </OverlayScrollbarCarousel>
+          );
+        }}
+      </Async>
+    ),
+    [split, latestActivity]
   );
 
   function handleSearch() {
@@ -157,45 +152,9 @@ export default function ProfileTabs({
       </div>
 
       <div className="tabs-body">
-        {openTab === "splits" &&
-          (endpoint === null ? (
-            memoizedTabs.splits
-          ) : (
-            <OverlayScrollbarCarousel>
-              <LazyLoadingContainer
-                key={endpoint}
-                endpoint={endpoint}
-                baseAPIRequest={{
-                  method: "get",
-                  parameters: {
-                    limit: 10,
-                    offset: 0,
-                  },
-                }}
-                onSegmentLoad={(segmentData) => {
-                  if (
-                    segmentData.code !== "OK" ||
-                    segmentData.content.length === 0
-                  )
-                    return <p className="empty">Nothing to see here...</p>;
+        {!endpoint && memoizedCurrentSplitDisplay}
 
-                  return (
-                    <>
-                      {segmentData.content.map((x) => (
-                        <SplitPreview key={x.id} split={x as any} />
-                      ))}
-                    </>
-                  );
-                }}
-                stopCondition={(response) =>
-                  response.code === "Unauthorized" ||
-                  (response.code === "OK" && response.content.length < 10)
-                }
-              />
-            </OverlayScrollbarCarousel>
-          ))}
-
-        {openTab === "workouts" && endpoint && (
+        {endpoint && (
           <OverlayScrollbarCarousel>
             <LazyLoadingContainer
               key={endpoint}
@@ -205,23 +164,22 @@ export default function ProfileTabs({
                 parameters: {
                   limit: 10,
                   offset: 0,
+                  nameFilter: searchTerm,
                 },
               }}
-              onSegmentLoad={(segmentData) => {
-                if (
-                  segmentData.code !== "OK" ||
-                  segmentData.content.length === 0
-                )
-                  return <p className="empty">Nothing to see here...</p>;
-
-                return (
-                  <>
-                    {segmentData.content.map((x) => (
-                      <WorkoutPreview key={x.id} workout={x as any} />
-                    ))}
-                  </>
-                );
-              }}
+              onSegmentLoad={(segmentData) => (
+                <>
+                  {segmentData.code === "OK"
+                    ? segmentData.content.map((x) =>
+                        openTab === "splits" ? (
+                          <SplitPreview key={x.id} split={x} />
+                        ) : (
+                          <WorkoutPreview key={x.id} workout={x as any} />
+                        )
+                      )
+                    : null}
+                </>
+              )}
               stopCondition={(response) =>
                 response.code === "Unauthorized" ||
                 (response.code === "OK" && response.content.length < 10)
