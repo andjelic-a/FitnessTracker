@@ -8,10 +8,7 @@ import CurrentSplitDisplay from "../CurrentSplitDisplay/CurrentSplitDisplay";
 import Async from "../Async/Async";
 import WorkoutCarousel from "../WorkoutCarousel/WorkoutCarousel";
 import CreatedWorkoutsTab from "./CreatedWorkoutsTab";
-import FavoriteWorkoutsTab from "./FavoriteWorkoutsTab";
-import LikedWorkoutsTab from "./LikedWorkoutsTab";
 import Icon from "../Icon/Icon";
-import { useNavigate } from "react-router-dom";
 import Dropdown from "../DropdownMenu/Dropdown";
 gsap.registerPlugin(Flip);
 
@@ -20,18 +17,18 @@ type ProfileWorkoutTabsProps = {
   split: Schema<"DetailedUserSplitResponseDTO"> | null;
 };
 
-type Tab = "split" | "created" | "favorite" | "liked";
+type Tab = "splits" | "workouts";
 
 export default function ProfileWorkoutTabs({
   latestActivity,
   split,
 }: ProfileWorkoutTabsProps) {
-  const [openTab, setOpenTab] = useState<Tab>("split");
+  const [openTab, setOpenTab] = useState<Tab>("splits");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const searchBarRef = useRef<HTMLInputElement>(null);
-  const navigate = useNavigate();
 
   const flipStateRef = useRef<Flip.FlipState | null>(null);
+
   const activeIndicatorPortalNode = useMemo(
     () =>
       portals.createHtmlPortalNode({
@@ -43,43 +40,11 @@ export default function ProfileWorkoutTabs({
     []
   );
 
-  const searchBarPortalNode = useMemo(
-    () =>
-      portals.createHtmlPortalNode({
-        attributes: {
-          class: "search-bar-container",
-        },
-      }),
-    []
-  );
-
-  const startWorkoutBtnPortalNode = useMemo(
-    () =>
-      portals.createHtmlPortalNode({
-        attributes: {
-          class: "change-split-btn-container",
-        },
-      }),
-    []
-  );
-
-  const tabPortalNodes = useMemo<{
-    [key in Tab]: portals.HtmlPortalNode;
-  }>(
-    () => ({
-      split: portals.createHtmlPortalNode(),
-      created: portals.createHtmlPortalNode(),
-      favorite: portals.createHtmlPortalNode(),
-      liked: portals.createHtmlPortalNode(),
-    }),
-    []
-  );
-
   const memoizedTabs = useMemo<{
     [key in Tab]: React.JSX.Element;
   }>(
     () => ({
-      split: (
+      splits: (
         <Async await={Promise.all([latestActivity, split])}>
           {([activity, split]) => {
             return split ? (
@@ -94,9 +59,7 @@ export default function ProfileWorkoutTabs({
           }}
         </Async>
       ),
-      created: <CreatedWorkoutsTab searchTerm={searchTerm} />,
-      favorite: <FavoriteWorkoutsTab searchTerm={searchTerm} />,
-      liked: <LikedWorkoutsTab searchTerm={searchTerm} />,
+      workouts: <CreatedWorkoutsTab searchTerm={searchTerm} />,
     }),
     [searchTerm, split, latestActivity]
   );
@@ -123,83 +86,22 @@ export default function ProfileWorkoutTabs({
 
   return (
     <div className="profile-workout-tabs-container">
-      <portals.InPortal node={tabPortalNodes.split}>
-        {memoizedTabs.split}
-      </portals.InPortal>
-
-      <portals.InPortal node={tabPortalNodes.created}>
-        <WorkoutCarousel>{memoizedTabs.created}</WorkoutCarousel>
-      </portals.InPortal>
-
-      <portals.InPortal node={tabPortalNodes.favorite}>
-        <WorkoutCarousel>{memoizedTabs.favorite}</WorkoutCarousel>
-      </portals.InPortal>
-
-      <portals.InPortal node={tabPortalNodes.liked}>
-        <WorkoutCarousel>{memoizedTabs.liked}</WorkoutCarousel>
-      </portals.InPortal>
-
-      <portals.InPortal node={searchBarPortalNode}>
-        <input
-          name="profile-workouts-search-bar"
-          type="text"
-          autoComplete="off"
-          className="search-bar"
-          placeholder="Search"
-          ref={searchBarRef}
-          onKeyDown={(e) => e.key === "Enter" && void handleSearch()}
-        />
-        <Icon name="search" className="search-icon" onClick={handleSearch} />
-      </portals.InPortal>
-
-      <portals.InPortal node={startWorkoutBtnPortalNode}>
-        {split &&
-          split.workouts.findIndex((x) => x.day === new Date().getUTCDay()) !==
-            -1 && (
-            <button onClick={() => navigate("/started-workout")}>
-              Start today's workout
-            </button>
-          )}
-      </portals.InPortal>
-
       <div className="tabs-header">
         <div className="tabs">
           <div className="tab">
-            <button onClick={() => handleOpenTab("split")}>Split</button>
-            {openTab === "split" && (
+            <button onClick={() => handleOpenTab("splits")}>Split</button>
+            {openTab === "splits" && (
               <portals.OutPortal node={activeIndicatorPortalNode} />
             )}
           </div>
 
           <div className="tab">
-            <button onClick={() => handleOpenTab("created")}>Created</button>
-            {openTab === "created" && (
-              <portals.OutPortal node={activeIndicatorPortalNode} />
-            )}
-          </div>
-
-          <div className="tab">
-            <button onClick={() => handleOpenTab("favorite")}>Favorite</button>
-
-            {openTab === "favorite" && (
-              <portals.OutPortal node={activeIndicatorPortalNode} />
-            )}
-          </div>
-
-          <div className="tab">
-            <button onClick={() => handleOpenTab("liked")}>Liked</button>
-
-            {openTab === "liked" && (
+            <button onClick={() => handleOpenTab("workouts")}>Workouts</button>
+            {openTab === "workouts" && (
               <portals.OutPortal node={activeIndicatorPortalNode} />
             )}
           </div>
         </div>
-
-        {/* {openTab === "split" ? (
-          <portals.OutPortal node={startWorkoutBtnPortalNode} />
-        ) : (
-          <portals.OutPortal node={searchBarPortalNode} />
-        )} */}
 
         <Dropdown
           values={{
@@ -208,11 +110,28 @@ export default function ProfileWorkoutTabs({
             Value3: 3,
           }}
           defaultValue={"Value3"}
-        ></Dropdown>
+        />
+
+        <div className="search-bar-container">
+          <input
+            name="profile-workouts-search-bar"
+            type="text"
+            autoComplete="off"
+            className="search-bar"
+            placeholder="Search"
+            ref={searchBarRef}
+            onKeyDown={(e) => e.key === "Enter" && void handleSearch()}
+          />
+
+          <Icon name="search" className="search-icon" onClick={handleSearch} />
+        </div>
       </div>
 
       <div className="tabs-body">
-        <portals.OutPortal node={tabPortalNodes[openTab]} />
+        {openTab === "splits" && memoizedTabs.splits}
+        {openTab === "workouts" && (
+          <WorkoutCarousel>{memoizedTabs.workouts}</WorkoutCarousel>
+        )}
       </div>
     </div>
   );
