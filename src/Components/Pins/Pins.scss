@@ -48,7 +48,7 @@
 
   .pins-body {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(40rem, 1fr));
     grid-template-rows: repeat(3, min(1fr, max-content));
     grid-auto-flow: row;
     gap: 1rem;
@@ -74,6 +74,7 @@
   border-radius: 0.7rem;
 
   .pin-header {
+    width: 100%;
     display: flex;
     align-items: center;
     padding: 0 0.5rem;
@@ -106,6 +107,10 @@
     h3 {
       font-size: 1.8rem;
       font-weight: 500;
+      max-width: 30rem;
+      background-color: red;
+      white-space: nowrap;
+      overflow: hidden;
     }
 
     .pin-type {
