@@ -17,7 +17,7 @@ type DropdownProps = {
 
 type DropdownWithValuesProps<Values extends ValuesType> = {
   values: Values;
-  defaultValue?: keyof Values;
+  defaultValue: keyof Values;
   onSelectionChanged?: (key: keyof Values, value: Values[keyof Values]) => void;
 } & UniversalDropdownProps;
 
@@ -122,6 +122,11 @@ function ValueBasedDropdown<Values extends ValuesType>({
 }: DropdownWithValuesProps<Values>) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [value, setValue] = useState<string>(defaultValue?.toString() ?? "");
+
+  useEffect(() => {
+    setValue(defaultValue?.toString() ?? "");
+    onSelectionChanged?.(defaultValue, values[defaultValue]);
+  }, [defaultValue, values]);
 
   const dropdownMenuRef = useRef<HTMLDivElement>(null);
 

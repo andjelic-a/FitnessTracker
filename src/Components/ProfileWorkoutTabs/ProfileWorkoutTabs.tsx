@@ -10,6 +10,8 @@ import WorkoutCarousel from "../WorkoutCarousel/WorkoutCarousel";
 import CreatedWorkoutsTab from "./CreatedWorkoutsTab";
 import Icon from "../Icon/Icon";
 import Dropdown from "../DropdownMenu/Dropdown";
+import LazyLoadingContainer from "../LazyLoadingContainer/LazyLoadingContainer";
+import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
 gsap.registerPlugin(Flip);
 
 type ProfileWorkoutTabsProps = {
@@ -84,6 +86,40 @@ export default function ProfileWorkoutTabs({
     setOpenTab(tab);
   }
 
+  const [endpoint, setEndpoint] = useState<
+    | null
+    | "/api/workout/personal/simple"
+    | "/api/workout/liked/simple"
+    | "/api/workout/favorite/simple"
+    | "/api/split/personal/simple"
+    | "/api/split/liked/simple"
+    | "/api/split/favorite/simple"
+  >(null);
+
+  const dropdown = useMemo(
+    () => (
+      <Dropdown
+        values={
+          openTab === "splits"
+            ? ({
+                Current: null,
+                Created: "/api/split/personal/simple",
+                Liked: "/api/split/liked/simple",
+                Favorites: "/api/split/favorite/simple",
+              } as const)
+            : ({
+                Created: "/api/workout/personal/simple",
+                Liked: "/api/workout/liked/simple",
+                Favorites: "/api/workout/favorite/simple",
+              } as const)
+        }
+        defaultValue={openTab === "splits" ? "Current" : "Created"}
+        onSelectionChanged={(_x, y) => setEndpoint(y ?? null)}
+      />
+    ),
+    [openTab]
+  );
+
   return (
     <div className="profile-workout-tabs-container">
       <div className="tabs-header">
@@ -103,14 +139,7 @@ export default function ProfileWorkoutTabs({
           </div>
         </div>
 
-        <Dropdown
-          values={{
-            Value1: 1,
-            Value2: 2,
-            Value3: 3,
-          }}
-          defaultValue={"Value3"}
-        />
+        {dropdown}
 
         <div className="search-bar-container">
           <input
@@ -129,8 +158,39 @@ export default function ProfileWorkoutTabs({
 
       <div className="tabs-body">
         {openTab === "splits" && memoizedTabs.splits}
-        {openTab === "workouts" && (
-          <WorkoutCarousel>{memoizedTabs.workouts}</WorkoutCarousel>
+        {openTab === "workouts" && endpoint && (
+          <WorkoutCarousel>
+            <LazyLoadingContainer
+              key={endpoint}
+              endpoint={endpoint}
+              baseAPIRequest={{
+                method: "get",
+                parameters: {
+                  limit: 10,
+                  offset: 0,
+                },
+              }}
+              onSegmentLoad={(segmentData) => {
+                if (
+                  segmentData.code !== "OK" ||
+                  segmentData.content.length === 0
+                )
+                  return <p className="empty">Nothing to see here...</p>;
+
+                return (
+                  <>
+                    {segmentData.content.map((x) => (
+                      <WorkoutPreview key={x.id} workout={x as any} />
+                    ))}
+                  </>
+                );
+              }}
+              stopCondition={(response) =>
+                response.code === "Unauthorized" ||
+                (response.code === "OK" && response.content.length < 10)
+              }
+            />
+          </WorkoutCarousel>
         )}
       </div>
     </div>
