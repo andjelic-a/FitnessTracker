@@ -4,7 +4,7 @@ import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
 import AnimatedOutlet from "../../Components/WindowWrapper/AnimatedOutlet";
 import profileLoader from "./ProfileLoader";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
-import ProfileWorkoutTabs from "../../Components/ProfileWorkoutTabs/ProfileWorkoutTabs";
+import ProfileTabs from "../../Components/ProfileTabs/ProfileTabs";
 import { useEffect, useState } from "react";
 import { NewWorkoutsContext } from "../../Contexts/NewWorkoutsContext";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
@@ -84,7 +84,7 @@ function InnerProfile({
           <Pins pins={loaderDataState.pins.content} includeEditButtons />
         )}
 
-        <ProfileWorkoutTabs
+        <ProfileTabs
           latestActivity={
             loaderDataState.latestWeekOfActivity.code === "OK"
               ? loaderDataState.latestWeekOfActivity.content

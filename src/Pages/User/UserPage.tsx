@@ -4,7 +4,7 @@ import userLoader from "./UserLoader";
 import { LoaderReturnType } from "../../BetterRouter/CreateLoader";
 import { useEffect, useRef, useState } from "react";
 import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
-import ProfileWorkoutTabs from "../../Components/ProfileWorkoutTabs/ProfileWorkoutTabs";
+import ProfileTabs from "../../Components/ProfileTabs/ProfileTabs";
 import Pins from "../../Components/Pins/Pins";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
 import { useNavigate } from "react-router-dom";
@@ -98,7 +98,7 @@ function InnerProfile({
           <Pins pins={loaderDataState.pins.content} />
         )}
 
-        <ProfileWorkoutTabs
+        <ProfileTabs
           latestActivity={
             loaderDataState.latestWeekOfActivity.code === "OK"
               ? loaderDataState.latestWeekOfActivity.content
