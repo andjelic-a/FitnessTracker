@@ -12,12 +12,6 @@ const userLoader = createLoader(({ params: { username } }) => {
         username,
       },
     }),
-    streak: sendAPIRequest("/api/user/{username}/streak", {
-      method: "get",
-      parameters: {
-        username,
-      },
-    }),
     latestWeekOfActivity: sendAPIRequest(
       "/api/user/{username}/streak/week/{date}",
       {

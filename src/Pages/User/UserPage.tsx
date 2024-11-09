@@ -30,13 +30,11 @@ export default function UserPage() {
       loaderData.user,
       loaderData.pins,
       loaderData.latestWeekOfActivity,
-      loaderData.streak,
     ]).then((x) => {
       setLoaderDataState({
         user: x[0],
         pins: x[1],
         latestWeekOfActivity: x[2],
-        streak: x[3],
       });
     });
   }, [loaderData]);

@@ -11,7 +11,6 @@ import Modal from "react-modal";
 import Error from "./Components/Error/Error.tsx";
 import Exercises from "./Pages/Exercises/Exercises.tsx";
 import FullExerciseDisplay from "./Components/FullExerciseDisplay/FullExerciseDisplay.tsx";
-import Profile from "./Pages/Profile/Profile.tsx";
 import Authentication from "./Pages/Authentication/Authentication.tsx";
 import AdminPanel from "./Pages/AdminPanel/AdminPanel.tsx";
 import AdminExercisePanel from "./Pages/AdminPanel/Exercises/AdminExercisePanel.tsx";
@@ -23,7 +22,6 @@ import exerciseLoader from "./Pages/Exercises/ExerciseLoader.ts";
 import singleExerciseLoader from "./Components/FullExerciseDisplay/SingleExerciseLoader.ts";
 import UpdateExercise from "./Pages/AdminPanel/Exercises/Update/UpdateExercise.tsx";
 import adminUpdateExerciseLoader from "./Pages/AdminPanel/Exercises/Update/UpdateExerciseLoader.ts";
-import profileLoader from "./Pages/Profile/ProfileLoader.ts";
 import authenticationLoader from "./Pages/Authentication/AuthenticationLoader.ts";
 import adminExerciseLoader from "./Pages/AdminPanel/Exercises/AdminExercisesLoader.ts";
 import EmailVerification from "./Pages/EmailVerification/EmailVerification.tsx";
@@ -126,46 +124,6 @@ const routes: RouteObject[] = [
             path: "equipment",
             element: <EquipmentAdminPanel />,
             loader: adminEquipmentLoader,
-          },
-        ],
-      },
-      {
-        path: "me",
-        element: <Profile />,
-        loader: profileLoader,
-        shouldRevalidate: (a) => a.currentUrl.pathname.includes("me/split/"),
-        children: [
-          {
-            path: "workout/new",
-            element: <WorkoutCreator />,
-          },
-          {
-            path: "workout/:id",
-            element: <WorkoutDisplay />,
-            loader: workoutDisplayLoader,
-          },
-          {
-            path: "workout/:id/edit",
-            element: <WorkoutEditor />,
-            loader: workoutDisplayLoader,
-          },
-          {
-            path: "split/new",
-            element: <SplitCreator />,
-          },
-          {
-            path: "split/:id",
-            element: <SplitDisplay />,
-            loader: splitDisplayLoader,
-          },
-          {
-            path: "split/:id/edit",
-            element: <SplitEditor />,
-            loader: splitDisplayLoader,
-          },
-          {
-            path: "settings",
-            element: <Settings />,
           },
         ],
       },
