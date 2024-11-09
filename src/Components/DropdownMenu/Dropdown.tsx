@@ -155,12 +155,10 @@ function ValueBasedDropdown<Values extends ValuesType>({
   return (
     <div
       ref={dropdownMenuRef}
-      className={`${className ? className : ""} dropdown-menu${
-        isOpen ? " rounded" : ""
-      }`}
+      className={`${className ? className : ""} dropdown-menu`}
     >
       <div
-        className="dropdown-button"
+        className={`dropdown-button ${isOpen ? " rounded" : ""}`}
         onClick={() => {
           if (!isOpen) onOpen?.();
           setIsOpen((prevState) => !prevState);
