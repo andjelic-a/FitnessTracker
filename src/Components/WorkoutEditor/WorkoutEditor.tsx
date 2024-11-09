@@ -157,11 +157,12 @@ const WorkoutEditor = WindowFC(
 
       descriptionTextAreaRef.current.value = "";
       descriptionTextAreaRef.current.blur();
-      sendAPIRequest("/api/workout/{id}", {
+      sendAPIRequest("/api/workout/{creator}/{name}", {
         method: "put",
         payload: updatedWorkout,
         parameters: {
-          id: originalWorkout.content.id,
+          name: originalWorkout.content.name,
+          creator: originalWorkout.content.creator.username,
         },
       });
 

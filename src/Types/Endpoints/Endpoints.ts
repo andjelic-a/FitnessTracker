@@ -3314,6 +3314,26 @@ type MappedEndpoints = {
               };
             };
           };
+          "404": {
+            description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
           "429": {
             description: "Too Many Requests";
             content: {
@@ -3403,8 +3423,8 @@ type MappedEndpoints = {
               };
             };
           };
-          "401": {
-            description: "Unauthorized";
+          "404": {
+            description: "Not Found";
             content: {
               "text/plain": {
                 schema: {
@@ -3512,8 +3532,8 @@ type MappedEndpoints = {
               };
             };
           };
-          "401": {
-            description: "Unauthorized";
+          "404": {
+            description: "Not Found";
             content: {
               "text/plain": {
                 schema: {
@@ -3555,17 +3575,24 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/split/{id}/detailed": {
+    "/api/split/{creator}/{name}": {
       get: {
         tags: ["Split"];
         parameters: [
           {
-            name: "id";
+            name: "creator";
             in: "path";
             required: true;
             schema: {
               type: "string";
-              format: "uuid";
+            };
+          },
+          {
+            name: "name";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
             };
           }
         ];
@@ -3586,26 +3613,6 @@ type MappedEndpoints = {
               "text/json": {
                 schema: {
                   $ref: "#/components/schemas/DetailedSplitResponseDTO";
-                };
-              };
-            };
-          };
-          "401": {
-            description: "Unauthorized";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
                 };
               };
             };
@@ -7458,17 +7465,24 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/workout/{id}": {
+    "/api/workout/{creator}/{name}": {
       delete: {
         tags: ["Workout"];
         parameters: [
           {
-            name: "id";
+            name: "creator";
             in: "path";
             required: true;
             schema: {
               type: "string";
-              format: "uuid";
+            };
+          },
+          {
+            name: "name";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
             };
           }
         ];
@@ -7558,16 +7572,106 @@ type MappedEndpoints = {
           };
         };
       };
-      put: {
+      get: {
         tags: ["Workout"];
         parameters: [
           {
-            name: "id";
+            name: "creator";
             in: "path";
             required: true;
             schema: {
               type: "string";
-              format: "uuid";
+            };
+          },
+          {
+            name: "name";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+            };
+          }
+        ];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedWorkoutResponseDTO";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedWorkoutResponseDTO";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/DetailedWorkoutResponseDTO";
+                };
+              };
+            };
+          };
+          "404": {
+            description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+      put: {
+        tags: ["Workout"];
+        parameters: [
+          {
+            name: "creator";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+            };
+          },
+          {
+            name: "name";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
             };
           }
         ];
@@ -8464,6 +8568,26 @@ type MappedEndpoints = {
               };
             };
           };
+          "404": {
+            description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
           "429": {
             description: "Too Many Requests";
             content: {
@@ -8553,8 +8677,8 @@ type MappedEndpoints = {
               };
             };
           };
-          "401": {
-            description: "Unauthorized";
+          "404": {
+            description: "Not Found";
             content: {
               "text/plain": {
                 schema: {
@@ -8658,104 +8782,6 @@ type MappedEndpoints = {
                   items: {
                     $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
                   };
-                };
-              };
-            };
-          };
-          "401": {
-            description: "Unauthorized";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-        };
-      };
-    };
-    "/api/workout/{id}/detailed": {
-      get: {
-        tags: ["Workout"];
-        parameters: [
-          {
-            name: "id";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-              format: "uuid";
-            };
-          }
-        ];
-        responses: {
-          "200": {
-            description: "OK";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/DetailedWorkoutResponseDTO";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/DetailedWorkoutResponseDTO";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/DetailedWorkoutResponseDTO";
-                };
-              };
-            };
-          };
-          "401": {
-            description: "Unauthorized";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
                 };
               };
             };

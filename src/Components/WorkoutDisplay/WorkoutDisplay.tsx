@@ -98,15 +98,15 @@ const WorkoutDisplay = WindowFC(({}, close) => {
         return;
       }
 
-      sendAPIRequest("/api/workout/{id}", {
+      sendAPIRequest("/api/workout/{creator}/{name}", {
         method: "delete",
         parameters: {
-          id: currentWorkout.content.id,
+          name: currentWorkout.content.name,
+          creator: currentWorkout.content.creator.username,
         },
       });
 
       //TODO: Update cache
-
       close();
     });
   };

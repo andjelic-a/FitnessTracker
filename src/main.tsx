@@ -67,14 +67,6 @@ const routes: RouteObject[] = [
         loader: singleExerciseLoader,
       },
       {
-        path: "workout/:id",
-        element: <div>Workout</div>,
-      },
-      {
-        path: "split/:id",
-        element: <div>Split</div>,
-      },
-      {
         path: "started-workout",
         element: <StartedWorkout />,
         loader: startedWorkoutLoader,
@@ -141,12 +133,12 @@ const routes: RouteObject[] = [
             element: <WorkoutCreator />,
           },
           {
-            path: "workout/:id",
+            path: "workout/:name",
             element: <WorkoutDisplay />,
             loader: workoutDisplayLoader,
           },
           {
-            path: "workout/:id/edit",
+            path: "workout/:name/edit",
             element: <WorkoutEditor />,
             loader: workoutDisplayLoader,
           },
@@ -155,12 +147,12 @@ const routes: RouteObject[] = [
             element: <SplitCreator />,
           },
           {
-            path: "split/:id",
+            path: "split/:name",
             element: <SplitDisplay />,
             loader: splitDisplayLoader,
           },
           {
-            path: "split/:id/edit",
+            path: "split/:name/edit",
             element: <SplitEditor />,
             loader: splitDisplayLoader,
           },
