@@ -22,6 +22,14 @@
 
     background-color: $primary-300;
     border-radius: 0.5rem;
+
+    .dropdown-button-icon {
+      width: 20%;
+    }
+    p {
+      width: 80%;
+      font-weight: 600;
+    }
   }
 
   .dropdown-content {
