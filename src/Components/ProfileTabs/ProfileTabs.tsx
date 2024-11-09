@@ -1,5 +1,5 @@
 import "./ProfileTabs.scss";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { memo, useEffect, useMemo, useRef, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import * as portals from "react-reverse-portal";
 import gsap from "gsap";
@@ -22,15 +22,12 @@ type ProfileTabsProps = {
 
 type Tab = "splits" | "workouts";
 
-export default function ProfileTabs({
-  latestActivity,
-  split,
-}: ProfileTabsProps) {
+const ProfileTabs = memo(({ latestActivity, split }: ProfileTabsProps) => {
   const [openTab, setOpenTab] = useState<Tab>("splits");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const searchBarRef = useRef<HTMLInputElement>(null);
-
   const params = useParams();
+
   const flipStateRef = useRef<Flip.FlipState | null>(null);
 
   const activeIndicatorPortalNode = useMemo(
@@ -135,10 +132,48 @@ export default function ProfileTabs({
               } as const)
         }
         defaultValue={openTab === "splits" ? "Current" : "Created"}
-        onSelectionChanged={(_x, y) => setEndpoint(y ?? null)}
+        onSelectionChanged={(_x, y) => void setEndpoint(y ?? null)}
       />
     ),
-    [openTab, params]
+    [openTab]
+  );
+
+  const containerMemo = useMemo(
+    () =>
+      endpoint === null ? null : (
+        <OverlayScrollbarCarousel>
+          <LazyLoadingContainer
+            key={endpoint}
+            endpoint={endpoint}
+            baseAPIRequest={{
+              method: "get",
+              parameters: {
+                limit: 10,
+                offset: 0,
+                nameFilter: searchTerm,
+                username: "username" in params ? params.username : undefined,
+              },
+            }}
+            onSegmentLoad={(segmentData) => (
+              <>
+                {segmentData.code === "OK"
+                  ? segmentData.content.map((x) =>
+                      openTab === "splits" ? (
+                        <SplitPreview key={x.id} split={x} />
+                      ) : (
+                        <WorkoutPreview key={x.id} workout={x as any} />
+                      )
+                    )
+                  : null}
+              </>
+            )}
+            stopCondition={(response) =>
+              response.code === "OK" && response.content.length < 10
+            }
+          />
+        </OverlayScrollbarCarousel>
+      ),
+    [endpoint, searchTerm]
   );
 
   return (
@@ -186,40 +221,10 @@ export default function ProfileTabs({
       <div className="tabs-body">
         {!endpoint && memoizedCurrentSplitDisplay}
 
-        {endpoint && (
-          <OverlayScrollbarCarousel>
-            <LazyLoadingContainer
-              key={endpoint}
-              endpoint={endpoint}
-              baseAPIRequest={{
-                method: "get",
-                parameters: {
-                  limit: 10,
-                  offset: 0,
-                  nameFilter: searchTerm,
-                  username: "username" in params ? params.username : undefined,
-                },
-              }}
-              onSegmentLoad={(segmentData) => (
-                <>
-                  {segmentData.code === "OK"
-                    ? segmentData.content.map((x) =>
-                        openTab === "splits" ? (
-                          <SplitPreview key={x.id} split={x} />
-                        ) : (
-                          <WorkoutPreview key={x.id} workout={x as any} />
-                        )
-                      )
-                    : null}
-                </>
-              )}
-              stopCondition={(response) =>
-                response.code === "OK" && response.content.length < 10
-              }
-            />
-          </OverlayScrollbarCarousel>
-        )}
+        {endpoint !== null && containerMemo}
       </div>
     </div>
   );
-}
+});
+
+export default ProfileTabs;

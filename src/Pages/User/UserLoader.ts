@@ -41,6 +41,6 @@ const userLoader = createLoader(({ params: { username } }) => {
       },
     }),
   };
-}, "/user/:username");
+}, "/:username");
 
 export default userLoader;

@@ -15,7 +15,7 @@ function AppHeader() {
 
       <div className="profile-picture-container">
         {basicInfo !== null ? (
-          <Link to="/me">
+          <Link to={basicInfo.username}>
             <img
               src={basicInfo.image ?? "/DefaultProfilePicture.png"}
               alt="Profile picture of the logged in user"

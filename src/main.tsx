@@ -77,46 +77,6 @@ const routes: RouteObject[] = [
         element: <div>Split</div>,
       },
       {
-        path: "me",
-        element: <Profile />,
-        loader: profileLoader,
-        shouldRevalidate: (a) => a.currentUrl.pathname.includes("me/split/"),
-        children: [
-          {
-            path: "workout/new",
-            element: <WorkoutCreator />,
-          },
-          {
-            path: "workout/:id",
-            element: <WorkoutDisplay />,
-            loader: workoutDisplayLoader,
-          },
-          {
-            path: "workout/:id/edit",
-            element: <WorkoutEditor />,
-            loader: workoutDisplayLoader,
-          },
-          {
-            path: "split/new",
-            element: <SplitCreator />,
-          },
-          {
-            path: "split/:id",
-            element: <SplitDisplay />,
-            loader: splitDisplayLoader,
-          },
-          {
-            path: "split/:id/edit",
-            element: <SplitEditor />,
-            loader: splitDisplayLoader,
-          },
-          {
-            path: "settings",
-            element: <Settings />,
-          },
-        ],
-      },
-      {
         path: "started-workout",
         element: <StartedWorkout />,
         loader: startedWorkoutLoader,
@@ -125,11 +85,6 @@ const routes: RouteObject[] = [
         path: "authentication",
         element: <Authentication />,
         loader: authenticationLoader,
-      },
-      {
-        path: "user/:username",
-        element: <UserPage />,
-        loader: userLoader,
       },
       {
         path: "email-verification/:code",
@@ -171,6 +126,85 @@ const routes: RouteObject[] = [
             path: "equipment",
             element: <EquipmentAdminPanel />,
             loader: adminEquipmentLoader,
+          },
+        ],
+      },
+      {
+        path: "me",
+        element: <Profile />,
+        loader: profileLoader,
+        shouldRevalidate: (a) => a.currentUrl.pathname.includes("me/split/"),
+        children: [
+          {
+            path: "workout/new",
+            element: <WorkoutCreator />,
+          },
+          {
+            path: "workout/:id",
+            element: <WorkoutDisplay />,
+            loader: workoutDisplayLoader,
+          },
+          {
+            path: "workout/:id/edit",
+            element: <WorkoutEditor />,
+            loader: workoutDisplayLoader,
+          },
+          {
+            path: "split/new",
+            element: <SplitCreator />,
+          },
+          {
+            path: "split/:id",
+            element: <SplitDisplay />,
+            loader: splitDisplayLoader,
+          },
+          {
+            path: "split/:id/edit",
+            element: <SplitEditor />,
+            loader: splitDisplayLoader,
+          },
+          {
+            path: "settings",
+            element: <Settings />,
+          },
+        ],
+      },
+      {
+        path: ":username",
+        element: <UserPage />,
+        loader: userLoader,
+        children: [
+          {
+            path: "workout/new",
+            element: <WorkoutCreator />,
+          },
+          {
+            path: "workout/:id",
+            element: <WorkoutDisplay />,
+            loader: workoutDisplayLoader,
+          },
+          {
+            path: "workout/:id/edit",
+            element: <WorkoutEditor />,
+            loader: workoutDisplayLoader,
+          },
+          {
+            path: "split/new",
+            element: <SplitCreator />,
+          },
+          {
+            path: "split/:id",
+            element: <SplitDisplay />,
+            loader: splitDisplayLoader,
+          },
+          {
+            path: "split/:id/edit",
+            element: <SplitEditor />,
+            loader: splitDisplayLoader,
+          },
+          {
+            path: "settings",
+            element: <Settings />,
           },
         ],
       },
