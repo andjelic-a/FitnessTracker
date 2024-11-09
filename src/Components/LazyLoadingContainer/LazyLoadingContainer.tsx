@@ -133,9 +133,14 @@ function LazyLoadingContainer<
     const newRequest = incrementRequest();
 
     const response = sendAPIRequest(endpoint, newRequest as any).then((x) => {
-      if (!isResponse(x) || (x as any).code !== "Too Many Requests")
-        currentRequest.current = newRequest;
+      if (!isResponse(x)) return x;
 
+      if ((x as any).code === "Too Many Requests") {
+        setTimeout(() => void (isWaiting.current = true), 1000);
+        return x;
+      }
+
+      currentRequest.current = newRequest;
       if (!stopCondition(x)) isWaiting.current = false;
       return x;
     });
