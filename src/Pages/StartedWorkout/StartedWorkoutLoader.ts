@@ -3,7 +3,7 @@ import sendAPIRequest from "../../Data/SendAPIRequest";
 
 const startedWorkoutLoader = createLoader(() => {
   return {
-    todaysWorkout: sendAPIRequest("/api/user/me/split/today", {
+    todaysWorkout: sendAPIRequest("/api/user/split/today", {
       method: "get",
     }),
   };

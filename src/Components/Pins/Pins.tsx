@@ -107,7 +107,7 @@ const Pins = memo<PinsProps>(({ pins, includeEditButtons }) => {
 
     if (!pinOptionsPromise)
       setPinOptionsPromise(
-        sendAPIRequest("/api/user/me/pins/options", {
+        sendAPIRequest("/api/user/pins/options", {
           method: "get",
         }).then((x) => (x.code === "OK" ? x.content : []))
       );
@@ -147,7 +147,7 @@ const Pins = memo<PinsProps>(({ pins, includeEditButtons }) => {
         setSelectedPins(newOrder);
         setIsWaitingForReorder(true);
 
-        sendAPIRequest("/api/user/me/pins/reorder", {
+        sendAPIRequest("/api/user/pins/reorder", {
           method: "patch",
           payload: {
             newOrder: newOrder.map((x, i) => ({

@@ -23,7 +23,7 @@ function App() {
     if (sentBasicProfileInfoRequest.current) return;
     sentBasicProfileInfoRequest.current = true;
 
-    sendAPIRequest("/api/user/me/basic", {
+    sendAPIRequest("/api/user/basic", {
       method: "get",
     }).then((x) => {
       if (x.code !== "OK") return;

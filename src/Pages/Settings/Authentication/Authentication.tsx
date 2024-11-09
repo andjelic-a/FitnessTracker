@@ -24,7 +24,7 @@ export default function Authentication() {
     )
       return;
 
-    const response = await sendAPIRequest("/api/user/me/password", {
+    const response = await sendAPIRequest("/api/user/password", {
       method: "patch",
       payload: {
         newPassword: newPasswordInputRef.current.value.trim(),
@@ -46,7 +46,7 @@ export default function Authentication() {
     )
       return;
 
-    const response = await sendAPIRequest("/api/user/me/email", {
+    const response = await sendAPIRequest("/api/user/email", {
       method: "patch",
       payload: {
         newEmail: newEmailInputRef.current.value.trim(),

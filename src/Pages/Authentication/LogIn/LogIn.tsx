@@ -98,7 +98,7 @@ export default function Login() {
         <button onClick={handleLogin}>Log in</button>
         <a
           onClick={() => {
-            sendAPIRequest("/api/user/me/forgotpassword", {
+            sendAPIRequest("/api/user/forgot-password", {
               method: "post",
               payload: {
                 email: emailField.current?.value ?? "",

@@ -113,7 +113,7 @@ const SplitDisplay = WindowFC(() => {
     if (isWaitingForResponse.current || splitId.current.length === 0) return;
     isWaitingForResponse.current = true;
 
-    sendAPIRequest("/api/user/me/split", {
+    sendAPIRequest("/api/user/split", {
       method: "patch",
       payload: {
         splitId: splitId.current,

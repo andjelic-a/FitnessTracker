@@ -82,12 +82,6 @@ const ProfileTabs = memo(({ latestActivity, split }: ProfileTabsProps) => {
 
   const [endpoint, setEndpoint] = useState<
     | null
-    | "/api/workout/personal/simple"
-    | "/api/workout/liked/simple"
-    | "/api/workout/favorite/simple"
-    | "/api/split/personal/simple"
-    | "/api/split/liked/simple"
-    | "/api/split/favorite/simple"
     | "/api/workout/simple/by/{username}"
     | "/api/workout/favorite/simple/by/{username}"
     | "/api/workout/liked/simple/by/{username}"
@@ -103,32 +97,14 @@ const ProfileTabs = memo(({ latestActivity, split }: ProfileTabsProps) => {
           openTab === "splits"
             ? ({
                 Current: null,
-                Created:
-                  "username" in params
-                    ? "/api/split/simple/by/{username}"
-                    : "/api/split/personal/simple",
-                Liked:
-                  "username" in params
-                    ? "/api/split/liked/simple/by/{username}"
-                    : "/api/split/liked/simple",
-                Favorites:
-                  "username" in params
-                    ? "/api/split/favorite/simple/by/{username}"
-                    : "/api/split/favorite/simple",
+                Created: "/api/split/simple/by/{username}",
+                Liked: "/api/split/liked/simple/by/{username}",
+                Favorites: "/api/split/favorite/simple/by/{username}",
               } as const)
             : ({
-                Created:
-                  "username" in params
-                    ? "/api/workout/simple/by/{username}"
-                    : "/api/workout/personal/simple",
-                Liked:
-                  "username" in params
-                    ? "/api/workout/liked/simple/by/{username}"
-                    : "/api/workout/liked/simple",
-                Favorites:
-                  "username" in params
-                    ? "/api/workout/favorite/simple/by/{username}"
-                    : "/api/workout/favorite/simple",
+                Created: "/api/workout/simple/by/{username}",
+                Liked: "/api/workout/liked/simple/by/{username}",
+                Favorites: "/api/workout/favorite/simple/by/{username}",
               } as const)
         }
         defaultValue={openTab === "splits" ? "Current" : "Created"}
@@ -150,8 +126,8 @@ const ProfileTabs = memo(({ latestActivity, split }: ProfileTabsProps) => {
               parameters: {
                 limit: 10,
                 offset: 0,
-                nameFilter: searchTerm,
-                username: "username" in params ? params.username : undefined,
+                usernameFilter: searchTerm.length > 0 ? searchTerm : undefined,
+                username: params.username!,
               },
             }}
             onSegmentLoad={(segmentData) => (

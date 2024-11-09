@@ -56,7 +56,7 @@ export default function SplitWorkoutSelector({
 
     isWaitingForResponse.current = true;
     setWorkoutPromises([
-      sendAPIRequest("/api/split/me/workoutoptions", {
+      sendAPIRequest("/api/split/workout-options", {
         method: "get",
         parameters: {
           limit: 10,
@@ -89,7 +89,7 @@ export default function SplitWorkoutSelector({
     isWaitingForResponse.current = true;
     setWorkoutPromises([
       ...workoutPromises,
-      sendAPIRequest("/api/split/me/workoutoptions", {
+      sendAPIRequest("/api/split/workout-options", {
         method: "get",
         parameters: {
           limit: 10,

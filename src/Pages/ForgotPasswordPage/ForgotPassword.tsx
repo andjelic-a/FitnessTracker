@@ -16,7 +16,7 @@ export default function ForgotPassword() {
 
       <button
         onClick={() => {
-          sendAPIRequest("/api/user/me/forgotpassword/{code}", {
+          sendAPIRequest("/api/user/forgot-password/{code}", {
             method: "patch",
             parameters: {
               code: code ?? "",

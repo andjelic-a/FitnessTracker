@@ -6,7 +6,7 @@ import FollowContainer from "../FollowContainer/FollowContainer";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
 
 type ProfileHeaderProps = {
-  user: Schema<"DetailedUserResponseDTO">;
+  user: Schema<"DetailedPublicUserResponseDTO">;
   includeEditButton?: boolean;
   includeFollowButton?: boolean;
   isFollowing?: boolean;

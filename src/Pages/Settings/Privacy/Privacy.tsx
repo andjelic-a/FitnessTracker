@@ -21,7 +21,7 @@ export default function Privacy() {
     if (loadedSettings.current) return;
     loadedSettings.current = true;
 
-    sendAPIRequest("/api/user/me/settings", {
+    sendAPIRequest("/api/user/settings", {
       method: "get",
     }).then((data) => {
       const settings = data.code === "OK" ? data.content : null;
@@ -41,7 +41,7 @@ export default function Privacy() {
   }, []);
 
   function handleSave() {
-    sendAPIRequest("/api/user/me/settings", {
+    sendAPIRequest("/api/user/settings", {
       method: "put",
       payload: {
         publicCompletedWorkouts: !isCompletedWorkoutsDisabled,

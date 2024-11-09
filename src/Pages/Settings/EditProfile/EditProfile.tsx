@@ -1,12 +1,13 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import Icon from "../../../Components/Icon/Icon";
 import InputField from "../../../Components/InputField/InputField";
 import "./EditProfile.scss";
-import { getProfileCache, setProfileCache } from "../../Profile/ProfileCache";
 import compressImage from "../../../Data/ImageCompression";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
+import basicProfileInfoContext from "../../../Contexts/BasicProfileInfoContext";
 
 export default function EditProfile() {
+  const user = useContext(basicProfileInfoContext);
   const [isImageHovered, setIsImageHovered] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedGender, setSelectedGender] = useState<
@@ -38,35 +39,35 @@ export default function EditProfile() {
 
   const loadedInitial = useRef(false);
   useEffect(() => {
-    if (loadedInitial.current) return;
-
+    if (!user || loadedInitial.current) return;
     loadedInitial.current = true;
-    getProfileCache()?.user.then((cache) => {
-      if (cache.code !== "OK") return;
 
-      const user = cache.content;
-      setSelectedImage(user.image);
-      setDefaultNameValue(user.name);
-      setDefaultBioValue(user.bio);
-      setSelectedGender(user.gender === 0 ? "male" : "female");
-    });
+    sendAPIRequest("/api/user/{username}/detailed", {
+      method: "get",
+      parameters: {
+        username: user.username,
+      },
+    })
+      .then((response) => (response.code === "OK" ? response.content : null))
+      .then((user) => {
+        if (!user) return;
+
+        setSelectedImage(user.image);
+        setDefaultNameValue(user.name);
+        setDefaultBioValue(user.bio);
+        setSelectedGender(user.gender === 0 ? "male" : "female");
+      });
   }, []);
 
   async function handleSave() {
-    const cache = getProfileCache();
-    const cachedUserData = await cache?.user;
-    const user = cachedUserData?.code === "OK" ? cachedUserData?.content : null;
-    if (!user) return;
-
     if (isImageChanged.current) {
-      sendAPIRequest("/api/user/me/image", {
+      sendAPIRequest("/api/user/image", {
         method: "patch",
         payload: {
           newImage: selectedImage,
         },
       });
 
-      user.image = selectedImage;
       isImageChanged.current = false;
     }
 
@@ -74,14 +75,13 @@ export default function EditProfile() {
       nameInputRef.current &&
       nameInputRef.current.value.trim() !== defaultNameValue
     ) {
-      sendAPIRequest("/api/user/me/name", {
+      sendAPIRequest("/api/user/name", {
         method: "patch",
         payload: {
           newName: nameInputRef.current.value.trim(),
         },
       });
 
-      user.name = nameInputRef.current.value.trim();
       setDefaultNameValue(nameInputRef.current.value.trim());
     }
 
@@ -89,21 +89,15 @@ export default function EditProfile() {
       bioInputRef.current &&
       bioInputRef.current.value.trim() !== defaultBioValue
     ) {
-      sendAPIRequest("/api/user/me/bio", {
+      sendAPIRequest("/api/user/bio", {
         method: "patch",
         payload: {
           newBio: bioInputRef.current.value.trim(),
         },
       });
 
-      user.bio = bioInputRef.current.value.trim();
       setDefaultBioValue(bioInputRef.current.value.trim());
     }
-
-    setProfileCache({
-      ...cache!,
-      user: Promise.resolve({ code: "OK", content: user }),
-    });
   }
 
   return (
