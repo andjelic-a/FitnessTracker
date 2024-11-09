@@ -35,7 +35,7 @@ export default function SplitWorkoutSelector({
   const loadMoreButtonRef = useRef<HTMLButtonElement>(null);
   const searchBarRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => handleInitialRequest, []);
+  useEffect(handleInitialRequest, []);
 
   function getFilters(): {
     favoriteOnly?: boolean;
