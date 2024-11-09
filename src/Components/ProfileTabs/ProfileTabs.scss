@@ -57,6 +57,10 @@
       display: flex;
       gap: 2rem;
 
+      .tabs-header-dropdown {
+        width: 12rem;
+      }
+
       .search-bar-container {
         width: 30rem;
         height: fit-content;
