@@ -131,6 +131,7 @@ const routes: RouteObject[] = [
         path: ":username",
         element: <UserPage />,
         loader: userLoader,
+        shouldRevalidate: (a) => a.currentUrl.pathname.includes("me/split/"),
         children: [
           {
             path: "workout/new",

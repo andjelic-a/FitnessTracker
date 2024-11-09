@@ -43,7 +43,6 @@ function ActivityGrid({ username, joinedAt }: ActivityGrid) {
       activityTabNames.forEach((tabName) => {
         newTabData[tabName] = prev?.[tabName] ?? null;
       });
-      console.log('a');
 
       newTabData.latest ??= sendAPIRequest(
         `/api/user/${username ? "{username}" : "me"}/streak`,
