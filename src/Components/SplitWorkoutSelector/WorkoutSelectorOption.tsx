@@ -30,11 +30,7 @@ export default function WorkoutSelectorOption({
       <div className="info-container">
         <h3 className="workout-name">{workout.name}</h3>
         <div>
-          <p className="workout-description">
-            {workout.description.length > 73
-              ? workout.description.substring(0, 70) + "..."
-              : workout.description}
-          </p>
+          <p className="workout-description">{workout.description}</p>
         </div>
       </div>
 

@@ -7,6 +7,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import Icon from "../Icon/Icon";
 import extractWorkoutsFromSplit from "../../Utility/ExtractWorkoutsFromSplit";
 import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
+import Description from "../Description/Description";
 import formatCount from "../../Utility/FormatCount";
 import { useEffect, useMemo, useRef, useState } from "react";
 import sendAPIRequest from "../../Data/SendAPIRequest";
@@ -186,20 +187,28 @@ const SplitDisplay = WindowFC(() => {
 
                 <div className="split-display-body">
                   {extractWorkoutsFromSplit(split.content).map((workout) => (
-                    <div className="workout" key={workout.day}>
-                      <h1>{workout.day}</h1>
+                    <div className="workout-container" key={workout.day}>
+                      <div className="workout-container-wrapper">
+                        <h3>{workout.day}</h3>
 
-                      {workout.workout === null ? (
-                        <p>Rest</p>
-                      ) : (
-                        <WorkoutPreview workout={workout.workout} />
-                      )}
+                        <div className="workout">
+                          {workout.workout === null ? (
+                            <>
+                            <Icon className="rest-icon" name="mug-hot" />
+                            <p className="rest">Rest</p>
+                          </>
+                          ) : (
+                            <WorkoutPreview workout={workout.workout} />
+                          )}
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
 
                 <div className="split-display-footer">
-                  {split.content.description.trim().length > 0 && (
+                  <Description placeholder="Split Description" text={split.content.description.trim()} isInputEnabled={false}/>
+                  {/*{split.content.description.trim().length > 0 && (
                     <div className="split-display-description-container">
                       <div className="split-display-description">
                         <label className="split-display-description-placeholder">
@@ -209,7 +218,7 @@ const SplitDisplay = WindowFC(() => {
                         {split.content.description}
                       </div>
                     </div>
-                  )}
+                  )}*/}
 
                   <div className="icon-container">
                     <div className="split-display-interaction-container">
