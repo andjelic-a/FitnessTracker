@@ -3,7 +3,7 @@ import sendAPIRequest from "../../Data/SendAPIRequest";
 import createLoader from "../../BetterRouter/CreateLoader";
 
 const workoutDisplayLoader = createLoader(({ params: { id } }) => {
-  if (!id) return redirect("/me");
+  if (!id) return redirect("/");
 
   return {
     workout: sendAPIRequest("/api/workout/{id}/detailed", {

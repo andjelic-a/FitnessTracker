@@ -131,7 +131,10 @@ const routes: RouteObject[] = [
         path: ":username",
         element: <UserPage />,
         loader: userLoader,
-        shouldRevalidate: (a) => a.currentUrl.pathname.includes("/split/"),
+        shouldRevalidate: ({ currentUrl, currentParams, nextParams }) =>
+          (currentUrl.pathname.includes("/split/") &&
+            currentParams.id != undefined) ||
+          currentParams.username !== nextParams.username,
         children: [
           {
             path: "workout/new",

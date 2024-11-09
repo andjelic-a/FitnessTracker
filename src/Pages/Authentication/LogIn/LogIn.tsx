@@ -45,7 +45,7 @@ export default function Login() {
         emailField.current!.value,
         passwordField.current!.value
       );
-      if (success) navigate("/me");
+      if (success) navigate("/");
       else errorMessageRef.current!.style.opacity = "1";
     }
   };

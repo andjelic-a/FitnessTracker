@@ -57,7 +57,7 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
         passwordField.current!.value
       );
 
-      if (success) navigate("/me");
+      if (success) navigate("/");
       else errorMessageRef.current!.style.opacity = "1";
     }
   };

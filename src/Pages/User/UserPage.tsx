@@ -59,13 +59,17 @@ function InnerProfile({
 }) {
   const navigate = useNavigate();
 
+  useEffect(() => {
+    setIsFollowing(
+      loaderDataState?.user.code === "OK" &&
+        loaderDataState.user.content.isFollowing
+    );
+  }, [loaderDataState]);
+
   const isMe =
     loaderDataState?.user.code === "OK" && loaderDataState.user.content.isMe;
 
-  const [isFollowing, setIsFollowing] = useState<boolean>(
-    loaderDataState?.user.code === "OK" &&
-      loaderDataState.user.content.isFollowing
-  );
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const isWaitingForResponse = useRef(false);
 
   function handleFollowToggle() {
@@ -89,6 +93,7 @@ function InnerProfile({
   return (
     <>
       <ProfileHeader
+        key={loaderDataState.user.content.username + "-header"}
         user={loaderDataState.user.content}
         includeEditButton={isMe}
         includeFollowButton={!isMe}
@@ -96,7 +101,10 @@ function InnerProfile({
         isFollowing={isMe ? undefined : isFollowing}
       />
 
-      <div className="profile-body">
+      <div
+        className="profile-body"
+        key={loaderDataState.user.content.username + "-body"}
+      >
         {isMe && (
           <>
             <button onClick={() => void navigate("workout/new")}>
@@ -110,10 +118,15 @@ function InnerProfile({
         )}
 
         {loaderDataState.pins.code === "OK" && (
-          <Pins pins={loaderDataState.pins.content} includeEditButtons={isMe} />
+          <Pins
+            key={loaderDataState.user.content.username + "-pins"}
+            pins={loaderDataState.pins.content}
+            includeEditButtons={isMe}
+          />
         )}
 
         <ProfileTabs
+          key={loaderDataState.user.content.username + "-tabs"}
           latestActivity={
             loaderDataState.latestWeekOfActivity.code === "OK"
               ? loaderDataState.latestWeekOfActivity.content
@@ -124,6 +137,7 @@ function InnerProfile({
 
         {loaderDataState.user.code === "OK" && (
           <ActivityGrid
+            key={loaderDataState.user.content.username + "-activity"}
             username={loaderDataState.user.content.username}
             joinedAt={new Date(loaderDataState.user.content.joinedAt)}
           />

@@ -95,7 +95,7 @@ function FollowContainer({
                       <div
                         className="follow-container-user"
                         key={x.username}
-                        onClick={() => void navigate(`/user/${x.username}`)}
+                        onClick={() => void navigate(`/${x.username}`)}
                       >
                         <img
                           src={x.image ?? "/DefaultProfilePicture.png"}

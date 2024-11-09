@@ -119,7 +119,7 @@ const SplitDisplay = WindowFC(() => {
         splitId: splitId.current,
       },
     }).then(() => {
-      navigate(`/me`);
+      navigate(`..`);
       setIsConfirmActivationModalOpen(false);
     });
   }

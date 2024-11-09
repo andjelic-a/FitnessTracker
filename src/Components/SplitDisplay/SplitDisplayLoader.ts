@@ -3,7 +3,7 @@ import sendAPIRequest from "../../Data/SendAPIRequest";
 import createLoader from "../../BetterRouter/CreateLoader";
 
 const splitDisplayLoader = createLoader(({ params: { id } }) => {
-  if (!id) return redirect("/me");
+  if (!id) return redirect("/");
 
   return {
     split: sendAPIRequest("/api/split/{id}/detailed", {

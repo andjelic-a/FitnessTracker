@@ -10,7 +10,7 @@ export default function EmailVerification() {
   return (
     <Async await={data.response}>
       {(response) => {
-        if (response.code === "No Content") navigate("/me");
+        if (response.code === "No Content") navigate("/");
 
         return (
           <div>
