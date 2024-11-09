@@ -52,66 +52,71 @@
       }
     }
 
-    .search-bar-container {
-      width: 30rem;
-      height: fit-content;
-      display: grid;
-      grid-template-rows: 1fr;
-      grid-template-columns: 1fr auto;
-      place-items: center;
-      position: relative;
-      border-bottom: 2px solid $dark-600;
-      padding-right: 0.5rem;
+    .filters-container {
+      display: flex;
+      gap: 2rem;
 
-      input {
-        min-width: 100%;
-        max-width: 100%;
-        width: 100%;
+      .search-bar-container {
+        width: 30rem;
+        height: fit-content;
+        display: grid;
+        grid-template-rows: 1fr;
+        grid-template-columns: 1fr auto;
+        place-items: center;
+        position: relative;
+        border-bottom: 2px solid $dark-600;
+        padding-right: 0.5rem;
 
-        font-size: 1.5rem;
-        font-family: sans-serif;
-        color: rgb(231, 231, 231);
+        input {
+          min-width: 100%;
+          max-width: 100%;
+          width: 100%;
 
-        background-color: transparent;
-        outline: none;
-        border: none;
+          font-size: 1.5rem;
+          font-family: sans-serif;
+          color: rgb(231, 231, 231);
 
-        padding: 0.7rem 1rem;
-        overflow: hidden;
-      }
+          background-color: transparent;
+          outline: none;
+          border: none;
 
-      &::before {
-        content: "";
-        display: block;
-        box-sizing: border-box;
+          padding: 0.7rem 1rem;
+          overflow: hidden;
+        }
 
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        width: 0%;
-        height: 0px;
-        transform: translate(-50%, 0%);
+        &::before {
+          content: "";
+          display: block;
+          box-sizing: border-box;
 
-        border-bottom: 2px solid #fff;
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          width: 0%;
+          height: 0px;
+          transform: translate(-50%, 0%);
 
-        transition: 200ms;
-        transition-timing-function: ease-in-out;
-      }
+          border-bottom: 2px solid #fff;
 
-      &:has(input:focus)::before {
-        width: 100%;
-        transition: 300ms;
-      }
+          transition: 200ms;
+          transition-timing-function: ease-in-out;
+        }
 
-      input:focus + .search-icon {
-        color: #fff;
-      }
+        &:has(input:focus)::before {
+          width: 100%;
+          transition: 300ms;
+        }
 
-      .search-icon {
-        color: #aaa;
-        font-size: 1.75rem;
-        transition: all 175ms ease-out;
-        cursor: pointer;
+        input:focus + .search-icon {
+          color: #fff;
+        }
+
+        .search-icon {
+          color: #aaa;
+          font-size: 1.75rem;
+          transition: all 175ms ease-out;
+          cursor: pointer;
+        }
       }
     }
 
@@ -146,6 +151,7 @@
 
   .tabs-body {
     width: 100%;
+    height: 16rem;
 
     .new-workout-btn {
       height: 13rem;

@@ -2,7 +2,6 @@ import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import WindowFC from "../WindowWrapper/WindowFC";
 import "./SplitCreator.scss";
 import Icon from "../Icon/Icon";
-import { Tooltip } from "react-tooltip";
 import {
   createHtmlPortalNode,
   InPortal,
@@ -75,7 +74,6 @@ const SplitCreator = WindowFC(
 
       const newSplit: Schema<"CreateSplitRequestDTO"> = {
         description: descriptionTextAreaRef.current.value,
-        isPublic: isPublic,
         name: titleInputRef.current.value,
         workouts: selectedWorkouts
           .filter((x) => x.selected !== null)
@@ -195,26 +193,6 @@ const SplitCreator = WindowFC(
             />
 
             <div className="buttons">
-              <button
-                className="split-visibility-toggle"
-                onClick={() => setIsPublic(!isPublic)}
-                data-tooltip-content={isPublic ? "Public" : "Private"}
-                data-tooltip-id="split-visibility-tooltip"
-                data-tooltip-place="left"
-              >
-                <Icon
-                  aria-hidden
-                  className="lock"
-                  name={isPublic ? "unlock" : "lock"}
-                />
-
-                <p aria-hidden={false} className="accessibility-only">
-                  {isPublic ? "Public" : "Private"}
-                </p>
-
-                <Tooltip id="split-visibility-tooltip" />
-              </button>
-
               <button onClick={() => onClose()} className="discard-btn">
                 <p>Discard</p>
               </button>

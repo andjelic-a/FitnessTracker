@@ -212,7 +212,7 @@ const Pins = memo<PinsProps>(({ pins, includeEditButtons }) => {
           <div className="pins-options-menu-body">
             <div className="info-section">
               <p>
-                Select up to six public workouts or splits you'd like to show to
+                Select up to six workouts or splits you'd like to show to
                 anyone.
               </p>
 

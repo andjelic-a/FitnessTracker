@@ -2761,13 +2761,6 @@ type MappedEndpoints = {
             };
           },
           {
-            name: "publicOnly";
-            in: "query";
-            schema: {
-              type: "boolean";
-            };
-          },
-          {
             name: "favoriteOnly";
             in: "query";
             schema: {
@@ -3255,72 +3248,7 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/split/public/simple": {
-      get: {
-        tags: ["Split"];
-        parameters: [
-          {
-            name: "name";
-            in: "query";
-            schema: {
-              type: "string";
-            };
-          }
-        ];
-        responses: {
-          "200": {
-            description: "OK";
-            content: {
-              "text/plain": {
-                schema: {
-                  type: "array";
-                  items: {
-                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
-                  };
-                };
-              };
-              "application/json": {
-                schema: {
-                  type: "array";
-                  items: {
-                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
-                  };
-                };
-              };
-              "text/json": {
-                schema: {
-                  type: "array";
-                  items: {
-                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
-                  };
-                };
-              };
-            };
-          };
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-        };
-      };
-    };
-    "/api/split/public/simple/by/{username}": {
+    "/api/split/simple/by/{username}": {
       get: {
         tags: ["Split"];
         parameters: [
@@ -3333,10 +3261,26 @@ type MappedEndpoints = {
             };
           },
           {
-            name: "name";
+            name: "nameFilter";
             in: "query";
             schema: {
               type: "string";
+            };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
             };
           }
         ];
@@ -3393,15 +3337,31 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/split/me/simple": {
+    "/api/split/personal/simple": {
       get: {
         tags: ["Split"];
         parameters: [
           {
-            name: "name";
+            name: "nameFilter";
             in: "query";
             schema: {
               type: "string";
+            };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
             };
           }
         ];
@@ -3457,6 +3417,426 @@ type MappedEndpoints = {
           };
           "403": {
             description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    "/api/split/favorite/simple": {
+      get: {
+        tags: ["Split"];
+        parameters: [
+          {
+            name: "nameFilter";
+            in: "query";
+            schema: {
+              type: "string";
+            };
+          },
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          }
+        ];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
+                  };
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    "/api/split/liked/simple": {
+      get: {
+        tags: ["Split"];
+        parameters: [
+          {
+            name: "nameFilter";
+            in: "query";
+            schema: {
+              type: "string";
+            };
+          },
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          }
+        ];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
+                  };
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    "/api/split/favorite/simple/by/{username}": {
+      get: {
+        tags: ["Split"];
+        parameters: [
+          {
+            name: "username";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+            };
+          },
+          {
+            name: "nameFilter";
+            in: "query";
+            schema: {
+              type: "string";
+            };
+          },
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          }
+        ];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
+                  };
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    "/api/split/liked/simple/by/{username}": {
+      get: {
+        tags: ["Split"];
+        parameters: [
+          {
+            name: "username";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+            };
+          },
+          {
+            name: "nameFilter";
+            in: "query";
+            schema: {
+              type: "string";
+            };
+          },
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          }
+        ];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleSplitResponseDTO";
+                  };
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
             content: {
               "text/plain": {
                 schema: {
@@ -9057,88 +9437,7 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/workout/public/simple": {
-      get: {
-        tags: ["Workout"];
-        parameters: [
-          {
-            name: "name";
-            in: "query";
-            schema: {
-              type: "string";
-            };
-          },
-          {
-            name: "limit";
-            in: "query";
-            schema: {
-              type: "integer";
-              format: "int32";
-            };
-          },
-          {
-            name: "offset";
-            in: "query";
-            schema: {
-              type: "integer";
-              format: "int32";
-            };
-          }
-        ];
-        responses: {
-          "200": {
-            description: "OK";
-            content: {
-              "text/plain": {
-                schema: {
-                  type: "array";
-                  items: {
-                    $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
-                  };
-                };
-              };
-              "application/json": {
-                schema: {
-                  type: "array";
-                  items: {
-                    $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
-                  };
-                };
-              };
-              "text/json": {
-                schema: {
-                  type: "array";
-                  items: {
-                    $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
-                  };
-                };
-              };
-            };
-          };
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-        };
-      };
-    };
-    "/api/workout/public/simple/by/{username}": {
+    "/api/workout/simple/by/{username}": {
       get: {
         tags: ["Workout"];
         parameters: [
@@ -9151,7 +9450,7 @@ type MappedEndpoints = {
             };
           },
           {
-            name: "name";
+            name: "nameFilter";
             in: "query";
             schema: {
               type: "string";
@@ -9232,7 +9531,7 @@ type MappedEndpoints = {
         tags: ["Workout"];
         parameters: [
           {
-            name: "name";
+            name: "nameFilter";
             in: "query";
             schema: {
               type: "string";
@@ -9287,26 +9586,6 @@ type MappedEndpoints = {
           };
           "401": {
             description: "Unauthorized";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "403": {
-            description: "Forbidden";
             content: {
               "text/plain": {
                 schema: {
@@ -9353,7 +9632,7 @@ type MappedEndpoints = {
         tags: ["Workout"];
         parameters: [
           {
-            name: "name";
+            name: "nameFilter";
             in: "query";
             schema: {
               type: "string";
@@ -9408,26 +9687,6 @@ type MappedEndpoints = {
           };
           "401": {
             description: "Unauthorized";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "403": {
-            description: "Forbidden";
             content: {
               "text/plain": {
                 schema: {
@@ -9474,7 +9733,7 @@ type MappedEndpoints = {
         tags: ["Workout"];
         parameters: [
           {
-            name: "name";
+            name: "nameFilter";
             in: "query";
             schema: {
               type: "string";
@@ -9547,8 +9806,206 @@ type MappedEndpoints = {
               };
             };
           };
-          "403": {
-            description: "Forbidden";
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    "/api/workout/favorite/simple/by/{username}": {
+      get: {
+        tags: ["Workout"];
+        parameters: [
+          {
+            name: "username";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+            };
+          },
+          {
+            name: "nameFilter";
+            in: "query";
+            schema: {
+              type: "string";
+            };
+          },
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          }
+        ];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
+                  };
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    "/api/workout/liked/simple/by/{username}": {
+      get: {
+        tags: ["Workout"];
+        parameters: [
+          {
+            name: "username";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+            };
+          },
+          {
+            name: "nameFilter";
+            in: "query";
+            schema: {
+              type: "string";
+            };
+          },
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          }
+        ];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
+                  };
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
             content: {
               "text/plain": {
                 schema: {
@@ -9886,9 +10343,6 @@ type MappedEndpoints = {
           description: {
             type: "string";
           };
-          isPublic: {
-            type: "boolean";
-          };
           workouts: {
             type: "array";
             items: {
@@ -9928,9 +10382,6 @@ type MappedEndpoints = {
           };
           description: {
             type: "string";
-          };
-          isPublic: {
-            type: "boolean";
           };
           sets: {
             type: "array";
@@ -10143,9 +10594,6 @@ type MappedEndpoints = {
           creator: {
             $ref: "#/components/schemas/SimpleUserResponseDTO";
           };
-          isPublic: {
-            type: "boolean";
-          };
           description: {
             type: "string";
           };
@@ -10267,9 +10715,6 @@ type MappedEndpoints = {
           description: {
             type: "string";
           };
-          isPublic: {
-            type: "boolean";
-          };
           creator: {
             $ref: "#/components/schemas/SimpleUserResponseDTO";
           };
@@ -10346,9 +10791,6 @@ type MappedEndpoints = {
           name: {
             type: "string";
           };
-          isPublic: {
-            type: "boolean";
-          };
         };
         additionalProperties: false;
       };
@@ -10371,9 +10813,6 @@ type MappedEndpoints = {
           };
           name: {
             type: "string";
-          };
-          isPublic: {
-            type: "boolean";
           };
         };
         additionalProperties: false;
@@ -10609,9 +11048,6 @@ type MappedEndpoints = {
           creator: {
             $ref: "#/components/schemas/SimpleUserResponseDTO";
           };
-          isPublic: {
-            type: "boolean";
-          };
         };
         additionalProperties: false;
       };
@@ -10627,9 +11063,6 @@ type MappedEndpoints = {
           };
           description: {
             type: "string";
-          };
-          isPublic: {
-            type: "boolean";
           };
           creator: {
             $ref: "#/components/schemas/SimpleUserResponseDTO";
@@ -10725,9 +11158,6 @@ type MappedEndpoints = {
           description: {
             type: "string";
           };
-          isPublic: {
-            type: "boolean";
-          };
           likeCount: {
             type: "integer";
             format: "int32";
@@ -10750,9 +11180,6 @@ type MappedEndpoints = {
           };
           description: {
             type: "string";
-          };
-          isPublic: {
-            type: "boolean";
           };
           creator: {
             $ref: "#/components/schemas/SimpleUserResponseDTO";
@@ -10824,9 +11251,6 @@ type MappedEndpoints = {
           description: {
             type: "string";
           };
-          isPublic: {
-            type: "boolean";
-          };
           sets: {
             type: "array";
             items: {
@@ -10873,9 +11297,6 @@ type MappedEndpoints = {
           };
           description: {
             type: "string";
-          };
-          isPublic: {
-            type: "boolean";
           };
         };
         additionalProperties: false;
