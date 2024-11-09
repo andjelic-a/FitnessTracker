@@ -12,6 +12,7 @@ import Dropdown from "../DropdownMenu/Dropdown";
 import LazyLoadingContainer from "../LazyLoadingContainer/LazyLoadingContainer";
 import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
 import SplitPreview from "../SplitPreview/SplitPreview";
+import { useParams } from "react-router-dom";
 gsap.registerPlugin(Flip);
 
 type ProfileTabsProps = {
@@ -29,6 +30,7 @@ export default function ProfileTabs({
   const [searchTerm, setSearchTerm] = useState<string>("");
   const searchBarRef = useRef<HTMLInputElement>(null);
 
+  const params = useParams();
   const flipStateRef = useRef<Flip.FlipState | null>(null);
 
   const activeIndicatorPortalNode = useMemo(
@@ -89,6 +91,12 @@ export default function ProfileTabs({
     | "/api/split/personal/simple"
     | "/api/split/liked/simple"
     | "/api/split/favorite/simple"
+    | "/api/workout/simple/by/{username}"
+    | "/api/workout/favorite/simple/by/{username}"
+    | "/api/workout/liked/simple/by/{username}"
+    | "/api/split/simple/by/{username}"
+    | "/api/split/favorite/simple/by/{username}"
+    | "/api/split/liked/simple/by/{username}"
   >(null);
 
   const dropdown = useMemo(
@@ -98,21 +106,39 @@ export default function ProfileTabs({
           openTab === "splits"
             ? ({
                 Current: null,
-                Created: "/api/split/personal/simple",
-                Liked: "/api/split/liked/simple",
-                Favorites: "/api/split/favorite/simple",
+                Created:
+                  "username" in params
+                    ? "/api/split/simple/by/{username}"
+                    : "/api/split/personal/simple",
+                Liked:
+                  "username" in params
+                    ? "/api/split/liked/simple/by/{username}"
+                    : "/api/split/liked/simple",
+                Favorites:
+                  "username" in params
+                    ? "/api/split/favorite/simple/by/{username}"
+                    : "/api/split/favorite/simple",
               } as const)
             : ({
-                Created: "/api/workout/personal/simple",
-                Liked: "/api/workout/liked/simple",
-                Favorites: "/api/workout/favorite/simple",
+                Created:
+                  "username" in params
+                    ? "/api/workout/simple/by/{username}"
+                    : "/api/workout/personal/simple",
+                Liked:
+                  "username" in params
+                    ? "/api/workout/liked/simple/by/{username}"
+                    : "/api/workout/liked/simple",
+                Favorites:
+                  "username" in params
+                    ? "/api/workout/favorite/simple/by/{username}"
+                    : "/api/workout/favorite/simple",
               } as const)
         }
         defaultValue={openTab === "splits" ? "Current" : "Created"}
         onSelectionChanged={(_x, y) => setEndpoint(y ?? null)}
       />
     ),
-    [openTab]
+    [openTab, params]
   );
 
   return (
@@ -134,20 +160,26 @@ export default function ProfileTabs({
           </div>
         </div>
 
-        {dropdown}
+        <div className="filters-container">
+          {dropdown}
 
-        <div className="search-bar-container">
-          <input
-            name="profile-workouts-search-bar"
-            type="text"
-            autoComplete="off"
-            className="search-bar"
-            placeholder="Search"
-            ref={searchBarRef}
-            onKeyDown={(e) => e.key === "Enter" && void handleSearch()}
-          />
+          <div className="search-bar-container">
+            <input
+              name="profile-workouts-search-bar"
+              type="text"
+              autoComplete="off"
+              className="search-bar"
+              placeholder="Search"
+              ref={searchBarRef}
+              onKeyDown={(e) => e.key === "Enter" && void handleSearch()}
+            />
 
-          <Icon name="search" className="search-icon" onClick={handleSearch} />
+            <Icon
+              name="search"
+              className="search-icon"
+              onClick={handleSearch}
+            />
+          </div>
         </div>
       </div>
 
@@ -165,6 +197,7 @@ export default function ProfileTabs({
                   limit: 10,
                   offset: 0,
                   nameFilter: searchTerm,
+                  username: "username" in params ? params.username : undefined,
                 },
               }}
               onSegmentLoad={(segmentData) => (
@@ -181,8 +214,7 @@ export default function ProfileTabs({
                 </>
               )}
               stopCondition={(response) =>
-                response.code === "Unauthorized" ||
-                (response.code === "OK" && response.content.length < 10)
+                response.code === "OK" && response.content.length < 10
               }
             />
           </OverlayScrollbarCarousel>
