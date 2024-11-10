@@ -14,6 +14,7 @@ export default function User({ user: { username, name, image } }: UserProps) {
       className="user-container"
       onClick={(e) => {
         e.preventDefault();
+        sessionStorage.setItem("revalidate-profile", "true");
         navigate(`/${username}`);
       }}
     >

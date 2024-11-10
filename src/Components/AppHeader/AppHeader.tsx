@@ -15,7 +15,10 @@ function AppHeader() {
 
       <div className="profile-picture-container">
         {basicInfo !== null ? (
-          <Link to={basicInfo.username}>
+          <Link
+            to={basicInfo.username}
+            onClick={() => sessionStorage.setItem("revalidate-profile", "true")}
+          >
             <img
               src={basicInfo.image ?? "/DefaultProfilePicture.png"}
               alt="Profile picture of the logged in user"

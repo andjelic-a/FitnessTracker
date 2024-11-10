@@ -94,7 +94,7 @@ const SplitCreator = WindowFC(
       }).then((x) => {
         if (x.code !== "Created") return;
 
-        sessionStorage.setItem("revalidate", "true");
+        sessionStorage.setItem("revalidate-profile", "true");
         onClose(true);
       });
     }

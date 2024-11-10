@@ -173,7 +173,7 @@ const WorkoutEditor = WindowFC(
           originalWorkout.content.name !== updatedWorkout.name ||
           originalWorkout.content.description !== updatedWorkout.description
         ) {
-          sessionStorage.setItem("revalidate", "true");
+          sessionStorage.setItem("revalidate-profile", "true");
           navigate("..");
         } else onClose(true);
       });

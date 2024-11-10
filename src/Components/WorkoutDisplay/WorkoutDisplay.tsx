@@ -107,7 +107,7 @@ const WorkoutDisplay = WindowFC(({}, close) => {
       }).then((x) => {
         if (x.code !== "No Content") return;
 
-        sessionStorage.setItem("revalidate", "true");
+        sessionStorage.setItem("revalidate-profile", "true");
         close();
       });
     });

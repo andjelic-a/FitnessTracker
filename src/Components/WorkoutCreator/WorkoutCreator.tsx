@@ -108,7 +108,7 @@ const WorkoutCreator = WindowFC(
       }).then((newWorkout) => {
         if (newWorkout.code !== "Created") return;
 
-        sessionStorage.setItem("revalidate", "true");
+        sessionStorage.setItem("revalidate-profile", "true");
         onClose(true);
       });
     }

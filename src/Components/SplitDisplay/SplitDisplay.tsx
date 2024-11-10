@@ -119,7 +119,7 @@ const SplitDisplay = WindowFC(() => {
         splitId: splitId.current,
       },
     }).then(() => {
-      sessionStorage.setItem("revalidate", "true");
+      sessionStorage.setItem("revalidate-profile", "true");
       navigate(`..`);
       setIsConfirmActivationModalOpen(false);
     });
