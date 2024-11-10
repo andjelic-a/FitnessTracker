@@ -30,6 +30,11 @@ const ProfileTabs = memo(({ latestActivity, split }: ProfileTabsProps) => {
 
   const flipStateRef = useRef<Flip.FlipState | null>(null);
 
+  useEffect(() => {
+    setOpenTab("splits");
+    setEndpoint(null);
+  }, [split]);
+
   const activeIndicatorPortalNode = useMemo(
     () =>
       portals.createHtmlPortalNode({

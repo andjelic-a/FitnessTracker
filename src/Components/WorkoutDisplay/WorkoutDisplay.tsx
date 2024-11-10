@@ -104,10 +104,12 @@ const WorkoutDisplay = WindowFC(({}, close) => {
           name: currentWorkout.content.name,
           creator: currentWorkout.content.creator.username,
         },
-      });
+      }).then((x) => {
+        if (x.code !== "No Content") return;
 
-      //TODO: Update cache
-      close();
+        sessionStorage.setItem("revalidate", "true");
+        close();
+      });
     });
   };
 

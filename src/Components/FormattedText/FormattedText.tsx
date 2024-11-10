@@ -6,7 +6,6 @@ type FormattedTextProps = {
 };
 
 export default function FormattedText({ children }: FormattedTextProps) {
-  //TODO:
   /*
     examine each line separately and render it accordingly:
         if it starts with # it is a heading ✔
