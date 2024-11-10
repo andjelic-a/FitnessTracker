@@ -5,6 +5,7 @@ import sendAPIRequest from "../../../Data/SendAPIRequest";
 import { useRef } from "react";
 import { logout } from "../../../Data/User";
 import { validateEmail, validatePassword } from "../../Authentication/Validate";
+import { useNavigate } from "react-router-dom";
 
 export default function Authentication() {
   const oldEmailInputRef = useRef<HTMLInputElement>(null);
@@ -12,6 +13,8 @@ export default function Authentication() {
 
   const oldPasswordInputRef = useRef<HTMLInputElement>(null);
   const newPasswordInputRef = useRef<HTMLInputElement>(null);
+
+  const navigate = useNavigate();
 
   async function handlePasswordChangeSave() {
     if (
@@ -24,7 +27,7 @@ export default function Authentication() {
     )
       return;
 
-    const response = await sendAPIRequest("/api/user/me/password", {
+    const response = await sendAPIRequest("/api/user/password", {
       method: "patch",
       payload: {
         newPassword: newPasswordInputRef.current.value.trim(),
@@ -32,7 +35,11 @@ export default function Authentication() {
       },
     });
 
-    if (response.code === "No Content") await logout();
+    if (response.code === "No Content") {
+      await logout();
+      sessionStorage.setItem("revalidate-main", "true");
+      navigate(0);
+    }
   }
 
   async function handleEmailChangeSave() {
@@ -46,7 +53,7 @@ export default function Authentication() {
     )
       return;
 
-    const response = await sendAPIRequest("/api/user/me/email", {
+    const response = await sendAPIRequest("/api/user/email", {
       method: "patch",
       payload: {
         newEmail: newEmailInputRef.current.value.trim(),
@@ -54,7 +61,11 @@ export default function Authentication() {
       },
     });
 
-    if (response.code === "No Content") await logout(true);
+    if (response.code === "No Content") {
+      await logout(true);
+      sessionStorage.setItem("revalidate-main", "true");
+      navigate(0);
+    }
   }
 
   return (

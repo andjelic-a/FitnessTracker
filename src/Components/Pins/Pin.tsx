@@ -36,7 +36,7 @@ export default function Pin({ pin, includeDragHandle }: PinProps) {
       }}
     >
       <div className="pin-header">
-        <Link to={`${pin.type === 0 ? "workout" : "split"}/${pin.id}`}>
+        <Link to={`${pin.type === 0 ? "workout" : "split"}/${pin.name}`}>
           <h3>{pin.name}</h3>
           &nbsp;
           <p className="pin-type">{pin.type === 0 ? "(Workout)" : "(Split)"}</p>
@@ -47,10 +47,12 @@ export default function Pin({ pin, includeDragHandle }: PinProps) {
 
       <div className="pin-footer">
         <div className="pin-likes">
-          <Icon name="thumbs-up" />0
+          <Icon name="thumbs-up" />
+          {pin.likeCount}
         </div>
         <div className="pin-favorites">
-          <Icon name="bookmark" />0
+          <Icon name="bookmark" />
+          {pin.favoriteCount}
         </div>
       </div>
 

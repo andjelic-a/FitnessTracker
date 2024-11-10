@@ -20,10 +20,6 @@ import {
 } from "react-reverse-portal";
 import CommentSection from "../CommentSection/CommentSection";
 import ConfirmModalDialog from "../ConfirmModalDialog/ConfirmModalDialog";
-import {
-  getProfileCache,
-  setProfileCache,
-} from "../../Pages/Profile/ProfileCache";
 
 const SplitDisplay = WindowFC(() => {
   const loaderData = useLoaderData<typeof splitDisplayLoader>();
@@ -32,6 +28,8 @@ const SplitDisplay = WindowFC(() => {
   const [isLiked, setIsLiked] = useState<boolean | null>(null);
   const [isFavorited, setIsFavorited] = useState<boolean | null>(null);
   const [isCommentSectionOpen, setIsCommentSectionOpen] =
+    useState<boolean>(false);
+  const [commentSectionPreviouslyOpen, setCommentSectionPreviouslyOpen] =
     useState<boolean>(false);
 
   const [likeCount, setLikeCount] = useState<number>(0);
@@ -78,9 +76,6 @@ const SplitDisplay = WindowFC(() => {
     setIsLiked((prevState) => !prevState);
   };
 
-  const handleCommentClick = () =>
-    void setIsCommentSectionOpen((prevState) => !prevState);
-
   const handleFavoriteClick = () => {
     if (isWaitingForResponse.current) return;
     isWaitingForResponse.current = true;
@@ -118,38 +113,26 @@ const SplitDisplay = WindowFC(() => {
     if (isWaitingForResponse.current || splitId.current.length === 0) return;
     isWaitingForResponse.current = true;
 
-    const cache = getProfileCache();
-    if (cache === null) {
-      navigate(`/activate-split/${splitId.current}`);
-      setIsConfirmActivationModalOpen(false);
-      return;
-    }
-
-    const user = await cache.user;
-    const split = await loaderData.split;
-
-    if (user.code === "OK" && split.code === "OK")
-      user.content.currentSplit = split.content;
-
-    setProfileCache({
-      ...cache,
-      user: Promise.resolve(user),
-    });
-
-    navigate(`/me`);
-    setIsConfirmActivationModalOpen(false);
-
-    sendAPIRequest("/api/user/me/split", {
+    sendAPIRequest("/api/user/split", {
       method: "patch",
       payload: {
         splitId: splitId.current,
       },
+    }).then(() => {
+      sessionStorage.setItem("revalidate-profile", "true");
+      navigate(`..`);
+      setIsConfirmActivationModalOpen(false);
     });
   }
 
   return (
     <div className="split-display-container">
-      <InPortal node={commentSectionPortalNode} children={commentSection} />
+      <InPortal
+        node={commentSectionPortalNode}
+        children={
+          commentSectionPreviouslyOpen && isCommentSectionOpen && commentSection
+        }
+      />
 
       <div className="split-display">
         <Async await={loaderData?.split}>
@@ -194,11 +177,14 @@ const SplitDisplay = WindowFC(() => {
                         <div className="workout">
                           {workout.workout === null ? (
                             <>
-                            <Icon className="rest-icon" name="mug-hot" />
-                            <p className="rest">Rest</p>
-                          </>
+                              <Icon className="rest-icon" name="mug-hot" />
+                              <p className="rest">Rest</p>
+                            </>
                           ) : (
-                            <WorkoutPreview workout={workout.workout} />
+                            <WorkoutPreview
+                              className="split-workout-preview"
+                              workout={workout.workout}
+                            />
                           )}
                         </div>
                       </div>
@@ -207,7 +193,11 @@ const SplitDisplay = WindowFC(() => {
                 </div>
 
                 <div className="split-display-footer">
-                  <Description placeholder="Split Description" text={split.content.description.trim()} isInputEnabled={false}/>
+                  <Description
+                    placeholder="Split Description"
+                    text={split.content.description.trim()}
+                    isInputEnabled={false}
+                  />
                   {/*{split.content.description.trim().length > 0 && (
                     <div className="split-display-description-container">
                       <div className="split-display-description">
@@ -241,7 +231,17 @@ const SplitDisplay = WindowFC(() => {
                     </div>
 
                     <div className="split-display-interaction-container">
-                      <button onClick={handleCommentClick}>
+                      <button
+                        onClick={() => {
+                          if (
+                            !commentSectionPreviouslyOpen &&
+                            !isCommentSectionOpen
+                          )
+                            setCommentSectionPreviouslyOpen(true);
+
+                          setIsCommentSectionOpen((prevState) => !prevState);
+                        }}
+                      >
                         <Icon
                           name="comment"
                           className={`split-display-comment ${

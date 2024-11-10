@@ -155,7 +155,6 @@ const Comment = React.memo<CommentProps>(
           }).then(() => void (isWaitingForResponse.current = false));
         } else
           sendAPIRequest("/api/split/comment/{id}/like", {
-            //TODO: Check
             method: "post",
             parameters: {
               id: comment.id,

@@ -45,8 +45,11 @@ export default function Login() {
         emailField.current!.value,
         passwordField.current!.value
       );
-      if (success) navigate("/me");
-      else errorMessageRef.current!.style.opacity = "1";
+
+      if (success) {
+        sessionStorage.setItem("revalidate-main", "true");
+        navigate("/");
+      } else errorMessageRef.current!.style.opacity = "1";
     }
   };
 
@@ -64,7 +67,7 @@ export default function Login() {
         <InputField
           inputRef={emailField}
           containerRef={emailContainer}
-          placeholder="Email"
+          placeholder="Email or username"
           className="input-field"
           iconName="envelope"
           onEnter={(enteredText) => {
@@ -98,7 +101,7 @@ export default function Login() {
         <button onClick={handleLogin}>Log in</button>
         <a
           onClick={() => {
-            sendAPIRequest("/api/user/me/forgotpassword", {
+            sendAPIRequest("/api/user/forgot-password", {
               method: "post",
               payload: {
                 email: emailField.current?.value ?? "",

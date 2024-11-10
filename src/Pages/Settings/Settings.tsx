@@ -11,10 +11,12 @@ import {
   InPortal,
   OutPortal,
 } from "react-reverse-portal";
+import { useNavigate } from "react-router-dom";
 
 type SettingsTab = "edit" | "auth" | "privacy";
 const Settings = WindowFC(({}, close) => {
   const [openTab, setOpenTab] = useState<SettingsTab>("edit");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
@@ -91,7 +93,15 @@ const Settings = WindowFC(({}, close) => {
           Privacy
         </div>
 
-        <div onClick={() => logout()} className="settings-item">
+        <div
+          onClick={() => {
+            logout().then(() => {
+              sessionStorage.setItem("revalidate-main", "true");
+              navigate("..");
+            });
+          }}
+          className="settings-item"
+        >
           Log out
         </div>
 

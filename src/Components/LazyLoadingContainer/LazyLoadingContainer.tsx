@@ -5,6 +5,7 @@ import { Request } from "../../Types/Endpoints/RequestParser";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import LazySegment from "./LazySegment";
 import genericMemo from "../../Utility/GenericMemo";
+import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 
 type LazyLoadingContainerProps<
   Endpoint extends Endpoints,
@@ -53,7 +54,9 @@ function LazyLoadingContainer<
   before,
   after,
 }: LazyLoadingContainerProps<Endpoint, BaseRequest>) {
-  const [segments, setSegments] = useState<ReactNode[]>([]);
+  const [segments, setSegments] = useState<Promise<APIResponse<any, any>>[]>(
+    []
+  );
   const currentRequest = useRef<RequestIsh | null>(null);
   const isWaiting = useRef<boolean>(false);
   const isWaitingForInitial = useRef<boolean>(false);
@@ -71,14 +74,7 @@ function LazyLoadingContainer<
       return x;
     });
 
-    setSegments(() => [
-      <LazySegment
-        onReachLoadThreshold={handleNewSegmentLoad}
-        key={"segment-0"}
-        onSegmentLoad={(x) => onSegmentLoad(x, 0)}
-        promise={response}
-      />,
-    ]);
+    setSegments(() => [response]);
   }, [baseAPIRequest]);
 
   function isValidRequest(request: {}): request is RequestIsh {
@@ -133,30 +129,33 @@ function LazyLoadingContainer<
     const newRequest = incrementRequest();
 
     const response = sendAPIRequest(endpoint, newRequest as any).then((x) => {
-      if (!isResponse(x) || (x as any).code !== "Too Many Requests")
-        currentRequest.current = newRequest;
+      if (!isResponse(x)) return x;
 
+      if ((x as any).code === "Too Many Requests") {
+        setTimeout(() => void (isWaiting.current = true), 1000);
+        return x;
+      }
+
+      currentRequest.current = newRequest;
       if (!stopCondition(x)) isWaiting.current = false;
       return x;
     });
 
-    setSegments((oldSegments) => [
-      ...oldSegments,
-      <LazySegment
-        onReachLoadThreshold={handleNewSegmentLoad}
-        key={"segment-" + oldSegments.length}
-        onSegmentLoad={(x) => onSegmentLoad(x, oldSegments.length)}
-        promise={response}
-      />,
-    ]);
-
+    setSegments((oldSegments) => [...oldSegments, response]);
     return true;
   }
 
   return (
     <div className="lazy-container">
       {before && <div className="lazy-segment before">{before}</div>}
-      {segments}
+      {segments.map((segment, i) => (
+        <LazySegment
+          onReachLoadThreshold={handleNewSegmentLoad}
+          key={`segment-${i}`}
+          onSegmentLoad={(x) => onSegmentLoad(x, i)}
+          promise={segment}
+        />
+      ))}
       {after && <div className="lazy-segment after">{after}</div>}
     </div>
   );

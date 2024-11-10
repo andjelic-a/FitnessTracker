@@ -59,7 +59,7 @@ export default function ExerciseSelector({
   const reachedEnd = useRef(false);
   const loadMoreButtonRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => handleInitialRequest, []);
+  useEffect(handleInitialRequest, []);
 
   function getFilters(): {
     name: string | undefined;

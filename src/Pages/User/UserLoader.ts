@@ -3,16 +3,10 @@ import sendAPIRequest from "../../Data/SendAPIRequest";
 import createLoader from "../../BetterRouter/CreateLoader";
 
 const userLoader = createLoader(({ params: { username } }) => {
-  if (!username) return redirect("/me");
+  if (!username) return redirect("/");
 
   return {
     user: sendAPIRequest("/api/user/{username}/detailed", {
-      method: "get",
-      parameters: {
-        username,
-      },
-    }),
-    streak: sendAPIRequest("/api/user/{username}/streak", {
       method: "get",
       parameters: {
         username,
@@ -41,6 +35,6 @@ const userLoader = createLoader(({ params: { username } }) => {
       },
     }),
   };
-}, "/user/:username");
+}, "/:username");
 
 export default userLoader;

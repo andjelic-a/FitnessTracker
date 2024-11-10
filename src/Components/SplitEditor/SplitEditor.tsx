@@ -29,6 +29,10 @@ const SplitEditor = WindowFC(
       }[]
     >([
       {
+        day: "Sunday",
+        selected: null,
+      },
+      {
         day: "Monday",
         selected: null,
       },
@@ -52,10 +56,6 @@ const SplitEditor = WindowFC(
         day: "Saturday",
         selected: null,
       },
-      {
-        day: "Sunday",
-        selected: null,
-      },
     ]);
 
     const titleInputRef = useRef<HTMLInputElement | null>(null);
@@ -74,20 +74,18 @@ const SplitEditor = WindowFC(
         const splitWorkouts = x.content.workouts;
         const workouts: (Schema<"SimpleSplitWorkoutResponseDTO"> | null)[] = [];
         for (let i = 0; i < 7; i++) {
-          const workout =
-            splitWorkouts.find((x) => (x.day - 1 < 0 ? 6 : x.day - 1) === i) ??
-            null;
+          const workout = splitWorkouts.find((x) => x.day === i) ?? null;
           workouts.push(workout);
         }
 
         const days: Day[] = [
+          "Sunday",
           "Monday",
           "Tuesday",
           "Wednesday",
           "Thursday",
           "Friday",
           "Saturday",
-          "Sunday",
         ];
 
         setSelectedWorkouts(
@@ -134,13 +132,13 @@ const SplitEditor = WindowFC(
           .filter((x) => x.selected !== null)
           .map((x) => ({
             day: [
+              "Sunday",
               "Monday",
               "Tuesday",
               "Wednesday",
               "Thursday",
               "Friday",
               "Saturday",
-              "Sunday",
             ].indexOf(x.day) as 0 | 1 | 2 | 3 | 4 | 5 | 6,
             workoutId: x.selected!.id,
           })),

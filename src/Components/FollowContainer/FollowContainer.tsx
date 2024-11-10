@@ -21,19 +21,19 @@ function FollowContainer({
   const [baseRequestParameters, setBaseRequestParameters] = useState<{
     limit: number;
     offset: number;
-    username: string | undefined;
+    username: string;
     searchTerm: string | undefined;
   }>({
     limit: 10,
     offset: 0,
-    username: "username" in params ? params.username : undefined,
+    username: params.username ?? "",
     searchTerm: undefined,
   });
 
   function constructRequestParameters() {
     setBaseRequestParameters((x) => ({
       ...x,
-      username: "username" in params ? params.username : undefined,
+      username: params.username ?? "",
       searchTerm:
         searchBarRef.current && searchBarRef.current.value.trim().length > 0
           ? searchBarRef.current.value.trim()
@@ -81,11 +81,7 @@ function FollowContainer({
             </div>
 
             <LazyLoadingContainer
-              endpoint={
-                "username" in params
-                  ? `/api/user/{username}/${followersOrFollowing}`
-                  : `/api/user/me/${followersOrFollowing}`
-              }
+              endpoint={`/api/user/{username}/${followersOrFollowing}`}
               baseAPIRequest={{
                 method: "get",
                 parameters: baseRequestParameters,
@@ -99,7 +95,7 @@ function FollowContainer({
                       <div
                         className="follow-container-user"
                         key={x.username}
-                        onClick={() => void navigate(`/user/${x.username}`)}
+                        onClick={() => void navigate(`/${x.username}`)}
                       >
                         <img
                           src={x.image ?? "/DefaultProfilePicture.png"}

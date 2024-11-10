@@ -10,11 +10,13 @@ import Icon from "../Icon/Icon";
 import WorkoutSetCreator from "../WorkoutSetCreator/WorkoutSetCreator";
 import CurrentEditingWorkoutSetsContext from "../../Contexts/CurrentEditingWorkoutSetsContext";
 import extractSets from "../../Utility/ExtractSetsFromWorkout";
+import { useNavigate } from "react-router-dom";
 
 const WorkoutEditor = WindowFC(
   ({}, onClose, setModalConfirmationOpeningCondition) => {
     const loaderData = useLoaderData<typeof workoutDisplayLoader>();
     const [currentSets, setCurrentSets] = useState<WorkoutItemData[]>([]);
+    const navigate = useNavigate();
 
     const titleInputRef = useRef<HTMLInputElement | null>(null);
     const descriptionTextAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -157,16 +159,24 @@ const WorkoutEditor = WindowFC(
 
       descriptionTextAreaRef.current.value = "";
       descriptionTextAreaRef.current.blur();
-      sendAPIRequest("/api/workout/{id}", {
+      sendAPIRequest("/api/workout/{creator}/{name}", {
         method: "put",
         payload: updatedWorkout,
         parameters: {
-          id: originalWorkout.content.id,
+          name: originalWorkout.content.name,
+          creator: originalWorkout.content.creator.username,
         },
-      });
+      }).then((x) => {
+        if (x.code !== "No Content") return;
 
-      //TODO: Update cache
-      onClose(true);
+        if (
+          originalWorkout.content.name !== updatedWorkout.name ||
+          originalWorkout.content.description !== updatedWorkout.description
+        ) {
+          sessionStorage.setItem("revalidate-profile", "true");
+          navigate("..");
+        } else onClose(true);
+      });
     };
 
     return (

@@ -61,7 +61,7 @@ export default function StartedWorkout() {
     if (sentRequest.current) return;
 
     sentRequest.current = true;
-    return sendAPIRequest("/api/user/me/split/today/completeworkout", {
+    return sendAPIRequest("/api/user/split/today/complete-workout", {
       method: "post",
       payload: {
         completedSets: completedSets
