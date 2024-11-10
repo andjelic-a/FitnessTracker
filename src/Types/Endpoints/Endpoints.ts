@@ -9447,6 +9447,10 @@ type MappedEndpoints = {
             type: "integer";
             format: "int32";
           };
+          favoriteCount: {
+            type: "integer";
+            format: "int32";
+          };
         };
         additionalProperties: false;
       };

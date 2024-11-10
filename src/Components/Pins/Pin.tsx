@@ -47,10 +47,12 @@ export default function Pin({ pin, includeDragHandle }: PinProps) {
 
       <div className="pin-footer">
         <div className="pin-likes">
-          <Icon name="thumbs-up" />0
+          <Icon name="thumbs-up" />
+          {pin.likeCount}
         </div>
         <div className="pin-favorites">
-          <Icon name="bookmark" />0
+          <Icon name="bookmark" />
+          {pin.favoriteCount}
         </div>
       </div>
 
