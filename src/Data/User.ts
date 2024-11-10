@@ -94,7 +94,6 @@ export async function register(
 export async function logout(clientSideOnly: boolean = false): Promise<void> {
   if (clientSideOnly) {
     localStorage.removeItem("token");
-    window.location.reload();
     return;
   }
 
@@ -110,5 +109,4 @@ export async function logout(clientSideOnly: boolean = false): Promise<void> {
   );
 
   localStorage.removeItem("token");
-  window.location.reload();
 }

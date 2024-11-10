@@ -137,9 +137,7 @@ const CommentSection = memo<CommentSectionProps>(
             );
           }}
           stopCondition={(response) =>
-            response.code === "Unauthorized" ||
-            response.code === "Forbidden" ||
-            (response.code === "OK" && response.content.length < 10)
+            response.code === "OK" && response.content.length < 10
           }
         />
       ),

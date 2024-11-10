@@ -5,6 +5,7 @@ import sendAPIRequest from "../../../Data/SendAPIRequest";
 import { useRef } from "react";
 import { logout } from "../../../Data/User";
 import { validateEmail, validatePassword } from "../../Authentication/Validate";
+import { useNavigate } from "react-router-dom";
 
 export default function Authentication() {
   const oldEmailInputRef = useRef<HTMLInputElement>(null);
@@ -12,6 +13,8 @@ export default function Authentication() {
 
   const oldPasswordInputRef = useRef<HTMLInputElement>(null);
   const newPasswordInputRef = useRef<HTMLInputElement>(null);
+
+  const navigate = useNavigate();
 
   async function handlePasswordChangeSave() {
     if (
@@ -32,7 +35,10 @@ export default function Authentication() {
       },
     });
 
-    if (response.code === "No Content") await logout();
+    if (response.code === "No Content") {
+      await logout();
+      navigate(0);
+    }
   }
 
   async function handleEmailChangeSave() {
@@ -54,7 +60,10 @@ export default function Authentication() {
       },
     });
 
-    if (response.code === "No Content") await logout(true);
+    if (response.code === "No Content") {
+      await logout(true);
+      navigate(0);
+    }
   }
 
   return (

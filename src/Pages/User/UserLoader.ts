@@ -3,7 +3,7 @@ import sendAPIRequest from "../../Data/SendAPIRequest";
 import createLoader from "../../BetterRouter/CreateLoader";
 
 const userLoader = createLoader(({ params: { username } }) => {
-  if (!username) return redirect("/me");
+  if (!username) return redirect("/");
 
   return {
     user: sendAPIRequest("/api/user/{username}/detailed", {
