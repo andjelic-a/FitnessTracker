@@ -5339,17 +5339,17 @@ type MappedEndpoints = {
             content: {
               "text/plain": {
                 schema: {
-                  $ref: "#/components/schemas/DetailedPublicUserResponseDTO";
+                  $ref: "#/components/schemas/DetailedUserResponseDTO";
                 };
               };
               "application/json": {
                 schema: {
-                  $ref: "#/components/schemas/DetailedPublicUserResponseDTO";
+                  $ref: "#/components/schemas/DetailedUserResponseDTO";
                 };
               };
               "text/json": {
                 schema: {
-                  $ref: "#/components/schemas/DetailedPublicUserResponseDTO";
+                  $ref: "#/components/schemas/DetailedUserResponseDTO";
                 };
               };
             };
@@ -9166,53 +9166,6 @@ type MappedEndpoints = {
         };
         additionalProperties: false;
       };
-      DetailedPublicUserResponseDTO: {
-        type: "object";
-        properties: {
-          username: {
-            type: "string";
-          };
-          name: {
-            type: "string";
-          };
-          image: {
-            type: "string";
-            nullable: true;
-          };
-          bio: {
-            type: "string";
-          };
-          followers: {
-            type: "integer";
-            format: "int32";
-          };
-          following: {
-            type: "integer";
-            format: "int32";
-          };
-          totalCompletedWorkouts: {
-            type: "integer";
-            format: "int32";
-          };
-          isMe: {
-            type: "boolean";
-          };
-          isFollowing: {
-            type: "boolean";
-          };
-          joinedAt: {
-            type: "string";
-            format: "date-time";
-          };
-          currentSplit: {
-            $ref: "#/components/schemas/DetailedUserSplitResponseDTO";
-          };
-          gender: {
-            $ref: "#/components/schemas/Gender";
-          };
-        };
-        additionalProperties: false;
-      };
       DetailedSetResponseDTO: {
         type: "object";
         properties: {
@@ -9289,6 +9242,53 @@ type MappedEndpoints = {
           };
           isFavorited: {
             type: "boolean";
+          };
+        };
+        additionalProperties: false;
+      };
+      DetailedUserResponseDTO: {
+        type: "object";
+        properties: {
+          username: {
+            type: "string";
+          };
+          name: {
+            type: "string";
+          };
+          image: {
+            type: "string";
+            nullable: true;
+          };
+          bio: {
+            type: "string";
+          };
+          followers: {
+            type: "integer";
+            format: "int32";
+          };
+          following: {
+            type: "integer";
+            format: "int32";
+          };
+          totalCompletedWorkouts: {
+            type: "integer";
+            format: "int32";
+          };
+          isMe: {
+            type: "boolean";
+          };
+          isFollowing: {
+            type: "boolean";
+          };
+          joinedAt: {
+            type: "string";
+            format: "date-time";
+          };
+          currentSplit: {
+            $ref: "#/components/schemas/DetailedUserSplitResponseDTO";
+          };
+          gender: {
+            $ref: "#/components/schemas/Gender";
           };
         };
         additionalProperties: false;

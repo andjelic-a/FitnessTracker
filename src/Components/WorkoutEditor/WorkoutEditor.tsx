@@ -10,11 +10,13 @@ import Icon from "../Icon/Icon";
 import WorkoutSetCreator from "../WorkoutSetCreator/WorkoutSetCreator";
 import CurrentEditingWorkoutSetsContext from "../../Contexts/CurrentEditingWorkoutSetsContext";
 import extractSets from "../../Utility/ExtractSetsFromWorkout";
+import { useNavigate } from "react-router-dom";
 
 const WorkoutEditor = WindowFC(
   ({}, onClose, setModalConfirmationOpeningCondition) => {
     const loaderData = useLoaderData<typeof workoutDisplayLoader>();
     const [currentSets, setCurrentSets] = useState<WorkoutItemData[]>([]);
+    const navigate = useNavigate();
 
     const titleInputRef = useRef<HTMLInputElement | null>(null);
     const descriptionTextAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -167,7 +169,9 @@ const WorkoutEditor = WindowFC(
       });
 
       //TODO: Update cache
-      onClose(true);
+      if (originalWorkout.content.name !== updatedWorkout.name) {
+        navigate("..");
+      } else onClose(true);
     };
 
     return (
