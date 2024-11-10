@@ -27,7 +27,12 @@ export default function WorkoutPreview({
       {...attr}
     >
       <div className="header" {...headerProps}>
-        <p className="name" onClick={() => navigate(`workout/${workout.name}`)}>
+        <p
+          className="name"
+          onClick={() =>
+            navigate(`/${workout.creator.username}/workout/${workout.name}`)
+          }
+        >
           {workout.name}
         </p>
       </div>
