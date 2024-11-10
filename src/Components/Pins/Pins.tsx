@@ -1,6 +1,6 @@
 import "./Pins.scss";
 import Pin from "./Pin";
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import ReactModal from "react-modal";
@@ -21,6 +21,7 @@ import {
   InPortal,
   OutPortal,
 } from "react-reverse-portal";
+import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 
 type PinsProps = {
   pins: Schema<"PinResponseDTO">[];
@@ -110,66 +111,75 @@ const Pins = memo<PinsProps>(({ pins, includeEditButtons }) => {
     resetPinsBodyHeight();
   }
 
+  const segment = useCallback(
+    (segmentData: APIResponse<"/api/user/pins/options", "get">) => {
+      if (segmentData.code !== "OK") return null;
+
+      return segmentData.content.map((x) => (
+        <div
+          className="option"
+          key={x.name + "-" + x.type}
+          onClick={() => {
+            if (selectedMenuPins.findIndex((y) => x.id === y.id) < 0) {
+              if (selectedMenuPins.length < 6) {
+                setSelectedMenuPins([...selectedMenuPins, x]);
+              }
+            } else
+              setSelectedMenuPins(
+                selectedMenuPins.filter((y) => x.id !== y.id)
+              );
+          }}
+        >
+          <div className="checkbox-container">
+            <input
+              type="checkbox"
+              name={`${x.name}-${x.type}`}
+              id={`${x.name}-${x.type}`}
+              checked={selectedMenuPins.findIndex((y) => x.id === y.id) >= 0}
+              readOnly
+            />
+
+            <label htmlFor={`${x.name}-${x.type}`}>
+              {x.name}
+              &nbsp;
+              <p>{x.type === 0 ? "(Workout)" : "(Split)"}</p>
+            </label>
+          </div>
+
+          <div className="like-count-container">
+            <p>{x.likeCount}</p>
+            <Icon name="thumbs-up" />
+          </div>
+        </div>
+      ));
+    },
+    [selectedMenuPins]
+  );
+
+  const apiRequest = useMemo(
+    () =>
+      ({
+        method: "get",
+        parameters: {
+          limit: 15,
+          offset: 0,
+        },
+      } as const),
+    []
+  );
+
   const lazyLoadingContainerMemo = useMemo(
     () => (
       <LazyLoadingContainer
         endpoint="/api/user/pins/options"
-        baseAPIRequest={{
-          method: "get",
-          parameters: {
-            limit: 15,
-            offset: 0,
-          },
-        }}
-        onSegmentLoad={(segmentData) => {
-          if (segmentData.code !== "OK") return null;
-
-          return segmentData.content.map((x) => (
-            <div
-              className="option"
-              key={x.name + "-" + x.type}
-              onClick={() => {
-                if (selectedMenuPins.findIndex((y) => x.id === y.id) < 0) {
-                  if (selectedMenuPins.length < 6) {
-                    setSelectedMenuPins([...selectedMenuPins, x]);
-                  }
-                } else
-                  setSelectedMenuPins(
-                    selectedMenuPins.filter((y) => x.id !== y.id)
-                  );
-              }}
-            >
-              <div className="checkbox-container">
-                <input
-                  type="checkbox"
-                  name={`${x.name}-${x.type}`}
-                  id={`${x.name}-${x.type}`}
-                  checked={
-                    selectedMenuPins.findIndex((y) => x.id === y.id) >= 0
-                  }
-                  readOnly
-                />
-
-                <label htmlFor={`${x.name}-${x.type}`}>
-                  {x.name}
-                  &nbsp;
-                  <p>{x.type === 0 ? "(Workout)" : "(Split)"}</p>
-                </label>
-              </div>
-
-              <div className="like-count-container">
-                <p>{x.likeCount}</p>
-                <Icon name="thumbs-up" />
-              </div>
-            </div>
-          ));
-        }}
+        baseAPIRequest={apiRequest}
+        onSegmentLoad={segment}
         stopCondition={(response) =>
           response.code === "OK" && response.content.length < 15
         }
       />
     ),
-    []
+    [segment]
   );
 
   const portalNode = useMemo(() => createHtmlPortalNode(), []);
