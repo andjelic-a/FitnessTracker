@@ -95,8 +95,10 @@ const Settings = WindowFC(({}, close) => {
 
         <div
           onClick={() => {
-            logout();
-            navigate("..");
+            logout().then(() => {
+              sessionStorage.setItem("revalidate-main", "true");
+              navigate("..");
+            });
           }}
           className="settings-item"
         >

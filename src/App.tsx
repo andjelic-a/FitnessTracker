@@ -1,28 +1,18 @@
 import "./App.scss";
 import { Outlet } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import AppHeader from "./Components/AppHeader/AppHeader";
-import sendAPIRequest from "./Data/SendAPIRequest";
 import { Schema } from "./Types/Endpoints/SchemaParser";
 import basicProfileInfoContext from "./Contexts/BasicProfileInfoContext";
+import useLoaderData from "./BetterRouter/UseLoaderData";
+import appLoader from "./AppLoader";
 
 function App() {
   const [basicProfileInfo, setBasicProfileInfo] =
     useState<Schema<"SimpleUserResponseDTO"> | null>(null);
-  const sentBasicProfileInfoRequest = useRef(false);
 
-  useEffect(() => {
-    if (sentBasicProfileInfoRequest.current) return;
-    sentBasicProfileInfoRequest.current = true;
-
-    sendAPIRequest("/api/user/basic", {
-      method: "get",
-    }).then((x) => {
-      if (x.code !== "OK") return;
-
-      setBasicProfileInfo(x.content);
-    });
-  }, []);
+  const loaderData = useLoaderData<typeof appLoader>();
+  useEffect(() => void loaderData.user.then(setBasicProfileInfo), [loaderData]);
 
   return (
     <>

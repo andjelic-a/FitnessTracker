@@ -37,6 +37,7 @@ export default function Authentication() {
 
     if (response.code === "No Content") {
       await logout();
+      sessionStorage.setItem("revalidate-main", "true");
       navigate(0);
     }
   }
@@ -62,6 +63,7 @@ export default function Authentication() {
 
     if (response.code === "No Content") {
       await logout(true);
+      sessionStorage.setItem("revalidate-main", "true");
       navigate(0);
     }
   }

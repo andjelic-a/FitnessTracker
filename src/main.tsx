@@ -44,12 +44,23 @@ import splitDisplayLoader from "./Components/SplitDisplay/SplitDisplayLoader.ts"
 import SplitCreator from "./Components/SplitCreator/SplitCreator.tsx";
 import SplitEditor from "./Components/SplitEditor/SplitEditor.tsx";
 import WorkoutCreator from "./Components/WorkoutCreator/WorkoutCreator.tsx";
+import appLoader from "./AppLoader.ts";
 
 const routes: RouteObject[] = [
   {
     path: "/",
     element: <App />,
+    loader: appLoader,
     errorElement: <Error />,
+    shouldRevalidate: () => {
+      const revalidate = sessionStorage.getItem("revalidate-main");
+      if (revalidate === "true") {
+        sessionStorage.removeItem("revalidate-main");
+        return true;
+      }
+
+      return false;
+    },
     children: [
       {
         path: "/",
@@ -124,9 +135,9 @@ const routes: RouteObject[] = [
         element: <UserPage />,
         loader: userLoader,
         shouldRevalidate: () => {
-          const revalidate = sessionStorage.getItem("revalidate");
+          const revalidate = sessionStorage.getItem("revalidate-profile");
           if (revalidate === "true") {
-            sessionStorage.removeItem("revalidate");
+            sessionStorage.removeItem("revalidate-profile");
             return true;
           }
 
