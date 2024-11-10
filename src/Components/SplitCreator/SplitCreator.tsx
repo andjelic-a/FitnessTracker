@@ -94,12 +94,7 @@ const SplitCreator = WindowFC(
       }).then((x) => {
         if (x.code !== "Created") return;
 
-        //TODO: Implement simulated response
-        /* const simulatedResponse: Schema<"SimpleSplitResponseDTO"> = {
-          creator: user,
-          ...x.content,
-        }; */
-
+        sessionStorage.setItem("revalidate", "true");
         onClose(true);
       });
     }

@@ -6,14 +6,12 @@ import sendAPIRequest from "../../Data/SendAPIRequest";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import WindowFC from "../WindowWrapper/WindowFC";
 import WorkoutSetCreator from "../WorkoutSetCreator/WorkoutSetCreator";
-import { NewWorkoutsContext } from "../../Contexts/NewWorkoutsContext";
 import CurrentEditingWorkoutSetsContext from "../../Contexts/CurrentEditingWorkoutSetsContext";
 import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 
 const WorkoutCreator = WindowFC(
   ({}, onClose, setModalConfirmationOpeningCondition) => {
     const basicInfo = useContext(basicProfileInfoContext);
-    const newWorkoutsContext = useContext(NewWorkoutsContext);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
     const [currentSets, setCurrentSets] = useState<WorkoutItemData[]>([]);
@@ -47,7 +45,7 @@ const WorkoutCreator = WindowFC(
       return true;
     };
 
-    const handleSaveClick = async () => {
+    async function handleSaveClick() {
       let isValid = validateTitle();
       isValid = validateSets() && isValid;
 
@@ -110,17 +108,10 @@ const WorkoutCreator = WindowFC(
       }).then((newWorkout) => {
         if (newWorkout.code !== "Created") return;
 
-        const simulatedResponse: Schema<"SimpleWorkoutResponseDTO"> = {
-          id: newWorkout.content.id,
-          name: newWorkout.content.name,
-          creator: basicInfo,
-          description: "",
-        };
-
+        sessionStorage.setItem("revalidate", "true");
         onClose(true);
-        newWorkoutsContext.addWorkout(simulatedResponse);
       });
-    };
+    }
 
     return (
       <CurrentEditingWorkoutSetsContext.Provider
