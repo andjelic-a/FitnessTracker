@@ -8,7 +8,6 @@ import ProfileTabs from "../../Components/ProfileTabs/ProfileTabs";
 import Pins from "../../Components/Pins/Pins";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
 import sendAPIRequest from "../../Data/SendAPIRequest";
-import { useNavigate } from "react-router-dom";
 import AnimatedOutlet from "../../Components/WindowWrapper/AnimatedOutlet";
 
 export default function UserPage() {
@@ -57,8 +56,6 @@ function InnerProfile({
       }
     | null;
 }) {
-  const navigate = useNavigate();
-
   useEffect(() => {
     setIsFollowing(
       loaderDataState?.user.code === "OK" &&
@@ -105,18 +102,6 @@ function InnerProfile({
         className="profile-body"
         key={loaderDataState.user.content.username + "-body"}
       >
-        {isMe && (
-          <>
-            <button onClick={() => void navigate("workout/new")}>
-              New Workout
-            </button>
-
-            <button onClick={() => void navigate("split/new")}>
-              New Split
-            </button>
-          </>
-        )}
-
         {loaderDataState.pins.code === "OK" && (
           <Pins
             key={loaderDataState.user.content.username + "-pins"}
@@ -133,6 +118,7 @@ function InnerProfile({
               : null
           }
           split={loaderDataState.user.content.currentSplit}
+          isMe={isMe}
         />
 
         {loaderDataState.user.code === "OK" && (
