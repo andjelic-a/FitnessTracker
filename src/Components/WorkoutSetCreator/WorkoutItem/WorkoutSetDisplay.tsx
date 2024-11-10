@@ -135,8 +135,7 @@ export default function WorkoutSetDisplay({
             )}
           </button>
 
-          {/* TODO: make the dropdown menu's items (?non focusable by tabbing and instead only?) reachable with arrows */}
-          {/* TODO?: make the dropdown open on focus, close on escape or blur (un-focus) */}
+          {/* Accessibility todo?: make the dropdown open on focus, close on escape or blur (un-focus), use arrows to navigate */}
           {isDropdownOpen && (
             <div ref={iconDropdownRef} className="set-dropdown-menu">
               <button onClick={() => handleChangeSetIcon("1")}>

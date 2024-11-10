@@ -266,6 +266,12 @@
           }
         }
 
+        .lazy-container,
+        .lazy-segment {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
         .option {
           font-size: 1.7rem;
           padding: 0 1rem;

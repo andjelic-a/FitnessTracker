@@ -5051,6 +5051,24 @@ type MappedEndpoints = {
     "/api/user/pins/options": {
       get: {
         tags: ["User"];
+        parameters: [
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          }
+        ];
         responses: {
           "200": {
             description: "OK";

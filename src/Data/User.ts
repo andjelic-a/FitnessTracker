@@ -41,7 +41,7 @@ export async function getJWT(): Promise<string | null> {
   }
 
   if (response.code === "Unauthorized") localStorage.removeItem("token");
-  return null; //TODO: Handle errors */
+  return null;
 }
 
 export async function login(email: string, password: string): Promise<boolean> {
