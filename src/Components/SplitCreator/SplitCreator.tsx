@@ -13,6 +13,7 @@ import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import { Day } from "../../Types/Utility/Day";
 import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
+import Description from "../Description/Description";
 
 const SplitCreator = WindowFC(
   ({}, onClose, setModalConfirmationOpeningCondition) => {
@@ -53,6 +54,7 @@ const SplitCreator = WindowFC(
         selected: null,
       },
     ]);
+    const [hoveredDay, setHoveredDay] = useState<string | null>(null);
 
     const titleInputRef = useRef<HTMLInputElement | null>(null);
     const descriptionTextAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -106,7 +108,7 @@ const SplitCreator = WindowFC(
 
     useEffect(() => {
       setModalConfirmationOpeningCondition?.(
-        () => validateTitle() || validateWorkouts()
+        () => validateTitle() || validateWorkouts() || validateDescription()
       );
     }, [selectedWorkouts]);
 
@@ -121,6 +123,16 @@ const SplitCreator = WindowFC(
       }
 
       titleInputRef.current?.classList.remove("invalid");
+      return true;
+    }
+
+    function validateDescription(): boolean {
+      if (!descriptionTextAreaRef.current?.value) {
+        descriptionTextAreaRef.current?.classList.add("invalid");
+        return false;
+      }
+
+      descriptionTextAreaRef.current?.classList.remove("invalid");
       return true;
     }
 
@@ -189,42 +201,40 @@ const SplitCreator = WindowFC(
           <div className="body">
             {selectedWorkouts.map((x) => (
               <div className="day-container" key={x.day}>
-                <p>{x.day}</p>
+                <div className="day-container-wrapper">
+                  <h3>{x.day}</h3>
 
-                <div className="workout">
-                  {x.selected === null ? (
-                    <p className="rest">Rest</p>
-                  ) : (
-                    <WorkoutPreview workout={x.selected} />
-                  )}
+                  <div className="workout">
+                    {x.selected === null ? (
+                      <>
+                        <Icon className="rest-icon" name="mug-hot" />
+                        <p className="rest">Rest</p>
+                      </>
+                    ) : (
+                      <WorkoutPreview workout={x.selected} />
+                    )}
+                  </div>
+
+                  <button
+                    className={`day-container-button ${
+                      hoveredDay === x.day ? "" : "hide"
+                    }`}
+                    onClick={() => handleOpenWorkoutSelector(x.day)}
+                    onMouseEnter={() => setHoveredDay(x.day)}
+                    onMouseLeave={() => setHoveredDay(null)}
+                  >
+                    Replace
+                  </button>
                 </div>
-
-                <button onClick={() => handleOpenWorkoutSelector(x.day)}>
-                  Replace
-                </button>
               </div>
             ))}
           </div>
 
-          <div className="description-container">
-            <textarea
-              id="description-input"
-              ref={descriptionTextAreaRef}
-              onChange={(e) => {
-                e.target.style.height = "auto";
-                e.target.style.height = `${e.target.scrollHeight}px`;
-              }}
-              aria-labelledby="description-input-label"
-            />
-
-            <label
-              htmlFor="description-input"
-              className="description-input-label"
-              id="description-input-label"
-            >
-              Split description
-            </label>
-          </div>
+          <Description
+            ref={descriptionTextAreaRef}
+            placeholder="Split description"
+            isInputEnabled={true}
+          />
         </div>
       </>
     );

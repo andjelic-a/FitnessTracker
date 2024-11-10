@@ -1,62 +1,93 @@
 @import "../../Palette.scss";
 
 .workout-preview {
-  font-size: 1rem;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  gap: 0.5rem;
-
-  border: 2px solid $dark-200;
-  border-radius: 0.5rem;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   padding: 1rem;
+  top: 0;
 
-  width: 30rem;
-  min-width: 30rem;
-  max-width: 30rem;
-
-  height: 13rem;
-  min-height: 13rem;
-  max-height: 13rem;
-
-  .header {
-    grid-row: 1;
+  .workout-preview-header {
+    position: relative;
+    width: 100%;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    font-size: 1.33em;
-    font-weight: bold;
-    height: 3rem;
+    font-size: 1.8rem;
 
-    .name {
-      cursor: pointer;
-    }
-
-    .private-label {
-      font-size: 0.85em;
-      color: #aaa;
-      padding: 0.7em 0.75em;
-      border-radius: 10rem;
-      border: 1px solid $dark-200;
-      font-weight: lighter;
+    .workout-preview-header-name {
+      max-width: 35%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 
-  .body {
-    grid-row: 2;
+  .workout-preview-body {
+    width: 100%;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
-    font-size: 1em;
+    font-size: 1.6rem;
     font-weight: normal;
+    overflow: hidden;
+
+    p {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
-  .footer {
-    grid-row: 3;
+  .workout-preview-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8em;
+    font-size: 1rem;
     font-weight: normal;
+  }
+}
+
+.mini-workout-preview {
+  padding: 0.5rem;
+  height: 13rem;
+  width: 26rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid $dark-200;
+  border-radius: 0.5rem;
+
+  .mini-workout-preview-header {
+    padding: 1.5rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    color: #aaa;
+
+    .mini-workout-preview-header-name {
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mini-workout-preview-header-day {
+      font-size: 1.2rem;
+      font-weight: 100;
+    }
+  }
+
+  .mini-workout-preview-footer {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 100;
+    color: #aaa;
   }
 }
