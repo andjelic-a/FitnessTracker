@@ -26,6 +26,10 @@ const SplitCreator = WindowFC(
       }[]
     >([
       {
+        day: "Sunday",
+        selected: null,
+      },
+      {
         day: "Monday",
         selected: null,
       },
@@ -47,10 +51,6 @@ const SplitCreator = WindowFC(
       },
       {
         day: "Saturday",
-        selected: null,
-      },
-      {
-        day: "Sunday",
         selected: null,
       },
     ]);
@@ -211,7 +211,10 @@ const SplitCreator = WindowFC(
                         <p className="rest">Rest</p>
                       </>
                     ) : (
-                      <WorkoutPreview workout={x.selected} />
+                      <WorkoutPreview
+                        className="split-workout-preview"
+                        workout={x.selected}
+                      />
                     )}
                   </div>
 

@@ -177,11 +177,14 @@ const SplitDisplay = WindowFC(() => {
                         <div className="workout">
                           {workout.workout === null ? (
                             <>
-                            <Icon className="rest-icon" name="mug-hot" />
-                            <p className="rest">Rest</p>
-                          </>
+                              <Icon className="rest-icon" name="mug-hot" />
+                              <p className="rest">Rest</p>
+                            </>
                           ) : (
-                            <WorkoutPreview workout={workout.workout} />
+                            <WorkoutPreview
+                              className="split-workout-preview"
+                              workout={workout.workout}
+                            />
                           )}
                         </div>
                       </div>
@@ -190,7 +193,11 @@ const SplitDisplay = WindowFC(() => {
                 </div>
 
                 <div className="split-display-footer">
-                  <Description placeholder="Split Description" text={split.content.description.trim()} isInputEnabled={false}/>
+                  <Description
+                    placeholder="Split Description"
+                    text={split.content.description.trim()}
+                    isInputEnabled={false}
+                  />
                   {/*{split.content.description.trim().length > 0 && (
                     <div className="split-display-description-container">
                       <div className="split-display-description">
