@@ -17,6 +17,7 @@ export default function EditProfile() {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const bioInputRef = useRef<HTMLTextAreaElement>(null);
 
+  const [defaultUsernameValue, setDefaultUsernameValue] = useState<string>("");
   const [defaultNameValue, setDefaultNameValue] = useState("");
   const [defaultBioValue, setDefaultBioValue] = useState("");
 
@@ -46,6 +47,7 @@ export default function EditProfile() {
 
       const user = cache.content;
       setSelectedImage(user.image);
+      setDefaultUsernameValue(user.username);
       setDefaultNameValue(user.name);
       setDefaultBioValue(user.bio);
       setSelectedGender(user.gender === 0 ? "male" : "female");
@@ -141,8 +143,8 @@ export default function EditProfile() {
         </div>
 
         <div className="edit-profile-user-details-info">
-          <p>@username</p>
-          <p className="edit-profile-user-details-info-name">name</p>
+          <p>@{defaultUsernameValue}</p>
+          <p className="edit-profile-user-details-info-name">{defaultNameValue}</p>
         </div>
 
         <div className="image-buttons-container">
@@ -170,9 +172,8 @@ export default function EditProfile() {
           autoComplete="off"
           maxLength={25}
           className="edit-profile-username-input"
-          placeholder="Name"
+          placeholder="Enter Name"
           inputRef={nameInputRef}
-          defaultValue={defaultNameValue}
         />
       </div>
 
@@ -181,7 +182,7 @@ export default function EditProfile() {
         <textarea
           name="bio"
           autoComplete="off"
-          placeholder="Bio"
+          placeholder="Enter Bio"
           onChange={(e) => {
             e.target.style.height = "auto";
             e.target.style.height = `${e.target.scrollHeight}px`;

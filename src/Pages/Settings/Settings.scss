@@ -3,7 +3,8 @@
 .settings-container {
   display: grid;
   grid-template-columns: max-content 1fr;
-  width: 90vw;
+  width: 50vw;
+  height: 50vh;
   background-color: $dark-200;
   border-radius: 1rem;
 
