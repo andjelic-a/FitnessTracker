@@ -28,6 +28,8 @@ const WorkoutDisplay = WindowFC(({}, close) => {
   const [isFavorited, setIsFavorited] = useState<boolean | null>(null);
   const [isCommentSectionOpen, setIsCommentSectionOpen] =
     useState<boolean>(false);
+  const [commentSectionPreviouslyOpen, setCommentSectionPreviouslyOpen] =
+    useState<boolean>(false);
 
   const [likeCount, setLikeCount] = useState<number>(0);
   const [commentCount, setCommentCount] = useState<number>(0);
@@ -72,9 +74,6 @@ const WorkoutDisplay = WindowFC(({}, close) => {
     setLikeCount((prevState) => prevState + (isLiked ? -1 : 1));
     setIsLiked((prevState) => !prevState);
   };
-
-  const handleCommentClick = () =>
-    void setIsCommentSectionOpen((prevState) => !prevState);
 
   const handleFavoriteClick = () => {
     if (isWaitingForResponse.current) return;
@@ -155,159 +154,172 @@ const WorkoutDisplay = WindowFC(({}, close) => {
   );
 
   return (
-    <>
-      <InPortal node={commentSectionPortalNode} children={commentSection} />
+    <div className="workout-display-container">
+      <InPortal
+        node={commentSectionPortalNode}
+        children={
+          commentSectionPreviouslyOpen && isCommentSectionOpen && commentSection
+        }
+      />
 
-      <div className="workout-display-container">
-        <div className="workout-display">
-          <Async await={loaderData?.workout}>
-            {(workout) => {
-              if (!workout || workout.code !== "OK") return null;
+      <div className="workout-display">
+        <Async await={loaderData?.workout}>
+          {(workout) => {
+            if (!workout || workout.code !== "OK") return null;
 
-              return (
-                <>
-                  <div className="workout-display-header">
-                    <p className="workout-display-title">
-                      {workout.content.name}
-                    </p>
+            return (
+              <>
+                <div className="workout-display-header">
+                  <p className="workout-display-title">
+                    {workout.content.name}
+                  </p>
 
-                    <div className="buttons">
-                      <button
-                        className="workout-display-edit"
-                        onClick={() => void navigate("edit")}
-                      >
-                        <Icon name="pen-to-square" />
+                  <div className="buttons">
+                    <button
+                      className="workout-display-edit"
+                      onClick={() => void navigate("edit")}
+                    >
+                      <Icon name="pen-to-square" />
 
-                        <p className="accessibility-only" aria-hidden={false}>
-                          Edit
-                        </p>
-                      </button>
+                      <p className="accessibility-only" aria-hidden={false}>
+                        Edit
+                      </p>
+                    </button>
 
-                      <button
-                        className="workout-display-delete"
-                        onClick={() => void setIsConfirmDeletionModalOpen(true)}
-                      >
-                        <Icon name="trash" />
+                    <button
+                      className="workout-display-delete"
+                      onClick={() => void setIsConfirmDeletionModalOpen(true)}
+                    >
+                      <Icon name="trash" />
 
-                        <p className="accessibility-only" aria-hidden={false}>
-                          Delete
-                        </p>
-                      </button>
-                    </div>
+                      <p className="accessibility-only" aria-hidden={false}>
+                        Delete
+                      </p>
+                    </button>
                   </div>
+                </div>
 
-                  <div className="workout-display-body">
-                    {extractSetsNoMapping(workout.content).map((set) => (
-                      <WorkoutDisplayItem
-                        key={set.id}
-                        exercise={set.exercise}
-                        sets={set.sets}
-                      />
-                    ))}
-                  </div>
+                <div className="workout-display-body">
+                  {extractSetsNoMapping(workout.content).map((set) => (
+                    <WorkoutDisplayItem
+                      key={set.id}
+                      exercise={set.exercise}
+                      sets={set.sets}
+                    />
+                  ))}
+                </div>
 
-                  <div className="workout-display-footer">
-                    {workout.content.description?.trim() && (
-                      <div className="workout-display-description-container">
-                        <div className="workout-display-description">
-                          <label className="workout-display-description-placeholder">
-                            Workout Description
-                          </label>
+                <div className="workout-display-footer">
+                  {workout.content.description?.trim() && (
+                    <div className="workout-display-description-container">
+                      <div className="workout-display-description">
+                        <label className="workout-display-description-placeholder">
+                          Workout Description
+                        </label>
 
-                          {workout.content.description}
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="icon-container">
-                      <div className="workout-display-interaction-container">
-                        <button onClick={handleThumbsUpClick}>
-                          <Icon
-                            name="thumbs-up"
-                            className={`workout-display-thumbs-up ${
-                              isLiked ? "active" : ""
-                            }`}
-                          />
-                        </button>
-
-                        <p className="accessibility-only" aria-hidden={false}>
-                          Like
-                        </p>
-
-                        <p className="workout-display-interaction-count">
-                          {formatCount(likeCount)}
-                        </p>
-                      </div>
-
-                      <div className="workout-display-interaction-container">
-                        <button onClick={handleCommentClick}>
-                          <Icon
-                            name="comment"
-                            className={`workout-display-comment ${
-                              isCommentSectionOpen ? "active" : ""
-                            }`}
-                          />
-                        </button>
-
-                        <p className="accessibility-only" aria-hidden={false}>
-                          Comment section
-                        </p>
-
-                        <p className="workout-display-interaction-count">
-                          {formatCount(commentCount)}
-
-                          <span
-                            className="accessibility-only"
-                            aria-hidden={false}
-                          >
-                            Comments
-                          </span>
-                        </p>
-                      </div>
-
-                      <div className="workout-display-interaction-container">
-                        <button onClick={handleFavoriteClick}>
-                          <Icon
-                            name="bookmark"
-                            className={`workout-display-bookmark ${
-                              isFavorited ? "active" : ""
-                            }`}
-                          />
-                        </button>
-
-                        <p className="accessibility-only" aria-hidden={false}>
-                          Favorite
-                        </p>
-
-                        <p className="workout-display-interaction-count">
-                          {formatCount(favoriteCount)}
-                        </p>
+                        {workout.content.description}
                       </div>
                     </div>
+                  )}
+
+                  <div className="icon-container">
+                    <div className="workout-display-interaction-container">
+                      <button onClick={handleThumbsUpClick}>
+                        <Icon
+                          name="thumbs-up"
+                          className={`workout-display-thumbs-up ${
+                            isLiked ? "active" : ""
+                          }`}
+                        />
+                      </button>
+
+                      <p className="accessibility-only" aria-hidden={false}>
+                        Like
+                      </p>
+
+                      <p className="workout-display-interaction-count">
+                        {formatCount(likeCount)}
+                      </p>
+                    </div>
+
+                    <div className="workout-display-interaction-container">
+                      <button
+                        onClick={() => {
+                          if (
+                            !commentSectionPreviouslyOpen &&
+                            !isCommentSectionOpen
+                          )
+                            setCommentSectionPreviouslyOpen(true);
+
+                          setIsCommentSectionOpen((prevState) => !prevState);
+                        }}
+                      >
+                        <Icon
+                          name="comment"
+                          className={`workout-display-comment ${
+                            isCommentSectionOpen ? "active" : ""
+                          }`}
+                        />
+                      </button>
+
+                      <p className="accessibility-only" aria-hidden={false}>
+                        Comment section
+                      </p>
+
+                      <p className="workout-display-interaction-count">
+                        {formatCount(commentCount)}
+
+                        <span
+                          className="accessibility-only"
+                          aria-hidden={false}
+                        >
+                          Comments
+                        </span>
+                      </p>
+                    </div>
+
+                    <div className="workout-display-interaction-container">
+                      <button onClick={handleFavoriteClick}>
+                        <Icon
+                          name="bookmark"
+                          className={`workout-display-bookmark ${
+                            isFavorited ? "active" : ""
+                          }`}
+                        />
+                      </button>
+
+                      <p className="accessibility-only" aria-hidden={false}>
+                        Favorite
+                      </p>
+
+                      <p className="workout-display-interaction-count">
+                        {formatCount(favoriteCount)}
+                      </p>
+                    </div>
                   </div>
-                </>
-              );
-            }}
-          </Async>
-        </div>
-
-        <AnimatePresence>
-          {isCommentSectionOpen && (
-            <motion.div {...motionProps}>
-              <OutPortal node={commentSectionPortalNode} />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <ConfirmModalDialog
-          isOpen={isConfirmDeletionModalOpen}
-          onConfirm={handleDelete}
-          onDeny={() => void setIsConfirmDeletionModalOpen(false)}
-        >
-          Are you sure you want to <b>permanently</b> delete this workout?
-        </ConfirmModalDialog>
+                </div>
+              </>
+            );
+          }}
+        </Async>
       </div>
-    </>
+
+      <AnimatePresence>
+        {isCommentSectionOpen && (
+          <motion.div {...motionProps}>
+            <OutPortal node={commentSectionPortalNode} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <ConfirmModalDialog
+        isOpen={isConfirmDeletionModalOpen}
+        onConfirm={handleDelete}
+        onDeny={() => void setIsConfirmDeletionModalOpen(false)}
+      >
+        Are you sure you want to <b>permanently</b> delete this workout?
+      </ConfirmModalDialog>
+    </div>
   );
 });
 

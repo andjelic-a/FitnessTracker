@@ -28,6 +28,8 @@ const SplitDisplay = WindowFC(() => {
   const [isFavorited, setIsFavorited] = useState<boolean | null>(null);
   const [isCommentSectionOpen, setIsCommentSectionOpen] =
     useState<boolean>(false);
+  const [commentSectionPreviouslyOpen, setCommentSectionPreviouslyOpen] =
+    useState<boolean>(false);
 
   const [likeCount, setLikeCount] = useState<number>(0);
   const [commentCount, setCommentCount] = useState<number>(0);
@@ -72,9 +74,6 @@ const SplitDisplay = WindowFC(() => {
     setLikeCount((prevState) => prevState + (isLiked ? -1 : 1));
     setIsLiked((prevState) => !prevState);
   };
-
-  const handleCommentClick = () =>
-    void setIsCommentSectionOpen((prevState) => !prevState);
 
   const handleFavoriteClick = () => {
     if (isWaitingForResponse.current) return;
@@ -127,7 +126,12 @@ const SplitDisplay = WindowFC(() => {
 
   return (
     <div className="split-display-container">
-      <InPortal node={commentSectionPortalNode} children={commentSection} />
+      <InPortal
+        node={commentSectionPortalNode}
+        children={
+          commentSectionPreviouslyOpen && isCommentSectionOpen && commentSection
+        }
+      />
 
       <div className="split-display">
         <Async await={loaderData?.split}>
@@ -211,7 +215,17 @@ const SplitDisplay = WindowFC(() => {
                     </div>
 
                     <div className="split-display-interaction-container">
-                      <button onClick={handleCommentClick}>
+                      <button
+                        onClick={() => {
+                          if (
+                            !commentSectionPreviouslyOpen &&
+                            !isCommentSectionOpen
+                          )
+                            setCommentSectionPreviouslyOpen(true);
+
+                          setIsCommentSectionOpen((prevState) => !prevState);
+                        }}
+                      >
                         <Icon
                           name="comment"
                           className={`split-display-comment ${
