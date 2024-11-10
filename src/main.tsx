@@ -134,14 +134,18 @@ const routes: RouteObject[] = [
         path: ":username",
         element: <UserPage />,
         loader: userLoader,
-        shouldRevalidate: () => {
+        shouldRevalidate: ({ currentParams, nextParams }) => {
           const revalidate = sessionStorage.getItem("revalidate-profile");
           if (revalidate === "true") {
             sessionStorage.removeItem("revalidate-profile");
             return true;
           }
 
-          return false;
+          return (
+            currentParams.username !== undefined &&
+            nextParams.username !== undefined &&
+            currentParams.username !== nextParams.username
+          );
         },
         children: [
           {

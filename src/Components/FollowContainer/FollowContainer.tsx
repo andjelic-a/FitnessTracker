@@ -95,10 +95,7 @@ function FollowContainer({
                       <div
                         className="follow-container-user"
                         key={x.username}
-                        onClick={() => {
-                          sessionStorage.setItem("revalidate-profile", "true");
-                          void navigate(`/${x.username}`);
-                        }}
+                        onClick={() => void navigate(`/${x.username}`)}
                       >
                         <img
                           src={x.image ?? "/DefaultProfilePicture.png"}
