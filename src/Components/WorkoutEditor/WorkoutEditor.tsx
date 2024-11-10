@@ -166,12 +166,17 @@ const WorkoutEditor = WindowFC(
           name: originalWorkout.content.name,
           creator: originalWorkout.content.creator.username,
         },
-      });
+      }).then((x) => {
+        if (x.code !== "No Content") return;
 
-      //TODO: Update cache
-      if (originalWorkout.content.name !== updatedWorkout.name) {
-        navigate("..");
-      } else onClose(true);
+        if (
+          originalWorkout.content.name !== updatedWorkout.name ||
+          originalWorkout.content.description !== updatedWorkout.description
+        ) {
+          sessionStorage.setItem("revalidate", "true");
+          navigate("..");
+        } else onClose(true);
+      });
     };
 
     return (

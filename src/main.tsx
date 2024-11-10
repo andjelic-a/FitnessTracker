@@ -123,10 +123,15 @@ const routes: RouteObject[] = [
         path: ":username",
         element: <UserPage />,
         loader: userLoader,
-        shouldRevalidate: ({ currentUrl, currentParams, nextParams }) =>
-          (currentUrl.pathname.includes("/split/") &&
-            currentParams.id != undefined) ||
-          currentParams.username !== nextParams.username,
+        shouldRevalidate: () => {
+          const revalidate = sessionStorage.getItem("revalidate");
+          if (revalidate === "true") {
+            sessionStorage.removeItem("revalidate");
+            return true;
+          }
+
+          return false;
+        },
         children: [
           {
             path: "workout/new",
