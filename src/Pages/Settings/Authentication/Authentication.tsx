@@ -2,10 +2,11 @@ import InputField from "../../../Components/InputField/InputField";
 import Icon from "../../../Components/Icon/Icon";
 import "./Authentication.scss";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { logout } from "../../../Data/User";
 import { validateEmail, validatePassword } from "../../Authentication/Validate";
 import { useNavigate } from "react-router-dom";
+import basicProfileInfoContext from "../../../Contexts/BasicProfileInfoContext";
 
 export default function Authentication() {
   const oldEmailInputRef = useRef<HTMLInputElement>(null);
@@ -19,19 +20,10 @@ export default function Authentication() {
   const navigate = useNavigate();
   const [resendDelay, setResendDelay] = useState(0);
   const [isVerified, setIsVerified] = useState(false);
-  const sentInitialVerificationRequest = useRef(false);
+  const basicInfo = useContext(basicProfileInfoContext);
 
-  useEffect(() => {
-    if (sentInitialVerificationRequest.current) return;
-    sentInitialVerificationRequest.current = true;
-
-    sendAPIRequest("/api/user/is-verified", {
-      method: "get",
-    }).then((response) => {
-      //If response in not ok, meaning if something went wrong with the request or the user shouldn't even be seeing this screen (not logged in), do not let them ask for a verification code to avoid further problems
-      setIsVerified(response.code !== "OK" || response.content.isVerified);
-    });
-  }, []);
+  //If basic info is null, user is not logged in and shouldn't even be seeing this screen, set to true to prevent them from asking for a new verification code
+  useEffect(() => setIsVerified(basicInfo?.isVerified ?? true), [basicInfo]);
 
   async function handlePasswordChangeSave() {
     if (
