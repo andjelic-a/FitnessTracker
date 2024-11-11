@@ -1,5 +1,12 @@
 import "./ProfileTabs.scss";
-import React, { memo, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  memo,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import * as portals from "react-reverse-portal";
 import gsap from "gsap";
@@ -13,6 +20,7 @@ import LazyLoadingContainer from "../LazyLoadingContainer/LazyLoadingContainer";
 import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
 import SplitPreview from "../SplitPreview/SplitPreview";
 import { Link, useParams } from "react-router-dom";
+import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 gsap.registerPlugin(Flip);
 
 type ProfileTabsProps = {
@@ -29,6 +37,7 @@ const ProfileTabs = memo(
     const [searchTerm, setSearchTerm] = useState<string>("");
     const searchBarRef = useRef<HTMLInputElement>(null);
     const params = useParams();
+    const basicInfo = useContext(basicProfileInfoContext);
 
     const flipStateRef = useRef<Flip.FlipState | null>(null);
 
@@ -155,6 +164,8 @@ const ProfileTabs = memo(
                 response.code === "OK" && response.content.length < 10
               }
               before={
+                basicInfo == null ||
+                !basicInfo.isVerified ||
                 !isMe ? undefined : endpoint ===
                   "/api/split/simple/by/{username}" ? (
                   <Link className="add-button" to="split/new">

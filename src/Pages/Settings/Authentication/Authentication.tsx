@@ -110,7 +110,10 @@ export default function Authentication() {
       },
     });
 
-    if (response.code === "No Content") setIsVerified(true);
+    if (response.code === "No Content") {
+      sessionStorage.setItem("revalidate-main", "true");
+      setIsVerified(true);
+    }
   }
 
   return (
