@@ -1,9 +1,10 @@
 export function validateEmail(email: string | undefined | null): boolean {
   if (!email) return false;
 
-  const re =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(email.trim());
+  const validUsernameRegex = /^[a-zA-Z0-9_.]{3,15}$/;
+  const validEmailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+
+  return validUsernameRegex.test(email.trim()) || validEmailRegex.test(email);
 }
 
 export function validatePassword(password: string | undefined | null): boolean {

@@ -7,22 +7,11 @@ import useOutsideClick from "../../Hooks/UseOutsideClick";
 
 type ProfileHeaderProps = {
   user: Schema<"DetailedUserResponseDTO">;
-} & (
-  | {
-      includeEditButton: boolean;
-
-      includeFollowButton?: never;
-      isFollowing?: never;
-      handleFollow?: never;
-    }
-  | {
-      includeEditButton?: never;
-
-      includeFollowButton: boolean;
-      isFollowing: boolean;
-      handleFollow: () => void;
-    }
-);
+  includeEditButton?: boolean;
+  includeFollowButton?: boolean;
+  isFollowing?: boolean;
+  handleFollow?: () => void;
+};
 
 function ProfileHeader({ user, ...props }: ProfileHeaderProps) {
   const navigate = useNavigate();
@@ -55,7 +44,7 @@ function ProfileHeader({ user, ...props }: ProfileHeaderProps) {
         <p className="username">{user.username}</p>
       </div>
 
-      {"includeEditButton" in props && (
+      {props.includeEditButton && (
         <button
           className="edit-profile-btn"
           onClick={() => void navigate("settings")}
@@ -64,7 +53,7 @@ function ProfileHeader({ user, ...props }: ProfileHeaderProps) {
         </button>
       )}
 
-      {"includeFollowButton" in props && (
+      {props.includeFollowButton && (
         <button
           className="follow-btn"
           onClick={() => {

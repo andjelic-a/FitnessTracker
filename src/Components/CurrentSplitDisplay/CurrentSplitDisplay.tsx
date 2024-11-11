@@ -42,10 +42,7 @@ export default function CurrentSplitDisplay({
 
   useEffect(() => {
     if (!split) return;
-
-    const a = extractWorkouts(split);
-    setWorkouts([...a.slice(1), a[0]]);
-    // setWorkouts(a);
+    setWorkouts(extractWorkouts(split));
   }, [split]);
 
   function extractWorkouts(
@@ -53,7 +50,6 @@ export default function CurrentSplitDisplay({
   ): SplitWorkout[] {
     const workouts: (Schema<"SimpleSplitWorkoutResponseDTO"> | null)[] = [];
 
-    //TODO: Ask the user if they prefer to have this display as monday-first or sunday-first
     for (let i = 0; i < 7; i++)
       workouts.push(split.workouts.find((x) => x.day === i) ?? null);
 
@@ -68,7 +64,6 @@ export default function CurrentSplitDisplay({
     workout: Schema<"SimpleSplitWorkoutResponseDTO">
   ): WorkoutStatus {
     let today = new Date().getUTCDay();
-    // if (today === -1) today = 6;
 
     if (workout.day > today) return "pending";
 
@@ -85,7 +80,6 @@ export default function CurrentSplitDisplay({
 
   function getStatusForRest(day: number): RestStatus {
     let today = new Date().getUTCDay();
-    // if (today === -1) today = 6;
 
     if (day === today) return "scheduled-today";
     if (day < today) return "passed";

@@ -7,12 +7,11 @@ import ActivityGrid from "../../Components/ActivityGrid/ActivityGrid";
 import ProfileTabs from "../../Components/ProfileTabs/ProfileTabs";
 import Pins from "../../Components/Pins/Pins";
 import ProfileHeader from "../../Components/ProfileHeader/ProfileHeader";
-import { useNavigate } from "react-router-dom";
 import sendAPIRequest from "../../Data/SendAPIRequest";
+import AnimatedOutlet from "../../Components/WindowWrapper/AnimatedOutlet";
 
 export default function UserPage() {
   const loaderData = useLoaderData<typeof userLoader>();
-  const navigate = useNavigate();
 
   const [loaderDataState, setLoaderDataState] = useState<
     | {
@@ -30,15 +29,11 @@ export default function UserPage() {
       loaderData.user,
       loaderData.pins,
       loaderData.latestWeekOfActivity,
-      loaderData.streak,
     ]).then((x) => {
-      if (x[0].code === "OK" && x[0].content.isMe) navigate("/me");
-
       setLoaderDataState({
         user: x[0],
         pins: x[1],
         latestWeekOfActivity: x[2],
-        streak: x[3],
       });
     });
   }, [loaderData]);
@@ -55,17 +50,23 @@ function InnerProfile({
 }: {
   loaderDataState:
     | {
-        [key in keyof LoaderReturnType<typeof userLoader>]: Awaited<
-          LoaderReturnType<typeof userLoader>[key]
+        [Key in keyof LoaderReturnType<typeof userLoader>]: Awaited<
+          LoaderReturnType<typeof userLoader>[Key]
         >;
       }
     | null;
 }) {
-  if (loaderDataState?.user.code !== "OK") return <></>;
+  useEffect(() => {
+    setIsFollowing(
+      loaderDataState?.user.code === "OK" &&
+        loaderDataState.user.content.isFollowing
+    );
+  }, [loaderDataState]);
 
-  const [isFollowing, setIsFollowing] = useState<boolean>(
-    loaderDataState.user.content.isFollowing
-  );
+  const isMe =
+    loaderDataState?.user.code === "OK" && loaderDataState.user.content.isMe;
+
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const isWaitingForResponse = useRef(false);
 
   function handleFollowToggle() {
@@ -84,36 +85,52 @@ function InnerProfile({
     }).then(() => void (isWaitingForResponse.current = false));
   }
 
+  if (loaderDataState?.user.code !== "OK") return <></>;
+
   return (
     <>
       <ProfileHeader
+        key={loaderDataState.user.content.username + "-header"}
         user={loaderDataState.user.content}
-        includeFollowButton
-        handleFollow={handleFollowToggle}
-        isFollowing={isFollowing}
+        includeEditButton={isMe}
+        includeFollowButton={!isMe}
+        handleFollow={isMe ? undefined : handleFollowToggle}
+        isFollowing={isMe ? undefined : isFollowing}
       />
 
-      <div className="profile-body">
+      <div
+        className="profile-body"
+        key={loaderDataState.user.content.username + "-body"}
+      >
         {loaderDataState.pins.code === "OK" && (
-          <Pins pins={loaderDataState.pins.content} />
+          <Pins
+            key={loaderDataState.user.content.username + "-pins"}
+            pins={loaderDataState.pins.content}
+            includeEditButtons={isMe}
+          />
         )}
 
         <ProfileTabs
+          key={loaderDataState.user.content.username + "-tabs"}
           latestActivity={
             loaderDataState.latestWeekOfActivity.code === "OK"
               ? loaderDataState.latestWeekOfActivity.content
               : null
           }
           split={loaderDataState.user.content.currentSplit}
+          isMe={isMe}
         />
 
         {loaderDataState.user.code === "OK" && (
           <ActivityGrid
+            key={loaderDataState.user.content.username + "-activity"}
             username={loaderDataState.user.content.username}
             joinedAt={new Date(loaderDataState.user.content.joinedAt)}
           />
         )}
       </div>
+
+      <AnimatedOutlet />
     </>
   );
 }

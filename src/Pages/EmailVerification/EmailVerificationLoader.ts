@@ -3,7 +3,7 @@ import sendAPIRequest from "../../Data/SendAPIRequest";
 
 const emailVerificationLoader = createLoader(
   ({ params: { code } }) => ({
-    response: sendAPIRequest("/api/user/me/confirmemail/{code}", {
+    response: sendAPIRequest("/api/user/confirm-email/{code}", {
       method: "patch",
       parameters: {
         code: code ?? "",

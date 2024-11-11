@@ -41,7 +41,7 @@ export async function getJWT(): Promise<string | null> {
   }
 
   if (response.code === "Unauthorized") localStorage.removeItem("token");
-  return null; //TODO: Handle errors */
+  return null;
 }
 
 export async function login(email: string, password: string): Promise<boolean> {
@@ -94,7 +94,6 @@ export async function register(
 export async function logout(clientSideOnly: boolean = false): Promise<void> {
   if (clientSideOnly) {
     localStorage.removeItem("token");
-    window.location.reload();
     return;
   }
 
@@ -110,5 +109,4 @@ export async function logout(clientSideOnly: boolean = false): Promise<void> {
   );
 
   localStorage.removeItem("token");
-  window.location.reload();
 }

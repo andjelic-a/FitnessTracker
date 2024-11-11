@@ -34,6 +34,17 @@ const CommentSection = memo<CommentSectionProps>(
 
     const [newComments, setNewComments] = useState<CommentSchema[]>([]);
 
+    function getRequestParameters():
+      | {
+          workoutId: string;
+        }
+      | {
+          splitId: string;
+        } {
+      if (type === "workout") return { workoutId: id };
+      else return { splitId: id };
+    }
+
     async function handleCreateComment(
       newComment: Schema<"CreateWorkoutCommentRequestDTO">
     ) {
@@ -45,10 +56,7 @@ const CommentSection = memo<CommentSectionProps>(
           : "/api/split/{splitId}/comment",
         {
           method: "post",
-          parameters: {
-            workoutId: id,
-            splitId: id,
-          },
+          parameters: getRequestParameters(),
           payload: newComment,
         }
       );
@@ -66,8 +74,7 @@ const CommentSection = memo<CommentSectionProps>(
         likeCount: 0,
         replyCount: 0,
         text: newComment.comment,
-        workoutId: id,
-        splitId: id,
+        ...getRequestParameters(),
       };
 
       setNewComments((prev) => [newCommentSimulatedResponse, ...prev]);
@@ -82,11 +89,10 @@ const CommentSection = memo<CommentSectionProps>(
       () => ({
         method: "get",
         parameters: {
-          workoutId: id,
-          splitId: id,
+          ...getRequestParameters(),
           limit: 10,
           offset: 0,
-        },
+        } as any,
       }),
       [id]
     );
@@ -137,9 +143,7 @@ const CommentSection = memo<CommentSectionProps>(
             );
           }}
           stopCondition={(response) =>
-            response.code === "Unauthorized" ||
-            response.code === "Forbidden" ||
-            (response.code === "OK" && response.content.length < 10)
+            response.code === "OK" && response.content.length < 10
           }
         />
       ),

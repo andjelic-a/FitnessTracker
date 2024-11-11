@@ -11,7 +11,6 @@ import Modal from "react-modal";
 import Error from "./Components/Error/Error.tsx";
 import Exercises from "./Pages/Exercises/Exercises.tsx";
 import FullExerciseDisplay from "./Components/FullExerciseDisplay/FullExerciseDisplay.tsx";
-import Profile from "./Pages/Profile/Profile.tsx";
 import Authentication from "./Pages/Authentication/Authentication.tsx";
 import AdminPanel from "./Pages/AdminPanel/AdminPanel.tsx";
 import AdminExercisePanel from "./Pages/AdminPanel/Exercises/AdminExercisePanel.tsx";
@@ -23,7 +22,6 @@ import exerciseLoader from "./Pages/Exercises/ExerciseLoader.ts";
 import singleExerciseLoader from "./Components/FullExerciseDisplay/SingleExerciseLoader.ts";
 import UpdateExercise from "./Pages/AdminPanel/Exercises/Update/UpdateExercise.tsx";
 import adminUpdateExerciseLoader from "./Pages/AdminPanel/Exercises/Update/UpdateExerciseLoader.ts";
-import profileLoader from "./Pages/Profile/ProfileLoader.ts";
 import authenticationLoader from "./Pages/Authentication/AuthenticationLoader.ts";
 import adminExerciseLoader from "./Pages/AdminPanel/Exercises/AdminExercisesLoader.ts";
 import EmailVerification from "./Pages/EmailVerification/EmailVerification.tsx";
@@ -46,12 +44,23 @@ import splitDisplayLoader from "./Components/SplitDisplay/SplitDisplayLoader.ts"
 import SplitCreator from "./Components/SplitCreator/SplitCreator.tsx";
 import SplitEditor from "./Components/SplitEditor/SplitEditor.tsx";
 import WorkoutCreator from "./Components/WorkoutCreator/WorkoutCreator.tsx";
+import appLoader from "./AppLoader.ts";
 
 const routes: RouteObject[] = [
   {
     path: "/",
     element: <App />,
+    loader: appLoader,
     errorElement: <Error />,
+    shouldRevalidate: () => {
+      const revalidate = sessionStorage.getItem("revalidate-main");
+      if (revalidate === "true") {
+        sessionStorage.removeItem("revalidate-main");
+        return true;
+      }
+
+      return false;
+    },
     children: [
       {
         path: "/",
@@ -69,54 +78,6 @@ const routes: RouteObject[] = [
         loader: singleExerciseLoader,
       },
       {
-        path: "workout/:id",
-        element: <div>Workout</div>,
-      },
-      {
-        path: "split/:id",
-        element: <div>Split</div>,
-      },
-      {
-        path: "me",
-        element: <Profile />,
-        loader: profileLoader,
-        shouldRevalidate: (a) => a.currentUrl.pathname.includes("me/split/"),
-        children: [
-          {
-            path: "workout/new",
-            element: <WorkoutCreator />,
-          },
-          {
-            path: "workout/:id",
-            element: <WorkoutDisplay />,
-            loader: workoutDisplayLoader,
-          },
-          {
-            path: "workout/:id/edit",
-            element: <WorkoutEditor />,
-            loader: workoutDisplayLoader,
-          },
-          {
-            path: "split/new",
-            element: <SplitCreator />,
-          },
-          {
-            path: "split/:id",
-            element: <SplitDisplay />,
-            loader: splitDisplayLoader,
-          },
-          {
-            path: "split/:id/edit",
-            element: <SplitEditor />,
-            loader: splitDisplayLoader,
-          },
-          {
-            path: "settings",
-            element: <Settings />,
-          },
-        ],
-      },
-      {
         path: "started-workout",
         element: <StartedWorkout />,
         loader: startedWorkoutLoader,
@@ -125,11 +86,6 @@ const routes: RouteObject[] = [
         path: "authentication",
         element: <Authentication />,
         loader: authenticationLoader,
-      },
-      {
-        path: "user/:username",
-        element: <UserPage />,
-        loader: userLoader,
       },
       {
         path: "email-verification/:code",
@@ -171,6 +127,58 @@ const routes: RouteObject[] = [
             path: "equipment",
             element: <EquipmentAdminPanel />,
             loader: adminEquipmentLoader,
+          },
+        ],
+      },
+      {
+        path: ":username",
+        element: <UserPage />,
+        loader: userLoader,
+        shouldRevalidate: ({ currentParams, nextParams }) => {
+          const revalidate = sessionStorage.getItem("revalidate-profile");
+          if (revalidate === "true") {
+            sessionStorage.removeItem("revalidate-profile");
+            return true;
+          }
+
+          return (
+            currentParams.username !== undefined &&
+            nextParams.username !== undefined &&
+            currentParams.username !== nextParams.username
+          );
+        },
+        children: [
+          {
+            path: "workout/new",
+            element: <WorkoutCreator />,
+          },
+          {
+            path: "workout/:name",
+            element: <WorkoutDisplay />,
+            loader: workoutDisplayLoader,
+          },
+          {
+            path: "workout/:name/edit",
+            element: <WorkoutEditor />,
+            loader: workoutDisplayLoader,
+          },
+          {
+            path: "split/new",
+            element: <SplitCreator />,
+          },
+          {
+            path: "split/:name",
+            element: <SplitDisplay />,
+            loader: splitDisplayLoader,
+          },
+          {
+            path: "split/:name/edit",
+            element: <SplitEditor />,
+            loader: splitDisplayLoader,
+          },
+          {
+            path: "settings",
+            element: <Settings />,
           },
         ],
       },

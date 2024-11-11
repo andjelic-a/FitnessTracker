@@ -25,13 +25,13 @@ export default function CurrentSplitDayDisplay({
 }: CurrentSplitDayDisplayProps) {
   const days = useMemo(
     () => [
+      "Sunday",
       "Monday",
       "Tuesday",
       "Wednesday",
       "Thursday",
       "Friday",
       "Saturday",
-      "Sunday",
     ],
     []
   );

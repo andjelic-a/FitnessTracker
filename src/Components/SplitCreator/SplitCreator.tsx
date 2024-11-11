@@ -26,6 +26,10 @@ const SplitCreator = WindowFC(
       }[]
     >([
       {
+        day: "Sunday",
+        selected: null,
+      },
+      {
         day: "Monday",
         selected: null,
       },
@@ -49,12 +53,7 @@ const SplitCreator = WindowFC(
         day: "Saturday",
         selected: null,
       },
-      {
-        day: "Sunday",
-        selected: null,
-      },
     ]);
-    const [isPublic, setIsPublic] = useState<boolean>(false);
     const [hoveredDay, setHoveredDay] = useState<string | null>(null);
 
     const titleInputRef = useRef<HTMLInputElement | null>(null);
@@ -97,12 +96,7 @@ const SplitCreator = WindowFC(
       }).then((x) => {
         if (x.code !== "Created") return;
 
-        //TODO: Implement simulated response
-        /* const simulatedResponse: Schema<"SimpleSplitResponseDTO"> = {
-          creator: user,
-          ...x.content,
-        }; */
-
+        sessionStorage.setItem("revalidate-profile", "true");
         onClose(true);
       });
     }
@@ -133,7 +127,7 @@ const SplitCreator = WindowFC(
     }
 
     function validateDescription(): boolean {
-      if(!descriptionTextAreaRef.current?.value) {
+      if (!descriptionTextAreaRef.current?.value) {
         descriptionTextAreaRef.current?.classList.add("invalid");
         return false;
       }
@@ -217,7 +211,10 @@ const SplitCreator = WindowFC(
                         <p className="rest">Rest</p>
                       </>
                     ) : (
-                      <WorkoutPreview workout={x.selected} />
+                      <WorkoutPreview
+                        className="split-workout-preview"
+                        workout={x.selected}
+                      />
                     )}
                   </div>
 
@@ -236,7 +233,11 @@ const SplitCreator = WindowFC(
             ))}
           </div>
 
-          <Description ref={descriptionTextAreaRef} placeholder="Split description" isInputEnabled={true} />
+          <Description
+            ref={descriptionTextAreaRef}
+            placeholder="Split description"
+            isInputEnabled={true}
+          />
         </div>
       </>
     );

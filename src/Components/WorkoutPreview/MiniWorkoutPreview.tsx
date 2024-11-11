@@ -35,6 +35,7 @@ export default function MiniWorkoutPreview({
         >
           {workout.name}
         </p>
+
         <p className="mini-workout-preview-header-day">{day}</p>
       </div>
 

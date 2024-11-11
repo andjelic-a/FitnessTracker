@@ -1,5 +1,5 @@
 import "./ProfileTabs.scss";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { memo, useEffect, useMemo, useRef, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import * as portals from "react-reverse-portal";
 import gsap from "gsap";
@@ -12,182 +12,119 @@ import Dropdown from "../DropdownMenu/Dropdown";
 import LazyLoadingContainer from "../LazyLoadingContainer/LazyLoadingContainer";
 import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
 import SplitPreview from "../SplitPreview/SplitPreview";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 gsap.registerPlugin(Flip);
 
 type ProfileTabsProps = {
   latestActivity: Schema<"DetailedWeekOfCompletedWorkoutsResponseDTO"> | null;
   split: Schema<"DetailedUserSplitResponseDTO"> | null;
+  isMe: boolean;
 };
 
 type Tab = "splits" | "workouts";
 
-export default function ProfileTabs({
-  latestActivity,
-  split,
-}: ProfileTabsProps) {
-  const [openTab, setOpenTab] = useState<Tab>("splits");
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const searchBarRef = useRef<HTMLInputElement>(null);
+const ProfileTabs = memo(
+  ({ latestActivity, split, isMe }: ProfileTabsProps) => {
+    const [openTab, setOpenTab] = useState<Tab>("splits");
+    const [searchTerm, setSearchTerm] = useState<string>("");
+    const searchBarRef = useRef<HTMLInputElement>(null);
+    const params = useParams();
 
-  const params = useParams();
-  const flipStateRef = useRef<Flip.FlipState | null>(null);
+    const flipStateRef = useRef<Flip.FlipState | null>(null);
 
-  const activeIndicatorPortalNode = useMemo(
-    () =>
-      portals.createHtmlPortalNode({
-        attributes: {
-          class: "active-indicator",
-          "data-flip-id": "active-indicator",
-        },
-      }),
-    []
-  );
+    useEffect(() => {
+      setOpenTab("splits");
+      setEndpoint(null);
+    }, [split]);
 
-  const memoizedCurrentSplitDisplay = useMemo<React.JSX.Element>(
-    () => (
-      <Async await={Promise.all([latestActivity, split])}>
-        {([activity, split]) => {
-          return split ? (
-            <CurrentSplitDisplay latestActivity={activity} split={split} />
-          ) : (
-            <OverlayScrollbarCarousel>
-              <div className="empty">
-                <p>No split currently in use</p>
-              </div>
-            </OverlayScrollbarCarousel>
-          );
-        }}
-      </Async>
-    ),
-    [split, latestActivity]
-  );
+    const activeIndicatorPortalNode = useMemo(
+      () =>
+        portals.createHtmlPortalNode({
+          attributes: {
+            class: "active-indicator",
+            "data-flip-id": "active-indicator",
+          },
+        }),
+      []
+    );
 
-  function handleSearch() {
-    if (!searchBarRef.current) return;
-    setSearchTerm(searchBarRef.current.value.trim());
-  }
+    const memoizedCurrentSplitDisplay = useMemo<React.JSX.Element>(
+      () => (
+        <Async await={Promise.all([latestActivity, split])}>
+          {([activity, split]) => {
+            return split ? (
+              <CurrentSplitDisplay latestActivity={activity} split={split} />
+            ) : (
+              <OverlayScrollbarCarousel>
+                <div className="empty">
+                  <p>No split currently in use</p>
+                </div>
+              </OverlayScrollbarCarousel>
+            );
+          }}
+        </Async>
+      ),
+      [split, latestActivity]
+    );
 
-  useEffect(() => {
-    if (!flipStateRef.current) return;
+    function handleSearch() {
+      if (!searchBarRef.current) return;
+      setSearchTerm(searchBarRef.current.value.trim());
+    }
 
-    Flip.from(flipStateRef.current, {
-      scale: true,
-      duration: 0.25,
-      ease: "sine.inOut",
-    });
-  }, [openTab]);
+    useEffect(() => {
+      if (!flipStateRef.current) return;
 
-  function handleOpenTab(tab: Tab) {
-    flipStateRef.current = Flip.getState(".active-indicator");
-    setOpenTab(tab);
-  }
+      Flip.from(flipStateRef.current, {
+        scale: true,
+        duration: 0.25,
+        ease: "sine.inOut",
+      });
+    }, [openTab]);
 
-  const [endpoint, setEndpoint] = useState<
-    | null
-    | "/api/workout/personal/simple"
-    | "/api/workout/liked/simple"
-    | "/api/workout/favorite/simple"
-    | "/api/split/personal/simple"
-    | "/api/split/liked/simple"
-    | "/api/split/favorite/simple"
-    | "/api/workout/simple/by/{username}"
-    | "/api/workout/favorite/simple/by/{username}"
-    | "/api/workout/liked/simple/by/{username}"
-    | "/api/split/simple/by/{username}"
-    | "/api/split/favorite/simple/by/{username}"
-    | "/api/split/liked/simple/by/{username}"
-  >(null);
+    function handleOpenTab(tab: Tab) {
+      flipStateRef.current = Flip.getState(".active-indicator");
+      setOpenTab(tab);
+    }
 
-  const dropdown = useMemo(
-    () => (
-      <Dropdown
-        className="tabs-header-dropdown"
-        values={
-          openTab === "splits"
-            ? ({
-                Current: null,
-                Created:
-                  "username" in params
-                    ? "/api/split/simple/by/{username}"
-                    : "/api/split/personal/simple",
-                Liked:
-                  "username" in params
-                    ? "/api/split/liked/simple/by/{username}"
-                    : "/api/split/liked/simple",
-                Favorites:
-                  "username" in params
-                    ? "/api/split/favorite/simple/by/{username}"
-                    : "/api/split/favorite/simple",
-              } as const)
-            : ({
-                Created:
-                  "username" in params
-                    ? "/api/workout/simple/by/{username}"
-                    : "/api/workout/personal/simple",
-                Liked:
-                  "username" in params
-                    ? "/api/workout/liked/simple/by/{username}"
-                    : "/api/workout/liked/simple",
-                Favorites:
-                  "username" in params
-                    ? "/api/workout/favorite/simple/by/{username}"
-                    : "/api/workout/favorite/simple",
-              } as const)
-        }
-        defaultValue={openTab === "splits" ? "Current" : "Created"}
-        onSelectionChanged={(_x, y) => setEndpoint(y ?? null)}
-      />
-    ),
-    [openTab, params]
-  );
+    const [endpoint, setEndpoint] = useState<
+      | null
+      | "/api/workout/simple/by/{username}"
+      | "/api/workout/favorite/simple/by/{username}"
+      | "/api/workout/liked/simple/by/{username}"
+      | "/api/split/simple/by/{username}"
+      | "/api/split/favorite/simple/by/{username}"
+      | "/api/split/liked/simple/by/{username}"
+    >(null);
 
-  return (
-    <div className="profile-workout-tabs-container">
-      <div className="tabs-header">
-        <div className="tabs">
-          <div className="tab">
-            <button onClick={() => handleOpenTab("splits")}>Split</button>
-            {openTab === "splits" && (
-              <portals.OutPortal node={activeIndicatorPortalNode} />
-            )}
-          </div>
+    const dropdown = useMemo(
+      () => (
+        <Dropdown
+          className="tabs-header-dropdown"
+          values={
+            openTab === "splits"
+              ? ({
+                  Current: null,
+                  Created: "/api/split/simple/by/{username}",
+                  Liked: "/api/split/liked/simple/by/{username}",
+                  Favorites: "/api/split/favorite/simple/by/{username}",
+                } as const)
+              : ({
+                  Created: "/api/workout/simple/by/{username}",
+                  Liked: "/api/workout/liked/simple/by/{username}",
+                  Favorites: "/api/workout/favorite/simple/by/{username}",
+                } as const)
+          }
+          defaultValue={openTab === "splits" ? "Current" : "Created"}
+          onSelectionChanged={(_x, y) => void setEndpoint(y ?? null)}
+        />
+      ),
+      [openTab]
+    );
 
-          <div className="tab">
-            <button onClick={() => handleOpenTab("workouts")}>Workouts</button>
-            {openTab === "workouts" && (
-              <portals.OutPortal node={activeIndicatorPortalNode} />
-            )}
-          </div>
-        </div>
-
-        <div className="filters-container">
-          {dropdown}
-
-          <div className="search-bar-container">
-            <input
-              name="profile-workouts-search-bar"
-              type="text"
-              autoComplete="off"
-              className="search-bar"
-              placeholder="Search"
-              ref={searchBarRef}
-              onKeyDown={(e) => e.key === "Enter" && void handleSearch()}
-            />
-
-            <Icon
-              name="search"
-              className="search-icon"
-              onClick={handleSearch}
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="tabs-body">
-        {!endpoint && memoizedCurrentSplitDisplay}
-
-        {endpoint && (
+    const containerMemo = useMemo(
+      () =>
+        endpoint === null ? null : (
           <OverlayScrollbarCarousel>
             <LazyLoadingContainer
               key={endpoint}
@@ -197,8 +134,9 @@ export default function ProfileTabs({
                 parameters: {
                   limit: 10,
                   offset: 0,
-                  nameFilter: searchTerm,
-                  username: "username" in params ? params.username : undefined,
+                  usernameFilter:
+                    searchTerm.length > 0 ? searchTerm : undefined,
+                  username: params.username!,
                 },
               }}
               onSegmentLoad={(segmentData) => (
@@ -217,10 +155,76 @@ export default function ProfileTabs({
               stopCondition={(response) =>
                 response.code === "OK" && response.content.length < 10
               }
+              before={
+                !isMe ? undefined : endpoint ===
+                  "/api/split/simple/by/{username}" ? (
+                  <Link className="add-button" to="split/new">
+                    +
+                  </Link>
+                ) : endpoint === "/api/workout/simple/by/{username}" ? (
+                  <Link className="add-button" to="workout/new">
+                    +
+                  </Link>
+                ) : undefined
+              }
             />
           </OverlayScrollbarCarousel>
-        )}
+        ),
+      [endpoint, searchTerm]
+    );
+
+    return (
+      <div className="profile-workout-tabs-container">
+        <div className="tabs-header">
+          <div className="tabs">
+            <div className="tab">
+              <button onClick={() => handleOpenTab("splits")}>Split</button>
+              {openTab === "splits" && (
+                <portals.OutPortal node={activeIndicatorPortalNode} />
+              )}
+            </div>
+
+            <div className="tab">
+              <button onClick={() => handleOpenTab("workouts")}>
+                Workouts
+              </button>
+              {openTab === "workouts" && (
+                <portals.OutPortal node={activeIndicatorPortalNode} />
+              )}
+            </div>
+          </div>
+
+          <div className="filters-container">
+            {dropdown}
+
+            <div className="search-bar-container">
+              <input
+                name="profile-workouts-search-bar"
+                type="text"
+                autoComplete="off"
+                className="search-bar"
+                placeholder="Search"
+                ref={searchBarRef}
+                onKeyDown={(e) => e.key === "Enter" && void handleSearch()}
+              />
+
+              <Icon
+                name="search"
+                className="search-icon"
+                onClick={handleSearch}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="tabs-body">
+          {!endpoint && memoizedCurrentSplitDisplay}
+
+          {endpoint !== null && containerMemo}
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
+);
+
+export default ProfileTabs;

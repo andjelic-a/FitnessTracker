@@ -1,8 +1,7 @@
 import "./Pins.scss";
 import Pin from "./Pin";
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
-import Async from "../Async/Async";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import ReactModal from "react-modal";
 import Icon from "../Icon/Icon";
@@ -16,6 +15,13 @@ import { createPortal } from "react-dom";
 import PinDragOverlay from "./PinDragOverlay";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
+import LazyLoadingContainer from "../LazyLoadingContainer/LazyLoadingContainer";
+import {
+  createHtmlPortalNode,
+  InPortal,
+  OutPortal,
+} from "react-reverse-portal";
+import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 
 type PinsProps = {
   pins: Schema<"PinResponseDTO">[];
@@ -23,10 +29,8 @@ type PinsProps = {
 };
 
 const Pins = memo<PinsProps>(({ pins, includeEditButtons }) => {
-  const [pinOptionsPromise, setPinOptionsPromise] = useState<Promise<
-    Schema<"PinResponseDTO">[]
-  > | null>(null);
   const [isOptionsMenuOpen, setIsOptionsMenuOpen] = useState(false);
+  const [previouslyOpen, setPreviouslyOpen] = useState(false);
 
   const [selectedPins, setSelectedPins] = useState<Schema<"PinResponseDTO">[]>(
     []
@@ -102,21 +106,83 @@ const Pins = memo<PinsProps>(({ pins, includeEditButtons }) => {
     if (pinsBodyRef.current) pinsBodyRef.current.style.minHeight = "";
   }
 
-  function handleOpenMenu() {
-    setIsOptionsMenuOpen(!isOptionsMenuOpen);
-
-    if (!pinOptionsPromise)
-      setPinOptionsPromise(
-        sendAPIRequest("/api/user/me/pins/options", {
-          method: "get",
-        }).then((x) => (x.code === "OK" ? x.content : []))
-      );
-  }
-
   function handleCloseMenu() {
     setIsOptionsMenuOpen(false);
     resetPinsBodyHeight();
   }
+
+  const segment = useCallback(
+    (segmentData: APIResponse<"/api/user/pins/options", "get">) => {
+      if (segmentData.code !== "OK") return null;
+
+      return segmentData.content.map((x) => (
+        <div
+          className="option"
+          key={x.name + "-" + x.type}
+          onClick={() => {
+            if (selectedMenuPins.findIndex((y) => x.id === y.id) < 0) {
+              if (selectedMenuPins.length < 6) {
+                setSelectedMenuPins([...selectedMenuPins, x]);
+              }
+            } else
+              setSelectedMenuPins(
+                selectedMenuPins.filter((y) => x.id !== y.id)
+              );
+          }}
+        >
+          <div className="checkbox-container">
+            <input
+              type="checkbox"
+              name={`${x.name}-${x.type}`}
+              id={`${x.name}-${x.type}`}
+              checked={selectedMenuPins.findIndex((y) => x.id === y.id) >= 0}
+              readOnly
+            />
+
+            <label htmlFor={`${x.name}-${x.type}`}>
+              {x.name}
+              &nbsp;
+              <p>{x.type === 0 ? "(Workout)" : "(Split)"}</p>
+            </label>
+          </div>
+
+          <div className="like-count-container">
+            <p>{x.likeCount}</p>
+            <Icon name="thumbs-up" />
+          </div>
+        </div>
+      ));
+    },
+    [selectedMenuPins]
+  );
+
+  const apiRequest = useMemo(
+    () =>
+      ({
+        method: "get",
+        parameters: {
+          limit: 15,
+          offset: 0,
+        },
+      } as const),
+    []
+  );
+
+  const lazyLoadingContainerMemo = useMemo(
+    () => (
+      <LazyLoadingContainer
+        endpoint="/api/user/pins/options"
+        baseAPIRequest={apiRequest}
+        onSegmentLoad={segment}
+        stopCondition={(response) =>
+          response.code === "OK" && response.content.length < 15
+        }
+      />
+    ),
+    [segment]
+  );
+
+  const portalNode = useMemo(() => createHtmlPortalNode(), []);
 
   return (
     <DndContext
@@ -147,7 +213,7 @@ const Pins = memo<PinsProps>(({ pins, includeEditButtons }) => {
         setSelectedPins(newOrder);
         setIsWaitingForReorder(true);
 
-        sendAPIRequest("/api/user/me/pins/reorder", {
+        sendAPIRequest("/api/user/pins/reorder", {
           method: "patch",
           payload: {
             newOrder: newOrder.map((x, i) => ({
@@ -159,6 +225,13 @@ const Pins = memo<PinsProps>(({ pins, includeEditButtons }) => {
         }).then(() => void setIsWaitingForReorder(false));
       }}
     >
+      <InPortal
+        node={portalNode}
+        children={
+          includeEditButtons && previouslyOpen && lazyLoadingContainerMemo
+        }
+      />
+
       <div className="pins-container">
         <div className="pins-header">
           {selectedPins.length > 0 ? <h1>Pinned</h1> : <h1></h1>}
@@ -168,7 +241,11 @@ const Pins = memo<PinsProps>(({ pins, includeEditButtons }) => {
               className={`customize-button ${
                 selectedPins.length > 0 ? "upper-right" : "lower-right"
               }`}
-              onClick={handleOpenMenu}
+              onClick={() => {
+                if (!previouslyOpen) setPreviouslyOpen(true);
+
+                setIsOptionsMenuOpen(true);
+              }}
             >
               Customize your pins
             </button>
@@ -226,51 +303,7 @@ const Pins = memo<PinsProps>(({ pins, includeEditButtons }) => {
               </p>
             </div>
 
-            <Async await={pinOptionsPromise ?? Promise.resolve([])}>
-              {(options) =>
-                options.map((x) => (
-                  <div
-                    className="option"
-                    key={x.name + "-" + x.type}
-                    onClick={() => {
-                      if (
-                        selectedMenuPins.findIndex((y) => x.id === y.id) < 0
-                      ) {
-                        if (selectedMenuPins.length < 6) {
-                          setSelectedMenuPins([...selectedMenuPins, x]);
-                        }
-                      } else
-                        setSelectedMenuPins(
-                          selectedMenuPins.filter((y) => x.id !== y.id)
-                        );
-                    }}
-                  >
-                    <div className="checkbox-container">
-                      <input
-                        type="checkbox"
-                        name={`${x.name}-${x.type}`}
-                        id={`${x.name}-${x.type}`}
-                        checked={
-                          selectedMenuPins.findIndex((y) => x.id === y.id) >= 0
-                        }
-                        readOnly
-                      />
-
-                      <label htmlFor={`${x.name}-${x.type}`}>
-                        {x.name}
-                        &nbsp;
-                        <p>{x.type === 0 ? "(Workout)" : "(Split)"}</p>
-                      </label>
-                    </div>
-
-                    <div className="like-count-container">
-                      <p>{x.likeCount}</p>
-                      <Icon name="thumbs-up" />
-                    </div>
-                  </div>
-                ))
-              }
-            </Async>
+            <OutPortal node={portalNode} />
           </div>
 
           <button className="save-button" onClick={handleSelectionSave}>
