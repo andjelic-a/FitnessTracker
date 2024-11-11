@@ -8,33 +8,43 @@
 
 .edit-profile {
   min-height: 100%;
+
   .edit-profile-user-details {
     position: relative;
     display: flex;
     align-items: center;
     margin-top: 4rem;
     width: 80%;
+    min-height: 10rem;
     height: 10rem;
     background-color: $dark-300;
     border-radius: 1rem;
     font-weight: 450;
-    padding: 0 2rem;
     font-size: 2.2rem;
+    padding: 0 2rem;
 
-    .edit-profile-user-details-info-name {
-      font-size: 2rem;
-      color: $dark-600;
+    .edit-profile-user-details-info {
+      max-width: 60%;
+
+      .edit-profile-user-details-info-name {
+        height: auto;
+        font-size: 2rem;
+        color: $dark-600;
+        white-space: normal;
+        word-wrap: break-word;
+      }
     }
 
-    .image-buttons-container {
+    .edit-profile-user-details-button {
       display: flex;
-      gap: 1rem;
+      justify-content: flex-end;
+      width: 20%;
       margin-left: auto;
 
-      button {
+      .edit-profile-image-remove {
         position: relative;
-        width: 12rem;
         height: 3.5rem;
+        aspect-ratio: 1;
         border-radius: 0.5rem;
         font-size: 1.4rem;
         outline: none;
@@ -48,21 +58,17 @@
           background-color: $primary-400;
         }
       }
-
-      .edit-profile-image-remove {
-        aspect-ratio: 1;
-        width: max-content;
-      }
     }
   }
 
-  .edit-profile-image {
+  .edit-profile-image-container {
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    min-width: 10rem;
-    min-height: 10rem;
+    max-width: 20%;
+    aspect-ratio: 1;
     transition: 0.2s;
     overflow: hidden;
     cursor: pointer;
@@ -74,8 +80,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 7.5rem;
-      height: 7.5rem;
+      max-width: 100%;
+      aspect-ratio: 1;
       border-radius: 50%;
 
       .edit-profile-image-input {
@@ -102,8 +108,9 @@
     }
 
     img {
-      width: 8rem;
-      height: 8rem;
+      max-height: 80%;
+      max-width: 100%;
+      aspect-ratio: 1;
       object-fit: cover;
       background-color: white;
       border-radius: 50%;

@@ -107,7 +107,7 @@ export default function EditProfile() {
       <h3>Edit profile</h3>
 
       <div className="edit-profile-user-details">
-        <div className={`edit-profile-image`}>
+        <div className={`edit-profile-image-container`}>
           <div
             className={`edit-profile-image-trigger`}
             onMouseEnter={() => setIsImageHovered(true)}
@@ -137,13 +137,15 @@ export default function EditProfile() {
         </div>
 
         <div className="edit-profile-user-details-info">
-          <p>@{defaultUsernameValue}</p>
+          <p className="edit-profile-user-details-info-username">
+            @{defaultUsernameValue}
+          </p>
           <p className="edit-profile-user-details-info-name">
             {defaultNameValue}
           </p>
         </div>
 
-        <div className="image-buttons-container">
+        <div className="edit-profile-user-details-button">
           <button
             className="edit-profile-image-remove"
             onClick={handleRemoveImage}
