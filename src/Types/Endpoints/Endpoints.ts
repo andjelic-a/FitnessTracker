@@ -5633,6 +5633,73 @@ type MappedEndpoints = {
         };
       };
     };
+    "/api/user/is-verified": {
+      get: {
+        tags: ["User"];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/IsVerifiedResponseDTO";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/IsVerifiedResponseDTO";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/IsVerifiedResponseDTO";
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
     "/api/user/{username}/pins": {
       get: {
         tags: ["User"];
@@ -9364,6 +9431,15 @@ type MappedEndpoints = {
         enum: [0, 1];
         type: "integer";
         format: "int32";
+      };
+      IsVerifiedResponseDTO: {
+        type: "object";
+        properties: {
+          isVerified: {
+            type: "boolean";
+          };
+        };
+        additionalProperties: false;
       };
       LoginUserRequestDTO: {
         type: "object";
