@@ -42,9 +42,15 @@ body {
   overflow: hidden;
 }
 
-@media screen and (max-width: 540px) {
+@media screen and (max-width: 1000px) {
   :root {
     font-size: 8px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  :root {
+    font-size: 7px;
   }
 }
 
