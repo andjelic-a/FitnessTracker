@@ -9,7 +9,7 @@ import appLoader from "./AppLoader";
 
 function App() {
   const [basicProfileInfo, setBasicProfileInfo] =
-    useState<Schema<"SimpleUserResponseDTO"> | null>(null);
+    useState<Schema<"BasicUserPersonalInfoResponseDTO"> | null>(null);
 
   const loaderData = useLoaderData<typeof appLoader>();
   useEffect(() => void loaderData.user.then(setBasicProfileInfo), [loaderData]);

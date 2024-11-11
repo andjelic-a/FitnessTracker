@@ -5240,17 +5240,17 @@ type MappedEndpoints = {
             content: {
               "text/plain": {
                 schema: {
-                  $ref: "#/components/schemas/SimpleUserResponseDTO";
+                  $ref: "#/components/schemas/BasicUserPersonalInfoResponseDTO";
                 };
               };
               "application/json": {
                 schema: {
-                  $ref: "#/components/schemas/SimpleUserResponseDTO";
+                  $ref: "#/components/schemas/BasicUserPersonalInfoResponseDTO";
                 };
               };
               "text/json": {
                 schema: {
-                  $ref: "#/components/schemas/SimpleUserResponseDTO";
+                  $ref: "#/components/schemas/BasicUserPersonalInfoResponseDTO";
                 };
               };
             };
@@ -8810,6 +8810,25 @@ type MappedEndpoints = {
   };
   components: {
     schemas: {
+      BasicUserPersonalInfoResponseDTO: {
+        type: "object";
+        properties: {
+          username: {
+            type: "string";
+          };
+          name: {
+            type: "string";
+          };
+          image: {
+            type: "string";
+            nullable: true;
+          };
+          isVerified: {
+            type: "boolean";
+          };
+        };
+        additionalProperties: false;
+      };
       CreateCompletedSetRequestDTO: {
         type: "object";
         properties: {

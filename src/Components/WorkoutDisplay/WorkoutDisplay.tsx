@@ -1,5 +1,5 @@
 import "./WorkoutDisplay.scss";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import Icon from "../Icon/Icon";
 import WorkoutDisplayItem from "./WorkoutDisplayItem/WorkoutDisplayItem";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
@@ -20,9 +20,11 @@ import { motion } from "framer-motion";
 import ConfirmModalDialog from "../ConfirmModalDialog/ConfirmModalDialog";
 import CommentSection from "../CommentSection/CommentSection";
 import Description from "../Description/Description";
+import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 
 const WorkoutDisplay = WindowFC(({}, close) => {
   const loaderData = useLoaderData<typeof workoutDisplayLoader>();
+  const userInfo = useContext(basicProfileInfoContext);
   const navigate = useNavigate();
 
   const [isLiked, setIsLiked] = useState<boolean | null>(null);
@@ -62,6 +64,11 @@ const WorkoutDisplay = WindowFC(({}, close) => {
   }, [loaderData]);
 
   const handleThumbsUpClick = () => {
+    if (!userInfo) {
+      navigate("/authentication");
+      return;
+    }
+
     if (isWaitingForResponse.current) return;
     isWaitingForResponse.current = true;
 
@@ -77,6 +84,11 @@ const WorkoutDisplay = WindowFC(({}, close) => {
   };
 
   const handleFavoriteClick = () => {
+    if (!userInfo) {
+      navigate("/authentication");
+      return;
+    }
+
     if (isWaitingForResponse.current) return;
     isWaitingForResponse.current = true;
 
@@ -176,27 +188,37 @@ const WorkoutDisplay = WindowFC(({}, close) => {
                   </p>
 
                   <div className="buttons">
-                    <button
-                      className="workout-display-edit"
-                      onClick={() => void navigate("edit")}
-                    >
-                      <Icon name="pen-to-square" />
+                    {userInfo != null &&
+                      userInfo.username ===
+                        workout.content.creator.username && (
+                        <button
+                          className="workout-display-edit"
+                          onClick={() => void navigate("edit")}
+                        >
+                          <Icon name="pen-to-square" />
 
-                      <p className="accessibility-only" aria-hidden={false}>
-                        Edit
-                      </p>
-                    </button>
+                          <p className="accessibility-only" aria-hidden={false}>
+                            Edit
+                          </p>
+                        </button>
+                      )}
 
-                    <button
-                      className="workout-display-delete"
-                      onClick={() => void setIsConfirmDeletionModalOpen(true)}
-                    >
-                      <Icon name="trash" />
+                    {userInfo != null &&
+                      userInfo.username ===
+                        workout.content.creator.username && (
+                        <button
+                          className="workout-display-delete"
+                          onClick={() =>
+                            void setIsConfirmDeletionModalOpen(true)
+                          }
+                        >
+                          <Icon name="trash" />
 
-                      <p className="accessibility-only" aria-hidden={false}>
-                        Delete
-                      </p>
-                    </button>
+                          <p className="accessibility-only" aria-hidden={false}>
+                            Delete
+                          </p>
+                        </button>
+                      )}
                   </div>
                 </div>
 
@@ -210,12 +232,12 @@ const WorkoutDisplay = WindowFC(({}, close) => {
                   ))}
                 </div>
 
-                  <div className="workout-display-footer">
-                    <Description
-                      placeholder="Workout Description"
-                      text={workout.content.description?.trim()}
-                      isInputEnabled = {false}
-                    />
+                <div className="workout-display-footer">
+                  <Description
+                    placeholder="Workout Description"
+                    text={workout.content.description?.trim()}
+                    isInputEnabled={false}
+                  />
 
                   <div className="icon-container">
                     <div className="workout-display-interaction-container">

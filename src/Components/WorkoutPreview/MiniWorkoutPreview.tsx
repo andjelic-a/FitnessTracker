@@ -1,7 +1,7 @@
 import "./WorkoutPreview.scss";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import User from "../User/User";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { HTMLProps } from "../../Types/Utility/HTMLProps";
 
 type WorkoutPreviewDisplayProps = {
@@ -21,20 +21,18 @@ export default function MiniWorkoutPreview({
   day,
   ...attr
 }: WorkoutPreviewDisplayProps) {
-  const navigate = useNavigate();
-
   return (
     <div
       className={"mini-workout-preview " + (className ? className : "")}
       {...attr}
     >
       <div className="mini-workout-preview-header" {...headerProps}>
-        <p
+        <Link
           className="mini-workout-preview-header-name"
-          onClick={() => navigate(`workout/${workout.id}`)}
+          to={`/${workout.creator.username}/workout/${workout.name}`}
         >
           {workout.name}
-        </p>
+        </Link>
 
         <p className="mini-workout-preview-header-day">{day}</p>
       </div>

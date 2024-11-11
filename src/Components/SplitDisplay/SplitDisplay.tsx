@@ -9,7 +9,7 @@ import extractWorkoutsFromSplit from "../../Utility/ExtractWorkoutsFromSplit";
 import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
 import Description from "../Description/Description";
 import formatCount from "../../Utility/FormatCount";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
@@ -20,9 +20,11 @@ import {
 } from "react-reverse-portal";
 import CommentSection from "../CommentSection/CommentSection";
 import ConfirmModalDialog from "../ConfirmModalDialog/ConfirmModalDialog";
+import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 
 const SplitDisplay = WindowFC(() => {
   const loaderData = useLoaderData<typeof splitDisplayLoader>();
+  const userInfo = useContext(basicProfileInfoContext);
   const navigate = useNavigate();
 
   const [isLiked, setIsLiked] = useState<boolean | null>(null);
@@ -62,6 +64,11 @@ const SplitDisplay = WindowFC(() => {
   }, [loaderData]);
 
   const handleThumbsUpClick = () => {
+    if (!userInfo) {
+      navigate("/authentication");
+      return;
+    }
+
     if (isWaitingForResponse.current) return;
     isWaitingForResponse.current = true;
 
@@ -77,6 +84,11 @@ const SplitDisplay = WindowFC(() => {
   };
 
   const handleFavoriteClick = () => {
+    if (!userInfo) {
+      navigate("/authentication");
+      return;
+    }
+
     if (isWaitingForResponse.current) return;
     isWaitingForResponse.current = true;
 
@@ -145,20 +157,28 @@ const SplitDisplay = WindowFC(() => {
                   <p className="split-display-title">{split.content.name}</p>
 
                   <div className="buttons">
-                    <button
-                      className="split-display-edit"
-                      onClick={() => void navigate("edit")}
-                    >
-                      <Icon name="pen-to-square" />
+                    {userInfo != null &&
+                      userInfo.username === split.content.creator.username && (
+                        <button
+                          className="split-display-edit"
+                          onClick={() => void navigate("edit")}
+                        >
+                          <Icon name="pen-to-square" />
 
-                      <p className="accessibility-only" aria-hidden={false}>
-                        Edit
-                      </p>
-                    </button>
+                          <p className="accessibility-only" aria-hidden={false}>
+                            Edit
+                          </p>
+                        </button>
+                      )}
 
                     <button
                       className="split-display-activate"
                       onClick={() => {
+                        if (!userInfo) {
+                          navigate("/authentication");
+                          return;
+                        }
+
                         if (!isWaitingForResponse.current)
                           setIsConfirmActivationModalOpen(true);
                       }}
