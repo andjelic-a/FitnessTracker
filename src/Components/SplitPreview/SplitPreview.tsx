@@ -24,7 +24,12 @@ export default function SplitPreview({
   return (
     <div className={"split-preview " + (className ? className : "")} {...attr}>
       <div className="header" {...headerProps}>
-        <p className="name" onClick={() => navigate(`split/${split.name}`)}>
+        <p
+          className="name"
+          onClick={() =>
+            navigate(`/${split.creator.username}/split/${split.name}`)
+          }
+        >
           {split.name}
         </p>
       </div>
