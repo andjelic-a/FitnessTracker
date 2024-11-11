@@ -144,10 +144,6 @@ export default function EditProfile() {
         </div>
 
         <div className="image-buttons-container">
-          <button onClick={() => imageInputRef.current?.click()}>
-            Change image
-          </button>
-
           <button
             className="edit-profile-image-remove"
             onClick={handleRemoveImage}

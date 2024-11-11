@@ -67,7 +67,11 @@ const Settings = WindowFC(({}, close) => {
     [key in SettingsTab]: HtmlPortalNode;
   }>(
     () => ({
-      edit: createHtmlPortalNode(),
+      edit: createHtmlPortalNode({
+        attributes: {
+          class: "edit-profile-container"
+        }
+      }),
       auth: createHtmlPortalNode(),
       privacy: createHtmlPortalNode(),
     }),

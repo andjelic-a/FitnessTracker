@@ -1,5 +1,10 @@
 @import "../../../Palette.scss";
 
+.edit-profile-container {
+  width: 100%;
+  background-color: $dark-200;
+}
+
 .edit-profile {
   min-height: 100%;
   .edit-profile-user-details {
