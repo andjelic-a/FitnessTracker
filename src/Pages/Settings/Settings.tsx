@@ -109,7 +109,7 @@ const Settings = WindowFC(({}, close) => {
           Log out
         </div>
 
-        <div onClick={() => close()} className="settings-item">
+        <div onClick={() => close()} className="settings-item settings-item-cancel">
           Cancel
         </div>
       </div>

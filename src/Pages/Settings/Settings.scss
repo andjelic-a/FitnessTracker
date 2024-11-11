@@ -102,9 +102,13 @@
       &::after {
         background-color: transparent;
       }
-      
+
       .settings-item {
         border: none;
+      }
+
+      .settings-item-cancel {
+        display: none;
       }
     }
   }  
