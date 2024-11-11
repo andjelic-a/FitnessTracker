@@ -8,6 +8,7 @@ import formatCount from "../../../Utility/FormatCount";
 import CommentInputField from "../CommentInputField/CommentInputField";
 import "./Comment.scss";
 import basicProfileInfoContext from "../../../Contexts/BasicProfileInfoContext";
+import { useNavigate } from "react-router-dom";
 
 type CommentProps = {
   type: "workout" | "split";
@@ -36,6 +37,7 @@ type CommentSchema =
 const Comment = React.memo<CommentProps>(
   ({ comment, onCreateNewReply, type, ...props }) => {
     const basicInfo = useContext(basicProfileInfoContext);
+    const navigate = useNavigate();
 
     const isWaitingForResponse = useRef<boolean>(false);
     const commentInputFieldRef = useRef<HTMLTextAreaElement>(null);
@@ -139,6 +141,11 @@ const Comment = React.memo<CommentProps>(
     }
 
     function handleLikeClick() {
+      if (!basicInfo) {
+        navigate("/authentication");
+        return;
+      }
+
       if (isWaitingForResponse.current) return;
       isWaitingForResponse.current = true;
 
@@ -177,6 +184,8 @@ const Comment = React.memo<CommentProps>(
     }
 
     function handleReplyBtnClick() {
+      if (basicInfo == null || !basicInfo.isVerified) return;
+
       if (isReplying) commentInputFieldRef.current?.focus();
       else setIsReplying(true);
     }
