@@ -2,10 +2,11 @@ import InputField from "../../../Components/InputField/InputField";
 import Icon from "../../../Components/Icon/Icon";
 import "./Authentication.scss";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
-import { useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { logout } from "../../../Data/User";
 import { validateEmail, validatePassword } from "../../Authentication/Validate";
 import { useNavigate } from "react-router-dom";
+import basicProfileInfoContext from "../../../Contexts/BasicProfileInfoContext";
 
 export default function Authentication() {
   const oldEmailInputRef = useRef<HTMLInputElement>(null);
@@ -14,7 +15,15 @@ export default function Authentication() {
   const oldPasswordInputRef = useRef<HTMLInputElement>(null);
   const newPasswordInputRef = useRef<HTMLInputElement>(null);
 
+  const verificationCodeInputRef = useRef<HTMLInputElement>(null);
+
   const navigate = useNavigate();
+  const [resendDelay, setResendDelay] = useState(0);
+  const [isVerified, setIsVerified] = useState(false);
+  const basicInfo = useContext(basicProfileInfoContext);
+
+  //If basic info is null, user is not logged in and shouldn't even be seeing this screen, set to true to prevent them from asking for a new verification code
+  useEffect(() => setIsVerified(basicInfo?.isVerified ?? true), [basicInfo]);
 
   async function handlePasswordChangeSave() {
     if (
@@ -68,9 +77,80 @@ export default function Authentication() {
     }
   }
 
+  async function handleResendVerificationCode() {
+    if (resendDelay > 0) return;
+
+    const response = await sendAPIRequest(
+      "/api/user/resend-confirmation-email",
+      {
+        method: "post",
+      }
+    );
+
+    if (response.code !== "Created") return;
+
+    setResendDelay(60);
+    const interval = setInterval(() => {
+      setResendDelay((prev) => {
+        if (prev === 1) clearInterval(interval);
+
+        return prev - 1;
+      });
+    }, 1000);
+  }
+
+  async function handleResendVerifyEmail() {
+    const code = verificationCodeInputRef.current?.value.trim();
+    if (code?.length !== 36) return;
+
+    const response = await sendAPIRequest("/api/user/confirm-email/{code}", {
+      method: "patch",
+      parameters: {
+        code,
+      },
+    });
+
+    if (response.code === "No Content") {
+      sessionStorage.setItem("revalidate-main", "true");
+      setIsVerified(true);
+    }
+  }
+
   return (
     <div className="settings-tab authentication">
       <h3>Authentication</h3>
+
+      {!isVerified && (
+        <div className="authentication-email verification">
+          <p>Your email has not been verified</p>
+
+          <div className="input-container">
+            <InputField
+              maxLength={50}
+              className="authentication-email-input"
+              placeholder="Verification code"
+              name="verificationCode"
+              autoComplete="off"
+              inputRef={verificationCodeInputRef}
+            />
+
+            <button
+              className="authentication-button resend"
+              onClick={handleResendVerificationCode}
+              disabled={resendDelay > 0}
+            >
+              {"Resend" + (resendDelay > 0 ? ` (${resendDelay}s)` : "")}
+            </button>
+          </div>
+
+          <button
+            className="authentication-button verify"
+            onClick={handleResendVerifyEmail}
+          >
+            Verify
+          </button>
+        </div>
+      )}
 
       <div className="authentication-email">
         <p>Change Email</p>

@@ -196,6 +196,30 @@
       cursor: pointer;
     }
   }
+
+  .verification {
+    p {
+      color: red;
+    }
+
+    .input-container {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+
+      * {
+        margin: 0;
+      }
+
+      .resend{
+        width: 15rem;
+      }
+    }
+
+    .authentication-button.verify {
+      margin-top: 2rem;
+    }
+  }
 }
 
 @media screen and (max-width: 700px) {
