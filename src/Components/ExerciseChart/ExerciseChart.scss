@@ -1,0 +1,17 @@
+@import "../../Palette.scss";
+
+.chart-container {
+  position: relative;
+  background-color: $dark-200;
+  border-radius: 0.5rem;
+  overflow: hidden;
+
+  width: 80rem;
+  max-width: 85vw;
+  height: 50rem;
+  max-height: 85svh;
+
+  * {
+    color: #fff !important;
+  }
+}

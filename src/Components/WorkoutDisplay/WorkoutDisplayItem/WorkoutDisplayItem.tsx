@@ -63,6 +63,14 @@ export default function WorkoutDisplayItem({
             Collapse
           </p>
         </button>
+
+        <Link to={`${exercise.id}/chart`} className="chart-link">
+          <Icon name="chart-line" />
+
+          <p className="accessibility-only" aria-hidden={false}>
+            Chart
+          </p>
+        </Link>
       </div>
 
       {!isCollapsed && <OutPortal node={bodyPortalNode} />}

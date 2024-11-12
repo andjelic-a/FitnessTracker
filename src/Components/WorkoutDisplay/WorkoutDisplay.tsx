@@ -21,6 +21,7 @@ import ConfirmModalDialog from "../ConfirmModalDialog/ConfirmModalDialog";
 import CommentSection from "../CommentSection/CommentSection";
 import Description from "../Description/Description";
 import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
+import AnimatedOutlet from "../WindowWrapper/AnimatedOutlet";
 
 const WorkoutDisplay = WindowFC(({}, close) => {
   const loaderData = useLoaderData<typeof workoutDisplayLoader>();
@@ -336,6 +337,8 @@ const WorkoutDisplay = WindowFC(({}, close) => {
       >
         Are you sure you want to <b>permanently</b> delete this workout?
       </ConfirmModalDialog>
+
+      <AnimatedOutlet />
     </div>
   );
 });
