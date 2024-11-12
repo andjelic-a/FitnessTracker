@@ -109,6 +109,7 @@ const ProfileTabs = memo(
     const dropdown = useMemo(
       () => (
         <Dropdown
+          className="tabs-header-dropdown"
           values={
             openTab === "splits"
               ? ({

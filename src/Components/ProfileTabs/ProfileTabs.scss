@@ -2,6 +2,7 @@
 
 .profile-workout-tabs-container {
   width: 100%;
+  max-width: 100rem;
 
   display: flex;
   flex-direction: column;
@@ -55,6 +56,10 @@
     .filters-container {
       display: flex;
       gap: 2rem;
+
+      .tabs-header-dropdown {
+        width: 12rem;
+      }
 
       .search-bar-container {
         width: 30rem;

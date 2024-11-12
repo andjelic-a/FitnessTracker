@@ -387,3 +387,9 @@
     grid-template-columns: 1fr !important;
   }
 }
+
+@media (max-width: 400px) {
+  .pin-container {
+    height: 14rem;
+  }
+}
