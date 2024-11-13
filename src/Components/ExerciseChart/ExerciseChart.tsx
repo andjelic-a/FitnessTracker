@@ -11,7 +11,7 @@ const ExerciseChart = WindowFC(() => {
   return (
     <Async await={loaderData?.chartData}>
       {(response) => {
-        if (response.code !== "OK") return null;
+        if (response?.code !== "OK") return null;
         const chart = response.content.data.slice(
           response.content.data.length - 30
         );
@@ -28,12 +28,14 @@ const ExerciseChart = WindowFC(() => {
               series={[
                 {
                   data: chart.map((x) => x.weightUsed),
+                  color: "#f9aa81"
                 },
               ]}
               sx={{
-                "& .MuiChartsAxis-left .MuiChartsAxis-tickLabel, & .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel": {
-                  fill: "#fff",
-                },
+                "& .MuiChartsAxis-left .MuiChartsAxis-tickLabel, & .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel":
+                  {
+                    fill: "#fff",
+                  },
                 "& .MuiChartsAxis-tickContainer .MuiChartsAxis-tick": {
                   stroke: "#fff",
                 },
