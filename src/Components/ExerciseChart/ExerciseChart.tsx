@@ -30,6 +30,19 @@ const ExerciseChart = WindowFC(() => {
                   data: chart.map((x) => x.weightUsed),
                 },
               ]}
+              sx={{
+                "& .MuiChartsAxis-left .MuiChartsAxis-tickLabel, & .MuiChartsAxis-bottom .MuiChartsAxis-tickLabel": {
+                  fill: "#fff",
+                },
+                "& .MuiChartsAxis-tickContainer .MuiChartsAxis-tick": {
+                  stroke: "#fff",
+                },
+                "& .MuiChartsAxis-bottom .MuiChartsAxis-line, & .MuiChartsAxis-left .MuiChartsAxis-line":
+                  {
+                    stroke: "#fff",
+                    strokeWidth: 2.5,
+                  },
+              }}
             />
           </div>
         );
