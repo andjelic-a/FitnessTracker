@@ -1,13 +1,16 @@
 @import "../../Palette.scss";
 
-.chart-container {
-  position: relative;
+.exercise-chart-container {
   background-color: $dark-200;
-  border-radius: 0.5rem;
-  overflow: hidden;
 
-  width: 80rem;
-  max-width: 85vw;
-  height: 50rem;
-  max-height: 85svh;
+  .exercise-chart-container {
+    position: relative;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  
+    width: 80rem;
+    max-width: 85vw;
+    height: 50rem;
+    max-height: 85svh;
+  }
 }
