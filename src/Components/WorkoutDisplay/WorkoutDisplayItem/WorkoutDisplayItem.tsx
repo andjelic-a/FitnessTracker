@@ -9,6 +9,7 @@ import {
   OutPortal,
 } from "react-reverse-portal";
 import Icon from "../../Icon/Icon";
+import ExerciseChart from "../../ExerciseChart/ExerciseChart";
 
 type WorkoutDisplayItemProps = {
   exercise: Schema<"SimpleExerciseResponseDTO">;
@@ -29,6 +30,11 @@ export default function WorkoutDisplayItem({
       }),
     []
   );
+  const chartPortalNode = useMemo(() => createHtmlPortalNode(), []);
+
+  const [isChartWindowOpen, setIsChartWindowOpen] = useState(false);
+  const [chartWindowPreviouslyOpen, setChartWindowPreviouslyOpen] =
+    useState(false);
 
   return (
     <div className="workout-display-item">
@@ -42,6 +48,12 @@ export default function WorkoutDisplayItem({
         {sets.map((set, index) => (
           <WorkoutDisplaySet key={set.id} index={index} set={set} />
         ))}
+      </InPortal>
+
+      <InPortal node={chartPortalNode}>
+        {chartWindowPreviouslyOpen && isChartWindowOpen && (
+          <ExerciseChart exerciseId={exercise.id} />
+        )}
       </InPortal>
 
       <div className="workout-display-item-header">
@@ -64,16 +76,25 @@ export default function WorkoutDisplayItem({
           </p>
         </button>
 
-        <Link to={`${exercise.id}/chart`} className="chart-link">
+        <button
+          onClick={() => {
+            if (!isChartWindowOpen && !chartWindowPreviouslyOpen)
+              setChartWindowPreviouslyOpen(true);
+
+            setIsChartWindowOpen(!isChartWindowOpen);
+          }}
+          className="chart-link"
+        >
           <Icon name="chart-line" />
 
           <p className="accessibility-only" aria-hidden={false}>
             Chart
           </p>
-        </Link>
+        </button>
       </div>
 
       {!isCollapsed && <OutPortal node={bodyPortalNode} />}
+      <OutPortal node={chartPortalNode} />
     </div>
   );
 }

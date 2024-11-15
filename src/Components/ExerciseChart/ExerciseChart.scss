@@ -1,16 +1,22 @@
 @import "../../Palette.scss";
 
 .exercise-chart-container {
-  background-color: $dark-200;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000000000000000000000;
 
-  .exercise-chart-container {
-    position: relative;
-    border-radius: 0.5rem;
-    overflow: hidden;
-  
-    width: 80rem;
-    max-width: 85vw;
-    height: 50rem;
-    max-height: 85svh;
-  }
+  background-color: $dark-200;
+  border-radius: 0.5rem;
+  overflow: hidden;
+
+  width: 80rem;
+  max-width: 85vw;
+  height: 50rem;
+  max-height: 85svh;
+}
+
+.MuiPopper-root {
+  z-index: 100000000000000000000000000000000000000000000000000000000000000 !important;
 }

@@ -45,8 +45,6 @@ import SplitCreator from "./Components/SplitCreator/SplitCreator.tsx";
 import SplitEditor from "./Components/SplitEditor/SplitEditor.tsx";
 import WorkoutCreator from "./Components/WorkoutCreator/WorkoutCreator.tsx";
 import appLoader from "./AppLoader.ts";
-import ExerciseChart from "./Components/ExerciseChart/ExerciseChart.tsx";
-import exerciseChartLoader from "./Components/ExerciseChart/ExerciseChartLoader.ts";
 
 const routes: RouteObject[] = [
   {
@@ -158,13 +156,6 @@ const routes: RouteObject[] = [
             path: "workout/:name",
             element: <WorkoutDisplay />,
             loader: workoutDisplayLoader,
-            children: [
-              {
-                path: ":exerciseId/chart",
-                element: <ExerciseChart />,
-                loader: exerciseChartLoader,
-              },
-            ],
           },
           {
             path: "workout/:name/edit",
