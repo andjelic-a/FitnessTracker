@@ -52,7 +52,7 @@ export default function WorkoutDisplayItem({
 
       <InPortal node={chartPortalNode}>
         {chartWindowPreviouslyOpen && isChartWindowOpen && (
-          <ExerciseChart exerciseId={exercise.id} />
+          <ExerciseChart exercise={exercise} />
         )}
       </InPortal>
 

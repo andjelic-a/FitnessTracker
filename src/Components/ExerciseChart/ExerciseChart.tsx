@@ -6,12 +6,13 @@ import { createPortal } from "react-dom";
 import { LineChart } from "@mui/x-charts";
 import { useEffect, useRef, useState } from "react";
 import { APIResponse } from "../../Types/Endpoints/ResponseParser";
+import { Schema } from "../../Types/Endpoints/SchemaParser";
 
 type ExerciseChartProps = {
-  exerciseId: number;
+  exercise: Schema<"SimpleExerciseResponseDTO">;
 };
 
-export default function ExerciseChart({ exerciseId }: ExerciseChartProps) {
+export default function ExerciseChart({ exercise }: ExerciseChartProps) {
   const [chartData, setChartData] = useState<Promise<
     APIResponse<
       "/api/workout/{creator}/{name}/mock-exercise-chart-data/{exerciseId}",
@@ -39,12 +40,12 @@ export default function ExerciseChart({ exerciseId }: ExerciseChartProps) {
           parameters: {
             creator: params.username,
             name: params.name,
-            exerciseId: exerciseId,
+            exerciseId: exercise.id,
           },
         }
       )
     );
-  }, [params, exerciseId]);
+  }, [params, exercise]);
 
   return (
     <>
@@ -59,8 +60,8 @@ export default function ExerciseChart({ exerciseId }: ExerciseChartProps) {
             return createPortal(
               <div className="exercise-chart-container">
                 <div className="exercise-chart-header">
-                  <h3>Workout Title</h3>
-                  {/*TODO: DropdownMenu*/} 
+                  <h3>{exercise.name}</h3>
+                  {/*TODO: DropdownMenu*/}
                 </div>
                 <div className="exercise-chart">
                   <LineChart
