@@ -7899,19 +7899,11 @@ type MappedEndpoints = {
             };
           },
           {
-            name: "offset";
+            name: "startDate";
             in: "query";
             schema: {
-              type: "integer";
-              format: "int32";
-            };
-          },
-          {
-            name: "limit";
-            in: "query";
-            schema: {
-              type: "integer";
-              format: "int32";
+              type: "string";
+              format: "date-time";
             };
           }
         ];
@@ -8026,6 +8018,14 @@ type MappedEndpoints = {
             schema: {
               type: "integer";
               format: "int32";
+            };
+          },
+          {
+            name: "startDate";
+            in: "query";
+            schema: {
+              type: "string";
+              format: "date-time";
             };
           }
         ];
