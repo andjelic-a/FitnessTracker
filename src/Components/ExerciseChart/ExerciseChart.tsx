@@ -1,11 +1,11 @@
 import "./ExerciseChart.scss";
 import Async from "../Async/Async";
-import { LineChart } from "@mui/x-charts";
-import { useEffect, useRef, useState } from "react";
-import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import { useParams } from "react-router-dom";
 import { createPortal } from "react-dom";
+import { LineChart } from "@mui/x-charts";
+import { useEffect, useRef, useState } from "react";
+import { APIResponse } from "../../Types/Endpoints/ResponseParser";
 
 type ExerciseChartProps = {
   exerciseId: number;
@@ -58,8 +58,11 @@ export default function ExerciseChart({ exerciseId }: ExerciseChartProps) {
 
             return createPortal(
               <div className="exercise-chart-container">
-                <div className="exercise-chart-header"></div>
-                <div className="exercise-chart-container">
+                <div className="exercise-chart-header">
+                  <h3>Workout Title</h3>
+                  {/*TODO: DropdownMenu*/} 
+                </div>
+                <div className="exercise-chart">
                   <LineChart
                     xAxis={[
                       {
