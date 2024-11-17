@@ -131,58 +131,76 @@ const ProfileTabs = memo(
       [openTab]
     );
 
-    const containerMemo = useMemo(
-      () =>
-        endpoint === null ? null : (
-          <OverlayScrollbarCarousel>
-            <LazyLoadingContainer
-              key={endpoint}
-              endpoint={endpoint}
-              baseAPIRequest={{
-                method: "get",
-                parameters: {
-                  limit: 10,
-                  offset: 0,
-                  usernameFilter:
-                    searchTerm.length > 0 ? searchTerm : undefined,
-                  username: params.username!,
-                },
-              }}
-              onSegmentLoad={(segmentData) => (
-                <>
-                  {segmentData.code === "OK"
-                    ? segmentData.content.map((x) =>
-                        openTab === "splits" ? (
-                          <SplitPreview key={x.id} split={x} />
-                        ) : (
-                          <WorkoutPreview key={x.id} workout={x as any} />
-                        )
-                      )
-                    : null}
-                </>
-              )}
-              stopCondition={(response) =>
-                response.code === "OK" && response.content.length < 10
-              }
-              before={
-                basicInfo == null ||
-                !basicInfo.isVerified ||
-                !isMe ? undefined : endpoint ===
-                  "/api/split/simple/by/{username}" ? (
+    const containerMemo = useMemo(() => {
+      if (endpoint === null) return null;
+      const ableToCreateWorkouts =
+        basicInfo == null || !basicInfo.isVerified || !isMe
+          ? undefined
+          : endpoint === "/api/workout/simple/by/{username}";
+
+      const ableToCreateSplits =
+        basicInfo == null || !basicInfo.isVerified || !isMe
+          ? undefined
+          : endpoint === "/api/split/simple/by/{username}";
+
+      return (
+        <OverlayScrollbarCarousel>
+          <LazyLoadingContainer
+            key={endpoint}
+            endpoint={endpoint}
+            baseAPIRequest={{
+              method: "get",
+              parameters: {
+                limit: 10,
+                offset: 0,
+                usernameFilter: searchTerm.length > 0 ? searchTerm : undefined,
+                username: params.username!,
+              },
+            }}
+            onSegmentLoad={(segmentData, i) => (
+              <>
+                {(segmentData.code !== "OK" ||
+                  segmentData.content.length === 0) &&
+                  !ableToCreateSplits &&
+                  !ableToCreateWorkouts &&
+                  i === 0 && (
+                    <div className="empty">
+                      <p>Nothing to see here...</p>
+                    </div>
+                  )}
+
+                {segmentData.code === "OK" &&
+                  segmentData.content.map((x) =>
+                    openTab === "splits" ? (
+                      <SplitPreview key={x.id} split={x} />
+                    ) : (
+                      <WorkoutPreview key={x.id} workout={x as any} />
+                    )
+                  )}
+              </>
+            )}
+            stopCondition={(response) =>
+              response.code === "OK" && response.content.length < 10
+            }
+            before={
+              <>
+                {ableToCreateSplits && (
                   <Link className="add-button" to="split/new">
                     +
                   </Link>
-                ) : endpoint === "/api/workout/simple/by/{username}" ? (
+                )}
+
+                {ableToCreateWorkouts && (
                   <Link className="add-button" to="workout/new">
                     +
                   </Link>
-                ) : undefined
-              }
-            />
-          </OverlayScrollbarCarousel>
-        ),
-      [endpoint, searchTerm]
-    );
+                )}
+              </>
+            }
+          />
+        </OverlayScrollbarCarousel>
+      );
+    }, [endpoint, searchTerm]);
 
     return (
       <div className="profile-workout-tabs-container">

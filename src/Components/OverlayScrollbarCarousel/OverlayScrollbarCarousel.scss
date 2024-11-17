@@ -38,6 +38,11 @@
       radial-gradient(160% 154% at 711px -303px, #191919 0%, #191919 99%);
   }
 
+  .lazy-container:has(.empty),
+  .lazy-segment:has(.empty) {
+    width: 100%;
+  }
+
   .empty {
     font-size: 2rem;
     text-align: center;
