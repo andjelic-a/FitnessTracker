@@ -24,7 +24,7 @@ export default function SplitPreview({
       <div className="split-preview-header" {...headerProps}>
         <Link
           className="split-preview-preview-header-name"
-          to={`/${split.creator.username}/workout/${split.name}`}
+          to={`/${split.creator.username}/split/${split.name}`}
         >
           {split.name}
         </Link>
