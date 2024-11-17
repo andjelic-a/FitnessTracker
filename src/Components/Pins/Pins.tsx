@@ -140,7 +140,7 @@ const Pins = memo<PinsProps>(({ pins, includeEditButtons }) => {
             />
 
             <label htmlFor={`${x.name}-${x.type}`}>
-              {x.name}
+              <h3>{x.name}</h3>
               &nbsp;
               <p>{x.type === 0 ? "(Workout)" : "(Split)"}</p>
             </label>
