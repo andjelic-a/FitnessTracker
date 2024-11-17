@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import { HTMLProps } from "../../Types/Utility/HTMLProps";
 import User from "../User/User";
@@ -19,22 +19,18 @@ export default function SplitPreview({
   footerProps,
   ...attr
 }: SplitPreviewDisplayProps) {
-  const navigate = useNavigate();
-
   return (
     <div className={"split-preview " + (className ? className : "")} {...attr}>
-      <div className="header" {...headerProps}>
-        <p
-          className="name"
-          onClick={() =>
-            navigate(`/${split.creator.username}/split/${split.name}`)
-          }
+      <div className="split-preview-header" {...headerProps}>
+        <Link
+          className="split-preview-preview-header-name"
+          to={`/${split.creator.username}/workout/${split.name}`}
         >
           {split.name}
-        </p>
+        </Link>
       </div>
 
-      <div className="footer" {...footerProps}>
+      <div className="split-preview-footer" {...footerProps}>
         <User user={split.creator} />
       </div>
     </div>

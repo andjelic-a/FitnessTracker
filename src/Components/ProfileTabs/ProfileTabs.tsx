@@ -17,7 +17,7 @@ import OverlayScrollbarCarousel from "../OverlayScrollbarCarousel/OverlayScrollb
 import Icon from "../Icon/Icon";
 import Dropdown from "../DropdownMenu/Dropdown";
 import LazyLoadingContainer from "../LazyLoadingContainer/LazyLoadingContainer";
-import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
+import MiniWorkoutPreview from "../WorkoutPreview/MiniWorkoutPreview";
 import SplitPreview from "../SplitPreview/SplitPreview";
 import { Link, useParams } from "react-router-dom";
 import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
@@ -155,7 +155,7 @@ const ProfileTabs = memo(
                         openTab === "splits" ? (
                           <SplitPreview key={x.id} split={x} />
                         ) : (
-                          <WorkoutPreview key={x.id} workout={x as any} />
+                          <MiniWorkoutPreview key={x.id} workout={x as any} />
                         )
                       )
                     : null}
