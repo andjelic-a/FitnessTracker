@@ -158,6 +158,10 @@ const SplitCreator = WindowFC(
       <>
         <InPortal node={workoutSelectorPortalNode}>
           <SplitWorkoutSelector
+            defaultWorkout={
+              selectedWorkouts.find((x) => x.day === selectingForDay)
+                ?.selected ?? null
+            }
             onClose={handleCloseWorkoutSelector}
             onConfirmSelection={(x) =>
               setselectedWorkouts((prev) => {

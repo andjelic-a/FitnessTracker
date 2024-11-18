@@ -200,6 +200,7 @@ const SplitEditor = WindowFC(
       <>
         <InPortal node={workoutSelectorPortalNode}>
           <SplitWorkoutSelector
+            defaultWorkout={null}
             onClose={handleCloseWorkoutSelector}
             onConfirmSelection={(x) =>
               setSelectedWorkouts((prev) => {

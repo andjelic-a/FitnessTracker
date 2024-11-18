@@ -5,12 +5,14 @@ import Icon from "../Icon/Icon";
 import WorkoutSelectorSegment from "./WorkoutSelectorSegment";
 import "./SplitWorkoutSelector.scss";
 import Toggle from "../Toggle/Toggle";
+import WorkoutSelectorOption from "./WorkoutSelectorOption";
 
 type WorkoutSchema = Schema<"SimpleWorkoutOptionResponseDTO">;
 
 type ChooseWorkoutWindowProps = {
+  defaultWorkout: WorkoutSchema | null;
   onClose: () => void;
-  onConfirmSelection: (workout: WorkoutSchema) => void;
+  onConfirmSelection: (workout: WorkoutSchema | null) => void;
 };
 
 type Filters = {
@@ -21,10 +23,13 @@ type Filters = {
 export default function SplitWorkoutSelector({
   onClose,
   onConfirmSelection,
+  defaultWorkout,
 }: ChooseWorkoutWindowProps) {
   const [selectedWorkout, setSelectedWorkout] = useState<WorkoutSchema | null>(
     null
   );
+
+  useEffect(() => void setSelectedWorkout(defaultWorkout), [defaultWorkout]);
 
   const [workoutPromises, setWorkoutPromises] = useState<
     Promise<WorkoutSchema[]>[]
@@ -127,8 +132,6 @@ export default function SplitWorkoutSelector({
   }
 
   function handleConfirm() {
-    if (!selectedWorkout) return;
-
     onConfirmSelection(selectedWorkout);
     setSelectedWorkout(null);
     onClose();
@@ -181,6 +184,13 @@ export default function SplitWorkoutSelector({
         aria-orientation="vertical"
         aria-label="Choose Workout"
       >
+        <WorkoutSelectorOption
+          key="rest-option"
+          workout={null}
+          isSelected={selectedWorkout === null}
+          onSelectWorkout={setSelectedWorkout}
+        />
+
         {workoutPromises.map((workoutsPromise, i) => (
           <WorkoutSelectorSegment
             key={i}
