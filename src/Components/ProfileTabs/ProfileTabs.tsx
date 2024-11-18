@@ -17,8 +17,7 @@ import OverlayScrollbarCarousel from "../OverlayScrollbarCarousel/OverlayScrollb
 import Icon from "../Icon/Icon";
 import Dropdown from "../DropdownMenu/Dropdown";
 import LazyLoadingContainer from "../LazyLoadingContainer/LazyLoadingContainer";
-import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
-import SplitPreview from "../SplitPreview/SplitPreview";
+import MiniPreview from "../MiniPreview/MiniPreview";
 import { Link, useParams } from "react-router-dom";
 import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 gsap.registerPlugin(Flip);
@@ -29,11 +28,11 @@ type ProfileTabsProps = {
   isMe: boolean;
 };
 
-type Tab = "splits" | "workouts";
+type Tab = "split" | "workout";
 
 const ProfileTabs = memo(
   ({ latestActivity, split, isMe }: ProfileTabsProps) => {
-    const [openTab, setOpenTab] = useState<Tab>("splits");
+    const [openTab, setOpenTab] = useState<Tab>("split");
     const [searchTerm, setSearchTerm] = useState<string>("");
     const searchBarRef = useRef<HTMLInputElement>(null);
     const params = useParams();
@@ -42,7 +41,7 @@ const ProfileTabs = memo(
     const flipStateRef = useRef<Flip.FlipState | null>(null);
 
     useEffect(() => {
-      setOpenTab("splits");
+      setOpenTab("split");
       setEndpoint(null);
     }, [split]);
 
@@ -111,7 +110,7 @@ const ProfileTabs = memo(
         <Dropdown
           className="tabs-header-dropdown"
           values={
-            openTab === "splits"
+            openTab === "split"
               ? ({
                   Current: null,
                   Created: "/api/split/simple/by/{username}",
@@ -124,7 +123,7 @@ const ProfileTabs = memo(
                   Favorites: "/api/workout/favorite/simple/by/{username}",
                 } as const)
           }
-          defaultValue={openTab === "splits" ? "Current" : "Created"}
+          defaultValue={openTab === "split" ? "Current" : "Created"}
           onSelectionChanged={(_x, y) => void setEndpoint(y ?? null)}
         />
       ),
@@ -159,24 +158,20 @@ const ProfileTabs = memo(
             }}
             onSegmentLoad={(segmentData, i) => (
               <>
-                {(segmentData.code !== "OK" ||
-                  segmentData.content.length === 0) &&
+                {i === 0 &&
+                  (segmentData.code !== "OK" ||
+                    segmentData.content.length === 0) &&
                   !ableToCreateSplits &&
-                  !ableToCreateWorkouts &&
-                  i === 0 && (
+                  !ableToCreateWorkouts && (
                     <div className="empty">
                       <p>Nothing to see here...</p>
                     </div>
                   )}
 
                 {segmentData.code === "OK" &&
-                  segmentData.content.map((x) =>
-                    openTab === "splits" ? (
-                      <SplitPreview key={x.id} split={x} />
-                    ) : (
-                      <WorkoutPreview key={x.id} workout={x as any} />
-                    )
-                  )}
+                  segmentData.content.map((x) => (
+                    <MiniPreview key={x.id} data={x} type={openTab} />
+                  ))}
               </>
             )}
             stopCondition={(response) =>
@@ -207,17 +202,15 @@ const ProfileTabs = memo(
         <div className="tabs-header">
           <div className="tabs">
             <div className="tab">
-              <button onClick={() => handleOpenTab("splits")}>Split</button>
-              {openTab === "splits" && (
+              <button onClick={() => handleOpenTab("split")}>Split</button>
+              {openTab === "split" && (
                 <portals.OutPortal node={activeIndicatorPortalNode} />
               )}
             </div>
 
             <div className="tab">
-              <button onClick={() => handleOpenTab("workouts")}>
-                Workouts
-              </button>
-              {openTab === "workouts" && (
+              <button onClick={() => handleOpenTab("workout")}>Workouts</button>
+              {openTab === "workout" && (
                 <portals.OutPortal node={activeIndicatorPortalNode} />
               )}
             </div>
