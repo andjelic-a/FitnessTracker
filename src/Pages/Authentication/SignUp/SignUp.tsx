@@ -59,7 +59,7 @@ function SignUp({ isActive, onToggle }: SignUpProps) {
 
       if (success) {
         sessionStorage.setItem("revalidate-main", "true");
-        navigate("/");
+        navigate(`/${usernameField.current!.value}`);
       } else errorMessageRef.current!.style.opacity = "1";
     }
   };

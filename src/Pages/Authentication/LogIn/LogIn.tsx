@@ -48,7 +48,11 @@ export default function Login() {
 
       if (success) {
         sessionStorage.setItem("revalidate-main", "true");
-        navigate("/");
+        navigate(
+          emailField.current!.value.includes("@")
+            ? "/"
+            : `/${emailField.current!.value}`
+        );
       } else errorMessageRef.current!.style.opacity = "1";
     }
   };
