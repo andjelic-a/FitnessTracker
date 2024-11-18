@@ -214,8 +214,8 @@
       top: 50%;
       left: 50%;
 
-      width: max-content;
-      height: max-content;
+      max-width: max-content;
+      width: 50rem;
       padding: 2rem;
       border-radius: 1.5rem;
 
@@ -225,8 +225,6 @@
 
       transition: 250ms;
       transform: translate(-50%, -60%);
-
-      width: 40rem;
 
       .pins-options-menu-header {
         display: flex;
@@ -257,6 +255,7 @@
 
       .pins-options-menu-body {
         max-height: 50vh;
+        max-width: 100%;
         overflow-y: auto;
 
         .info-section {
@@ -282,8 +281,10 @@
         }
 
         .option {
+          position: relative;
           font-size: 1.7rem;
           padding: 0 1rem;
+          overflow: hidden;
 
           display: grid;
           grid-template-columns: 1fr max-content;
@@ -313,11 +314,18 @@
 
             label {
               display: flex;
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              max-width: 100%;
+              max-width: 75%;
               pointer-events: none;
+              overflow: hidden;
+
+              h3 {
+                font-size: 1.6rem;
+                font-weight: 400;
+                max-width: 100%;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              }
 
               p {
                 color: $dark-600;
@@ -333,6 +341,9 @@
           }
 
           .like-count-container {
+            position: absolute;
+            right: 1rem;
+            top: 0.5rem;
             display: flex;
             align-items: center;
             gap: 0.75rem;
@@ -385,5 +396,11 @@
 @media (max-width: 1425px) {
   .pins-body {
     grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .pin-container {
+    height: 14rem;
   }
 }

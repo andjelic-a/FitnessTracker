@@ -2,6 +2,7 @@
 
 .profile-workout-tabs-container {
   width: 100%;
+  max-width: 100rem;
 
   display: flex;
   flex-direction: column;
@@ -55,9 +56,15 @@
     .filters-container {
       display: flex;
       gap: 2rem;
+      justify-content: space-between;
+
+      .tabs-header-dropdown {
+        min-width: 11rem;
+      }
 
       .search-bar-container {
-        width: 30rem;
+        width: 100%;
+        max-width: 30rem;
         height: fit-content;
         display: grid;
         grid-template-rows: 1fr;
@@ -171,14 +178,23 @@
       cursor: pointer;
       background-color: transparent;
 
-      color: #aaa;
-      // transition: all 200ms ease-out;
+      color: $dark-600;
+      transition: color .2s, border-color .2s ease-out;
       font-size: 3.5rem;
       font-weight: 100;
 
       &:hover {
-        color: #fff;
+        color: #ccc;
+        font-weight: 400;
+        border-color: #ccc;
       }
     }
+  }
+}
+
+
+@media screen and (max-width: 435px) {
+  .filters-container {
+    gap: 0 !important;
   }
 }

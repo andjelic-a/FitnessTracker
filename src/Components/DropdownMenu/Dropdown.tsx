@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
 import DropdownItem from "./DropdownItem";
+import Icon from "../Icon/Icon";
 import "./Dropdown.scss";
 
 type UniversalDropdownProps = {
@@ -85,6 +86,7 @@ function ChildBasedDropdown({
         }}
       >
         {value}
+        <Icon name="angle-down" className="dropdown-button-icon" />
       </div>
       <div className={`dropdown-content ${isOpen ? "open" : ""}`}>
         <div
@@ -155,18 +157,19 @@ function ValueBasedDropdown<Values extends ValuesType>({
   return (
     <div
       ref={dropdownMenuRef}
-      className={`${className ? className : ""} dropdown-menu${
-        isOpen ? " rounded" : ""
-      }`}
+      className={`${className ? className : ""} dropdown-menu`}
     >
       <div
-        className="dropdown-button"
+        className={`dropdown-button ${isOpen ? " rounded" : ""}`}
         onClick={() => {
           if (!isOpen) onOpen?.();
           setIsOpen((prevState) => !prevState);
         }}
       >
-        {value}
+        <p> {value}</p>
+        <div className="dropdown-button-icon">
+          <Icon name="angle-down" />
+        </div>
       </div>
       <div className={`dropdown-content ${isOpen ? "open" : ""}`}>{items}</div>
     </div>

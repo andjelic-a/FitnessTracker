@@ -18,6 +18,7 @@ export default function EditProfile() {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const bioInputRef = useRef<HTMLTextAreaElement>(null);
 
+  const [defaultUsernameValue, setDefaultUsernameValue] = useState<string>("");
   const [defaultNameValue, setDefaultNameValue] = useState("");
   const [defaultBioValue, setDefaultBioValue] = useState("");
 
@@ -53,6 +54,7 @@ export default function EditProfile() {
         if (!user) return;
 
         setSelectedImage(user.image);
+        setDefaultUsernameValue(user.username);
         setDefaultNameValue(user.name);
         setDefaultBioValue(user.bio);
         setSelectedGender(user.gender === 0 ? "male" : "female");
@@ -105,7 +107,7 @@ export default function EditProfile() {
       <h3>Edit profile</h3>
 
       <div className="edit-profile-user-details">
-        <div className={`edit-profile-image`}>
+        <div className={`edit-profile-image-container`}>
           <div
             className={`edit-profile-image-trigger`}
             onMouseEnter={() => setIsImageHovered(true)}
@@ -135,15 +137,15 @@ export default function EditProfile() {
         </div>
 
         <div className="edit-profile-user-details-info">
-          <p>@username</p>
-          <p className="edit-profile-user-details-info-name">name</p>
+          <p className="edit-profile-user-details-info-username">
+            @{defaultUsernameValue}
+          </p>
+          <p className="edit-profile-user-details-info-name">
+            {defaultNameValue}
+          </p>
         </div>
 
-        <div className="image-buttons-container">
-          <button onClick={() => imageInputRef.current?.click()}>
-            Change image
-          </button>
-
+        <div className="edit-profile-user-details-button">
           <button
             className="edit-profile-image-remove"
             onClick={handleRemoveImage}
@@ -164,9 +166,8 @@ export default function EditProfile() {
           autoComplete="off"
           maxLength={25}
           className="edit-profile-username-input"
-          placeholder="Name"
+          placeholder="Enter Name"
           inputRef={nameInputRef}
-          defaultValue={defaultNameValue}
         />
       </div>
 
@@ -175,7 +176,7 @@ export default function EditProfile() {
         <textarea
           name="bio"
           autoComplete="off"
-          placeholder="Bio"
+          placeholder="Enter Bio"
           onChange={(e) => {
             e.target.style.height = "auto";
             e.target.style.height = `${e.target.scrollHeight}px`;

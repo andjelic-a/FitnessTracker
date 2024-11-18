@@ -5,13 +5,11 @@
   position: relative;
 
   width: 15rem;
-  height: 3.5rem;
-  height: auto;
+  height: 4rem;
 
-  background-color: $primary-300;
   color: white;
   font-size: 1.6rem;
-  border-radius: 2rem;
+  user-select: none;
 
   .dropdown-button {
     display: flex;
@@ -22,8 +20,16 @@
     height: 100%;
     padding: 1rem;
 
-    background-color: $primary-400;
+    background-color: $primary-300;
     border-radius: 0.5rem;
+
+    .dropdown-button-icon {
+      width: 20%;
+    }
+    p {
+      width: 80%;
+      font-weight: 600;
+    }
   }
 
   .dropdown-content {
@@ -64,11 +70,12 @@
     }
 
     .dropdown-item {
-      padding: 0.3rem;
+      padding: 0.5rem;
+      padding-left: 1rem;
     }
 
     .dropdown-item:hover {
-      background-color: $primary-400;
+      background-color: $primary-500;
     }
 
     :last-child {

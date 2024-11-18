@@ -3,12 +3,15 @@
 .settings-container {
   display: grid;
   grid-template-columns: max-content 1fr;
-  width: 90vw;
+  min-width: 90rem;
+  width: 50vw;
+  height: 70rem;
   background-color: $dark-200;
   border-radius: 1rem;
 
   .settings-sidebar {
-    width: 40rem;
+    min-width: 30rem;
+    width: 10vw;
     height: 100%;
     padding: 2rem 0;
 
@@ -81,4 +84,32 @@
       background: $dark-600;
     }
   }
+}
+
+@media screen and (max-width: 900px) {
+  .settings-container{
+    min-width: 40rem;
+    width: 80vw;
+    grid-template-columns: 1fr;
+    grid-template-rows: max-content 1fr;
+
+    .settings-sidebar {
+      width: 100%;
+      height: 100%;
+      flex-direction: row;
+      border-bottom: 1px solid $dark-300;
+
+      &::after {
+        background-color: transparent;
+      }
+
+      .settings-item {
+        border: none;
+      }
+
+      .settings-item-cancel {
+        display: none;
+      }
+    }
+  }  
 }

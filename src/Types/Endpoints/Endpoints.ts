@@ -9454,11 +9454,11 @@ type MappedEndpoints = {
           name: {
             type: "string";
           };
-          creator: {
-            $ref: "#/components/schemas/SimpleUserResponseDTO";
-          };
           description: {
             type: "string";
+          };
+          creator: {
+            $ref: "#/components/schemas/SimpleUserResponseDTO";
           };
           workouts: {
             type: "array";
@@ -9916,6 +9916,9 @@ type MappedEndpoints = {
             format: "uuid";
           };
           name: {
+            type: "string";
+          };
+          description: {
             type: "string";
           };
           creator: {
