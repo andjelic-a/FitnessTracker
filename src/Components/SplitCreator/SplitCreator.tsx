@@ -227,7 +227,7 @@ const SplitCreator = WindowFC(
                       hoveredDay === x.day ? "" : "hide"
                     }`}
                     onClick={() => handleOpenWorkoutSelector(x.day)}
-                    onMouseEnter={() => setHoveredDay(x.day)}
+                    onMouseOver={() => setHoveredDay(x.day)}
                     onMouseLeave={() => setHoveredDay(null)}
                   >
                     Replace
