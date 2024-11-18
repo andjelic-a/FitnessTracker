@@ -93,7 +93,13 @@ const WindowFC =
             portalClassName="modal-portal"
             onRequestClose={() => void setIsModalOpen(false)}
           >
-            <FocusTrap focusTrapOptions={{ allowOutsideClick: true }}>
+            <FocusTrap
+              focusTrapOptions={{
+                allowOutsideClick: true,
+                escapeDeactivates: false,
+              }}
+              autoFocus
+            >
               <div>
                 {windowProps.closeConfirmationModal.children(
                   () => void setIsModalOpen(false),
