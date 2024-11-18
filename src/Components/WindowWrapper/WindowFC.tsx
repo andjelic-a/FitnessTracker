@@ -5,6 +5,7 @@ import AnimatedLayout, { AnimatedLayoutVariants } from "./AnimatedLayout";
 import ReactModal from "react-modal";
 import FocusTrap from "focus-trap-react";
 import "./WindowFC.scss";
+import { createPortal } from "react-dom";
 
 type WindowFCProps = {
   animationTriggers?: AnimatedLayoutVariants;
@@ -51,36 +52,39 @@ const WindowFC =
 
     return (
       <>
-        <FocusTrap
-          paused={isModalOpen}
-          focusTrapOptions={{
-            fallbackFocus: document.body,
-            escapeDeactivates: false,
-          }}
-        >
-          <div
-            className="window-wrapper"
-            onClick={(e) => {
-              if ((e.target as HTMLElement).className === "window-wrapper")
-                handleClose();
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Escape") handleClose();
+        {createPortal(
+          <FocusTrap
+            paused={isModalOpen}
+            focusTrapOptions={{
+              fallbackFocus: document.body,
+              escapeDeactivates: false,
             }}
           >
-            <AnimatedLayout variants={windowProps?.animationTriggers}>
-              <AnimatePresence>
-                {component(
-                  props,
-                  handleClose,
-                  windowProps?.closeConfirmationModal
-                    ? setModalOpeningCondition
-                    : undefined
-                )}
-              </AnimatePresence>
-            </AnimatedLayout>
-          </div>
-        </FocusTrap>
+            <div
+              className="window-wrapper"
+              onClick={(e) => {
+                if ((e.target as HTMLElement).className === "window-wrapper")
+                  handleClose();
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Escape") handleClose();
+              }}
+            >
+              <AnimatedLayout variants={windowProps?.animationTriggers}>
+                <AnimatePresence>
+                  {component(
+                    props,
+                    handleClose,
+                    windowProps?.closeConfirmationModal
+                      ? setModalOpeningCondition
+                      : undefined
+                  )}
+                </AnimatePresence>
+              </AnimatedLayout>
+            </div>
+          </FocusTrap>,
+          document.body
+        )}
 
         {windowProps?.closeConfirmationModal && (
           <ReactModal

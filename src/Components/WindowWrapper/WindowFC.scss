@@ -1,17 +1,20 @@
 .window-wrapper {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 0%;
+  left: 0%;
   width: 100vw;
   height: 100vh;
   z-index: 100;
-  translate: -50% -50%;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  & ~ * {
-    filter: blur(6px);
-  }
+  // backdrop-filter: blur(3px);
+}
+
+*:has(~ .window-wrapper),
+*:has(~ .window-wrapper) * {
+  // outline: 1px solid red;
+  filter: blur(2px);
 }
