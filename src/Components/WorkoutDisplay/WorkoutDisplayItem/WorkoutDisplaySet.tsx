@@ -27,7 +27,7 @@ export default function WorkoutDisplaySet({
       <div>{getIconByType()}</div>
 
       <div>
-        <p>{type === "1" ? set.riR : type === "w" ? "-" : "0"}</p>
+        <p>{type === "1" ? Math.max(0, set.riR) : type === "w" ? "-" : "0"}</p>
       </div>
 
       <div>
