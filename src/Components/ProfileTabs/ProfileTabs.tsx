@@ -28,11 +28,11 @@ type ProfileTabsProps = {
   isMe: boolean;
 };
 
-type Tab = "splits" | "workouts";
+type Tab = "split" | "workout";
 
 const ProfileTabs = memo(
   ({ latestActivity, split, isMe }: ProfileTabsProps) => {
-    const [openTab, setOpenTab] = useState<Tab>("splits");
+    const [openTab, setOpenTab] = useState<Tab>("split");
     const [searchTerm, setSearchTerm] = useState<string>("");
     const searchBarRef = useRef<HTMLInputElement>(null);
     const params = useParams();
@@ -41,7 +41,7 @@ const ProfileTabs = memo(
     const flipStateRef = useRef<Flip.FlipState | null>(null);
 
     useEffect(() => {
-      setOpenTab("splits");
+      setOpenTab("split");
       setEndpoint(null);
     }, [split]);
 
@@ -110,7 +110,7 @@ const ProfileTabs = memo(
         <Dropdown
           className="tabs-header-dropdown"
           values={
-            openTab === "splits"
+            openTab === "split"
               ? ({
                   Current: null,
                   Created: "/api/split/simple/by/{username}",
@@ -123,82 +123,94 @@ const ProfileTabs = memo(
                   Favorites: "/api/workout/favorite/simple/by/{username}",
                 } as const)
           }
-          defaultValue={openTab === "splits" ? "Current" : "Created"}
+          defaultValue={openTab === "split" ? "Current" : "Created"}
           onSelectionChanged={(_x, y) => void setEndpoint(y ?? null)}
         />
       ),
       [openTab]
     );
 
-    const containerMemo = useMemo(
-      () =>
-        endpoint === null ? null : (
-          <OverlayScrollbarCarousel>
-            <LazyLoadingContainer
-              key={endpoint}
-              endpoint={endpoint}
-              baseAPIRequest={{
-                method: "get",
-                parameters: {
-                  limit: 10,
-                  offset: 0,
-                  usernameFilter:
-                    searchTerm.length > 0 ? searchTerm : undefined,
-                  username: params.username!,
-                },
-              }}
-              onSegmentLoad={(segmentData) => (
-                <>
-                  {segmentData.code === "OK"
-                    ? segmentData.content.map((x) =>
-                        openTab === "splits" ? (
-                          <MiniPreview key={x.id} data={x} type="split"/>
-                        ) : (
-                          <MiniPreview key={x.id} data={x as any} type="workout"/>
-                        )
-                      )
-                    : null}
-                </>
-              )}
-              stopCondition={(response) =>
-                response.code === "OK" && response.content.length < 10
-              }
-              before={
-                basicInfo == null ||
-                !basicInfo.isVerified ||
-                !isMe ? undefined : endpoint ===
-                  "/api/split/simple/by/{username}" ? (
+    const containerMemo = useMemo(() => {
+      if (endpoint === null) return null;
+      const ableToCreateWorkouts =
+        basicInfo == null || !basicInfo.isVerified || !isMe
+          ? undefined
+          : endpoint === "/api/workout/simple/by/{username}";
+
+      const ableToCreateSplits =
+        basicInfo == null || !basicInfo.isVerified || !isMe
+          ? undefined
+          : endpoint === "/api/split/simple/by/{username}";
+
+      return (
+        <OverlayScrollbarCarousel>
+          <LazyLoadingContainer
+            key={endpoint}
+            endpoint={endpoint}
+            baseAPIRequest={{
+              method: "get",
+              parameters: {
+                limit: 10,
+                offset: 0,
+                usernameFilter: searchTerm.length > 0 ? searchTerm : undefined,
+                username: params.username!,
+              },
+            }}
+            onSegmentLoad={(segmentData, i) => (
+              <>
+                {i === 0 &&
+                  (segmentData.code !== "OK" ||
+                    segmentData.content.length === 0) &&
+                  !ableToCreateSplits &&
+                  !ableToCreateWorkouts && (
+                    <div className="empty">
+                      <p>Nothing to see here...</p>
+                    </div>
+                  )}
+
+                {segmentData.code === "OK" &&
+                  segmentData.content.map((x) => (
+                    <MiniPreview key={x.id} data={x} type={openTab} />
+                  ))}
+              </>
+            )}
+            stopCondition={(response) =>
+              response.code === "OK" && response.content.length < 10
+            }
+            before={
+              <>
+                {ableToCreateSplits && (
                   <Link className="add-button" to="split/new">
                     +
                   </Link>
-                ) : endpoint === "/api/workout/simple/by/{username}" ? (
+                )}
+
+                {ableToCreateWorkouts && (
                   <Link className="add-button" to="workout/new">
                     +
                   </Link>
-                ) : undefined
-              }
-            />
-          </OverlayScrollbarCarousel>
-        ),
-      [endpoint, searchTerm]
-    );
+                )}
+              </>
+            }
+          />
+        </OverlayScrollbarCarousel>
+      );
+    }, [endpoint, searchTerm]);
 
     return (
       <div className="profile-workout-tabs-container">
         <div className="tabs-header">
           <div className="tabs">
             <div className="tab">
-              <button onClick={() => handleOpenTab("splits")}>Split</button>
-              {openTab === "splits" && (
+              <button onClick={() => handleOpenTab("split")}>Split</button>
+              {openTab === "split" && (
                 <portals.OutPortal node={activeIndicatorPortalNode} />
               )}
             </div>
 
             <div className="tab">
-              <button onClick={() => handleOpenTab("workouts")}>
-                Workouts
-              </button>
-              {openTab === "workouts" && (
+              <button onClick={() => handleOpenTab("workout")}>Workouts</button>
+              {openTab === "workout" && (
                 <portals.OutPortal node={activeIndicatorPortalNode} />
               )}
             </div>

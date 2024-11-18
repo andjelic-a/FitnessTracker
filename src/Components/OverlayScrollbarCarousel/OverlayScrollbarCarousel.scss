@@ -10,41 +10,43 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+
     font-size: 2rem;
     gap: 2rem;
-    min-width: 100%;
-    height: max-content;
+  }
 
-    .empty {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 1.5rem;
-    }
+  &:has(.empty)::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
 
-    &:has(.empty)::before {
-      content: "";
-      display: block;
-      width: 100%;
-      height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
 
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: -1;
+    background-size: 100% 100%;
+    background-position: 0px 0px, 0px 0px;
+    background-image: repeating-radial-gradient(
+        75% 75% at 238% 218%,
+        #19191938 37%,
+        #2e2e2e38 49%,
+        #19191938 52%
+      ),
+      radial-gradient(160% 154% at 711px -303px, #191919 0%, #191919 99%);
+  }
 
-      background-size: 100% 100%;
-      background-position: 0px 0px, 0px 0px;
-      background-image: repeating-radial-gradient(
-          75% 75% at 238% 218%,
-          #19191938 37%,
-          #2e2e2e38 49%,
-          #19191938 52%
-        ),
-        radial-gradient(160% 154% at 711px -303px, #191919 0%, #191919 99%);
-    }
+  .lazy-container:has(.empty),
+  .lazy-segment:has(.empty) {
+    width: 100%;
+  }
+
+  .empty {
+    font-size: 2rem;
+    text-align: center;
+    width: 100%;
   }
 
   .lazy-container,
