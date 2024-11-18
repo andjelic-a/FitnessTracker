@@ -8,6 +8,7 @@
   height: 70rem;
   background-color: $dark-200;
   border-radius: 1rem;
+  font-size: 1.7em;
 
   .settings-sidebar {
     min-width: 30rem;
@@ -87,7 +88,7 @@
 }
 
 @media screen and (max-width: 900px) {
-  .settings-container{
+  .settings-container {
     min-width: 40rem;
     width: 80vw;
     grid-template-columns: 1fr;
@@ -111,5 +112,5 @@
         display: none;
       }
     }
-  }  
+  }
 }
