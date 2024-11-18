@@ -40,7 +40,9 @@ export async function getJWT(): Promise<string | null> {
     return response.content.token;
   }
 
-  if (response.code === "Unauthorized") localStorage.removeItem("token");
+  if (response.code === "Unauthorized" || response.code === "Bad Request")
+    localStorage.removeItem("token");
+  
   return null;
 }
 

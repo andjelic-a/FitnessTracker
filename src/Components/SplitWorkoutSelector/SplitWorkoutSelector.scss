@@ -57,7 +57,8 @@
     .search-bar-container {
       display: flex;
       width: 35rem;
-      height: 3rem;
+      height: 4rem;
+      padding: 0.5rem 0;
       align-items: center;
       background-color: $dark-300;
       border-radius: 0.5rem;
@@ -108,9 +109,17 @@
 
     .filters-container {
       display: flex;
-      width: 35rem;
       justify-content: space-between;
       align-items: center;
+      width: 35rem;
+      gap: 1rem;
+
+      .toggle {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
     }
   }
 
@@ -209,12 +218,12 @@
           text-align: start;
           position: relative;
           max-width: 100%;
-          
+
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
           display: block;
-        }        
+        }
       }
 
       .view-details-link {

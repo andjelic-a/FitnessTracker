@@ -4,9 +4,11 @@ import Icon from "../Icon/Icon";
 import { Tooltip } from "react-tooltip";
 
 type WorkoutSelectorOptionProps = {
-  workout: Schema<"SimpleWorkoutOptionResponseDTO">;
+  workout: Schema<"SimpleWorkoutOptionResponseDTO"> | null;
   isSelected: boolean;
-  onSelectWorkout: (workout: Schema<"SimpleWorkoutOptionResponseDTO">) => void;
+  onSelectWorkout: (
+    workout: Schema<"SimpleWorkoutOptionResponseDTO"> | null
+  ) => void;
 };
 
 export default function WorkoutSelectorOption({
@@ -28,27 +30,29 @@ export default function WorkoutSelectorOption({
       </div>
 
       <div className="info-container">
-        <h3 className="workout-name">{workout.name}</h3>
+        <h3 className="workout-name">{workout?.name ?? "Rest"}</h3>
         <div>
-          <p className="workout-description">{workout.description}</p>
+          <p className="workout-description">{workout?.description}</p>
         </div>
       </div>
 
-      <Link
-        to={`/workouts/${workout.id}`}
-        target="_blank"
-        className="view-details-link"
-        data-tooltip-id={`link-tooltip-${workout.id}`}
-      >
-        <Icon name="link" />
+      {workout && (
+        <Link
+          to={`/${workout.creator.username}/workout/${workout.name}`}
+          target="_blank"
+          className="view-details-link"
+          data-tooltip-id={`link-tooltip-${workout.id}`}
+        >
+          <Icon name="link" />
 
-        <Tooltip
-          id={`link-tooltip-${workout.id}`}
-          place="top"
-          content="View details"
-          delayShow={150}
-        />
-      </Link>
+          <Tooltip
+            id={`link-tooltip-${workout.id}`}
+            place="top"
+            content="View details"
+            delayShow={150}
+          />
+        </Link>
+      )}
     </button>
   );
 }

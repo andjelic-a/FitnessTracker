@@ -86,7 +86,13 @@ export default function CurrentSplitDayDisplay({
 
           {props.status === "done" && (
             <>
-              <div className="badge">
+              <div
+                className="badge"
+                data-tooltip-id="done-tooltip"
+                data-tooltip-place="bottom"
+                data-tooltip-class-name="done-tooltip"
+                data-tooltip-delay-show={150}
+              >
                 <Icon name="circle-check" />
               </div>
 

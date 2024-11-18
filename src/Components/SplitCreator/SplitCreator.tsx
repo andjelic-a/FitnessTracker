@@ -158,6 +158,10 @@ const SplitCreator = WindowFC(
       <>
         <InPortal node={workoutSelectorPortalNode}>
           <SplitWorkoutSelector
+            defaultWorkout={
+              selectedWorkouts.find((x) => x.day === selectingForDay)
+                ?.selected ?? null
+            }
             onClose={handleCloseWorkoutSelector}
             onConfirmSelection={(x) =>
               setselectedWorkouts((prev) => {
@@ -223,7 +227,7 @@ const SplitCreator = WindowFC(
                       hoveredDay === x.day ? "" : "hide"
                     }`}
                     onClick={() => handleOpenWorkoutSelector(x.day)}
-                    onMouseEnter={() => setHoveredDay(x.day)}
+                    onMouseOver={() => setHoveredDay(x.day)}
                     onMouseLeave={() => setHoveredDay(null)}
                   >
                     Replace

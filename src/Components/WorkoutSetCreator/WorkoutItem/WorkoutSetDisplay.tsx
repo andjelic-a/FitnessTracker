@@ -162,9 +162,11 @@ export default function WorkoutSetDisplay({
               value={set.rir <= 0 ? "" : set.rir}
               placeholder={set.rir <= 0 ? "0" : set.rir.toString()}
               maxLength={4}
-              onChange={(e) =>
-                handleSetChanged({ ...set, rir: +e.target.value })
-              }
+              onChange={(e) => {
+                if (isNaN(+e.target.value)) return;
+
+                handleSetChanged({ ...set, rir: +e.target.value });
+              }}
             />
           ) : (
             <input type="text" disabled value={set.type === "w" ? "-" : "0"} />
@@ -177,6 +179,24 @@ export default function WorkoutSetDisplay({
             defaultValue={set.repRange === "0" ? "" : set.repRange}
             placeholder={set.repRange}
             maxLength={5}
+            onKeyDown={(e) => {
+              if (
+                isNaN(+e.key) &&
+                e.key !== "Backspace" &&
+                e.key !== "Delete" &&
+                e.key !== "Tab" &&
+                e.key !== "Escape" &&
+                e.key !== "ArrowLeft" &&
+                e.key !== "ArrowRight" &&
+                e.key !== "ArrowUp" &&
+                e.key !== "ArrowDown" &&
+                e.key !== "Home" &&
+                e.key !== "End" &&
+                e.key !== " " &&
+                e.key !== "-"
+              )
+                e.preventDefault();
+            }}
             onChange={(e) =>
               handleSetChanged({ ...set, repRange: e.target.value })
             }

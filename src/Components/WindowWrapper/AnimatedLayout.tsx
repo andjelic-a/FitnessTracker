@@ -20,7 +20,7 @@ const AnimatedLayout = ({
     () => ({
       hidden: {
         opacity: 0,
-        scale: 0.5,
+        scale: 0.7,
       },
       enter: {
         opacity: 1,
@@ -28,7 +28,10 @@ const AnimatedLayout = ({
       },
       exit: {
         opacity: 0,
-        scale: 0.5,
+        scale: 0.7,
+        transition: {
+          duration: 0.2,
+        },
       },
     }),
     []

@@ -152,7 +152,7 @@ const ProfileTabs = memo(
               parameters: {
                 limit: 10,
                 offset: 0,
-                usernameFilter: searchTerm.length > 0 ? searchTerm : undefined,
+                nameFilter: searchTerm.length > 0 ? searchTerm : undefined,
                 username: params.username!,
               },
             }}

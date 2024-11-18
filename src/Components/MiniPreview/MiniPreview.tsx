@@ -6,7 +6,7 @@ import "./MiniPreview.scss";
 
 type MiniPreviewDisplayProps = {
   data: Schema<"SimpleSplitResponseDTO"> | Schema<"SimpleWorkoutResponseDTO">;
-  type: 'split' | 'workout';
+  type: "split" | "workout";
   headerProps?: HTMLProps<HTMLDivElement>;
   bodyProps?: HTMLProps<HTMLDivElement>;
   footerProps?: HTMLProps<HTMLDivElement>;
@@ -28,7 +28,7 @@ export default function MiniPreview({
       <div className="mini-preview-header" {...headerProps}>
         <Link
           className="mini-preview-preview-header-name"
-          to={`/${data.creator.username}/${ type === "split" ? 'split' : 'workout'}/${data.name}`}
+          to={`/${data.creator.username}/${type}/${data.name}`}
         >
           {data.name}
         </Link>

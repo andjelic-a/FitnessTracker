@@ -5,7 +5,9 @@ import WorkoutSelectorOption from "./WorkoutSelectorOption";
 type WorkoutSelectorSegmentProps = {
   workouts: Promise<Schema<"SimpleWorkoutOptionResponseDTO">[]>;
   selectedWorkout: Schema<"SimpleWorkoutOptionResponseDTO"> | null;
-  onSelectWorkout: (workout: Schema<"SimpleWorkoutOptionResponseDTO">) => void;
+  onSelectWorkout: (
+    workout: Schema<"SimpleWorkoutOptionResponseDTO"> | null
+  ) => void;
 };
 
 export default function WorkoutSelectorSegment({
