@@ -162,9 +162,11 @@ export default function WorkoutSetDisplay({
               value={set.rir <= 0 ? "" : set.rir}
               placeholder={set.rir <= 0 ? "0" : set.rir.toString()}
               maxLength={4}
-              onChange={(e) =>
-                handleSetChanged({ ...set, rir: +e.target.value })
-              }
+              onChange={(e) => {
+                if (isNaN(+e.target.value)) return;
+
+                handleSetChanged({ ...set, rir: +e.target.value });
+              }}
             />
           ) : (
             <input type="text" disabled value={set.type === "w" ? "-" : "0"} />
