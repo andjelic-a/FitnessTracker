@@ -38,7 +38,7 @@ export default function WorkoutSelectorOption({
 
       {workout && (
         <Link
-          to={`/workouts/${workout.id}`}
+          to={`/${workout.creator.username}/workout/${workout.name}`}
           target="_blank"
           className="view-details-link"
           data-tooltip-id={`link-tooltip-${workout.id}`}
