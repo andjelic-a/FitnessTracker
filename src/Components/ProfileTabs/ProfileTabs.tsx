@@ -17,8 +17,7 @@ import OverlayScrollbarCarousel from "../OverlayScrollbarCarousel/OverlayScrollb
 import Icon from "../Icon/Icon";
 import Dropdown from "../DropdownMenu/Dropdown";
 import LazyLoadingContainer from "../LazyLoadingContainer/LazyLoadingContainer";
-import WorkoutPreview from "../WorkoutPreview/WorkoutPreview";
-import SplitPreview from "../SplitPreview/SplitPreview";
+import MiniPreview from "../MiniPreview/MiniPreview";
 import { Link, useParams } from "react-router-dom";
 import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 gsap.registerPlugin(Flip);
@@ -153,9 +152,9 @@ const ProfileTabs = memo(
                   {segmentData.code === "OK"
                     ? segmentData.content.map((x) =>
                         openTab === "splits" ? (
-                          <SplitPreview key={x.id} split={x} />
+                          <MiniPreview key={x.id} data={x} type="split"/>
                         ) : (
-                          <WorkoutPreview key={x.id} workout={x as any} />
+                          <MiniPreview key={x.id} data={x as any} type="workout"/>
                         )
                       )
                     : null}
