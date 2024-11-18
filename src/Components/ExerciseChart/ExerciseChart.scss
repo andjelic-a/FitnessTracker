@@ -7,8 +7,9 @@
   transform: translate(-50%, -50%);
   z-index: 101;
 
-  height: 50vh;
+  width: 90rem;
   aspect-ratio: 1.5 / 1;
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -20,7 +21,6 @@
 
 .exercise-chart-header {
   height: 10%;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,9 +30,34 @@
     font-weight: 500;
     color: #fff;
   }
+
+  .exercise-chart-dropdown {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+  }
 }
 
 .exercise-chart {
   width: 100%;
   height: 90%;
+}
+
+
+@media screen and (max-width: 750px) {
+  .exercise-chart-container {
+    width: 100%;
+    aspect-ratio: 1.5 / 1;
+  }
+
+  .exercise-chart-dropdown {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+  }
+
+  .exercise-chart {
+    width: 100%;
+    height: 90%;
+  }
 }

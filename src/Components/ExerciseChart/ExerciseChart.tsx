@@ -80,8 +80,7 @@ const ExerciseChart = memo(({ exercise }: ExerciseChartProps) => {
             <div className="exercise-chart-container">
               <div className="exercise-chart-header">
                 <h3>{exercise.name}</h3>
-
-                {dropdown}
+                <div className="exercise-chart-dropdown">{dropdown}</div>
               </div>
 
               <div className="exercise-chart">
