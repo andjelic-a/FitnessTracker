@@ -85,6 +85,9 @@ const ExerciseChart = memo(({ exercise }: ExerciseChartProps) => {
 
               <div className="exercise-chart">
                 <LineChart
+                slots={{
+                  mark: () => null
+                }}
                   xAxis={[
                     {
                       data: chart.map((x) => new Date(x.timeCompleted)),
@@ -115,6 +118,11 @@ const ExerciseChart = memo(({ exercise }: ExerciseChartProps) => {
                         stroke: "#fff",
                         strokeWidth: 2.5,
                       },
+                    "& .MuiChartsAxisHighlight-root": {
+                      stroke: "#fff",
+                      strokeWidth: 1,
+                      strokeDasharray: "10",
+                    },
                   }}
                 />
               </div>
