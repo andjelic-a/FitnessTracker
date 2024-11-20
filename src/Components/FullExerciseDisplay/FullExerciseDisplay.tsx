@@ -3,6 +3,7 @@ import FormattedText from "../FormattedText/FormattedText";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
 import singleExerciseLoader from "./SingleExerciseLoader";
 import Async from "../Async/Async";
+import Icon from "../Icon/Icon";
 
 export default function FullExerciseDisplay() {
   const data = useLoaderData<typeof singleExerciseLoader>();
@@ -14,6 +15,27 @@ export default function FullExerciseDisplay() {
 
         return (
           <div className="full-exercise-display">
+            <div className="full-exercise-display-header">
+              <Icon
+                name="arrow-left"
+                className="full-exercise-display-header-arrow"
+              />
+              <Icon
+                name="ellipsis"
+                className="full-exercise-display-header-ellipsis"
+              />
+              <div className="full-exercise-display-header-tabs-container">
+                <div className="full-exercise-display-header-tab">
+                  <p>Summary</p>
+                </div>
+                <div className="full-exercise-display-header-tab">
+                  <p>History</p>
+                </div>
+                <div className="full-exercise-display-header-tab">
+                  <p>Description</p>
+                </div>
+              </div>
+            </div>
             <div className="full-exercise-display-image">
               <img src={exercise.content.image ?? ""} alt="" />
             </div>
