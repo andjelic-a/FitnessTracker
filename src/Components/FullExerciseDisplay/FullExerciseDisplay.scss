@@ -54,11 +54,39 @@
       display: flex;
 
       .full-exercise-display-header-tab {
+        position: relative;
         width: calc(100%/3);
 
         display: flex;
         justify-content: center;
         align-items: center;
+
+        transition: 0.2s;
+
+        p {
+          font-size: 1.8rem;
+          font-weight: 500;
+        }
+
+        &:hover {
+          background-color: $dark-300;
+          cursor: pointer;
+        }
+      }
+
+      .full-exercise-display-selected-tab {
+
+        &::after {
+          content: "";
+          
+          width: 100%;
+          height: 3px;
+
+          position: absolute;
+          bottom: 0;
+
+          background-color: $primary-300;
+        }
       }
     }
   }

@@ -25,7 +25,7 @@ export default function FullExerciseDisplay() {
                 className="full-exercise-display-header-ellipsis"
               />
               <div className="full-exercise-display-header-tabs-container">
-                <div className="full-exercise-display-header-tab">
+                <div className="full-exercise-display-header-tab full-exercise-display-selected-tab">
                   <p>Summary</p>
                 </div>
                 <div className="full-exercise-display-header-tab">
