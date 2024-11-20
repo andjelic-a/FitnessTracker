@@ -14,7 +14,9 @@ export default function FullExerciseDisplay() {
 
         return (
           <div className="full-exercise-display">
-            <img src={exercise.content.image ?? ""} alt="" />
+            <div className="full-exercise-display-image">
+              <img src={exercise.content.image ?? ""} alt="" />
+            </div>
             <div className="info">
               <h1>{exercise.content.name}</h1>
               <FormattedText children={exercise.content.description} />

@@ -1,18 +1,25 @@
 @import "../../Palette.scss";
 
 .full-exercise-display {
-  border: 3px solid #fff;
-  display: grid;
-  grid-template-columns: 4fr 6fr;
-  column-gap: 2vw;
+  width: auto;
+  min-height: 100rem;
+  border-radius: 1rem;
 
-  img {
-    grid-column: 1;
-    aspect-ratio: auto;
+  background-color: $dark-200;
+  border: 3px solid $dark-200;
+  overflow: hidden;
+  
+  .full-exercise-display-image {
     width: 100%;
-  }
+    aspect-ratio: 2.5/1;
 
-  .info {
-    grid-column: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+
+    img {
+      height: 100%;
+    }
   }
 }
