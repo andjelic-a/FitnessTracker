@@ -1,4 +1,5 @@
 import "./FullExerciseDisplay.scss";
+import { useState } from "react";
 import FormattedText from "../FormattedText/FormattedText";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
 import singleExerciseLoader from "./SingleExerciseLoader";
@@ -7,6 +8,8 @@ import Icon from "../Icon/Icon";
 
 export default function FullExerciseDisplay() {
   const data = useLoaderData<typeof singleExerciseLoader>();
+
+  const [activeTab, setActiveTab] = useState<number>(0);
 
   return (
     <Async await={data.exercise}>
@@ -25,15 +28,19 @@ export default function FullExerciseDisplay() {
                 className="full-exercise-display-header-ellipsis"
               />
               <div className="full-exercise-display-header-tabs-container">
-                <div className="full-exercise-display-header-tab full-exercise-display-selected-tab">
+                <div className="full-exercise-display-header-tab" onClick={() => setActiveTab(0)}>
                   <p>Summary</p>
                 </div>
-                <div className="full-exercise-display-header-tab">
+                <div className="full-exercise-display-header-tab" onClick={() => setActiveTab(1)}>
                   <p>History</p>
                 </div>
-                <div className="full-exercise-display-header-tab">
+                <div className="full-exercise-display-header-tab" onClick={() => setActiveTab(2)}>
                   <p>Description</p>
                 </div>
+                <div
+                  className="full-exercise-display-header-tab-indicator"
+                  style={{ left: `${(100 / 3) * activeTab}%` }}
+                />
               </div>
             </div>
             <div className="full-exercise-display-image">

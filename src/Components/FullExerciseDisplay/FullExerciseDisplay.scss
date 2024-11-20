@@ -66,6 +66,7 @@
         p {
           font-size: 1.8rem;
           font-weight: 500;
+          user-select: none;
         }
 
         &:hover {
@@ -74,19 +75,13 @@
         }
       }
 
-      .full-exercise-display-selected-tab {
-
-        &::after {
-          content: "";
-          
-          width: 100%;
-          height: 3px;
-
-          position: absolute;
-          bottom: 0;
-
-          background-color: $primary-300;
-        }
+      .full-exercise-display-header-tab-indicator {
+        position: absolute;
+        bottom: 0;
+        width: calc(100% / 3);
+        height: 3px;
+        background-color: $primary-300;
+        transition: 0.2s;
       }
     }
   }
