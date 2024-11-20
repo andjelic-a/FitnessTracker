@@ -28,14 +28,23 @@ export default function FullExerciseDisplay() {
                 className="full-exercise-display-header-ellipsis"
               />
               <div className="full-exercise-display-header-tabs-container">
-                <div className="full-exercise-display-header-tab" onClick={() => setActiveTab(0)}>
+                <div
+                  className="full-exercise-display-header-tab"
+                  onClick={() => setActiveTab(0)}
+                >
                   <p>Summary</p>
                 </div>
-                <div className="full-exercise-display-header-tab" onClick={() => setActiveTab(1)}>
+                <div
+                  className="full-exercise-display-header-tab"
+                  onClick={() => setActiveTab(1)}
+                >
                   <p>History</p>
                 </div>
-                <div className="full-exercise-display-header-tab" onClick={() => setActiveTab(2)}>
-                  <p>Description</p>
+                <div
+                  className="full-exercise-display-header-tab"
+                  onClick={() => setActiveTab(2)}
+                >
+                  <p>How to</p>
                 </div>
                 <div
                   className="full-exercise-display-header-tab-indicator"
@@ -46,7 +55,7 @@ export default function FullExerciseDisplay() {
             <div className="full-exercise-display-image">
               <img src={exercise.content.image ?? ""} alt="" />
             </div>
-            <div className="info">
+            <div className="full-exercise-display-info">
               <h1>{exercise.content.name}</h1>
               <FormattedText children={exercise.content.description} />
 
@@ -94,6 +103,11 @@ export default function FullExerciseDisplay() {
                 {exercise.content.equipment.map((equipment) => (
                   <li key={equipment.id}>{equipment.name}</li>
                 ))}
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Similique fuga, molestias labore porro necessitatibus esse
+                fugiat dolorum consectetur praesentium maiores commodi
+                exercitationem delectus doloremque corrupti modi quis assumenda
+                temporibus enim!
               </ul>
             </div>
           </div>

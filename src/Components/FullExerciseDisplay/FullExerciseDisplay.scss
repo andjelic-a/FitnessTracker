@@ -3,7 +3,8 @@
 .full-exercise-display {
   position: relative;
 
-  width: auto;
+  max-width: 75rem;
+  width: 100%;
   min-height: 100rem;
   border-radius: 1rem;
 
@@ -55,7 +56,7 @@
 
       .full-exercise-display-header-tab {
         position: relative;
-        width: calc(100%/3);
+        width: calc(100% / 3);
 
         display: flex;
         justify-content: center;
@@ -99,5 +100,12 @@
     img {
       height: 100%;
     }
+  }
+
+  .full-exercise-display-info {
+    width: 100%;
+    min-height: calc(100% - (100% / (2.5 / 1)));
+
+    overflow-y: auto;
   }
 }
