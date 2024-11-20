@@ -5,7 +5,7 @@
 
   max-width: 75rem;
   width: 100%;
-  min-height: 100rem;
+  height: 100rem;
   border-radius: 1rem;
 
   background-color: $dark-200;
@@ -104,8 +104,30 @@
 
   .full-exercise-display-info {
     width: 100%;
-    min-height: calc(100% - (100% / (2.5 / 1)));
+    height: calc(100% - (100% / (2.5 / 1)));
+    padding: 1rem;
 
     overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $dark-300;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $dark-500;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: $dark-600;
+    }
+
+    h1 {
+      font-size: 3rem;
+    }
   }
 }

@@ -53,11 +53,16 @@ export default function FullExerciseDisplay() {
               </div>
             </div>
             <div className="full-exercise-display-image">
-              <img src={exercise.content.image ?? ""} alt="" />
+              <img
+                src={exercise.content.image ?? ""}
+                alt="Image of the exercise"
+              />
             </div>
             <div className="full-exercise-display-info">
               <h1>{exercise.content.name}</h1>
-              <FormattedText children={exercise.content.description} />
+              <div className="full-exercise-display-info-description">
+                <FormattedText children={exercise.content.description} />
+              </div>
 
               <h2>Primary Muscles</h2>
               <ul>
@@ -103,11 +108,6 @@ export default function FullExerciseDisplay() {
                 {exercise.content.equipment.map((equipment) => (
                   <li key={equipment.id}>{equipment.name}</li>
                 ))}
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Similique fuga, molestias labore porro necessitatibus esse
-                fugiat dolorum consectetur praesentium maiores commodi
-                exercitationem delectus doloremque corrupti modi quis assumenda
-                temporibus enim!
               </ul>
             </div>
           </div>
