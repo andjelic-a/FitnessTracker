@@ -130,4 +130,29 @@
       font-size: 3rem;
     }
   }
+
+  .full-exercise-display-body {
+    overflow-x: auto;
+
+    //History tab
+    .lazy-container,
+    .lazy-container .lazy-segment {
+      gap: 5rem;
+      // flex-direction: column; //Uncomment to make the entire history tab vertical
+    }
+
+    .completed-workout {
+      display: flex;
+      gap: 2rem;
+
+      .date {
+        font-size: 1.2em;
+        font-weight: 900;
+      }
+
+      * {
+        white-space: nowrap;
+      }
+    }
+  }
 }
