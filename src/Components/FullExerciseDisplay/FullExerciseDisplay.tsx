@@ -1,10 +1,12 @@
 import "./FullExerciseDisplay.scss";
 import { useState } from "react";
-import FormattedText from "../FormattedText/FormattedText";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
 import singleExerciseLoader from "./SingleExerciseLoader";
 import Async from "../Async/Async";
 import Icon from "../Icon/Icon";
+import ExerciseDisplaySummeryTab from "./ExerciseDisplaySummeryTab";
+import ExerciseDisplayHistoryTab from "./ExerciseDisplayHistoryTab";
+import ExerciseDisplayHowToTab from "./ExerciseDisplayHowToTab";
 
 export default function FullExerciseDisplay() {
   const data = useLoaderData<typeof singleExerciseLoader>();
@@ -58,57 +60,19 @@ export default function FullExerciseDisplay() {
                 alt="Image of the exercise"
               />
             </div>
-            <div className="full-exercise-display-info">
-              <h1>{exercise.content.name}</h1>
-              <div className="full-exercise-display-info-description">
-                <FormattedText children={exercise.content.description} />
-              </div>
 
-              <h2>Primary Muscles</h2>
-              <ul>
-                {exercise.content.primaryMuscleGroups.map((muscleGroup) => (
-                  <li key={muscleGroup.id}>
-                    <h3>{muscleGroup.name}</h3>
-                    {exercise.content.primaryMuscles
-                      .filter(
-                        (muscle) => muscle.muscleGroupId === muscleGroup.id
-                      )
-                      .map((muscle) => (
-                        <p key={muscle.id}>{muscle.name}</p>
-                      ))}
-                  </li>
-                ))}
-              </ul>
-
-              {exercise.content.secondaryMuscleGroups.length > 0 && (
-                <>
-                  <h2>Secondary Muscles</h2>
-                  <ul>
-                    {exercise.content.secondaryMuscleGroups.map(
-                      (muscleGroup) => (
-                        <li key={muscleGroup.id}>
-                          <h3>{muscleGroup.name}</h3>
-                          {exercise.content.secondaryMuscles
-                            .filter(
-                              (muscle) =>
-                                muscle.muscleGroupId === muscleGroup.id
-                            )
-                            .map((muscle) => (
-                              <p key={muscle.id}>{muscle.name}</p>
-                            ))}
-                        </li>
-                      )
-                    )}
-                  </ul>
-                </>
+            <div className="full-exercise-display-body">
+              {activeTab === 0 && (
+                <ExerciseDisplaySummeryTab exercise={exercise.content} />
               )}
 
-              <h2>Equipment</h2>
-              <ul>
-                {exercise.content.equipment.map((equipment) => (
-                  <li key={equipment.id}>{equipment.name}</li>
-                ))}
-              </ul>
+              {activeTab === 1 && (
+                <ExerciseDisplayHistoryTab exercise={exercise.content} />
+              )}
+
+              {activeTab === 2 && (
+                <ExerciseDisplayHowToTab exercise={exercise.content} />
+              )}
             </div>
           </div>
         );
