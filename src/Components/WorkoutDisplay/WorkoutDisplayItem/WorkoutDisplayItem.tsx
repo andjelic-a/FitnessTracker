@@ -21,15 +21,6 @@ export default function WorkoutDisplayItem({
   exercise,
 }: WorkoutDisplayItemProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const bodyPortalNode = useMemo(
-    () =>
-      createHtmlPortalNode({
-        attributes: {
-          class: "workout-display-item-body",
-        },
-      }),
-    []
-  );
   const chartPortalNode = useMemo(() => createHtmlPortalNode(), []);
 
   const [isChartWindowOpen, setIsChartWindowOpen] = useState(false);
@@ -38,18 +29,6 @@ export default function WorkoutDisplayItem({
 
   return (
     <div className="workout-display-item">
-      <InPortal node={bodyPortalNode}>
-        <div className="set-information-header-container set">
-          <p>SET</p>
-          <p>RiR</p>
-          <p>VOLUME</p>
-        </div>
-
-        {sets.map((set, index) => (
-          <WorkoutDisplaySet key={set.id} index={index} set={set} />
-        ))}
-      </InPortal>
-
       <InPortal node={chartPortalNode}>
         {chartWindowPreviouslyOpen && isChartWindowOpen && (
           <ExerciseChart exercise={exercise} />
@@ -93,7 +72,23 @@ export default function WorkoutDisplayItem({
         </button>
       </div>
 
-      {!isCollapsed && <OutPortal node={bodyPortalNode} />}
+      <div
+        className="workout-display-item-body"
+        style={{
+          display: isCollapsed ? "none" : "flex",
+        }}
+      >
+        <div className="set-information-header-container set">
+          <p>SET</p>
+          <p>RiR</p>
+          <p>VOLUME</p>
+        </div>
+
+        {sets.map((set, index) => (
+          <WorkoutDisplaySet key={set.id} index={index} set={set} />
+        ))}
+      </div>
+
       <OutPortal node={chartPortalNode} />
     </div>
   );
