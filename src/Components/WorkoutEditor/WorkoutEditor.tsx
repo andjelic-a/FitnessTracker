@@ -13,7 +13,7 @@ import extractSets from "../../Utility/ExtractSetsFromWorkout";
 import { useNavigate } from "react-router-dom";
 
 const WorkoutEditor = WindowFC(
-  ({}, onClose, setModalConfirmationOpeningCondition) => {
+  ({}, { close: onClose, setModalConfirmationOpeningCondition }) => {
     const loaderData = useLoaderData<typeof workoutDisplayLoader>();
     const [currentSets, setCurrentSets] = useState<WorkoutItemData[]>([]);
     const navigate = useNavigate();

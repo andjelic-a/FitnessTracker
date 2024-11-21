@@ -16,7 +16,7 @@ import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 import Description from "../Description/Description";
 
 const SplitCreator = WindowFC(
-  ({}, onClose, setModalConfirmationOpeningCondition) => {
+  ({}, { close: onClose, setModalConfirmationOpeningCondition }) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const basicInfo = useContext(basicProfileInfoContext);
     const [selectedWorkouts, setselectedWorkouts] = useState<

@@ -10,7 +10,7 @@ import CurrentEditingWorkoutSetsContext from "../../Contexts/CurrentEditingWorko
 import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 
 const WorkoutCreator = WindowFC(
-  ({}, onClose, setModalConfirmationOpeningCondition) => {
+  ({}, { close: onClose, setModalConfirmationOpeningCondition }) => {
     const basicInfo = useContext(basicProfileInfoContext);
     const wrapperRef = useRef<HTMLDivElement>(null);
 

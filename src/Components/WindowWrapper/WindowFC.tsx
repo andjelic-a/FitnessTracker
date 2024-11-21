@@ -21,13 +21,21 @@ type WindowFCProps = {
   };
 };
 
+type CloseFunction = (force?: boolean) => void;
+
+type WindowFCInnerComponent<T extends {}> = (
+  props: T,
+  windowProps: WindowFCInnerComponentProps
+) => React.JSX.Element;
+
+type WindowFCInnerComponentProps = {
+  close: CloseFunction;
+  setModalConfirmationOpeningCondition?: (condition: () => boolean) => void;
+};
+
 const WindowFC =
   <T extends {}>(
-    component: (
-      props: T,
-      close: (force?: boolean) => void,
-      setModalConfirmationOpeningCondition?: (condition: () => boolean) => void
-    ) => React.JSX.Element,
+    component: WindowFCInnerComponent<T>,
     windowProps?: WindowFCProps
   ) =>
   (props: T) => {
@@ -72,13 +80,13 @@ const WindowFC =
             >
               <AnimatedLayout variants={windowProps?.animationTriggers}>
                 <AnimatePresence>
-                  {component(
-                    props,
-                    handleClose,
-                    windowProps?.closeConfirmationModal
-                      ? setModalOpeningCondition
-                      : undefined
-                  )}
+                  {component(props, {
+                    close: handleClose,
+                    setModalConfirmationOpeningCondition:
+                      windowProps?.closeConfirmationModal
+                        ? setModalOpeningCondition
+                        : undefined,
+                  })}
                 </AnimatePresence>
               </AnimatedLayout>
             </div>

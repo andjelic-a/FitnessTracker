@@ -25,7 +25,7 @@ import AnimatedOutlet from "../WindowWrapper/AnimatedOutlet";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import ExerciseChart from "../ExerciseChart/ExerciseChart";
 
-const WorkoutDisplay = WindowFC(({}, close) => {
+const WorkoutDisplay = WindowFC(({}, { close }) => {
   const loaderData = useLoaderData<typeof workoutDisplayLoader>();
   const userInfo = useContext(basicProfileInfoContext);
   const navigate = useNavigate();
