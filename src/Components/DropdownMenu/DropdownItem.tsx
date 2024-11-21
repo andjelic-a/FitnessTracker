@@ -7,8 +7,8 @@ interface DropdownItemProps {
 
 export default function DropdownItem({ children, onClick }: DropdownItemProps) {
   return (
-    <div className="dropdown-item" onClick={onClick}>
+    <button className="dropdown-item" onClick={onClick}>
       {children}
-    </div>
+    </button>
   );
 }

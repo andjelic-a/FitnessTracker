@@ -69,18 +69,22 @@
           @for $completed from 1 through $total {
             &.fill-#{$completed}-of-#{$total} {
               $percentage: calc(100 / $total) * $completed * 1%;
-              background: linear-gradient(to top,
-                  $primary-300 $percentage,
-                  $dark-200 $percentage );
+              background: linear-gradient(
+                to top,
+                $primary-300 $percentage,
+                $dark-200 $percentage
+              );
             }
           }
         }
 
         &.fill-red {
-          background: linear-gradient(to top,
-              orange,
-              $primary-100,
-              $primary-600 );
+          background: linear-gradient(
+            to top,
+            orange,
+            $primary-100,
+            $primary-600
+          );
         }
       }
     }
@@ -121,6 +125,10 @@
 
       &.selected {
         background-color: $dark-400;
+
+        &:focus-visible {
+          background-color: $dark-500;
+        }
       }
     }
   }

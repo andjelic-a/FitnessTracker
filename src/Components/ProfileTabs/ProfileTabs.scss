@@ -39,6 +39,10 @@
           &:has(~ .active-indicator) {
             transform: translateY(-0.7rem);
           }
+
+          &:focus-visible {
+            color: $primary-300;
+          }
         }
 
         .active-indicator {
@@ -179,11 +183,12 @@
       background-color: transparent;
 
       color: $dark-600;
-      transition: color .2s, border-color .2s ease-out;
+      transition: color 0.2s, border-color 0.2s ease-out;
       font-size: 3.5rem;
       font-weight: 100;
 
-      &:hover {
+      &:hover,
+      &:focus-visible {
         color: #ccc;
         font-weight: 400;
         border-color: #ccc;
@@ -191,7 +196,6 @@
     }
   }
 }
-
 
 @media screen and (max-width: 435px) {
   .filters-container {
