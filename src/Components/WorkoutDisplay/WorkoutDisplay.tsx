@@ -22,6 +22,8 @@ import CommentSection from "../CommentSection/CommentSection";
 import Description from "../Description/Description";
 import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 import AnimatedOutlet from "../WindowWrapper/AnimatedOutlet";
+import { Schema } from "../../Types/Endpoints/SchemaParser";
+import ExerciseChart from "../ExerciseChart/ExerciseChart";
 
 const WorkoutDisplay = WindowFC(({}, close) => {
   const loaderData = useLoaderData<typeof workoutDisplayLoader>();
@@ -167,6 +169,14 @@ const WorkoutDisplay = WindowFC(({}, close) => {
     []
   );
 
+  const [openChartWindowForExercise, setOpenChartWindowForExercise] =
+    useState<Schema<"SimpleExerciseResponseDTO"> | null>(null);
+  function handleOpenChartWindow(
+    exercise: Schema<"SimpleExerciseResponseDTO">
+  ) {
+    setOpenChartWindowForExercise(exercise);
+  }
+
   return (
     <div className="workout-display-container">
       <InPortal
@@ -229,6 +239,7 @@ const WorkoutDisplay = WindowFC(({}, close) => {
                       key={set.id}
                       exercise={set.exercise}
                       sets={set.sets}
+                      onOpenChartWindow={handleOpenChartWindow}
                     />
                   ))}
                 </div>
@@ -339,6 +350,10 @@ const WorkoutDisplay = WindowFC(({}, close) => {
       </ConfirmModalDialog>
 
       <AnimatedOutlet />
+
+      {openChartWindowForExercise && (
+        <ExerciseChart exercise={openChartWindowForExercise} />
+      )}
     </div>
   );
 });

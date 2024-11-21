@@ -2,39 +2,23 @@ import "./WorkoutDisplayItem.scss";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import WorkoutDisplaySet from "./WorkoutDisplaySet";
 import { Link } from "react-router-dom";
-import { useMemo, useState } from "react";
-import {
-  createHtmlPortalNode,
-  InPortal,
-  OutPortal,
-} from "react-reverse-portal";
+import { useState } from "react";
 import Icon from "../../Icon/Icon";
-import ExerciseChart from "../../ExerciseChart/ExerciseChart";
 
 type WorkoutDisplayItemProps = {
   exercise: Schema<"SimpleExerciseResponseDTO">;
   sets: Schema<"DetailedSetResponseDTO">[];
+  onOpenChartWindow: (exercise: Schema<"SimpleExerciseResponseDTO">) => void;
 };
 
 export default function WorkoutDisplayItem({
   sets,
   exercise,
+  onOpenChartWindow,
 }: WorkoutDisplayItemProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const chartPortalNode = useMemo(() => createHtmlPortalNode(), []);
-
-  const [isChartWindowOpen, setIsChartWindowOpen] = useState(false);
-  const [chartWindowPreviouslyOpen, setChartWindowPreviouslyOpen] =
-    useState(false);
-
   return (
     <div className="workout-display-item">
-      <InPortal node={chartPortalNode}>
-        {chartWindowPreviouslyOpen && isChartWindowOpen && (
-          <ExerciseChart exercise={exercise} />
-        )}
-      </InPortal>
-
       <div className="workout-display-item-header">
         <div className="image-container">
           <img src={exercise.image} />
@@ -56,12 +40,7 @@ export default function WorkoutDisplayItem({
         </button>
 
         <button
-          onClick={() => {
-            if (!isChartWindowOpen && !chartWindowPreviouslyOpen)
-              setChartWindowPreviouslyOpen(true);
-
-            setIsChartWindowOpen(!isChartWindowOpen);
-          }}
+          onClick={() => void onOpenChartWindow(exercise)}
           className="chart-link"
         >
           <Icon name="chart-line" />
@@ -88,8 +67,6 @@ export default function WorkoutDisplayItem({
           <WorkoutDisplaySet key={set.id} index={index} set={set} />
         ))}
       </div>
-
-      <OutPortal node={chartPortalNode} />
     </div>
   );
 }
