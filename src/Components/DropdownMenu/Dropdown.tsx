@@ -78,7 +78,7 @@ function ChildBasedDropdown({
         isOpen ? " rounded" : ""
       }`}
     >
-      <div
+      <button
         className="dropdown-button"
         onClick={() => {
           if (!isOpen) onOpen?.();
@@ -87,14 +87,13 @@ function ChildBasedDropdown({
       >
         {value}
         <Icon name="angle-down" className="dropdown-button-icon" />
-      </div>
+      </button>
+
       <div className={`dropdown-content ${isOpen ? "open" : ""}`}>
-        <div
-          onClick={() => handleItemClick(placeholder, "-1")}
-          className="dropdown-item"
-        >
+        <DropdownItem onClick={() => handleItemClick(placeholder, "-1")}>
           {placeholder}
-        </div>
+        </DropdownItem>
+
         {dropdownItems.map((item) => {
           const Item = item.type;
 
