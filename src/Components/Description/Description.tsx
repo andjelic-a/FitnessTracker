@@ -25,7 +25,12 @@ const Description = forwardRef<HTMLTextAreaElement, DescriptionProps>(
     return (
       <div className="description-container">
         <div className="description">
-          <label className="description-placeholder" htmlFor="description-input">{placeholder}</label>
+          <label
+            className="description-placeholder"
+            htmlFor="description-input"
+          >
+            {placeholder}
+          </label>
 
           <textarea
             id="description-input"
@@ -39,6 +44,7 @@ const Description = forwardRef<HTMLTextAreaElement, DescriptionProps>(
               }
             }}
             disabled={!isInputEnabled}
+            aria-labelledby="description-input"
           />
         </div>
       </div>
