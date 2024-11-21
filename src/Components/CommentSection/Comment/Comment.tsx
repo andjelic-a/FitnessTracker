@@ -2,13 +2,12 @@ import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { Schema } from "../../../Types/Endpoints/SchemaParser";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import Icon from "../../Icon/Icon";
-import { AnimatePresence, motion } from "framer-motion";
 import formatDateSince from "../../../Utility/FormatDateSince";
 import formatCount from "../../../Utility/FormatCount";
 import CommentInputField from "../CommentInputField/CommentInputField";
 import "./Comment.scss";
 import basicProfileInfoContext from "../../../Contexts/BasicProfileInfoContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type CommentProps = {
   type: "workout" | "split";
@@ -308,29 +307,7 @@ const Comment = React.memo<CommentProps>(
     }, [replies]);
 
     return (
-      <motion.div
-        initial={{
-          top: -33,
-          opacity: 0,
-          pointerEvents: "none",
-        }}
-        animate={{
-          top: 0,
-          opacity: 1,
-          pointerEvents: "all",
-        }}
-        exit={{
-          top: -25,
-          opacity: 0,
-          pointerEvents: "none",
-        }}
-        transition={{
-          duration: 0.25,
-          ease: "easeOut",
-        }}
-        style={{
-          position: "relative",
-        }}
+      <div
         className={`workout-comment-container ${props.isReply ? "reply" : ""}`}
       >
         <div className="image-container">
@@ -342,11 +319,13 @@ const Comment = React.memo<CommentProps>(
 
         <div className="main">
           <div className="header">
-            <p className="name">@{comment.creator.name}</p>
-            <p className="dot">●</p>
-            <p className="date">
-              {formatDateSince(new Date(comment.createdAt))}
-            </p>
+            <Link to={`/${comment.creator.username}`}>
+              <p className="name">@{comment.creator.name}</p>
+              <p className="dot">●</p>
+              <p className="date">
+                {formatDateSince(new Date(comment.createdAt))}
+              </p>
+            </Link>
           </div>
 
           <div className="body">
@@ -356,13 +335,17 @@ const Comment = React.memo<CommentProps>(
           <div className="footer">
             <div className="footer-interaction-container">
               <div className="like-container">
-                <Icon
-                  name="thumbs-up"
-                  onClick={handleLikeClick}
-                  className={`like-btn ${isLiked ? "active" : ""}`}
-                />
+                <button>
+                  <Icon
+                    name="thumbs-up"
+                    onClick={handleLikeClick}
+                    className={`like-btn ${isLiked ? "active" : ""}`}
+                  />
+                </button>
+
                 {likeCount > 0 && <p>{formatCount(likeCount)}</p>}
               </div>
+
               <button className="reply-btn" onClick={handleReplyBtnClick}>
                 Reply
               </button>
@@ -388,21 +371,20 @@ const Comment = React.memo<CommentProps>(
 
             {!props.isReply && replyCount > 0 && (
               <>
-                <div
+                <button
                   className="reply-count-container"
                   onClick={handleRepliesClick}
                 >
                   <Icon name={`caret-${repliesExpanded ? "up" : "down"}`} />
                   <p>{formatCount(replyCount)} replies</p>
-                </div>
+                </button>
 
                 {repliesExpanded && <>{replyElements}</>}
-                <AnimatePresence></AnimatePresence>
               </>
             )}
           </div>
         </div>
-      </motion.div>
+      </div>
     );
   }
 );

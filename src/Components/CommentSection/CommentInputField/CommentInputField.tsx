@@ -90,6 +90,7 @@ export default function CommentInputField({
       <div className="main">
         <div className="comment-textarea-container">
           <textarea
+            name={`${props.type}-input-textarea`}
             disabled={basicInfo == null || !basicInfo.isVerified}
             placeholder={`Add a ${
               props.type === "comment" ? "comment" : "reply"
