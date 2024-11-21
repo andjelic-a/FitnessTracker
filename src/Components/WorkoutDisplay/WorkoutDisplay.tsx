@@ -25,7 +25,7 @@ import AnimatedOutlet from "../WindowWrapper/AnimatedOutlet";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import ExerciseChart from "../ExerciseChart/ExerciseChart";
 
-const WorkoutDisplay = WindowFC(({}, { close }) => {
+const WorkoutDisplay = WindowFC(({}, { close, overrideCloseFunction }) => {
   const loaderData = useLoaderData<typeof workoutDisplayLoader>();
   const userInfo = useContext(basicProfileInfoContext);
   const navigate = useNavigate();
@@ -65,6 +65,18 @@ const WorkoutDisplay = WindowFC(({}, { close }) => {
       setFavoriteCount(currentWorkout.content.favoriteCount);
     });
   }, [loaderData]);
+
+  useEffect(() => {
+    overrideCloseFunction((base) => (force) => {
+      if (isChartWindowOpen.current) {
+        isChartWindowOpen.current = false;
+        setOpenChartWindowForExercise(null);
+        return;
+      }
+
+      base(force);
+    });
+  }, []);
 
   const handleThumbsUpClick = () => {
     if (!userInfo) {
@@ -169,12 +181,14 @@ const WorkoutDisplay = WindowFC(({}, { close }) => {
     []
   );
 
+  const isChartWindowOpen = useRef(false);
   const [openChartWindowForExercise, setOpenChartWindowForExercise] =
     useState<Schema<"SimpleExerciseResponseDTO"> | null>(null);
   function handleOpenChartWindow(
     exercise: Schema<"SimpleExerciseResponseDTO">
   ) {
     setOpenChartWindowForExercise(exercise);
+    isChartWindowOpen.current = true;
   }
 
   return (

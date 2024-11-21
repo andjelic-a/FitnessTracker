@@ -31,6 +31,9 @@ type WindowFCInnerComponent<T extends {}> = (
 type WindowFCInnerComponentProps = {
   close: CloseFunction;
   setModalConfirmationOpeningCondition?: (condition: () => boolean) => void;
+  overrideCloseFunction: (
+    override: (base: CloseFunction) => CloseFunction
+  ) => void;
 };
 
 const WindowFC =
@@ -41,7 +44,8 @@ const WindowFC =
   (props: T) => {
     const exists = useIsPresent();
     const navigate = useNavigate();
-    const handleClose = (force?: boolean) => {
+
+    const baseClose = (force?: boolean) => {
       if (!exists) return;
 
       if (
@@ -52,6 +56,7 @@ const WindowFC =
         navigate(-1);
       else setIsModalOpen(true);
     };
+    const handleClose = useRef<CloseFunction>(baseClose);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const modalCondition = useRef<(() => boolean) | undefined>(undefined);
@@ -72,20 +77,22 @@ const WindowFC =
               className="window-wrapper"
               onClick={(e) => {
                 if ((e.target as HTMLElement).className === "window-wrapper")
-                  handleClose();
+                  handleClose.current();
               }}
               onKeyDown={(e) => {
-                if (e.key === "Escape") handleClose();
+                if (e.key === "Escape") handleClose.current();
               }}
             >
               <AnimatedLayout variants={windowProps?.animationTriggers}>
                 <AnimatePresence>
                   {component(props, {
-                    close: handleClose,
+                    close: handleClose.current,
                     setModalConfirmationOpeningCondition:
                       windowProps?.closeConfirmationModal
                         ? setModalOpeningCondition
                         : undefined,
+                    overrideCloseFunction: (override) =>
+                      (handleClose.current = override(baseClose)),
                   })}
                 </AnimatePresence>
               </AnimatedLayout>
@@ -113,7 +120,7 @@ const WindowFC =
                   () => void setIsModalOpen(false),
                   () => {
                     setIsModalOpen(false);
-                    handleClose(true);
+                    handleClose.current(true);
                   }
                 )}
               </div>
