@@ -281,8 +281,8 @@ const Pins = memo<PinsProps>(({ pins, includeEditButtons }) => {
           <div className="pins-options-menu-header">
             <h1>Edit pinned items</h1>
 
-            <button className="close-btn">
-              <Icon name="xmark" onClick={handleCloseMenu} />
+            <button className="close-btn" onClick={handleCloseMenu}>
+              <Icon name="xmark" />
             </button>
           </div>
 
