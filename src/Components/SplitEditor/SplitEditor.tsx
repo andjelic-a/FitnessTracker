@@ -17,7 +17,7 @@ import useLoaderData from "../../BetterRouter/UseLoaderData";
 import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 
 const SplitEditor = WindowFC(
-  ({}, onClose, setModalConfirmationOpeningCondition) => {
+  ({}, { close: onClose, setModalConfirmationOpeningCondition }) => {
     const loaderData = useLoaderData<typeof splitDisplayLoader>();
     const basicInfo = useContext(basicProfileInfoContext);
 
