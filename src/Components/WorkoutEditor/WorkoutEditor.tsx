@@ -13,7 +13,14 @@ import extractSets from "../../Utility/ExtractSetsFromWorkout";
 import { useNavigate } from "react-router-dom";
 
 const WorkoutEditor = WindowFC(
-  ({}, { close: onClose, setModalConfirmationOpeningCondition }) => {
+  (
+    {},
+    {
+      close: onClose,
+      setModalConfirmationOpeningCondition,
+      overrideCloseFunction,
+    }
+  ) => {
     const loaderData = useLoaderData<typeof workoutDisplayLoader>();
     const [currentSets, setCurrentSets] = useState<WorkoutItemData[]>([]);
     const navigate = useNavigate();
@@ -209,6 +216,7 @@ const WorkoutEditor = WindowFC(
           </div>
 
           <WorkoutSetCreator
+            overrideCloseFunction={overrideCloseFunction}
             onOverlayOpen={() => {
               if (!wrapperRef.current) return;
 

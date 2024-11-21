@@ -21,7 +21,11 @@ type WindowFCProps = {
   };
 };
 
-type CloseFunction = (force?: boolean) => void;
+export type CloseFunction = (force?: boolean) => void;
+
+export type CloseFunctionOverride = (
+  override: (base: CloseFunction) => CloseFunction
+) => void;
 
 type WindowFCInnerComponent<T extends {}> = (
   props: T,
@@ -31,9 +35,7 @@ type WindowFCInnerComponent<T extends {}> = (
 type WindowFCInnerComponentProps = {
   close: CloseFunction;
   setModalConfirmationOpeningCondition?: (condition: () => boolean) => void;
-  overrideCloseFunction: (
-    override: (base: CloseFunction) => CloseFunction
-  ) => void;
+  overrideCloseFunction: CloseFunctionOverride;
 };
 
 const WindowFC =

@@ -1,5 +1,5 @@
 import "./WorkoutSetCreator.scss";
-import { useContext, useState, useMemo } from "react";
+import { useContext, useState, useMemo, useEffect, useRef } from "react";
 import WorkoutItem, { WorkoutItemData } from "./WorkoutItem/WorkoutItem";
 import {
   closestCenter,
@@ -25,24 +25,47 @@ import {
 import { createPortal } from "react-dom";
 import WorkoutItemDragOverlay from "./WorkoutItem/WorkoutItemDragOverlay";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
+import { CloseFunctionOverride } from "../WindowWrapper/WindowFC";
 
 type WorkoutSetCreatorProps = {
   onOverlayOpen: () => void;
   onOverlayClose: () => void;
+  overrideCloseFunction: CloseFunctionOverride;
 };
 
 export default function WorkoutSetCreator({
   onOverlayOpen,
   onOverlayClose,
+  overrideCloseFunction,
 }: WorkoutSetCreatorProps) {
   const [isChoosingExercise, setIsChoosingExercise] = useState<boolean>(false);
   const [replacingExerciseId, setReplacingExerciseId] = useState<string | null>(
     null
   );
 
+  const isOverlayOpen = useRef(false);
+  useEffect(() => {
+    overrideCloseFunction((base) => (force) => {
+      if (isOverlayOpen.current) {
+        handleExerciseSelectorClose();
+        return;
+      }
+
+      base(force);
+    });
+  }, []);
+
+  function handleExerciseSelectorClose() {
+    onOverlayClose();
+    setIsChoosingExercise(false);
+    isOverlayOpen.current = false;
+    setReplacingExerciseId(null);
+  }
+
   function handleAddExerciseSetBtnClick() {
     onOverlayOpen();
     setIsChoosingExercise(true);
+    isOverlayOpen.current = true;
   }
 
   const handleExerciseChosen = (
@@ -86,6 +109,7 @@ export default function WorkoutSetCreator({
   function handleReplaceExerciseRequest(id: string) {
     onOverlayOpen();
     setIsChoosingExercise(true);
+    isOverlayOpen.current = true;
     setReplacingExerciseId(id);
   }
 
@@ -95,11 +119,7 @@ export default function WorkoutSetCreator({
   const exerciseSelectorMemo = useMemo(
     () => (
       <ExerciseSelector
-        onClose={() => {
-          onOverlayClose();
-          setIsChoosingExercise(false);
-          setReplacingExerciseId(null);
-        }}
+        onClose={handleExerciseSelectorClose}
         onConfirmSelection={handleExerciseChosen}
         singleMode={!!replacingExerciseId}
       />

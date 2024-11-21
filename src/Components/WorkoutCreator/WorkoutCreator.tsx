@@ -10,7 +10,14 @@ import CurrentEditingWorkoutSetsContext from "../../Contexts/CurrentEditingWorko
 import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 
 const WorkoutCreator = WindowFC(
-  ({}, { close: onClose, setModalConfirmationOpeningCondition }) => {
+  (
+    {},
+    {
+      close: onClose,
+      setModalConfirmationOpeningCondition,
+      overrideCloseFunction,
+    }
+  ) => {
     const basicInfo = useContext(basicProfileInfoContext);
     const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -143,6 +150,7 @@ const WorkoutCreator = WindowFC(
           </div>
 
           <WorkoutSetCreator
+            overrideCloseFunction={overrideCloseFunction}
             onOverlayOpen={() => {
               if (!wrapperRef.current) return;
 
