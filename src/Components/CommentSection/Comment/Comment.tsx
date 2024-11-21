@@ -298,10 +298,10 @@ const Comment = React.memo<CommentProps>(
           ))}
 
           {!replies.reachedEnd && (
-            <div className="show-more" onClick={handleShowMoreRepliesClick}>
+            <button className="show-more" onClick={handleShowMoreRepliesClick}>
               <Icon name="long-arrow-down" />
               <p>Show more replies</p>
-            </div>
+            </button>
           )}
         </div>
       );
