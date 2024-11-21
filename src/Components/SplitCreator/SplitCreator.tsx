@@ -16,7 +16,14 @@ import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 import Description from "../Description/Description";
 
 const SplitCreator = WindowFC(
-  ({}, { close: onClose, setModalConfirmationOpeningCondition }) => {
+  (
+    {},
+    {
+      close: onClose,
+      setModalConfirmationOpeningCondition,
+      overrideCloseFunction,
+    }
+  ) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
     const basicInfo = useContext(basicProfileInfoContext);
     const [selectedWorkouts, setselectedWorkouts] = useState<
@@ -101,6 +108,18 @@ const SplitCreator = WindowFC(
       });
     }
 
+    const isWorkoutSelectorOpenRef = useRef(false);
+    useEffect(() => {
+      overrideCloseFunction((base) => (force) => {
+        if (isWorkoutSelectorOpenRef.current) {
+          handleCloseWorkoutSelector();
+          return;
+        }
+
+        base(force);
+      });
+    }, []);
+
     const [isWorkoutSelectorOpen, setIsWorkoutSelectorOpen] = useState(false);
     const workoutSelectorPortalNode = useMemo(() => createHtmlPortalNode(), []);
 
@@ -139,6 +158,7 @@ const SplitCreator = WindowFC(
     function handleOpenWorkoutSelector(day: Day) {
       setSelectingForDay(day);
       setIsWorkoutSelectorOpen(true);
+      isWorkoutSelectorOpenRef.current = true;
 
       if (!wrapperRef.current) return;
 
@@ -152,6 +172,7 @@ const SplitCreator = WindowFC(
       wrapperRef.current.style.overflow = "auto";
       wrapperRef.current.scrollTop = 0;
       setIsWorkoutSelectorOpen(false);
+      isWorkoutSelectorOpenRef.current = false;
     }
 
     return (
