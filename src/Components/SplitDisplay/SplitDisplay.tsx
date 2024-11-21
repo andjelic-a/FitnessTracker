@@ -157,20 +157,6 @@ const SplitDisplay = WindowFC(() => {
                   <p className="split-display-title">{split.content.name}</p>
 
                   <div className="buttons">
-                    {userInfo != null &&
-                      userInfo.username === split.content.creator.username && (
-                        <button
-                          className="split-display-edit"
-                          onClick={() => void navigate("edit")}
-                        >
-                          <Icon name="pen-to-square" />
-
-                          <p className="accessibility-only" aria-hidden={false}>
-                            Edit
-                          </p>
-                        </button>
-                      )}
-
                     <button
                       className="split-display-activate"
                       onClick={() => {
