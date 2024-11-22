@@ -5,10 +5,16 @@ type ExerciseDisplayHowToTabProps = {
   exercise: Schema<"DetailedExerciseResponseDTO">;
 };
 
-export default function ExerciseDisplayHowToTab({exercise}: ExerciseDisplayHowToTabProps) {
-  return <div className="full-exercise-display-how-to">
-    <h1>{exercise.name}</h1>
+export default function ExerciseDisplayHowToTab({
+  exercise,
+}: ExerciseDisplayHowToTabProps) {
+  return (
+    <div className="full-exercise-display-how-to">
+      <h1>{exercise.name}</h1>
 
-    <div className="full-exercise-display-how-to-description"><FormattedText children={exercise.description}/></div>
-  </div>;
+      <div className="full-exercise-display-how-to-description">
+        <FormattedText children={exercise.description} />
+      </div>
+    </div>
+  );
 }
