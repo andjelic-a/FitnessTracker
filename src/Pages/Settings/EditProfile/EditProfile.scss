@@ -57,6 +57,11 @@
         &:hover {
           background-color: $primary-400;
         }
+
+        &:focus-visible {
+          background-color: $primary-400;
+          outline: 1px solid white;
+        }
       }
     }
   }
@@ -282,6 +287,11 @@
 
     &:hover {
       background-color: $primary-400;
+    }
+
+    &:focus-visible {
+      background-color: $primary-400;
+      outline: 1px solid white;
     }
   }
 }

@@ -5,6 +5,7 @@ import "./EditProfile.scss";
 import compressImage from "../../../Data/ImageCompression";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import basicProfileInfoContext from "../../../Contexts/BasicProfileInfoContext";
+import { Tooltip } from "react-tooltip";
 
 export default function EditProfile() {
   const user = useContext(basicProfileInfoContext);
@@ -107,12 +108,14 @@ export default function EditProfile() {
       <h3>Edit profile</h3>
 
       <div className="edit-profile-user-details">
-        <div className={`edit-profile-image-container`}>
-          <div
-            className={`edit-profile-image-trigger`}
-            onMouseEnter={() => setIsImageHovered(true)}
-            onMouseLeave={() => setIsImageHovered(false)}
-          >
+        <div
+          className={`edit-profile-image-container`}
+          onMouseEnter={() => setIsImageHovered(true)}
+          onMouseLeave={() => setIsImageHovered(false)}
+          onFocus={() => setIsImageHovered(true)}
+          onBlur={() => setIsImageHovered(false)}
+        >
+          <div className={`edit-profile-image-trigger`}>
             <input
               ref={imageInputRef}
               className="edit-profile-image-input"
@@ -155,6 +158,12 @@ export default function EditProfile() {
             <p className="accessibility-only" aria-hidden={false}>
               Remove image
             </p>
+
+            <Tooltip
+              anchorSelect=".edit-profile-image-remove"
+              delayShow={300}
+              content="Remove image"
+            />
           </button>
         </div>
       </div>
