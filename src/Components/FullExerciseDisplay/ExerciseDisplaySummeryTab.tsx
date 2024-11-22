@@ -73,7 +73,7 @@ export default function ExerciseDisplaySummeryTab({
           <div className="full-exercise-display-info-personal-records-body">
             <div className="full-exercise-display-info-personal-body-record">
               <p>Heaviest Weight</p>
-              <p>{exercise.mostWeightLifted?.weight || 0 + "kg"}</p>
+              <p>{(exercise.mostWeightLifted?.weight || 0) + "kg"}</p>
             </div>
             <div className="full-exercise-display-info-personal-body-record">
               <p>Best 1RM</p>
@@ -85,7 +85,7 @@ export default function ExerciseDisplaySummeryTab({
             </div>
             <div className="full-exercise-display-info-personal-body-record">
               <p>Best Session Volume</p>
-              <p>{exercise.mostSessionVolumeLifted?.totalVolumeLifted || 0 + "kg"}</p>
+              <p>{(exercise.mostSessionVolumeLifted?.totalVolumeLifted || 0) + "kg"}</p>
             </div>
           </div>
         </div>
