@@ -12,6 +12,7 @@ import {
   OutPortal,
 } from "react-reverse-portal";
 import { useNavigate } from "react-router-dom";
+import Icon from "../../Components/Icon/Icon";
 
 type SettingsTab = "edit" | "auth" | "privacy";
 const Settings = WindowFC(({}, { close }) => {
@@ -80,24 +81,28 @@ const Settings = WindowFC(({}, { close }) => {
 
   return (
     <div className="settings-container">
+      <button onClick={() => close()} className="close-btn">
+        <Icon name="xmark" />
+      </button>
+
       <InPortal node={tabPortals["edit"]} children={tabNodes["edit"]} />
       <InPortal node={tabPortals["auth"]} children={tabNodes["auth"]} />
       <InPortal node={tabPortals["privacy"]} children={tabNodes["privacy"]} />
 
       <div className="settings-sidebar">
-        <div onClick={() => setOpenTab("edit")} className="settings-item">
+        <button onClick={() => setOpenTab("edit")} className="settings-item">
           Edit profile
-        </div>
+        </button>
 
-        <div onClick={() => setOpenTab("auth")} className="settings-item">
+        <button onClick={() => setOpenTab("auth")} className="settings-item">
           Authentication
-        </div>
+        </button>
 
-        <div onClick={() => setOpenTab("privacy")} className="settings-item">
+        <button onClick={() => setOpenTab("privacy")} className="settings-item">
           Privacy
-        </div>
+        </button>
 
-        <div
+        <button
           onClick={() => {
             logout().then(() => {
               sessionStorage.setItem("revalidate-main", "true");
@@ -107,14 +112,14 @@ const Settings = WindowFC(({}, { close }) => {
           className="settings-item"
         >
           Log out
-        </div>
+        </button>
 
-        <div
+        <button
           onClick={() => close()}
           className="settings-item settings-item-cancel"
         >
           Cancel
-        </div>
+        </button>
       </div>
 
       <OutPortal node={tabPortals[openTab]} />
