@@ -28,21 +28,28 @@ const ExerciseDisplayHistoryTab = memo(
           if (segmentData.code !== "OK") return null;
 
           return segmentData.content.map((completedWorkout) => (
-            //The outer div represents a completed workout which contains the date of completion and all sets that the user completed of this exercise
             <div
               key={completedWorkout.completionDate}
-              className="completed-workout"
+              className="full-exercise-display-history"
             >
-              <p className="date">{completedWorkout.completionDate}</p>
+              <div className="full-exercise-display-history-header">
+                <img
+                  src={exercise.image}
+                  alt={exercise.name}
+                  className="full-exercise-display-history-image"
+                />
+                <h3>{exercise.name}</h3>
+              </div>
 
-              {/* Inner div represents a single completed set which contains the reps and weight */}
-              {completedWorkout.setsCompleted.map((completedSet, i) => (
-                <div key={i} className="completed-set">
-                  <p>
-                    {completedSet.weight}x{completedSet.reps}
-                  </p>
-                </div>
-              ))}
+              <div className="full-exercise-display-history-sets">
+                {completedWorkout.setsCompleted.map((completedSet, index) => (
+                  <div key={index} className="full-exercise-display-history-completed-set">
+                    <p>
+                      {index + 1} {completedSet.weight} x {completedSet.reps}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           ));
         }}

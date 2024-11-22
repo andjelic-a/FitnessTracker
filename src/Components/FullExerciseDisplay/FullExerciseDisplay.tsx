@@ -63,7 +63,11 @@ export default function FullExerciseDisplay() {
               </div>
             )}
 
-            <div className="full-exercise-display-body">
+            <div
+              className={`full-exercise-display-body ${
+                activeTab === 1 && "history-tab-active"
+              }`}
+            >
               {activeTab === 0 && (
                 <ExerciseDisplaySummeryTab exercise={exercise.content} />
               )}

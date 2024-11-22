@@ -196,12 +196,27 @@
         }
       }
     }
-  }
 
-  .full-exercise-display-how-to {
-
-    .full-exercise-display-how-to-description {
-      margin-top: 2rem;
+    .full-exercise-display-history {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: auto;
+    }
+  
+    .full-exercise-display-how-to {
+  
+      .full-exercise-display-how-to-description {
+        margin-top: 2rem;
+      }
     }
   }
+
+  .history-tab-active {
+    height: calc(100% - 10rem);
+  }
+}
+
+.lazy-container, .lazy-segment {
+  flex-direction: column;
 }
