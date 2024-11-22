@@ -85,7 +85,7 @@ export default function ExerciseDisplaySummeryTab({
             </div>
             <div className="full-exercise-display-info-personal-body-record">
               <p>Best Session Volume</p>
-              <p>{"kg"}</p>
+              <p>{exercise.mostSessionVolumeLifted?.totalVolumeLifted || 0 + "kg"}</p>
             </div>
           </div>
         </div>

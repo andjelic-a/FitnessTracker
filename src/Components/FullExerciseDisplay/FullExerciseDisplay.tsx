@@ -54,12 +54,14 @@ export default function FullExerciseDisplay() {
                 />
               </div>
             </div>
-            <div className="full-exercise-display-image">
-              <img
-                src={exercise.content.image ?? ""}
-                alt="Image of the exercise"
-              />
-            </div>
+            {(activeTab === 0 || activeTab === 2) && (
+              <div className="full-exercise-display-image">
+                <img
+                  src={exercise.content.image ?? ""}
+                  alt="Image of the exercise"
+                />
+              </div>
+            )}
 
             <div className="full-exercise-display-body">
               {activeTab === 0 && (
