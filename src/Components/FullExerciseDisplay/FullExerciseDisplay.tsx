@@ -7,11 +7,13 @@ import Icon from "../Icon/Icon";
 import ExerciseDisplaySummeryTab from "./ExerciseDisplaySummeryTab";
 import ExerciseDisplayHistoryTab from "./ExerciseDisplayHistoryTab";
 import ExerciseDisplayHowToTab from "./ExerciseDisplayHowToTab";
+import { useNavigate } from "react-router-dom";
 
 export default function FullExerciseDisplay() {
   const data = useLoaderData<typeof singleExerciseLoader>();
 
   const [activeTab, setActiveTab] = useState<number>(0);
+  const navigate = useNavigate();
 
   return (
     <Async await={data.exercise}>
@@ -21,33 +23,41 @@ export default function FullExerciseDisplay() {
         return (
           <div className="full-exercise-display">
             <div className="full-exercise-display-header">
-              <Icon
-                name="arrow-left"
+              <button
+                onClick={() => navigate(-1)}
                 className="full-exercise-display-header-arrow"
-              />
-              <Icon
-                name="ellipsis"
+              >
+                <Icon name="arrow-left" />
+              </button>
+
+              <button
+                onClick={() => console.log("dot dot dot")}
                 className="full-exercise-display-header-ellipsis"
-              />
+              >
+                <Icon name="ellipsis" />
+              </button>
+
               <div className="full-exercise-display-header-tabs-container">
-                <div
+                <button
                   className="full-exercise-display-header-tab"
                   onClick={() => setActiveTab(0)}
                 >
                   <p>Summary</p>
-                </div>
-                <div
+                </button>
+
+                <button
                   className="full-exercise-display-header-tab"
                   onClick={() => setActiveTab(1)}
                 >
                   <p>History</p>
-                </div>
-                <div
+                </button>
+
+                <button
                   className="full-exercise-display-header-tab"
                   onClick={() => setActiveTab(2)}
                 >
                   <p>How to</p>
-                </div>
+                </button>
                 <div
                   className="full-exercise-display-header-tab-indicator"
                   style={{ left: `${(100 / 3) * activeTab}%` }}
