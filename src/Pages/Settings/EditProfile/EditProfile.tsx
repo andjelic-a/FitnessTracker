@@ -11,9 +11,6 @@ export default function EditProfile() {
   const user = useContext(basicProfileInfoContext);
   const [isImageHovered, setIsImageHovered] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [selectedGender, setSelectedGender] = useState<
-    "male" | "none" | "female"
-  >("none");
 
   const imageInputRef = useRef<HTMLInputElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -58,7 +55,6 @@ export default function EditProfile() {
         setDefaultUsernameValue(user.username);
         setDefaultNameValue(user.name);
         setDefaultBioValue(user.bio);
-        setSelectedGender(user.gender === 0 ? "male" : "female");
       });
   }, []);
 
@@ -195,30 +191,6 @@ export default function EditProfile() {
           ref={bioInputRef}
           defaultValue={defaultBioValue}
         ></textarea>
-      </div>
-
-      <div className="edit-profile-gender">
-        <div
-          className={`edit-profile-gender-background ${selectedGender}`}
-        ></div>
-        <div
-          className={`edit-profile-gender-option`}
-          onClick={() => setSelectedGender("male")}
-        >
-          <p>Male</p>
-        </div>
-        <div
-          className={`edit-profile-gender-option`}
-          onClick={() => setSelectedGender("none")}
-        >
-          <p>None</p>
-        </div>
-        <div
-          className={`edit-profile-gender-option`}
-          onClick={() => setSelectedGender("female")}
-        >
-          <p>Female</p>
-        </div>
       </div>
 
       <div className="edit-profile-save-container">

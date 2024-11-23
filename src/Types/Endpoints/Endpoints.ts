@@ -1003,6 +1003,129 @@ type MappedEndpoints = {
         };
       };
     };
+    "/api/exercise/{id}/history": {
+      get: {
+        tags: ["Exercise"];
+        parameters: [
+          {
+            name: "id";
+            in: "path";
+            required: true;
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "offset";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          },
+          {
+            name: "limit";
+            in: "query";
+            schema: {
+              type: "integer";
+              format: "int32";
+            };
+          }
+        ];
+        responses: {
+          "200": {
+            description: "OK";
+            content: {
+              "text/plain": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/ExerciseHistorySegmentResponseDTO";
+                  };
+                };
+              };
+              "application/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/ExerciseHistorySegmentResponseDTO";
+                  };
+                };
+              };
+              "text/json": {
+                schema: {
+                  type: "array";
+                  items: {
+                    $ref: "#/components/schemas/ExerciseHistorySegmentResponseDTO";
+                  };
+                };
+              };
+            };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "404": {
+            description: "Not Found";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
     "/api/muscle": {
       post: {
         tags: ["Muscle"];
@@ -9073,6 +9196,20 @@ type MappedEndpoints = {
         };
         additionalProperties: false;
       };
+      CompletedSetResponseDTO: {
+        type: "object";
+        properties: {
+          reps: {
+            type: "integer";
+            format: "int32";
+          };
+          weight: {
+            type: "number";
+            format: "float";
+          };
+        };
+        additionalProperties: false;
+      };
       CreateCompletedSetRequestDTO: {
         type: "object";
         properties: {
@@ -9385,6 +9522,15 @@ type MappedEndpoints = {
               $ref: "#/components/schemas/SimpleEquipmentResponseDTO";
             };
           };
+          mostWeightLifted: {
+            $ref: "#/components/schemas/ExerciseRecordReponseDTO";
+          };
+          mostVolumeLifted: {
+            $ref: "#/components/schemas/ExerciseRecordReponseDTO";
+          };
+          mostSessionVolumeLifted: {
+            $ref: "#/components/schemas/ExerciseSessionRecordReponseDTO";
+          };
         };
         additionalProperties: false;
       };
@@ -9528,9 +9674,6 @@ type MappedEndpoints = {
           currentSplit: {
             $ref: "#/components/schemas/DetailedUserSplitResponseDTO";
           };
-          gender: {
-            $ref: "#/components/schemas/Gender";
-          };
         };
         additionalProperties: false;
       };
@@ -9623,10 +9766,53 @@ type MappedEndpoints = {
         };
         additionalProperties: false;
       };
-      Gender: {
-        enum: [0, 1];
-        type: "integer";
-        format: "int32";
+      ExerciseHistorySegmentResponseDTO: {
+        type: "object";
+        properties: {
+          completionDate: {
+            type: "string";
+            format: "date-time";
+          };
+          setsCompleted: {
+            type: "array";
+            items: {
+              $ref: "#/components/schemas/CompletedSetResponseDTO";
+            };
+          };
+        };
+        additionalProperties: false;
+      };
+      ExerciseRecordReponseDTO: {
+        type: "object";
+        properties: {
+          achievedAt: {
+            type: "string";
+            format: "date-time";
+          };
+          weight: {
+            type: "number";
+            format: "float";
+          };
+          reps: {
+            type: "integer";
+            format: "int32";
+          };
+        };
+        additionalProperties: false;
+      };
+      ExerciseSessionRecordReponseDTO: {
+        type: "object";
+        properties: {
+          achievedAt: {
+            type: "string";
+            format: "date-time";
+          };
+          totalVolumeLifted: {
+            type: "number";
+            format: "float";
+          };
+        };
+        additionalProperties: false;
       };
       LoginUserRequestDTO: {
         type: "object";
