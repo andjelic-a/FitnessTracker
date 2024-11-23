@@ -11,7 +11,7 @@ import Modal from "react-modal";
 import Error from "./Components/Error/Error.tsx";
 import Exercises from "./Pages/Exercises/Exercises.tsx";
 import FullExerciseDisplay from "./Components/FullExerciseDisplay/FullExerciseDisplay.tsx";
-import Authentication from "./Pages/Authentication/Authentication.tsx";
+import AuthenticationPage from "./Pages/Authentication/Authentication.tsx";
 import AdminPanel from "./Pages/AdminPanel/AdminPanel.tsx";
 import AdminExercisePanel from "./Pages/AdminPanel/Exercises/AdminExercisePanel.tsx";
 import MuscleAdminPanel from "./Pages/AdminPanel/Muscles/MuscleAdminPanel.tsx";
@@ -83,7 +83,7 @@ const routes: RouteObject[] = [
       },
       {
         path: "authentication",
-        element: <Authentication />,
+        element: <AuthenticationPage />,
         loader: authenticationLoader,
       },
       {
