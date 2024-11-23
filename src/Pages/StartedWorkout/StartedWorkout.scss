@@ -1,60 +1,121 @@
 @import "../../Palette.scss";
 
 .started-workout-container {
+  position: relative;
+
+  max-width: 75rem;
   width: 100%;
-  height: 100%;
-  background-color: $dark-100;
+  height: 100rem;
+  border-radius: 1rem;
+  padding: 1rem;
+
+  background-color: $dark-200;
+  border: 3px solid $dark-200;
+
+  overflow: hidden;
+
+  .alice-carousel__stage-item {
+    display: flex;
+    justify-content: center;
+  }
 
   .started-workout-set {
-    padding: 5rem 5rem 0 5rem;
+    display: flex;
+    flex-direction: column;
 
-    display: grid;
-    gap: 2rem;
-    grid-template-rows: max-content 1fr;
-    grid-template-columns: max-content 1fr;
-    grid-template-areas: "image title" "image sets";
+    max-width: 60rem;
+    width: 100%;
+    height: auto;
+    min-height: 18rem;
+    border-radius: 1rem;
 
-    @media screen and (max-width: 799.98px) {
-      grid-template-rows: max-content max-content 1fr;
-      grid-template-columns: 1fr;
-      grid-template-areas: "image" "title" "sets";
-    }
+    gap: 1rem;
 
-    a {
-      grid-area: title;
-      color: #fff;
-      text-decoration: none;
-      outline: none;
+    background-color: $dark-400;
+    overflow: hidden;
 
-      h1 {
-        font-size: 3rem;
-      }
-
-      &:hover,
-      &:focus-visible {
-        color: $primary-400;
-      }
-    }
-
-    img {
-      width: 40rem;
-      max-width: 100%;
-      grid-area: image;
-    }
-
-    .started-sets {
-      grid-area: sets;
+    .started-workout-set-header {
       display: flex;
-      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
       gap: 1rem;
+
+      padding: 0 1rem;
+      padding-top: 1rem;
+
+      .started-workout-set-image-container {
+        width: 6rem;
+        height: 6rem;
+        overflow: hidden;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .started-workout-set-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      a {
+        color: #fff;
+        text-decoration: none;
+        outline: none;
+
+        h1 {
+          font-size: 2rem;
+          font-weight: 500;
+        }
+
+        &:hover,
+        &:focus-visible {
+          color: $primary-400;
+        }
+      }
+    }
+
+    .started-workout-set-seactions {
+      width: 100%;
+
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 3rem;
+
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: #bbb;
+
+      p {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 3rem;
+      }
+    }
+
+    .started-workout-set-body {
+      height: 100%;
+
+      > :nth-child(odd) {
+        background-color: $dark-300;
+      }
 
       .started-set {
         display: flex;
-        gap: 2rem;
+        align-items: center;
+        padding: 0 2rem;
+        gap: 3rem;
 
-        .set-info {
+        height: 5rem;
+
+        p {
           display: flex;
-          gap: 1rem;
+          justify-content: center;
+          align-items: center;
+          min-width: 3rem;
         }
 
         .complete-inputs {

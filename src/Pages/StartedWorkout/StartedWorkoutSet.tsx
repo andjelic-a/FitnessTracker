@@ -16,18 +16,29 @@ export default function StartedWorkoutSet({
 }: StartedWorkoutSetsProps) {
   return (
     <div className="started-workout-set">
-      <img
-        src={set.exercise.image}
-        alt={`Image of exercise named ${set.exercise.name}`}
-      />
+      <div className="started-workout-set-header">
+        <div className="started-workout-set-image-container">
+          <img
+            className="started-workout-set-image"
+            src={set.exercise.image}
+            alt={`Image of exercise named ${set.exercise.name}`}
+          />
+        </div>
 
-      <Link target="_blank" to={`/exercises/${set.exercise.id}`}>
-        <h1>{set.exercise.name}</h1>
-      </Link>
+        <Link target="_blank" to={`/exercises/${set.exercise.id}`}>
+          <h1>{set.exercise.name}</h1>
+        </Link>
+      </div>
 
-      <div className="started-sets">
-        {set.sets.map((innerSet) => (
+      <div className="started-workout-set-seactions">
+        <p>SET</p>
+        <p>WEIGHT & REPS</p>
+      </div>
+
+      <div className="started-workout-set-body">
+        {set.sets.map((innerSet, index) => (
           <SingleSet
+            index={index}
             set={innerSet}
             completedInfo={
               completedInfo?.sets.find((x) => x.id === innerSet.id) ?? null
@@ -56,12 +67,14 @@ export default function StartedWorkoutSet({
 }
 
 type StartedWorkoutSetProps = {
+  index: number;
   set: ReturnType<typeof extractSetsNoMapping>[number]["sets"][number];
   completedInfo: CompletedSet["sets"][number] | null;
   setCompletedInfo: (completedInfo: CompletedSet["sets"][number]) => void;
 };
 
 function SingleSet({
+  index,
   set,
   completedInfo,
   setCompletedInfo,
@@ -84,21 +97,21 @@ function SingleSet({
 
   return (
     <div className="started-set" key={set.id}>
-      <p className="set-info">
-        <span>
+        <p>{index + 1}</p>
+
+        <p>
           {set.type === 0
-            ? `${set.riR} RiR`
+            ? set.riR
             : set.type === 1
             ? "Warmup"
             : "Failure"}
-        </span>
+        </p>
 
-        <span>
+        <p>
           {set.bottomRepRange === set.topRepRange
             ? set.bottomRepRange
             : `${set.bottomRepRange}-${set.topRepRange}`}
-        </span>
-      </p>
+        </p>
 
       {isEditing ? (
         <div className="complete-inputs">
