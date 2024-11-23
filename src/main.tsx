@@ -42,7 +42,6 @@ import WorkoutEditor from "./Components/WorkoutEditor/WorkoutEditor.tsx";
 import SplitDisplay from "./Components/SplitDisplay/SplitDisplay.tsx";
 import splitDisplayLoader from "./Components/SplitDisplay/SplitDisplayLoader.ts";
 import SplitCreator from "./Components/SplitCreator/SplitCreator.tsx";
-import SplitEditor from "./Components/SplitEditor/SplitEditor.tsx";
 import WorkoutCreator from "./Components/WorkoutCreator/WorkoutCreator.tsx";
 import appLoader from "./AppLoader.ts";
 
@@ -169,11 +168,6 @@ const routes: RouteObject[] = [
           {
             path: "split/:name",
             element: <SplitDisplay />,
-            loader: splitDisplayLoader,
-          },
-          {
-            path: "split/:name/edit",
-            element: <SplitEditor />,
             loader: splitDisplayLoader,
           },
           {

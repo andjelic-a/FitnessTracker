@@ -14,7 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 type SettingsTab = "edit" | "auth" | "privacy";
-const Settings = WindowFC(({}, close) => {
+const Settings = WindowFC(({}, { close }) => {
   const [openTab, setOpenTab] = useState<SettingsTab>("edit");
   const navigate = useNavigate();
 
@@ -69,8 +69,8 @@ const Settings = WindowFC(({}, close) => {
     () => ({
       edit: createHtmlPortalNode({
         attributes: {
-          class: "edit-profile-container"
-        }
+          class: "edit-profile-container",
+        },
       }),
       auth: createHtmlPortalNode(),
       privacy: createHtmlPortalNode(),
@@ -109,7 +109,10 @@ const Settings = WindowFC(({}, close) => {
           Log out
         </div>
 
-        <div onClick={() => close()} className="settings-item settings-item-cancel">
+        <div
+          onClick={() => close()}
+          className="settings-item settings-item-cancel"
+        >
           Cancel
         </div>
       </div>

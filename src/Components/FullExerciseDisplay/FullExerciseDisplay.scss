@@ -1,18 +1,324 @@
 @import "../../Palette.scss";
 
 .full-exercise-display {
-  border: 3px solid #fff;
-  display: grid;
-  grid-template-columns: 4fr 6fr;
-  column-gap: 2vw;
+  position: relative;
 
-  img {
-    grid-column: 1;
-    aspect-ratio: auto;
+  max-width: 75rem;
+  width: 100%;
+  height: 100rem;
+  border-radius: 1rem;
+
+  background-color: $dark-200;
+  border: 3px solid $dark-200;
+
+  overflow: hidden;
+
+  .full-exercise-display-header {
+    position: relative;
+
     width: 100%;
+    height: 10rem;
+
+    .full-exercise-display-header-arrow {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+
+      font-size: 2.5rem;
+      cursor: pointer;
+
+      &:hover {
+        color: $primary-500;
+      }
+    }
+
+    .full-exercise-display-header-ellipsis {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+
+      font-size: 2.5rem;
+      cursor: pointer;
+
+      &:hover {
+        color: $primary-500;
+      }
+    }
+
+    .full-exercise-display-header-tabs-container {
+      position: absolute;
+      bottom: 0;
+
+      width: 100%;
+      height: 50%;
+
+      display: flex;
+
+      .full-exercise-display-header-tab {
+        position: relative;
+        width: calc(100% / 3);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        transition: 0.2s;
+
+        p {
+          font-size: 1.8rem;
+          font-weight: 500;
+          user-select: none;
+        }
+
+        &:hover {
+          background-color: $dark-300;
+          cursor: pointer;
+        }
+      }
+
+      .full-exercise-display-header-tab-indicator {
+        position: absolute;
+        bottom: 0;
+        width: calc(100% / 3);
+        height: 3px;
+        background-color: $primary-300;
+        transition: 0.2s;
+      }
+    }
   }
 
-  .info {
-    grid-column: 2;
+  .full-exercise-display-image {
+    width: 100%;
+    aspect-ratio: 2.5/1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #fff;
+
+    img {
+      height: 100%;
+    }
+  }
+
+  h1 {
+    font-size: 3rem;
+  }
+
+  .full-exercise-display-body {
+    width: 100%;
+    height: calc(100% - (100% / (2.5 / 1)));
+    padding: 1rem;
+
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $dark-300;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $dark-500;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: $dark-600;
+    }
+
+    .full-exercise-display-info {
+      width: 100%;
+      height: 100%;
+
+      h3 {
+        font-size: 1.8rem;
+        font-weight: 500;
+      }
+
+      .full-exercise-display-info-muscle-equipment-section {
+        display: flex;
+        flex-direction: column;
+
+        margin-top: 2rem;
+        gap: 1rem;
+
+        color: #aaa;
+
+        .full-exercise-display-info-muscle-equipment {
+          display: flex;
+          width: 100%;
+          align-items: flex-end;
+        }
+      }
+
+      .full-exercise-display-info-personal-records {
+        margin-top: 2rem;
+
+        .full-exercise-display-info-personal-records-header {
+          display: flex;
+          gap: 1rem;
+
+          .icon {
+            color: $primary-300;
+            font-size: 2rem;
+          }
+
+          h3 {
+            color: #aaa;
+          }
+        }
+
+        .full-exercise-display-info-personal-records-body {
+          *:last-child {
+            border: none !important;
+          }
+
+          .full-exercise-display-info-personal-body-record {
+            width: 100%;
+            height: 7rem;
+            border-bottom: 1px solid $dark-400;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            font-size: 2rem;
+
+            *:last-child {
+              color: $primary-500;
+            }
+          }
+        }
+      }
+    }
+
+    .full-exercise-display-history {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .lazy-container,
+      .lazy-segment {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+
+        width: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      .full-exercise-display-history-item {
+        display: flex;
+        flex-direction: column;
+
+        max-width: 60rem;
+        width: 100%;
+        height: auto;
+        min-height: 18rem;
+        border-radius: 1rem;
+
+        gap: 1rem;
+
+        background-color: $dark-400;
+        overflow: hidden;
+
+        .full-exercise-display-history-header {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          gap: 1rem;
+
+          padding: 0 1rem;
+          padding-top: 1rem;
+
+          .full-exercise-display-history-image-container {
+            width: 6rem;
+            height: 6rem;
+            overflow: hidden;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .full-exercise-display-history-image {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+          }
+
+          h3 {
+            font-size: 2rem;
+            font-weight: 500;
+          }
+
+          p {
+            margin-left: auto;
+
+            color: #bbb;
+            font-weight: 500;
+            font-size: 1.8rem;
+          }
+        }
+
+        .full-exercise-display-history-set-seactions {
+          width: 100%;
+
+          display: flex;
+          align-items: center;
+          padding: 0 2rem;
+          gap: 3rem;
+
+          font-size: 1.4rem;
+          font-weight: 500;
+          color: #bbb;
+
+          p {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 3rem;
+          }
+        }
+
+        .full-exercise-display-history-sets {
+
+          >:nth-child(even) {
+            background-color: $dark-300;
+          }
+
+          .full-exercise-display-history-completed-set {
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            gap: 3rem;
+            
+            height: 5rem;
+
+            p {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              min-width: 3rem;
+            }
+          }
+        }
+      }
+    }
+
+    .full-exercise-display-how-to {
+      .full-exercise-display-how-to-description {
+        margin-top: 2rem;
+      }
+    }
+  }
+
+  .history-tab-active {
+    height: calc(100% - 10rem);
   }
 }

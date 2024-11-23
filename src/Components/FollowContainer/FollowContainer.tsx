@@ -1,9 +1,10 @@
 import "./FollowContainer.scss";
-import AnimatedLayout from "../WindowWrapper/AnimatedLayout";
 import { AnimatePresence } from "framer-motion";
-import LazyLoadingContainer from "../LazyLoadingContainer/LazyLoadingContainer";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import LazyLoadingContainer from "../LazyLoadingContainer/LazyLoadingContainer";
+import AnimatedLayout from "../WindowWrapper/AnimatedLayout";
+import Icon from "../Icon/Icon";
 
 type FollowContainerProps = {
   followersOrFollowing: "followers" | "following";
@@ -74,10 +75,17 @@ function FollowContainer({
           }}
         >
           <div className="follow-container">
-            <div className="follow-container-search">
-              <input type="text" placeholder="Search" ref={searchBarRef} />
+            <div className="follow-container-header">
+              <h3>{followersOrFollowing === "followers" ? "Followers" : "Following"}</h3>
 
-              <button onClick={constructRequestParameters}>Search</button>
+              <div className="follow-container-search">
+                <input type="text" placeholder="Search" ref={searchBarRef} />
+                <Icon
+                  name="search"
+                  className="follow-container-search-button"
+                  onClick={constructRequestParameters}
+                />
+              </div>
             </div>
 
             <LazyLoadingContainer
@@ -90,7 +98,7 @@ function FollowContainer({
                 if (segmentResponse.code !== "OK") return;
 
                 return (
-                  <>
+                  <div className="follow-container-body">
                     {segmentResponse.content.map((x) => (
                       <div
                         className="follow-container-user"
@@ -104,7 +112,7 @@ function FollowContainer({
                         <p>{x.name}</p>
                       </div>
                     ))}
-                  </>
+                  </div>
                 );
                 ``;
               }}

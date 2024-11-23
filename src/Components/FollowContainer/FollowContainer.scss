@@ -1,19 +1,21 @@
 @import "../../Palette.scss";
 
 .follow-container {
-  z-index: 5123;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  width: 40rem;
+  width: 50rem;
   min-height: 100svh;
   background-color: $dark-300;
   transition: 0.2s;
 
   .follow-container-header {
-    width: 80%;
-    height: 4rem;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 12rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,6 +25,7 @@
   }
 
   .follow-container-search {
+    position: relative;
     width: 80%;
     height: 6rem;
     display: flex;
@@ -31,7 +34,7 @@
 
     input {
       width: 100%;
-      height: 3rem;
+      height: 4rem;
       border-radius: 0.5rem;
       border: none;
       outline: none;
@@ -44,24 +47,41 @@
         color: $dark-600;
       }
     }
-  }
 
-  .follow-container-user {
-    width: 100%;
-    height: 6rem;
-    padding: 0 2rem;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 1rem;
-    cursor: pointer;
-
-    &:hover {
-      background-color: $dark-400;
-    }
-
-    img {
-      width: 5rem;
+    .follow-container-search-button {
+      position: absolute;      
+      right: 1rem;
+      cursor: pointer;
     }
   }
-}
+
+  .follow-container-body {
+    width: 45rem;
+
+    .follow-container-user {
+      width: 100%;
+      height: 6rem;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      border-radius: 0.5rem;
+      gap: 1rem;
+      cursor: pointer;
+
+      p {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-wrap: nowrap;
+      }
+  
+      &:hover {
+        background-color: $dark-400;
+      }
+  
+      img {
+        width: 5rem;
+      }
+    }
+  }
+  }
