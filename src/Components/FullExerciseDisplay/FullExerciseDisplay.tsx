@@ -1,10 +1,12 @@
 import "./FullExerciseDisplay.scss";
 import { useState } from "react";
-import FormattedText from "../FormattedText/FormattedText";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
 import singleExerciseLoader from "./SingleExerciseLoader";
 import Async from "../Async/Async";
 import Icon from "../Icon/Icon";
+import ExerciseDisplaySummeryTab from "./ExerciseDisplaySummeryTab";
+import ExerciseDisplayHistoryTab from "./ExerciseDisplayHistoryTab";
+import ExerciseDisplayHowToTab from "./ExerciseDisplayHowToTab";
 
 export default function FullExerciseDisplay() {
   const data = useLoaderData<typeof singleExerciseLoader>();
@@ -28,14 +30,23 @@ export default function FullExerciseDisplay() {
                 className="full-exercise-display-header-ellipsis"
               />
               <div className="full-exercise-display-header-tabs-container">
-                <div className="full-exercise-display-header-tab" onClick={() => setActiveTab(0)}>
+                <div
+                  className="full-exercise-display-header-tab"
+                  onClick={() => setActiveTab(0)}
+                >
                   <p>Summary</p>
                 </div>
-                <div className="full-exercise-display-header-tab" onClick={() => setActiveTab(1)}>
+                <div
+                  className="full-exercise-display-header-tab"
+                  onClick={() => setActiveTab(1)}
+                >
                   <p>History</p>
                 </div>
-                <div className="full-exercise-display-header-tab" onClick={() => setActiveTab(2)}>
-                  <p>Description</p>
+                <div
+                  className="full-exercise-display-header-tab"
+                  onClick={() => setActiveTab(2)}
+                >
+                  <p>How to</p>
                 </div>
                 <div
                   className="full-exercise-display-header-tab-indicator"
@@ -43,58 +54,31 @@ export default function FullExerciseDisplay() {
                 />
               </div>
             </div>
-            <div className="full-exercise-display-image">
-              <img src={exercise.content.image ?? ""} alt="" />
-            </div>
-            <div className="info">
-              <h1>{exercise.content.name}</h1>
-              <FormattedText children={exercise.content.description} />
+            {(activeTab === 0 || activeTab === 2) && (
+              <div className="full-exercise-display-image">
+                <img
+                  src={exercise.content.image ?? ""}
+                  alt="Image of the exercise"
+                />
+              </div>
+            )}
 
-              <h2>Primary Muscles</h2>
-              <ul>
-                {exercise.content.primaryMuscleGroups.map((muscleGroup) => (
-                  <li key={muscleGroup.id}>
-                    <h3>{muscleGroup.name}</h3>
-                    {exercise.content.primaryMuscles
-                      .filter(
-                        (muscle) => muscle.muscleGroupId === muscleGroup.id
-                      )
-                      .map((muscle) => (
-                        <p key={muscle.id}>{muscle.name}</p>
-                      ))}
-                  </li>
-                ))}
-              </ul>
-
-              {exercise.content.secondaryMuscleGroups.length > 0 && (
-                <>
-                  <h2>Secondary Muscles</h2>
-                  <ul>
-                    {exercise.content.secondaryMuscleGroups.map(
-                      (muscleGroup) => (
-                        <li key={muscleGroup.id}>
-                          <h3>{muscleGroup.name}</h3>
-                          {exercise.content.secondaryMuscles
-                            .filter(
-                              (muscle) =>
-                                muscle.muscleGroupId === muscleGroup.id
-                            )
-                            .map((muscle) => (
-                              <p key={muscle.id}>{muscle.name}</p>
-                            ))}
-                        </li>
-                      )
-                    )}
-                  </ul>
-                </>
+            <div
+              className={`full-exercise-display-body ${
+                activeTab === 1 && "history-tab-active"
+              }`}
+            >
+              {activeTab === 0 && (
+                <ExerciseDisplaySummeryTab exercise={exercise.content} />
               )}
 
-              <h2>Equipment</h2>
-              <ul>
-                {exercise.content.equipment.map((equipment) => (
-                  <li key={equipment.id}>{equipment.name}</li>
-                ))}
-              </ul>
+              {activeTab === 1 && (
+                <ExerciseDisplayHistoryTab exercise={exercise.content} />
+              )}
+
+              {activeTab === 2 && (
+                <ExerciseDisplayHowToTab exercise={exercise.content} />
+              )}
             </div>
           </div>
         );

@@ -3,8 +3,9 @@
 .full-exercise-display {
   position: relative;
 
-  width: auto;
-  min-height: 100rem;
+  max-width: 75rem;
+  width: 100%;
+  height: 100rem;
   border-radius: 1rem;
 
   background-color: $dark-200;
@@ -55,7 +56,7 @@
 
       .full-exercise-display-header-tab {
         position: relative;
-        width: calc(100%/3);
+        width: calc(100% / 3);
 
         display: flex;
         justify-content: center;
@@ -99,5 +100,225 @@
     img {
       height: 100%;
     }
+  }
+
+  h1 {
+    font-size: 3rem;
+  }
+
+  .full-exercise-display-body {
+    width: 100%;
+    height: calc(100% - (100% / (2.5 / 1)));
+    padding: 1rem;
+
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $dark-300;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $dark-500;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: $dark-600;
+    }
+
+    .full-exercise-display-info {
+      width: 100%;
+      height: 100%;
+
+      h3 {
+        font-size: 1.8rem;
+        font-weight: 500;
+      }
+
+      .full-exercise-display-info-muscle-equipment-section {
+        display: flex;
+        flex-direction: column;
+
+        margin-top: 2rem;
+        gap: 1rem;
+
+        color: #aaa;
+
+        .full-exercise-display-info-muscle-equipment {
+          display: flex;
+          width: 100%;
+          align-items: flex-end;
+        }
+      }
+
+      .full-exercise-display-info-personal-records {
+        margin-top: 2rem;
+
+        .full-exercise-display-info-personal-records-header {
+          display: flex;
+          gap: 1rem;
+
+          .icon {
+            color: $primary-300;
+            font-size: 2rem;
+          }
+
+          h3 {
+            color: #aaa;
+          }
+        }
+
+        .full-exercise-display-info-personal-records-body {
+          *:last-child {
+            border: none !important;
+          }
+
+          .full-exercise-display-info-personal-body-record {
+            width: 100%;
+            height: 7rem;
+            border-bottom: 1px solid $dark-400;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            font-size: 2rem;
+
+            *:last-child {
+              color: $primary-500;
+            }
+          }
+        }
+      }
+    }
+
+    .full-exercise-display-history {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .lazy-container,
+      .lazy-segment {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+
+        width: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      .full-exercise-display-history-item {
+        display: flex;
+        flex-direction: column;
+
+        max-width: 60rem;
+        width: 100%;
+        height: auto;
+        min-height: 18rem;
+        border-radius: 1rem;
+
+        gap: 1rem;
+
+        background-color: $dark-400;
+        overflow: hidden;
+
+        .full-exercise-display-history-header {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          gap: 1rem;
+
+          padding: 0 1rem;
+          padding-top: 1rem;
+
+          .full-exercise-display-history-image-container {
+            width: 6rem;
+            height: 6rem;
+            overflow: hidden;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .full-exercise-display-history-image {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+          }
+
+          h3 {
+            font-size: 2rem;
+            font-weight: 500;
+          }
+
+          p {
+            margin-left: auto;
+
+            color: #bbb;
+            font-weight: 500;
+            font-size: 1.8rem;
+          }
+        }
+
+        .full-exercise-display-history-set-seactions {
+          width: 100%;
+
+          display: flex;
+          align-items: center;
+          padding: 0 2rem;
+          gap: 3rem;
+
+          font-size: 1.4rem;
+          font-weight: 500;
+          color: #bbb;
+
+          p {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 3rem;
+          }
+        }
+
+        .full-exercise-display-history-sets {
+
+          >:nth-child(even) {
+            background-color: $dark-300;
+          }
+
+          .full-exercise-display-history-completed-set {
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            gap: 3rem;
+            
+            height: 5rem;
+
+            p {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              min-width: 3rem;
+            }
+          }
+        }
+      }
+    }
+
+    .full-exercise-display-how-to {
+      .full-exercise-display-how-to-description {
+        margin-top: 2rem;
+      }
+    }
+  }
+
+  .history-tab-active {
+    height: calc(100% - 10rem);
   }
 }
