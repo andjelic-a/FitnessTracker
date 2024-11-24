@@ -2,8 +2,6 @@ import "./StartedWorkout.scss";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
 import startedWorkoutLoader from "./StartedWorkoutLoader";
 import Async from "../../Components/Async/Async";
-import AliceCarousel from "react-alice-carousel";
-import "react-alice-carousel/lib/scss/alice-carousel.scss";
 import { Dispatch, SetStateAction, useMemo, useRef, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import { extractSetsNoMapping } from "../../Utility/ExtractSetsFromWorkout";
@@ -90,7 +88,8 @@ export default function StartedWorkout() {
                   Save
                 </button>
               </div>
-              <StartedWorkoutCarousel
+
+              <Inner
                 workout={workout.content}
                 completedSets={completedSets}
                 setCompletedSets={setCompletedSets}
@@ -98,10 +97,7 @@ export default function StartedWorkout() {
 
               <ConfirmModalDialog
                 isOpen={isConfirmationDialogOpen}
-                onConfirm={async () => {
-                  await save();
-                  navigate(-1);
-                }}
+                onConfirm={() => save()?.then(() => navigate(-1))}
                 onDeny={() => setIsConfirmationDialogOpen(false)}
                 confirmBtnText="Finish"
                 denyBtnText={
@@ -156,7 +152,7 @@ type StartedWorkoutCarouselProps = {
   setCompletedSets: Dispatch<SetStateAction<CompletedSet[]>>;
 };
 
-function StartedWorkoutCarousel({
+function Inner({
   workout,
   completedSets,
   setCompletedSets,
@@ -180,20 +176,5 @@ function StartedWorkoutCarousel({
     />
   ));
 
-  return (
-    <AliceCarousel
-      keyboardNavigation
-      items={items}
-      renderPrevButton={({ isDisabled }) => (
-        <button className="prev-button" disabled={isDisabled}>
-          Prev
-        </button>
-      )}
-      renderNextButton={({ isDisabled }) => (
-        <button className="next-button" disabled={isDisabled}>
-          Next
-        </button>
-      )}
-    />
-  );
+  return <div className="started-workout-sets-container">{items}</div>;
 }
