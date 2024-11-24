@@ -175,7 +175,8 @@ const ProfileTabs = memo(
               </>
             )}
             stopCondition={(response) =>
-              response.code === "OK" && response.content.length < 10
+              response.code === "Forbidden" ||
+              (response.code === "OK" && response.content.length < 10)
             }
             before={
               <>
