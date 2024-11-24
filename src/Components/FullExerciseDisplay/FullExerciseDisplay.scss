@@ -339,3 +339,55 @@
     height: calc(100% - 10rem);
   }
 }
+
+.exercise-display-popup {
+  position: absolute;
+  right: 2rem;
+  top: 4rem;
+  z-index: 1;
+
+  width: 15rem;
+  height: 7rem;
+  border-radius: 1rem;
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: $dark-300;
+  overflow: hidden;
+
+  transition: .2s, opacity 2s;
+
+  button {
+    height: 50%;
+    width: 100%;
+
+    outline: none;
+    border: none;
+    background-color: transparent;
+
+    color: #fff;
+    font-weight: 400;
+    font-size: 1.4rem;
+
+    &:first-child {
+      border-bottom: 1px solid $dark-200;
+    }
+
+    &:hover {
+      background-color: $dark-400;
+      cursor: pointer;
+    }
+  }
+}
+
+.closed {
+  width: 7.5rem;
+  height: 3.5rem;
+  z-index: -1;
+  
+  button {
+    font-size: 1.2rem;
+    opacity: 0.2;
+  }
+}

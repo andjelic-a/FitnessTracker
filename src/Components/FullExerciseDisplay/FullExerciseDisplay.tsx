@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 export default function FullExerciseDisplay() {
   const data = useLoaderData<typeof singleExerciseLoader>();
 
+  const [activeExerciseDisplayPopup, setActiveExerciseDisplayPopup] =
+    useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<number>(0);
   const navigate = useNavigate();
 
@@ -22,6 +24,8 @@ export default function FullExerciseDisplay() {
 
         return (
           <div className="full-exercise-display">
+            <ExerciseDisplayPopup isOpened={activeExerciseDisplayPopup}/>
+
             <div className="full-exercise-display-header">
               <button
                 onClick={() => navigate(-1)}
@@ -31,7 +35,9 @@ export default function FullExerciseDisplay() {
               </button>
 
               <button
-                onClick={() => console.log("dot dot dot")}
+                onClick={() =>
+                  setActiveExerciseDisplayPopup((prevState) => !prevState)
+                }
                 className="full-exercise-display-header-ellipsis"
               >
                 <Icon name="ellipsis" />
@@ -94,5 +100,18 @@ export default function FullExerciseDisplay() {
         );
       }}
     </Async>
+  );
+}
+
+type ExerciseDisplayPopupProps = {
+  isOpened: boolean;
+}
+
+function ExerciseDisplayPopup({ isOpened }: ExerciseDisplayPopupProps) {
+  return (
+    <div className={`exercise-display-popup ${!isOpened && "closed"}`}>
+      <button>Switch units</button>
+      <button>Add to favorites</button>
+    </div>
   );
 }
