@@ -36,9 +36,6 @@ const LazySegment = memo<LazySegmentProps>(
             if (!onReachLoadThreshold()) return;
 
             self.unobserve(marker.target);
-            // marker.target.remove();
-
-            // portal.unmount();
             self.disconnect();
           }
         },

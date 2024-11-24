@@ -38,6 +38,7 @@ export function ExerciseSelectorOption({
         target="_blank"
         className="view-details-link"
         data-tooltip-id={`link-tooltip-${exercise.id}`}
+        onClick={(e) => void e.stopPropagation()}
       >
         <Icon name="link" />
 

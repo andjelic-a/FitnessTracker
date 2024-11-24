@@ -5,14 +5,17 @@ import { useEffect, useRef, useState } from "react";
 import LazyLoadingContainer from "../LazyLoadingContainer/LazyLoadingContainer";
 import AnimatedLayout from "../WindowWrapper/AnimatedLayout";
 import Icon from "../Icon/Icon";
+import FocusTrap from "focus-trap-react";
 
 type FollowContainerProps = {
   followersOrFollowing: "followers" | "following";
+  onClose: () => void;
   isOpen: boolean;
 };
 
 function FollowContainer({
   isOpen,
+  onClose,
   followersOrFollowing,
 }: FollowContainerProps) {
   const navigate = useNavigate();
@@ -25,7 +28,7 @@ function FollowContainer({
     username: string;
     searchTerm: string | undefined;
   }>({
-    limit: 10,
+    limit: 20,
     offset: 0,
     username: params.username ?? "",
     searchTerm: undefined,
@@ -55,7 +58,7 @@ function FollowContainer({
           key={followersOrFollowing}
           variants={{
             enter: {
-              position: "absolute",
+              position: "fixed",
               top: "0",
               left: "100%",
               x: "-100%",
@@ -74,54 +77,82 @@ function FollowContainer({
             },
           }}
         >
-          <div className="follow-container">
-            <div className="follow-container-header">
-              <h3>{followersOrFollowing === "followers" ? "Followers" : "Following"}</h3>
+          <FocusTrap
+            focusTrapOptions={{
+              allowOutsideClick: true,
+              escapeDeactivates: false,
+            }}
+          >
+            <div
+              className="follow-container"
+              onKeyDown={(e) => {
+                if (e.key === "Escape") onClose();
+              }}
+            >
+              <div className="follow-container-header">
+                <button className="close-btn" onClick={onClose}>
+                  <Icon name="x" />
+                </button>
 
-              <div className="follow-container-search">
-                <input type="text" placeholder="Search" ref={searchBarRef} />
-                <Icon
-                  name="search"
-                  className="follow-container-search-button"
-                  onClick={constructRequestParameters}
-                />
+                <h3>
+                  {followersOrFollowing === "followers"
+                    ? "Followers"
+                    : "Following"}
+                </h3>
+
+                <div className="follow-container-search">
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    ref={searchBarRef}
+                    onKeyDown={(e) =>
+                      e.key === "Enter" && constructRequestParameters()
+                    }
+                  />
+
+                  <Icon
+                    name="search"
+                    className="follow-container-search-button"
+                    onClick={constructRequestParameters}
+                  />
+                </div>
               </div>
+
+              <LazyLoadingContainer
+                endpoint={`/api/user/{username}/${followersOrFollowing}`}
+                baseAPIRequest={{
+                  method: "get",
+                  parameters: baseRequestParameters,
+                }}
+                onSegmentLoad={(segmentResponse) => {
+                  if (segmentResponse.code !== "OK") return;
+
+                  return (
+                    <div className="follow-container-body">
+                      {segmentResponse.content.map((x) => (
+                        <button
+                          className="follow-container-user"
+                          key={x.username}
+                          onClick={() => void navigate(`/${x.username}`)}
+                        >
+                          <img
+                            src={x.image ?? "/DefaultProfilePicture.png"}
+                            alt={`Profile picture of a user named ${x.username}`}
+                          />
+                          <p>{x.name}</p>
+                        </button>
+                      ))}
+                    </div>
+                  );
+                  ``;
+                }}
+                stopCondition={(x) =>
+                  (x.code !== "OK" && x.code !== "Too Many Requests") ||
+                  (x.code === "OK" && x.content.length < 20)
+                }
+              />
             </div>
-
-            <LazyLoadingContainer
-              endpoint={`/api/user/{username}/${followersOrFollowing}`}
-              baseAPIRequest={{
-                method: "get",
-                parameters: baseRequestParameters,
-              }}
-              onSegmentLoad={(segmentResponse) => {
-                if (segmentResponse.code !== "OK") return;
-
-                return (
-                  <div className="follow-container-body">
-                    {segmentResponse.content.map((x) => (
-                      <div
-                        className="follow-container-user"
-                        key={x.username}
-                        onClick={() => void navigate(`/${x.username}`)}
-                      >
-                        <img
-                          src={x.image ?? "/DefaultProfilePicture.png"}
-                          alt={`Profile picture of a user named ${x.username}`}
-                        />
-                        <p>{x.name}</p>
-                      </div>
-                    ))}
-                  </div>
-                );
-                ``;
-              }}
-              stopCondition={(x) =>
-                (x.code !== "OK" && x.code !== "Too Many Requests") ||
-                (x.code === "OK" && x.content.length < 10)
-              }
-            />
-          </div>
+          </FocusTrap>
         </AnimatedLayout>
       )}
     </AnimatePresence>

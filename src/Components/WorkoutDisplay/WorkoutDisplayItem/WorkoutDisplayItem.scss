@@ -79,6 +79,17 @@
       margin-left: auto;
       margin-right: 2rem;
       cursor: pointer;
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+
+      &:hover {
+        color: $primary-600;
+      }
+
+      &:focus-visible {
+        outline: 1px solid $primary-300;
+        color: $primary-600;
+      }
     }
   }
 

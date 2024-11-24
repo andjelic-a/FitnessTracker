@@ -3,6 +3,7 @@ import useOutsideClick from "../../Hooks/UseOutsideClick";
 import DropdownItem from "./DropdownItem";
 import Icon from "../Icon/Icon";
 import "./Dropdown.scss";
+import FocusTrap from "focus-trap-react";
 
 type UniversalDropdownProps = {
   className?: string;
@@ -72,45 +73,51 @@ function ChildBasedDropdown({
   );
 
   return (
-    <div
-      ref={dropdownMenuRef}
-      className={`${className ? className : ""} dropdown-menu${
-        isOpen ? " rounded" : ""
-      }`}
+    <FocusTrap
+      focusTrapOptions={{
+        allowOutsideClick: true,
+      }}
+      active={isOpen}
     >
       <div
-        className="dropdown-button"
-        onClick={() => {
-          if (!isOpen) onOpen?.();
-          setIsOpen((prevState) => !prevState);
-        }}
+        ref={dropdownMenuRef}
+        className={`${className ? className : ""} dropdown-menu${
+          isOpen ? " rounded" : ""
+        }`}
       >
-        {value}
-        <Icon name="angle-down" className="dropdown-button-icon" />
-      </div>
-      <div className={`dropdown-content ${isOpen ? "open" : ""}`}>
-        <div
-          onClick={() => handleItemClick(placeholder, "-1")}
-          className="dropdown-item"
+        <button
+          className="dropdown-button"
+          onClick={() => {
+            if (!isOpen) onOpen?.();
+            setIsOpen((prevState) => !prevState);
+          }}
         >
-          {placeholder}
-        </div>
-        {dropdownItems.map((item) => {
-          const Item = item.type;
+          {value}
+          <Icon name="angle-down" className="dropdown-button-icon" />
+        </button>
 
-          return (
-            <Item
-              {...item.props}
-              onClick={() => {
-                item.props.onClick?.();
-                handleItemClick(item.props.children, item.key);
-              }}
-              key={item.key}
-            />
-          );
-        })}
+        <div className={`dropdown-content ${isOpen ? "open" : ""}`}>
+          <DropdownItem onClick={() => handleItemClick(placeholder, "-1")}>
+            {placeholder}
+          </DropdownItem>
+
+          {dropdownItems.map((item) => {
+            const Item = item.type;
+
+            return (
+              <Item
+                {...item.props}
+                onClick={() => {
+                  item.props.onClick?.();
+                  handleItemClick(item.props.children, item.key);
+                }}
+                key={item.key}
+              />
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </FocusTrap>
   );
 }
 
@@ -155,23 +162,32 @@ function ValueBasedDropdown<Values extends ValuesType>({
   }
 
   return (
-    <div
-      ref={dropdownMenuRef}
-      className={`${className ? className : ""} dropdown-menu`}
+    <FocusTrap
+      focusTrapOptions={{
+        allowOutsideClick: true,
+      }}
+      active={isOpen}
     >
       <div
-        className={`dropdown-button ${isOpen ? " rounded" : ""}`}
-        onClick={() => {
-          if (!isOpen) onOpen?.();
-          setIsOpen((prevState) => !prevState);
-        }}
+        ref={dropdownMenuRef}
+        className={`${className ? className : ""} dropdown-menu`}
       >
-        <p> {value}</p>
-        <div className="dropdown-button-icon">
-          <Icon name="angle-down" />
+        <button
+          className={`dropdown-button ${isOpen ? " rounded" : ""}`}
+          onClick={() => {
+            if (!isOpen) onOpen?.();
+            setIsOpen((prevState) => !prevState);
+          }}
+        >
+          <p>{value}</p>
+          <div className="dropdown-button-icon">
+            <Icon name="angle-down" />
+          </div>
+        </button>
+        <div className={`dropdown-content ${isOpen ? "open" : ""}`}>
+          {items}
         </div>
       </div>
-      <div className={`dropdown-content ${isOpen ? "open" : ""}`}>{items}</div>
-    </div>
+    </FocusTrap>
   );
 }

@@ -127,7 +127,7 @@ const ProfileTabs = memo(
           onSelectionChanged={(_x, y) => void setEndpoint(y ?? null)}
         />
       ),
-      [openTab]
+      [openTab, split]
     );
 
     const containerMemo = useMemo(() => {

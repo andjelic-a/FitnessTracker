@@ -9674,9 +9674,6 @@ type MappedEndpoints = {
           currentSplit: {
             $ref: "#/components/schemas/DetailedUserSplitResponseDTO";
           };
-          gender: {
-            $ref: "#/components/schemas/Gender";
-          };
         };
         additionalProperties: false;
       };
@@ -9816,11 +9813,6 @@ type MappedEndpoints = {
           };
         };
         additionalProperties: false;
-      };
-      Gender: {
-        enum: [0, 1];
-        type: "integer";
-        format: "int32";
       };
       LoginUserRequestDTO: {
         type: "object";

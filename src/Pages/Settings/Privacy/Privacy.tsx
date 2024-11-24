@@ -79,7 +79,7 @@ export default function Privacy() {
           </p>
         </div>
         <div className="privacy-container-button">
-          <div
+          <button
             className="privacy-container-button-background"
             onClick={() => setIsFollowingDisabled(!isFollowingDisabled)}
           >
@@ -93,7 +93,7 @@ export default function Privacy() {
                 isFollowingDisabled ? "button-disabled" : ""
               }`}
             ></div>
-          </div>
+          </button>
         </div>
       </div>
 
@@ -116,7 +116,7 @@ export default function Privacy() {
           </p>
         </div>
         <div className="privacy-container-button">
-          <div
+          <button
             className="privacy-container-button-background"
             onClick={() =>
               setIsCompletedWorkoutsDisabled(!isCompletedWorkoutsDisabled)
@@ -132,7 +132,7 @@ export default function Privacy() {
                 isCompletedWorkoutsDisabled ? "button-disabled" : ""
               }`}
             ></div>
-          </div>
+          </button>
         </div>
       </div>
 
@@ -155,7 +155,7 @@ export default function Privacy() {
           </p>
         </div>
         <div className="privacy-container-button">
-          <div
+          <button
             className="privacy-container-button-background"
             onClick={() => setIsStreakDisabled(!isStreakDisabled)}
           >
@@ -169,7 +169,7 @@ export default function Privacy() {
                 isStreakDisabled ? "button-disabled" : ""
               }`}
             ></div>
-          </div>
+          </button>
         </div>
       </div>
 
@@ -192,7 +192,7 @@ export default function Privacy() {
           </p>
         </div>
         <div className="privacy-container-button">
-          <div
+          <button
             className="privacy-container-button-background"
             onClick={() => setIsCurrentSplitDisabled(!isCurrentSplitDisabled)}
           >
@@ -206,7 +206,7 @@ export default function Privacy() {
                 isCurrentSplitDisabled ? "button-disabled" : ""
               }`}
             ></div>
-          </div>
+          </button>
         </div>
       </div>
 
@@ -229,7 +229,7 @@ export default function Privacy() {
           </p>
         </div>
         <div className="privacy-container-button">
-          <div
+          <button
             className="privacy-container-button-background"
             onClick={() => setIsLikedWorkoutsDisabled(!isLikedWorkoutsDisabled)}
           >
@@ -243,7 +243,7 @@ export default function Privacy() {
                 isLikedWorkoutsDisabled ? "button-disabled" : ""
               }`}
             ></div>
-          </div>
+          </button>
         </div>
       </div>
 
@@ -266,7 +266,7 @@ export default function Privacy() {
           </p>
         </div>
         <div className="privacy-container-button">
-          <div
+          <button
             className="privacy-container-button-background"
             onClick={() =>
               setIsFavoriteWorkoutsDisabled(!isFavoriteWorkoutsDisabled)
@@ -282,7 +282,7 @@ export default function Privacy() {
                 isFavoriteWorkoutsDisabled ? "button-disabled" : ""
               }`}
             ></div>
-          </div>
+          </button>
         </div>
       </div>
 
@@ -305,7 +305,7 @@ export default function Privacy() {
           </p>
         </div>
         <div className="privacy-container-button">
-          <div
+          <button
             className="privacy-container-button-background"
             onClick={() => setIsLikedSplitsDisabled(!isLikedSplitsDisabled)}
           >
@@ -319,7 +319,7 @@ export default function Privacy() {
                 isLikedSplitsDisabled ? "button-disabled" : ""
               }`}
             ></div>
-          </div>
+          </button>
         </div>
       </div>
 
@@ -342,7 +342,7 @@ export default function Privacy() {
           </p>
         </div>
         <div className="privacy-container-button">
-          <div
+          <button
             className="privacy-container-button-background"
             onClick={() =>
               setIsFavoriteSplitsDisabled(!isFavoriteSplitsDisabled)
@@ -358,7 +358,7 @@ export default function Privacy() {
                 isFavoriteSplitsDisabled ? "button-disabled" : ""
               }`}
             ></div>
-          </div>
+          </button>
         </div>
       </div>
 

@@ -57,6 +57,11 @@
         &:hover {
           background-color: $primary-400;
         }
+
+        &:focus-visible {
+          background-color: $primary-400;
+          outline: 1px solid white;
+        }
       }
     }
   }
@@ -267,7 +272,7 @@
   }
 
   .edit-profile-save {
-    margin-top: 4rem;
+    margin-top: 1rem;
     margin-bottom: 4rem;
     width: 14rem;
     min-height: 4rem;
@@ -282,6 +287,11 @@
 
     &:hover {
       background-color: $primary-400;
+    }
+
+    &:focus-visible {
+      background-color: $primary-400;
+      outline: 1px solid white;
     }
   }
 }

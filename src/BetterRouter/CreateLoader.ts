@@ -1,7 +1,7 @@
 import { defer, LoaderFunctionArgs } from "react-router-dom";
-import { LoaderParams } from "./Routes";
+import { LoaderParams } from "./LoaderParams";
 
-export type LoaderInit<
+type LoaderInit<
   Route extends string,
   T extends { [key: string]: any }
 > = (args: {

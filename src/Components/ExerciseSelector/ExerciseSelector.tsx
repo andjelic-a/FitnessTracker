@@ -215,8 +215,8 @@ export default function ExerciseSelector({
             }}
           />
 
-          <button className="search-btn">
-            <Icon onClick={handleSearch} name="arrow-right" />
+          <button className="search-btn" onClick={handleSearch}>
+            <Icon name="arrow-right" />
           </button>
         </div>
 

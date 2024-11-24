@@ -94,6 +94,7 @@ function ProfileHeader({ user, ...props }: ProfileHeaderProps) {
 
       <FollowContainer
         isOpen={followTabOpen !== null}
+        onClose={() => void setFollowTabOpen(null)}
         followersOrFollowing={followTabOpen ?? "followers"}
       />
     </div>

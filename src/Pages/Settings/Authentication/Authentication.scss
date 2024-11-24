@@ -59,6 +59,11 @@
     &:hover {
       background-color: $primary-400;
     }
+
+    &:focus-visible {
+      background-color: $primary-400;
+      outline: 1px solid white;
+    }
   }
 
   .authentication-password {
@@ -194,6 +199,15 @@
       border: none;
       outline: none;
       cursor: pointer;
+
+      &:hover {
+        background-color: $dark-500;
+      }
+
+      &:focus-visible {
+        background-color: $dark-500;
+        outline: 1px solid white;
+      }
     }
   }
 
@@ -211,7 +225,7 @@
         margin: 0;
       }
 
-      .resend{
+      .resend {
         width: 15rem;
       }
     }

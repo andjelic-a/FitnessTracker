@@ -111,6 +111,15 @@ const Pins = memo<PinsProps>(({ pins, includeEditButtons }) => {
     resetPinsBodyHeight();
   }
 
+  function handleOptionClick(option: Schema<"PinResponseDTO">) {
+    if (selectedMenuPins.findIndex((y) => option.id === y.id) < 0) {
+      if (selectedMenuPins.length < 6) {
+        setSelectedMenuPins([...selectedMenuPins, option]);
+      }
+    } else
+      setSelectedMenuPins(selectedMenuPins.filter((y) => option.id !== y.id));
+  }
+
   const segment = useCallback(
     (segmentData: APIResponse<"/api/user/pins/options", "get">) => {
       if (segmentData.code !== "OK") return null;
@@ -119,15 +128,9 @@ const Pins = memo<PinsProps>(({ pins, includeEditButtons }) => {
         <div
           className="option"
           key={x.name + "-" + x.type}
-          onClick={() => {
-            if (selectedMenuPins.findIndex((y) => x.id === y.id) < 0) {
-              if (selectedMenuPins.length < 6) {
-                setSelectedMenuPins([...selectedMenuPins, x]);
-              }
-            } else
-              setSelectedMenuPins(
-                selectedMenuPins.filter((y) => x.id !== y.id)
-              );
+          onClick={(e) => {
+            handleOptionClick(x);
+            e.stopPropagation();
           }}
         >
           <div className="checkbox-container">
@@ -136,6 +139,12 @@ const Pins = memo<PinsProps>(({ pins, includeEditButtons }) => {
               name={`${x.name}-${x.type}`}
               id={`${x.name}-${x.type}`}
               checked={selectedMenuPins.findIndex((y) => x.id === y.id) >= 0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleOptionClick(x);
+                  e.stopPropagation();
+                }
+              }}
               readOnly
             />
 
@@ -268,7 +277,7 @@ const Pins = memo<PinsProps>(({ pins, includeEditButtons }) => {
 
         <ReactModal
           isOpen={isOptionsMenuOpen}
-          onRequestClose={handleCloseMenu}
+          onRequestClose={handleSelectionSave}
           className={{
             afterOpen: "open",
             base: "pins-options-menu-container",
@@ -281,8 +290,8 @@ const Pins = memo<PinsProps>(({ pins, includeEditButtons }) => {
           <div className="pins-options-menu-header">
             <h1>Edit pinned items</h1>
 
-            <button className="close-btn">
-              <Icon name="xmark" onClick={handleCloseMenu} />
+            <button className="close-btn" onClick={handleSelectionSave}>
+              <Icon name="xmark" />
             </button>
           </div>
 
