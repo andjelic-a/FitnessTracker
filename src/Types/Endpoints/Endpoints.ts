@@ -3397,6 +3397,26 @@ type MappedEndpoints = {
               };
             };
           };
+          "403": {
+            description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
           "404": {
             description: "Not Found";
             content: {
@@ -3506,6 +3526,26 @@ type MappedEndpoints = {
               };
             };
           };
+          "403": {
+            description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
           "404": {
             description: "Not Found";
             content: {
@@ -3611,6 +3651,26 @@ type MappedEndpoints = {
                   items: {
                     $ref: "#/components/schemas/SimpleSplitResponseDTO";
                   };
+                };
+              };
+            };
+          };
+          "403": {
+            description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
                 };
               };
             };
@@ -6129,6 +6189,26 @@ type MappedEndpoints = {
               "text/json": {
                 schema: {
                   $ref: "#/components/schemas/DetailedWeekOfCompletedWorkoutsResponseDTO";
+                };
+              };
+            };
+          };
+          "403": {
+            description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
                 };
               };
             };
@@ -8913,6 +8993,26 @@ type MappedEndpoints = {
               };
             };
           };
+          "403": {
+            description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
           "404": {
             description: "Not Found";
             content: {
@@ -9022,6 +9122,26 @@ type MappedEndpoints = {
               };
             };
           };
+          "403": {
+            description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
           "404": {
             description: "Not Found";
             content: {
@@ -9127,6 +9247,26 @@ type MappedEndpoints = {
                   items: {
                     $ref: "#/components/schemas/SimpleWorkoutResponseDTO";
                   };
+                };
+              };
+            };
+          };
+          "403": {
+            description: "Forbidden";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
                 };
               };
             };
@@ -10430,19 +10570,22 @@ type MappedEndpoints = {
           publicFollowing: {
             type: "boolean";
           };
-          publicCompletedWorkouts: {
-            type: "boolean";
-          };
           publicStreak: {
             type: "boolean";
           };
           publicCurrentSplit: {
             type: "boolean";
           };
+          publicCreatedWorkouts: {
+            type: "boolean";
+          };
           publicLikedWorkouts: {
             type: "boolean";
           };
           publicFavoriteWorkouts: {
+            type: "boolean";
+          };
+          publicCreatedSplits: {
             type: "boolean";
           };
           publicLikedSplits: {
@@ -10460,19 +10603,22 @@ type MappedEndpoints = {
           publicFollowing: {
             type: "boolean";
           };
-          publicCompletedWorkouts: {
-            type: "boolean";
-          };
           publicStreak: {
             type: "boolean";
           };
           publicCurrentSplit: {
             type: "boolean";
           };
+          publicCreatedWorkouts: {
+            type: "boolean";
+          };
           publicLikedWorkouts: {
             type: "boolean";
           };
           publicFavoriteWorkouts: {
+            type: "boolean";
+          };
+          publicCreatedSplits: {
             type: "boolean";
           };
           publicLikedSplits: {
