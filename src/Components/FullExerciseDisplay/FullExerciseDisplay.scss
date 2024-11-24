@@ -210,6 +210,23 @@
         width: 100%;
         overflow-y: auto;
         overflow-x: hidden;
+
+        &::-webkit-scrollbar {
+          width: 8px;
+        }
+
+        &::-webkit-scrollbar-track {
+          background: $dark-300;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background: $dark-500;
+          border-radius: 10px;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+          background: $dark-600;
+        }
       }
 
       .full-exercise-display-history-item {
@@ -218,8 +235,7 @@
 
         max-width: 60rem;
         width: 100%;
-        height: auto;
-        min-height: 18rem;
+        min-height: fit-content;
         border-radius: 1rem;
 
         gap: 1rem;
@@ -287,8 +303,7 @@
         }
 
         .full-exercise-display-history-sets {
-
-          >:nth-child(even) {
+          > :nth-child(even) {
             background-color: $dark-300;
           }
 
@@ -297,7 +312,7 @@
             align-items: center;
             padding: 0 2rem;
             gap: 3rem;
-            
+
             height: 5rem;
 
             p {
