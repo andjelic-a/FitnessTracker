@@ -2,6 +2,7 @@ import { CompositionEvent, useRef, useState } from "react";
 import { extractSetsNoMapping } from "../../Utility/ExtractSetsFromWorkout";
 import { CompletedSet } from "./StartedWorkout";
 import { Link } from "react-router-dom";
+import Icon from "../../Components/Icon/Icon";
 
 type StartedWorkoutSetsProps = {
   set: ReturnType<typeof extractSetsNoMapping>[number];
@@ -97,35 +98,45 @@ function SingleSet({
 
   return (
     <div className="started-set" key={set.id}>
-      <p>{index + 1}</p>
+      <p>
+        {set.type === 0
+          ? index + 1
+          : set.type === 1
+          ? <Icon name="w"/>
+          : set.type === 2
+          ? <Icon name="d"/>
+          : set.type === 3
+          ? <Icon name="f"/>
+          : ""}
+      </p>
 
       <div className="complete-inputs">
-          <input
-            type="text"
-            autoComplete="off"
-            defaultValue={completedInfo?.reps}
-            ref={repsInputRef}
-            name="reps"
-            onBeforeInput={handleBeforeInput}
-            placeholder={`${set.riR} RiR`}
-            disabled={(!isEditing && completedInfo) ? true : false}
-          />
+        <input
+          type="text"
+          autoComplete="off"
+          defaultValue={completedInfo?.reps}
+          ref={repsInputRef}
+          name="reps"
+          onBeforeInput={handleBeforeInput}
+          placeholder={`${set.bottomRepRange}-${set.topRepRange}`}
+          disabled={!isEditing && completedInfo ? true : false}
+        />
 
-          <p> x </p>
+        <p> x </p>
 
-          <input
-            type="text"
-            autoComplete="off"
-            defaultValue={completedInfo?.weight}
-            ref={weightInputRef}
-            name="weight"
-            onBeforeInput={handleBeforeInput}
-            placeholder={`${set.bottomRepRange}-${set.topRepRange}`}
-            disabled={(!isEditing && completedInfo) ? true : false}
-          />
+        <input
+          type="text"
+          autoComplete="off"
+          defaultValue={completedInfo?.weight}
+          ref={weightInputRef}
+          name="weight"
+          onBeforeInput={handleBeforeInput}
+          placeholder={`${set.riR < 0 ? 0 : set.riR} RiR`}
+          disabled={!isEditing && completedInfo ? true : false}
+        />
 
-          <p>KG</p>
-        </div>
+        <p>KG</p>
+      </div>
 
       <button
         className="set-complete-button"
@@ -137,15 +148,13 @@ function SingleSet({
               weight: +(weightInputRef.current?.value ?? 0),
             });
             setIsEditing((x) => !x);
-          }
-          else if (!completedInfo) {
+          } else if (!completedInfo) {
             setCompletedInfo({
               id: set.id,
               reps: +(repsInputRef.current?.value ?? 0),
               weight: +(weightInputRef.current?.value ?? 0),
             });
-          }
-          else {
+          } else {
             setIsEditing((x) => !x);
           }
         }}
