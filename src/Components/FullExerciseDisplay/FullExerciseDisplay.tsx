@@ -11,11 +11,15 @@ import { useNavigate } from "react-router-dom";
 
 export default function FullExerciseDisplay() {
   const data = useLoaderData<typeof singleExerciseLoader>();
-
   const [activeExerciseDisplayPopup, setActiveExerciseDisplayPopup] =
     useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<number>(0);
+  const [unit, setUnit] = useState<"kg" | "lbs">("kg");
   const navigate = useNavigate();
+
+  const handleUnitSwitch = () => {
+    setUnit((prevUnit) => (prevUnit === "kg" ? "lbs" : "kg"));
+  };
 
   return (
     <Async await={data.exercise}>
@@ -24,7 +28,11 @@ export default function FullExerciseDisplay() {
 
         return (
           <div className="full-exercise-display">
-            <ExerciseDisplayPopup isOpened={activeExerciseDisplayPopup}/>
+            <ExerciseDisplayPopup
+              currentUnit={unit}
+              isOpened={activeExerciseDisplayPopup}
+              handleUnitSwitch={handleUnitSwitch}
+            />
 
             <div className="full-exercise-display-header">
               <button
@@ -64,12 +72,14 @@ export default function FullExerciseDisplay() {
                 >
                   <p>How to</p>
                 </button>
+
                 <div
                   className="full-exercise-display-header-tab-indicator"
                   style={{ left: `${(100 / 3) * activeTab}%` }}
                 />
               </div>
             </div>
+
             {(activeTab === 0 || activeTab === 2) && (
               <div className="full-exercise-display-image">
                 <img
@@ -85,13 +95,17 @@ export default function FullExerciseDisplay() {
               }`}
             >
               {activeTab === 0 && (
-                <ExerciseDisplaySummeryTab exercise={exercise.content} />
+                <ExerciseDisplaySummeryTab
+                  exercise={exercise.content}
+                  unit={unit}
+                />
               )}
-
               {activeTab === 1 && (
-                <ExerciseDisplayHistoryTab exercise={exercise.content} />
+                <ExerciseDisplayHistoryTab
+                  exercise={exercise.content}
+                  unit={unit}
+                />
               )}
-
               {activeTab === 2 && (
                 <ExerciseDisplayHowToTab exercise={exercise.content} />
               )}
@@ -105,12 +119,20 @@ export default function FullExerciseDisplay() {
 
 type ExerciseDisplayPopupProps = {
   isOpened: boolean;
-}
+  handleUnitSwitch: () => void;
+  currentUnit: "kg" | "lbs";
+};
 
-function ExerciseDisplayPopup({ isOpened }: ExerciseDisplayPopupProps) {
+function ExerciseDisplayPopup({
+  isOpened,
+  handleUnitSwitch,
+  currentUnit,
+}: ExerciseDisplayPopupProps) {
+  const nextUnit = currentUnit === "kg" ? "lbs" : "kg";
+
   return (
     <div className={`exercise-display-popup ${!isOpened && "closed"}`}>
-      <button>Switch units</button>
+      <button onClick={handleUnitSwitch}>Switch to {nextUnit}</button>
       <button>Add to favorites</button>
     </div>
   );

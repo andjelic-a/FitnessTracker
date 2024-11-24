@@ -5,11 +5,16 @@ import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 
 type ExerciseDisplayHistoryTabProps = {
   exercise: Schema<"DetailedExerciseResponseDTO">;
+  unit: "kg" | "lbs";
 };
 
 const ExerciseDisplayHistoryTab = memo(
-  ({ exercise }: ExerciseDisplayHistoryTabProps) => {
+  ({ exercise, unit }: ExerciseDisplayHistoryTabProps) => {
     const basicInfo = useContext(basicProfileInfoContext);
+
+    const convertWeight = (weight: number) => {
+      return unit === "lbs" ? weight * 2.20462 : weight * 0.453592;
+    };
 
     return basicInfo === null ? (
       <div>Login to view exercise history</div>
@@ -42,7 +47,11 @@ const ExerciseDisplayHistoryTab = memo(
                     />
                   </div>
                   <h3>{exercise.name}</h3>
-                  <p>{new Date(completedWorkout.completionDate).toLocaleDateString()}</p>
+                  <p>
+                    {new Date(
+                      completedWorkout.completionDate
+                    ).toLocaleDateString()}
+                  </p>
                 </div>
 
                 <div className="full-exercise-display-history-set-seactions">
@@ -57,7 +66,8 @@ const ExerciseDisplayHistoryTab = memo(
                     >
                       <p>{index + 1}</p>
                       <p>
-                        {completedSet.weight} x {completedSet.reps}
+                        {convertWeight(completedSet.weight).toFixed(0)} x{" "}
+                        {completedSet.reps}
                       </p>
                     </div>
                   ))}
