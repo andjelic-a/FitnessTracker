@@ -94,12 +94,16 @@
         align-items: center;
         min-width: 3rem;
       }
+
+      .started-workout-set-seaction-2 {
+        width: 15rem;
+      }
     }
 
     .started-workout-set-body {
       height: 100%;
 
-      > :nth-child(odd) {
+      > :nth-child(even) {
         background-color: $dark-300;
       }
 
@@ -119,20 +123,19 @@
         }
 
         .complete-inputs {
+          width: 17rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
           input {
             width: 5rem;
-            padding: 0.25rem 0.7rem;
             outline: none;
             border: none;
-            border-bottom: 1px solid #fff;
             background: none;
             color: #fff;
             font-size: 1.5rem;
-            text-align: end;
-
-            &:focus-within {
-              outline: 1px solid $primary-400;
-            }
+            text-align: center;
           }
         }
       }

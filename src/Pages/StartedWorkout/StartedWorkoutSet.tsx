@@ -32,7 +32,7 @@ export default function StartedWorkoutSet({
 
       <div className="started-workout-set-seactions">
         <p>SET</p>
-        <p>WEIGHT & REPS</p>
+        <p className="started-workout-set-seaction-2">WEIGHT & REPS</p>
       </div>
 
       <div className="started-workout-set-body">
@@ -97,24 +97,9 @@ function SingleSet({
 
   return (
     <div className="started-set" key={set.id}>
-        <p>{index + 1}</p>
+      <p>{index + 1}</p>
 
-        <p>
-          {set.type === 0
-            ? set.riR
-            : set.type === 1
-            ? "Warmup"
-            : "Failure"}
-        </p>
-
-        <p>
-          {set.bottomRepRange === set.topRepRange
-            ? set.bottomRepRange
-            : `${set.bottomRepRange}-${set.topRepRange}`}
-        </p>
-
-      {isEditing ? (
-        <div className="complete-inputs">
+      <div className="complete-inputs">
           <input
             type="text"
             autoComplete="off"
@@ -122,11 +107,11 @@ function SingleSet({
             ref={repsInputRef}
             name="reps"
             onBeforeInput={handleBeforeInput}
-            placeholder="0"
-            autoFocus
+            placeholder={`${set.riR} RiR`}
+            disabled={(!isEditing && completedInfo) ? true : false}
           />
 
-          <span> x </span>
+          <p> x </p>
 
           <input
             type="text"
@@ -135,32 +120,34 @@ function SingleSet({
             ref={weightInputRef}
             name="weight"
             onBeforeInput={handleBeforeInput}
-            placeholder="0"
+            placeholder={`${set.bottomRepRange}-${set.topRepRange}`}
+            disabled={(!isEditing && completedInfo) ? true : false}
           />
 
-          <span>KG</span>
+          <p>KG</p>
         </div>
-      ) : !completedInfo ? (
-        <></>
-      ) : (
-        <p className="set-completed-info">
-          <span>{completedInfo.reps}</span>
-          <span> x </span>
-          <span>{completedInfo.weight}KG</span>
-        </p>
-      )}
 
       <button
         className="set-complete-button"
         onClick={() => {
-          if (isEditing)
+          if (isEditing) {
             setCompletedInfo({
               id: set.id,
               reps: +(repsInputRef.current?.value ?? 0),
               weight: +(weightInputRef.current?.value ?? 0),
             });
-
-          setIsEditing((x) => !x);
+            setIsEditing((x) => !x);
+          }
+          else if (!completedInfo) {
+            setCompletedInfo({
+              id: set.id,
+              reps: +(repsInputRef.current?.value ?? 0),
+              weight: +(weightInputRef.current?.value ?? 0),
+            });
+          }
+          else {
+            setIsEditing((x) => !x);
+          }
         }}
       >
         {isEditing ? "Done" : completedInfo ? "Edit" : "Complete"}
