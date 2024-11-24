@@ -135,16 +135,17 @@ function FollowContainer({
                           key={x.username}
                           onClick={() => void navigate(`/${x.username}`)}
                         >
-                          <img
-                            src={x.image ?? "/DefaultProfilePicture.png"}
-                            alt={`Profile picture of a user named ${x.username}`}
-                          />
-                          <p>{x.name}</p>
+                          <div className="image-container">
+                            <img
+                              src={x.image ?? "/DefaultProfilePicture.png"}
+                              alt={`Profile picture of a user named ${x.username}`}
+                            />
+                          </div>
+                          <p>{x.username}</p>
                         </button>
                       ))}
                     </div>
                   );
-                  ``;
                 }}
                 stopCondition={(x) =>
                   (x.code !== "OK" && x.code !== "Too Many Requests") ||
