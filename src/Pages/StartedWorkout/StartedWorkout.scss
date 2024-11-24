@@ -14,6 +14,60 @@
 
   overflow: hidden;
 
+  .started-workout-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 5rem;
+    margin-bottom: 2rem;
+
+    h1 {
+      position: relative;
+      font-size: 2.8rem;
+      font-weight: 700;
+    }
+
+    .save-button {
+      padding: 0.7rem 1rem;
+      min-width: 10rem;
+      height: auto;
+      border-radius: 0.5rem;
+
+      position: absolute;
+      right: 2rem;
+
+      background-color: $primary-300;
+      outline: none;
+      border: none;
+
+      color: #fff;
+      font-size: 1.4rem;
+      user-select: none;
+
+      &:hover {
+        cursor: pointer;
+        background-color: $primary-400;
+      }
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    .started-workout-header {
+      justify-content: space-between;
+
+      h1 {
+        font-size: 2.2rem;
+      }
+
+      .save-button {
+        position: relative;
+        right: none;
+      }
+    }
+  }
+
   .alice-carousel__stage-item {
     display: flex;
     justify-content: center;
@@ -136,6 +190,32 @@
             color: #fff;
             font-size: 1.5rem;
             text-align: center;
+
+            &::placeholder {
+              color: $dark-600;
+            }
+          }
+        }
+        .set-complete-button {
+          padding: 0.7rem 1rem;
+          min-width: auto;
+          height: auto;
+          border-radius: 0.5rem;
+
+          position: relative;
+          margin-left: auto;
+
+          background-color: $primary-300;
+          outline: none;
+          border: none;
+
+          color: #fff;
+          font-size: 1.4rem;
+          user-select: none;
+
+          &:hover {
+            cursor: pointer;
+            background-color: $primary-400;
           }
         }
       }
@@ -143,9 +223,7 @@
   }
 
   .prev-button,
-  .next-button,
-  .save-button,
-  .set-complete-button {
+  .next-button {
     border: none;
     outline: none;
     background: none;
@@ -167,13 +245,5 @@
       cursor: not-allowed;
       background-color: $primary-200;
     }
-  }
-
-  .save-button {
-    position: absolute;
-    margin: 2rem;
-    right: 0;
-    font-size: 1.5rem;
-    padding: 0.5rem 10rem;
   }
 }

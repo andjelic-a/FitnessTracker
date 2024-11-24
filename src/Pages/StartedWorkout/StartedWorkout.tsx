@@ -83,15 +83,18 @@ export default function StartedWorkout() {
 
           return (
             <>
+              <div className="started-workout-header">
+                <h1>{workout.content.name}</h1>
+
+                <button onClick={handleSaveBtnClick} className="save-button">
+                  Save
+                </button>
+              </div>
               <StartedWorkoutCarousel
                 workout={workout.content}
                 completedSets={completedSets}
                 setCompletedSets={setCompletedSets}
               />
-
-              <button onClick={handleSaveBtnClick} className="save-button">
-                Save
-              </button>
 
               <ConfirmModalDialog
                 isOpen={isConfirmationDialogOpen}
