@@ -1,77 +1,250 @@
 @import "../../Palette.scss";
 
 .started-workout-container {
+  position: relative;
+
+  max-width: 75rem;
   width: 100%;
-  height: 100%;
-  background-color: $dark-100;
+  height: 100rem;
+  border-radius: 1rem;
 
-  .started-workout-set {
-    padding: 5rem 5rem 0 5rem;
+  background-color: $dark-200;
+  border: 3px solid $dark-200;
 
-    display: grid;
-    gap: 2rem;
-    grid-template-rows: max-content 1fr;
-    grid-template-columns: max-content 1fr;
-    grid-template-areas: "image title" "image sets";
+  overflow: hidden;
 
-    @media screen and (max-width: 799.98px) {
-      grid-template-rows: max-content max-content 1fr;
-      grid-template-columns: 1fr;
-      grid-template-areas: "image" "title" "sets";
+  .started-workout-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 1rem 0 1rem;
+
+    width: 100%;
+    height: 8rem;
+    margin-bottom: 2rem;
+
+    h1 {
+      position: relative;
+      font-size: 2.8rem;
+      font-weight: 700;
     }
 
-    a {
-      grid-area: title;
-      color: #fff;
-      text-decoration: none;
+    .save-button {
+      padding: 0.7rem 1rem;
+      min-width: 10rem;
+      height: auto;
+      border-radius: 0.5rem;
+
+      position: absolute;
+      right: 2rem;
+
+      background-color: $primary-300;
       outline: none;
+      border: none;
+
+      color: #fff;
+      font-size: 1.4rem;
+      user-select: none;
+
+      &:hover {
+        cursor: pointer;
+        background-color: $primary-400;
+      }
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    .started-workout-header {
+      justify-content: space-between;
 
       h1 {
-        font-size: 3rem;
+        font-size: 2.2rem;
       }
 
-      &:hover,
-      &:focus-visible {
-        color: $primary-400;
+      .save-button {
+        position: relative;
+        right: none;
       }
     }
+  }
 
-    img {
-      width: 40rem;
-      max-width: 100%;
-      grid-area: image;
+  .alice-carousel {
+    height: calc(100rem - 10rem);
+
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 8px;
     }
 
-    .started-sets {
-      grid-area: sets;
+    &::-webkit-scrollbar-track {
+      background: $dark-300;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: $dark-500;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: $dark-600;
+    }
+
+    .alice-carousel__stage {
       display: flex;
       flex-direction: column;
+      gap: 3rem;
+    }
+  }
+
+  .alice-carousel__stage-item {
+    display: flex;
+    justify-content: center;
+  }
+
+  .started-workout-set {
+    display: flex;
+    flex-direction: column;
+
+    max-width: 60rem;
+    width: 100%;
+    height: auto;
+    min-height: 18rem;
+    border-radius: 1rem;
+
+    gap: 1rem;
+
+    background-color: $dark-400;
+    overflow: hidden;
+
+    .started-workout-set-header {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
       gap: 1rem;
+
+      padding: 0 1rem;
+      padding-top: 1rem;
+
+      .started-workout-set-image-container {
+        width: 6rem;
+        height: 6rem;
+        overflow: hidden;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .started-workout-set-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      a {
+        color: #fff;
+        text-decoration: none;
+        outline: none;
+
+        h1 {
+          font-size: 2rem;
+          font-weight: 500;
+        }
+
+        &:hover,
+        &:focus-visible {
+          color: $primary-400;
+        }
+      }
+    }
+
+    .started-workout-set-seactions {
+      width: 100%;
+
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 3rem;
+
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: #bbb;
+
+      p {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 3rem;
+      }
+
+      .started-workout-set-seaction-2 {
+        width: 15rem;
+      }
+    }
+
+    .started-workout-set-body {
+      height: 100%;
+
+      > :nth-child(even) {
+        background-color: $dark-300;
+      }
 
       .started-set {
         display: flex;
-        gap: 2rem;
+        align-items: center;
+        padding: 0 2rem;
+        gap: 3rem;
 
-        .set-info {
+        height: 5rem;
+
+        p {
           display: flex;
-          gap: 1rem;
+          justify-content: center;
+          align-items: center;
+          min-width: 3rem;
         }
 
         .complete-inputs {
+          width: 17rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
           input {
             width: 5rem;
-            padding: 0.25rem 0.7rem;
             outline: none;
             border: none;
-            border-bottom: 1px solid #fff;
             background: none;
             color: #fff;
             font-size: 1.5rem;
-            text-align: end;
+            text-align: center;
 
-            &:focus-within {
-              outline: 1px solid $primary-400;
+            &::placeholder {
+              color: $dark-600;
             }
+          }
+        }
+        .set-complete-button {
+          padding: 0.7rem 1rem;
+          min-width: 8rem;
+          height: auto;
+          border-radius: 0.5rem;
+
+          position: relative;
+          margin-left: auto;
+
+          background-color: $primary-300;
+          outline: none;
+          border: none;
+
+          color: #fff;
+          font-size: 1.4rem;
+          user-select: none;
+
+          &:hover {
+            cursor: pointer;
+            background-color: $primary-400;
           }
         }
       }
@@ -79,9 +252,7 @@
   }
 
   .prev-button,
-  .next-button,
-  .save-button,
-  .set-complete-button {
+  .next-button {
     border: none;
     outline: none;
     background: none;
@@ -103,13 +274,5 @@
       cursor: not-allowed;
       background-color: $primary-200;
     }
-  }
-
-  .save-button {
-    position: absolute;
-    margin: 2rem;
-    right: 0;
-    font-size: 1.5rem;
-    padding: 0.5rem 10rem;
   }
 }

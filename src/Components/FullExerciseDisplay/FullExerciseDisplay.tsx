@@ -1,5 +1,5 @@
 import "./FullExerciseDisplay.scss";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
 import singleExerciseLoader from "./SingleExerciseLoader";
 import Async from "../Async/Async";
@@ -8,12 +8,25 @@ import ExerciseDisplaySummeryTab from "./ExerciseDisplaySummeryTab";
 import ExerciseDisplayHistoryTab from "./ExerciseDisplayHistoryTab";
 import ExerciseDisplayHowToTab from "./ExerciseDisplayHowToTab";
 import { useNavigate } from "react-router-dom";
+import useOutsideClick from "../../Hooks/UseOutsideClick";
 
 export default function FullExerciseDisplay() {
   const data = useLoaderData<typeof singleExerciseLoader>();
-
+  const [activeExerciseDisplayPopup, setActiveExerciseDisplayPopup] =
+    useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<number>(0);
+  const [unit, setUnit] = useState<"kg" | "lbs">("kg");
   const navigate = useNavigate();
+
+  const ellipsisButtonRef = useRef<HTMLButtonElement>(null);
+
+  const handleUnitSwitch = () => {
+    setUnit((prevUnit) => (prevUnit === "kg" ? "lbs" : "kg"));
+  };
+
+  const closePopup = () => {
+    setActiveExerciseDisplayPopup(false);
+  };
 
   return (
     <Async await={data.exercise}>
@@ -22,6 +35,14 @@ export default function FullExerciseDisplay() {
 
         return (
           <div className="full-exercise-display">
+            <ExerciseDisplayPopup
+              isOpened={activeExerciseDisplayPopup}
+              handleUnitSwitch={handleUnitSwitch}
+              currentUnit={unit}
+              closePopup={closePopup}
+              ellipsisButtonRef={ellipsisButtonRef}
+            />
+
             <div className="full-exercise-display-header">
               <button
                 onClick={() => navigate(-1)}
@@ -31,7 +52,10 @@ export default function FullExerciseDisplay() {
               </button>
 
               <button
-                onClick={() => console.log("dot dot dot")}
+                ref={ellipsisButtonRef}
+                onClick={() =>
+                  setActiveExerciseDisplayPopup((prevState) => !prevState)
+                }
                 className="full-exercise-display-header-ellipsis"
               >
                 <Icon name="ellipsis" />
@@ -58,12 +82,14 @@ export default function FullExerciseDisplay() {
                 >
                   <p>How to</p>
                 </button>
+
                 <div
                   className="full-exercise-display-header-tab-indicator"
                   style={{ left: `${(100 / 3) * activeTab}%` }}
                 />
               </div>
             </div>
+
             {(activeTab === 0 || activeTab === 2) && (
               <div className="full-exercise-display-image">
                 <img
@@ -79,13 +105,17 @@ export default function FullExerciseDisplay() {
               }`}
             >
               {activeTab === 0 && (
-                <ExerciseDisplaySummeryTab exercise={exercise.content} />
+                <ExerciseDisplaySummeryTab
+                  exercise={exercise.content}
+                  unit={unit}
+                />
               )}
-
               {activeTab === 1 && (
-                <ExerciseDisplayHistoryTab exercise={exercise.content} />
+                <ExerciseDisplayHistoryTab
+                  exercise={exercise.content}
+                  unit={unit}
+                />
               )}
-
               {activeTab === 2 && (
                 <ExerciseDisplayHowToTab exercise={exercise.content} />
               )}
@@ -94,5 +124,37 @@ export default function FullExerciseDisplay() {
         );
       }}
     </Async>
+  );
+}
+
+type ExerciseDisplayPopupProps = {
+  isOpened: boolean;
+  handleUnitSwitch: () => void;
+  currentUnit: "kg" | "lbs";
+  closePopup: () => void;
+  ellipsisButtonRef: React.RefObject<HTMLButtonElement>;
+};
+
+function ExerciseDisplayPopup({
+  isOpened,
+  handleUnitSwitch,
+  currentUnit,
+  closePopup,
+  ellipsisButtonRef,
+}: ExerciseDisplayPopupProps) {
+  const popupRef = useRef<HTMLDivElement>(null);
+
+  useOutsideClick([popupRef, ellipsisButtonRef], closePopup);
+
+  const nextUnit = currentUnit === "kg" ? "lbs" : "kg";
+
+  return (
+    <div
+      className={`exercise-display-popup ${!isOpened && "closed"}`}
+      ref={popupRef}
+    >
+      <button onClick={handleUnitSwitch}>Switch to {nextUnit}</button>
+      <button>Add to favorites</button>
+    </div>
   );
 }

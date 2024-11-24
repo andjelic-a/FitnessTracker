@@ -4,6 +4,7 @@ import MiniPreview from "../MiniPreview/MiniPreview";
 import { useMemo } from "react";
 import Icon from "../Icon/Icon";
 import { Tooltip } from "react-tooltip";
+import { Link } from "react-router-dom";
 
 type CurrentSplitDayDisplayProps = {
   day: number;
@@ -106,6 +107,29 @@ export default function CurrentSplitDayDisplay({
                   Workout complete! You're one step closer to your goals. Well
                   done!
                 </p>
+              </Tooltip>
+            </>
+          )}
+
+          {props.status === "pending-today" && (
+            <>
+              <Link
+                to="/started-workout"
+                className="badge pending-today-badge"
+                data-tooltip-id="pending-today-tooltip"
+                data-tooltip-place="bottom"
+                data-tooltip-class-name="pending-today-tooltip"
+                data-tooltip-delay-show={150}
+              >
+                <Icon name="circle" />
+              </Link>
+
+              <p className="accessibility-only" aria-hidden={false}>
+                Click to start today's workout
+              </p>
+
+              <Tooltip id="pending-today-tooltip">
+                <p>Click to start today's workout</p>
               </Tooltip>
             </>
           )}
