@@ -18,10 +18,12 @@ export default function User({ user: { username, name, image } }: UserProps) {
         navigate(`/${username}`);
       }}
     >
+      <div className="image-container">
       <img
         src={image ?? "/DefaultProfilePicture.png"}
         alt={`Profile picture of a user named ${name}`}
       />
+      </div>
       <p>{name}</p>
     </a>
   );
