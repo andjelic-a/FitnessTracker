@@ -163,10 +163,7 @@ const CommentSection = memo<CommentSectionProps>(
             onSubmit={handleCreateComment}
           />
 
-          <div className="workout-comments-body">
-            {/* <AnimatePresence>{commentElements}</AnimatePresence> */}
-            {commentElements}
-          </div>
+          <div className="workout-comments-body">{commentElements}</div>
         </div>
       </div>
     );

@@ -7,6 +7,8 @@ import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import Dropdown from "../DropdownMenu/Dropdown";
 import { addMonths } from "../../Utility/DateUtils";
+import FocusTrap from "focus-trap-react";
+import Icon from "../Icon/Icon";
 
 type ExerciseChartProps = {
   exercise: Schema<"SimpleExerciseResponseDTO">;
@@ -78,16 +80,27 @@ const ExerciseChart = memo(({ exercise }: ExerciseChartProps) => {
         <Async await={chartData}>
           {(chart) => (
             <div className="exercise-chart-container">
-              <div className="exercise-chart-header">
-                <h3>{exercise.name}</h3>
-                <div className="exercise-chart-dropdown">{dropdown}</div>
-              </div>
+              <FocusTrap
+                focusTrapOptions={{
+                  allowOutsideClick: true,
+                }}
+              >
+                <div className="exercise-chart-header">
+                  <button className="close-btn">
+                    <Icon name="xmark" />
+                  </button>
+
+                  <h3>{exercise.name}</h3>
+
+                  <div className="exercise-chart-dropdown">{dropdown}</div>
+                </div>
+              </FocusTrap>
 
               <div className="exercise-chart">
                 <LineChart
-                slots={{
-                  mark: () => null
-                }}
+                  slots={{
+                    mark: () => null,
+                  }}
                   xAxis={[
                     {
                       data: chart.map((x) => new Date(x.timeCompleted)),

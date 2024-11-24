@@ -1,7 +1,7 @@
 import Login from "./LogIn/LogIn";
 import "./Authentication.scss";
 
-function Authentication() {
+function AuthenticationPage() {
   return (
     <div className="auth-page">
       <Login />
@@ -9,4 +9,4 @@ function Authentication() {
   );
 }
 
-export default Authentication;
+export default AuthenticationPage;

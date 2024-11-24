@@ -31,11 +31,6 @@ export default function CommentInputField({
   useEffect(() => {
     setIsButtonContainerVisible(props.type !== "comment");
     if (props.type !== "comment") inputRef.current?.focus();
-
-    // inputRef.current?.setSelectionRange(
-    //   inputRef.current?.value.length,
-    //   inputRef.current?.value.length
-    // );
   }, [inputRef, props.type]);
 
   useEffect(updateSubmitBtnDisabledState, [isButtonContainerVisible]);
@@ -95,6 +90,7 @@ export default function CommentInputField({
       <div className="main">
         <div className="comment-textarea-container">
           <textarea
+            name={`${props.type}-input-textarea`}
             disabled={basicInfo == null || !basicInfo.isVerified}
             placeholder={`Add a ${
               props.type === "comment" ? "comment" : "reply"

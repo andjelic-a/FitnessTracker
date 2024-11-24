@@ -4,7 +4,7 @@ import sendAPIRequest from "./SendAPIRequest";
 export function isJWTExpired(jwt: string) {
   const parts = jwt.split(".");
   if (parts.length !== 3) {
-    // localStorage.removeItem("token");
+    localStorage.removeItem("token");
     return true;
   }
 

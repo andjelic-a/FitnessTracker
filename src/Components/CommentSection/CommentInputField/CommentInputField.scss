@@ -102,7 +102,8 @@
         font-weight: 600;
         transition: 0.2s;
 
-        &:hover {
+        &:hover,
+        &:focus-visible {
           background-color: $dark-600;
         }
 
@@ -110,8 +111,10 @@
           background-color: $primary-300;
           transition: 0.2s;
 
-          &:hover {
+          &:hover,
+          &:focus-visible {
             background-color: $primary-400;
+            outline: 1px solid #fff;
           }
 
           &:disabled {

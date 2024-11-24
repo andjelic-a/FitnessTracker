@@ -15,16 +15,17 @@ export default function PinDragOverlay({ pin }: PinDragOverlayProps) {
         <p className="pin-type">{pin.type === 0 ? "(Workout)" : "(Split)"}</p>
       </div>
 
-      <div className="pin-description">
-        {pin.description}
-      </div>
+      <div className="pin-description">{pin.description}</div>
 
       <div className="pin-footer">
         <div className="pin-likes">
-          <Icon name="thumbs-up" />0
+          <Icon name="thumbs-up" />
+          {pin.likeCount}
         </div>
+
         <div className="pin-favorites">
-          <Icon name="bookmark" />0
+          <Icon name="bookmark" />
+          {pin.favoriteCount}
         </div>
       </div>
 

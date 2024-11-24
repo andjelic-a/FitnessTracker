@@ -9,6 +9,28 @@
   background-color: $dark-200;
   border-radius: 1rem;
   font-size: 1.7em;
+  position: relative;
+
+  .close-btn {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+
+    background: none;
+    outline: none;
+    border: none;
+    color: #fff;
+
+    i {
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: $primary-300;
+    }
+  }
 
   .settings-sidebar {
     min-width: 30rem;
@@ -34,6 +56,12 @@
     }
 
     .settings-item {
+      outline: none;
+      background: none;
+      color: #fff;
+      font-size: inherit;
+      border: none;
+
       display: flex;
       justify-content: center;
       align-items: center;
@@ -42,7 +70,8 @@
       border-bottom: 1px solid $dark-300;
       cursor: pointer;
 
-      &:hover {
+      &:hover,
+      &:focus-visible {
         background-color: $dark-300;
       }
 

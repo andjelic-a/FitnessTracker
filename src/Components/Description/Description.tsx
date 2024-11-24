@@ -14,7 +14,8 @@ const Description = forwardRef<HTMLTextAreaElement, DescriptionProps>(
     const textareaRef = ref || localRef;
 
     useEffect(() => {
-      const textarea = textareaRef instanceof Function ? null : textareaRef.current;
+      const textarea =
+        textareaRef instanceof Function ? null : textareaRef.current;
       if (textarea) {
         textarea.style.height = "auto";
         textarea.style.height = `${textarea.scrollHeight}px`;
@@ -24,7 +25,13 @@ const Description = forwardRef<HTMLTextAreaElement, DescriptionProps>(
     return (
       <div className="description-container">
         <div className="description">
-          <label className="description-placeholder">{placeholder}</label>
+          <label
+            className="description-placeholder"
+            htmlFor="description-input"
+          >
+            {placeholder}
+          </label>
+
           <textarea
             id="description-input"
             rows={1}
@@ -36,8 +43,8 @@ const Description = forwardRef<HTMLTextAreaElement, DescriptionProps>(
                 e.target.style.height = `${e.target.scrollHeight}px`;
               }
             }}
-            aria-labelledby="description-input-label"
             disabled={!isInputEnabled}
+            aria-labelledby="description-input"
           />
         </div>
       </div>

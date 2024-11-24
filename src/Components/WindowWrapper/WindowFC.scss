@@ -9,12 +9,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
-  // backdrop-filter: blur(3px);
 }
 
-*:has(~ .window-wrapper),
 *:has(~ .window-wrapper) * {
-  // outline: 1px solid red;
   filter: blur(2px);
 }

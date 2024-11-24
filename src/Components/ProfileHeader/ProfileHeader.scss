@@ -80,7 +80,9 @@
       gap: 0.75rem;
 
       .stat:hover,
-      .stat:hover .value {
+      .stat:hover .value,
+      .stat:focus-visible,
+      .stat:focus-visible .value {
         color: $primary-600;
         cursor: pointer;
       }

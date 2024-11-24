@@ -1,7 +1,7 @@
 import "./WorkoutPreview.scss";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import User from "../User/User";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { HTMLProps } from "../../Types/Utility/HTMLProps";
 
 type WorkoutPreviewDisplayProps = {
@@ -19,22 +19,18 @@ export default function WorkoutPreview({
   footerProps,
   ...attr
 }: WorkoutPreviewDisplayProps) {
-  const navigate = useNavigate();
-
   return (
     <div
       className={"workout-preview " + (className ? className : "")}
       {...attr}
     >
       <div className="workout-preview-header" {...headerProps}>
-        <p
+        <Link
           className="workout-preview-header-name"
-          onClick={() =>
-            navigate(`/${workout.creator.username}/workout/${workout.name}`)
-          }
+          to={`/${workout.creator.username}/workout/${workout.name}`}
         >
           {workout.name}
-        </p>
+        </Link>
       </div>
 
       <div className="workout-preview-body" {...bodyProps}>

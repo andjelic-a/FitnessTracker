@@ -204,17 +204,6 @@ const SplitDisplay = WindowFC(() => {
                     text={split.content.description.trim()}
                     isInputEnabled={false}
                   />
-                  {/*{split.content.description.trim().length > 0 && (
-                    <div className="split-display-description-container">
-                      <div className="split-display-description">
-                        <label className="split-display-description-placeholder">
-                          Split Description
-                        </label>
-
-                        {split.content.description}
-                      </div>
-                    </div>
-                  )}*/}
 
                   <div className="icon-container">
                     <div className="split-display-interaction-container">

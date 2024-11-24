@@ -5,14 +5,12 @@ import "./EditProfile.scss";
 import compressImage from "../../../Data/ImageCompression";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
 import basicProfileInfoContext from "../../../Contexts/BasicProfileInfoContext";
+import { Tooltip } from "react-tooltip";
 
 export default function EditProfile() {
   const user = useContext(basicProfileInfoContext);
   const [isImageHovered, setIsImageHovered] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [selectedGender, setSelectedGender] = useState<
-    "male" | "none" | "female"
-  >("none");
 
   const imageInputRef = useRef<HTMLInputElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -57,7 +55,6 @@ export default function EditProfile() {
         setDefaultUsernameValue(user.username);
         setDefaultNameValue(user.name);
         setDefaultBioValue(user.bio);
-        setSelectedGender(user.gender === 0 ? "male" : "female");
       });
   }, []);
 
@@ -107,12 +104,14 @@ export default function EditProfile() {
       <h3>Edit profile</h3>
 
       <div className="edit-profile-user-details">
-        <div className={`edit-profile-image-container`}>
-          <div
-            className={`edit-profile-image-trigger`}
-            onMouseEnter={() => setIsImageHovered(true)}
-            onMouseLeave={() => setIsImageHovered(false)}
-          >
+        <div
+          className={`edit-profile-image-container`}
+          onMouseEnter={() => setIsImageHovered(true)}
+          onMouseLeave={() => setIsImageHovered(false)}
+          onFocus={() => setIsImageHovered(true)}
+          onBlur={() => setIsImageHovered(false)}
+        >
+          <div className={`edit-profile-image-trigger`}>
             <input
               ref={imageInputRef}
               className="edit-profile-image-input"
@@ -155,6 +154,12 @@ export default function EditProfile() {
             <p className="accessibility-only" aria-hidden={false}>
               Remove image
             </p>
+
+            <Tooltip
+              anchorSelect=".edit-profile-image-remove"
+              delayShow={300}
+              content="Remove image"
+            />
           </button>
         </div>
       </div>
@@ -186,30 +191,6 @@ export default function EditProfile() {
           ref={bioInputRef}
           defaultValue={defaultBioValue}
         ></textarea>
-      </div>
-
-      <div className="edit-profile-gender">
-        <div
-          className={`edit-profile-gender-background ${selectedGender}`}
-        ></div>
-        <div
-          className={`edit-profile-gender-option`}
-          onClick={() => setSelectedGender("male")}
-        >
-          <p>Male</p>
-        </div>
-        <div
-          className={`edit-profile-gender-option`}
-          onClick={() => setSelectedGender("none")}
-        >
-          <p>None</p>
-        </div>
-        <div
-          className={`edit-profile-gender-option`}
-          onClick={() => setSelectedGender("female")}
-        >
-          <p>Female</p>
-        </div>
       </div>
 
       <div className="edit-profile-save-container">

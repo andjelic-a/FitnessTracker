@@ -26,6 +26,7 @@ import { createPortal } from "react-dom";
 import WorkoutItemDragOverlay from "./WorkoutItem/WorkoutItemDragOverlay";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
 import { CloseFunctionOverride } from "../WindowWrapper/WindowFC";
+import FocusTrap from "focus-trap-react";
 
 type WorkoutSetCreatorProps = {
   onOverlayOpen: () => void;
@@ -138,7 +139,13 @@ export default function WorkoutSetCreator({
         children={exerciseSelectorMemo}
       />
 
-      {isChoosingExercise && <OutPortal node={exerciseSelectorPortalNode} />}
+      {isChoosingExercise && (
+        <FocusTrap focusTrapOptions={{ allowOutsideClick: true }}>
+          <div>
+            <OutPortal node={exerciseSelectorPortalNode} />
+          </div>
+        </FocusTrap>
+      )}
 
       <DndContext
         collisionDetection={closestCenter}
