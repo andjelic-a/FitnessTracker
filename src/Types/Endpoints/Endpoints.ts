@@ -5902,9 +5902,19 @@ type MappedEndpoints = {
         };
       };
     };
-    "/api/user/settings": {
+    "/api/user/{username}/settings": {
       get: {
         tags: ["User"];
+        parameters: [
+          {
+            name: "username";
+            in: "path";
+            required: true;
+            schema: {
+              type: "string";
+            };
+          }
+        ];
         responses: {
           "200": {
             description: "OK";
@@ -5922,93 +5932,6 @@ type MappedEndpoints = {
               "text/json": {
                 schema: {
                   $ref: "#/components/schemas/UserSettingsResponseDTO";
-                };
-              };
-            };
-          };
-          "401": {
-            description: "Unauthorized";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-        };
-      };
-      put: {
-        tags: ["User"];
-        requestBody: {
-          content: {
-            "application/json": {
-              schema: {
-                $ref: "#/components/schemas/UpdateUserSettingsRequestDTO";
-              };
-            };
-            "text/json": {
-              schema: {
-                $ref: "#/components/schemas/UpdateUserSettingsRequestDTO";
-              };
-            };
-            "application/*+json": {
-              schema: {
-                $ref: "#/components/schemas/UpdateUserSettingsRequestDTO";
-              };
-            };
-          };
-        };
-        responses: {
-          "204": {
-            description: "No Content";
-          };
-          "401": {
-            description: "Unauthorized";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
                 };
               };
             };
@@ -6942,6 +6865,75 @@ type MappedEndpoints = {
                 };
               };
             };
+          };
+          "401": {
+            description: "Unauthorized";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+          "429": {
+            description: "Too Many Requests";
+            content: {
+              "text/plain": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "application/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+              "text/json": {
+                schema: {
+                  $ref: "#/components/schemas/ProblemDetails";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+    "/api/user/settings": {
+      put: {
+        tags: ["User"];
+        requestBody: {
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateUserSettingsRequestDTO";
+              };
+            };
+            "text/json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateUserSettingsRequestDTO";
+              };
+            };
+            "application/*+json": {
+              schema: {
+                $ref: "#/components/schemas/UpdateUserSettingsRequestDTO";
+              };
+            };
+          };
+        };
+        responses: {
+          "204": {
+            description: "No Content";
           };
           "401": {
             description: "Unauthorized";

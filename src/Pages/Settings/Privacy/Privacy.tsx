@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import "./Privacy.scss";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
+import basicProfileInfoContext from "../../../Contexts/BasicProfileInfoContext";
 
 export default function Privacy() {
   const [isFollowingDisabled, setIsFollowingDisabled] = useState(false);
@@ -18,12 +19,17 @@ export default function Privacy() {
 
   const loadedSettings = useRef<boolean>(false);
 
+  const basicUserInfo = useContext(basicProfileInfoContext);
+
   useEffect(() => {
-    if (loadedSettings.current) return;
+    if (loadedSettings.current || !basicUserInfo) return;
     loadedSettings.current = true;
 
-    sendAPIRequest("/api/user/settings", {
+    sendAPIRequest("/api/user/{username}/settings", {
       method: "get",
+      parameters: {
+        username: basicUserInfo.username,
+      },
     }).then((data) => {
       const settings = data.code === "OK" ? data.content : null;
       if (!settings) return;

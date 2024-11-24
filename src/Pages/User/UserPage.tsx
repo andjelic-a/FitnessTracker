@@ -29,11 +29,13 @@ export default function UserPage() {
       loaderData.user,
       loaderData.pins,
       loaderData.latestWeekOfActivity,
+      loaderData.privacySettings,
     ]).then((x) => {
       setLoaderDataState({
         user: x[0],
         pins: x[1],
         latestWeekOfActivity: x[2],
+        privacySettings: x[3],
       });
     });
   }, [loaderData]);
@@ -121,13 +123,14 @@ function InnerProfile({
           isMe={isMe}
         />
 
-        {loaderDataState.user.code === "OK" && (
-          <ActivityGrid
-            key={loaderDataState.user.content.username + "-activity"}
-            username={loaderDataState.user.content.username}
-            joinedAt={new Date(loaderDataState.user.content.joinedAt)}
-          />
-        )}
+        {loaderDataState.privacySettings.publicStreak &&
+          loaderDataState.user.code === "OK" && (
+            <ActivityGrid
+              key={loaderDataState.user.content.username + "-activity"}
+              username={loaderDataState.user.content.username}
+              joinedAt={new Date(loaderDataState.user.content.joinedAt)}
+            />
+          )}
       </div>
 
       <AnimatedOutlet />
