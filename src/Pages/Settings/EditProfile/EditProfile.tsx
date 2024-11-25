@@ -65,7 +65,11 @@ export default function EditProfile() {
         payload: {
           newImage: selectedImage,
         },
-      });
+      }).then(
+        (x) =>
+          x.code === "No Content" &&
+          void sessionStorage.setItem("revalidate-profile", "true")
+      );
 
       isImageChanged.current = false;
     }
@@ -79,7 +83,11 @@ export default function EditProfile() {
         payload: {
           newName: nameInputRef.current.value.trim(),
         },
-      });
+      }).then(
+        (x) =>
+          x.code === "No Content" &&
+          void sessionStorage.setItem("revalidate-profile", "true")
+      );
 
       setDefaultNameValue(nameInputRef.current.value.trim());
     }
@@ -93,7 +101,11 @@ export default function EditProfile() {
         payload: {
           newBio: bioInputRef.current.value.trim(),
         },
-      });
+      }).then(
+        (x) =>
+          x.code === "No Content" &&
+          void sessionStorage.setItem("revalidate-profile", "true")
+      );
 
       setDefaultBioValue(bioInputRef.current.value.trim());
     }

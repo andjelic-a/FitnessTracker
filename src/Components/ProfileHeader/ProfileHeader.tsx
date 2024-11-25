@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import "./ProfileHeader.scss";
 import { useNavigate } from "react-router-dom";
 import FollowContainer from "../FollowContainer/FollowContainer";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
+import basicProfileInfoContext from "../../Contexts/BasicProfileInfoContext";
 
 type ProfileHeaderProps = {
   user: Schema<"DetailedUserResponseDTO">;
@@ -29,6 +30,8 @@ function ProfileHeader({ user, ...props }: ProfileHeaderProps) {
 
   const containerRef = useRef<HTMLDivElement>(null);
   useOutsideClick(containerRef, () => setFollowTabOpen(null), "left");
+
+  const basicUserInfo = useContext(basicProfileInfoContext);
 
   return (
     <div className="profile-header" ref={containerRef}>
@@ -57,6 +60,11 @@ function ProfileHeader({ user, ...props }: ProfileHeaderProps) {
         <button
           className="follow-btn"
           onClick={() => {
+            if (!basicUserInfo) {
+              navigate("/authentication");
+              return;
+            }
+
             props.handleFollow?.();
             setFollowersCount((x) => x + (props.isFollowing ? -1 : 1));
           }}

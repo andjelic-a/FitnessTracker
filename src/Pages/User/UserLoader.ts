@@ -1,6 +1,7 @@
 import { redirect } from "react-router-dom";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import createLoader from "../../BetterRouter/CreateLoader";
+import { Schema } from "../../Types/Endpoints/SchemaParser";
 
 const userLoader = createLoader(({ params: { username } }) => {
   if (!username) return redirect("/");
@@ -34,6 +35,26 @@ const userLoader = createLoader(({ params: { username } }) => {
         username,
       },
     }),
+    privacySettings: sendAPIRequest("/api/user/{username}/settings", {
+      method: "get",
+      parameters: {
+        username,
+      },
+    }).then<Schema<"UserSettingsResponseDTO">>((x) =>
+      x.code === "OK"
+        ? x.content
+        : {
+            publicCreatedSplits: false,
+            publicCreatedWorkouts: false,
+            publicFavoriteSplits: false,
+            publicFavoriteWorkouts: false,
+            publicFollowing: false,
+            publicLikedSplits: false,
+            publicLikedWorkouts: false,
+            publicStreak: false,
+            publicCurrentSplit: false,
+          }
+    ),
   };
 }, "/:username");
 
