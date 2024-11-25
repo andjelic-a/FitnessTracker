@@ -63,35 +63,19 @@
   padding: 1rem;
   top: 0;
 
-  .workout-preview-header {
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.8rem;
-
-    .workout-preview-header-name {
-      color: #fff;
-      text-decoration: none;
-      max-width: 35%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-  }
-
   .workout-preview-body {
     width: 100%;
+    height: 65%;
     display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    font-size: 1.6rem;
+    justify-content: center;
+    align-items: flex-end;
     font-weight: normal;
     overflow: hidden;
 
-    p {
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .workout-preview-body-name {
+      font-size: 2rem;
+      color: #fff;
+      text-decoration: none;
     }
   }
 
@@ -101,5 +85,6 @@
     align-items: center;
     font-size: 1rem;
     font-weight: normal;
+    height: 30%;
   }
 }

@@ -26,12 +26,14 @@
     background-color: $primary-300;
     border-radius: 0.5rem;
 
+    cursor: pointer;
+
     .dropdown-button-icon {
       width: 20%;
     }
     p {
       width: 80%;
-      font-weight: 600;
+      font-size: 1.6rem;
     }
 
     &:hover,

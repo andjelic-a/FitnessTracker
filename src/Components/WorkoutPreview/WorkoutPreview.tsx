@@ -24,23 +24,13 @@ export default function WorkoutPreview({
       className={"workout-preview " + (className ? className : "")}
       {...attr}
     >
-      <div className="workout-preview-header" {...headerProps}>
+      <div className="workout-preview-body" {...headerProps}>
         <Link
-          className="workout-preview-header-name"
+          className="workout-preview-body-name"
           to={`/${workout.creator.username}/workout/${workout.name}`}
         >
           {workout.name}
         </Link>
-      </div>
-
-      <div className="workout-preview-body" {...bodyProps}>
-        <p>
-          {workout.description
-            ? workout.description.length > 150
-              ? workout.description.slice(0, 75) + "..."
-              : workout.description
-            : ""}
-        </p>
       </div>
 
       <div className="workout-preview-footer" {...footerProps}>
