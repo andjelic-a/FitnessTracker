@@ -13,7 +13,7 @@ const exerciseChartLoader = createLoader(
           method: "get",
           parameters: {
             creator: username,
-            name,
+            name: name.replace(/-/g, " "),
             exerciseId: +exerciseId,
           },
         }

@@ -10,7 +10,7 @@ const splitDisplayLoader = createLoader(({ params: { name, username } }) => {
       method: "get",
       parameters: {
         creator: username,
-        name,
+        name: name.replace(/-/g, " "),
       },
     }),
   };

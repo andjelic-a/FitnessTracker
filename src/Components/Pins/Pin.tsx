@@ -36,7 +36,12 @@ export default function Pin({ pin, includeDragHandle }: PinProps) {
       }}
     >
       <div className="pin-header">
-        <Link to={`${pin.type === 0 ? "workout" : "split"}/${pin.name}`}>
+        <Link
+          to={`${pin.type === 0 ? "workout" : "split"}/${pin.name.replace(
+            / /g,
+            "-"
+          )}`}
+        >
           <h3>{pin.name}</h3>
           &nbsp;
           <p className="pin-type">{pin.type === 0 ? "(Workout)" : "(Split)"}</p>
