@@ -26,12 +26,13 @@ type ProfileTabsProps = {
   latestActivity: Schema<"DetailedWeekOfCompletedWorkoutsResponseDTO"> | null;
   split: Schema<"DetailedUserSplitResponseDTO"> | null;
   isMe: boolean;
+  privacySettings: Schema<"UserSettingsResponseDTO">;
 };
 
 type Tab = "split" | "workout";
 
 const ProfileTabs = memo(
-  ({ latestActivity, split, isMe }: ProfileTabsProps) => {
+  ({ latestActivity, split, isMe, privacySettings }: ProfileTabsProps) => {
     const [openTab, setOpenTab] = useState<Tab>("split");
     const [searchTerm, setSearchTerm] = useState<string>("");
     const searchBarRef = useRef<HTMLInputElement>(null);
@@ -40,10 +41,28 @@ const ProfileTabs = memo(
 
     const flipStateRef = useRef<Flip.FlipState | null>(null);
 
+    const showWorkoutTab = useMemo(
+      () =>
+        isMe ||
+        privacySettings.publicCreatedWorkouts ||
+        privacySettings.publicLikedWorkouts ||
+        privacySettings.publicFavoriteWorkouts,
+      [privacySettings]
+    );
+
+    const showSplitTab = useMemo(
+      () =>
+        isMe ||
+        privacySettings.publicCurrentSplit ||
+        privacySettings.publicCreatedSplits ||
+        privacySettings.publicLikedSplits ||
+        privacySettings.publicFavoriteSplits,
+      [privacySettings]
+    );
+
     useEffect(() => {
-      setOpenTab("split");
-      setEndpoint(null);
-    }, [split]);
+      setOpenTab(isMe ? "split" : showSplitTab ? "split" : "workout");
+    }, [isMe, showSplitTab]);
 
     const activeIndicatorPortalNode = useMemo(
       () =>
@@ -105,30 +124,54 @@ const ProfileTabs = memo(
       | "/api/split/liked/simple/by/{username}"
     >(null);
 
-    const dropdown = useMemo(
-      () => (
+    const dropdown = useMemo(() => {
+      let values =
+        openTab === "split"
+          ? ({
+              Current: null,
+              Created: "/api/split/simple/by/{username}",
+              Liked: "/api/split/liked/simple/by/{username}",
+              Favorites: "/api/split/favorite/simple/by/{username}",
+            } as const)
+          : ({
+              Created: "/api/workout/simple/by/{username}",
+              Liked: "/api/workout/liked/simple/by/{username}",
+              Favorites: "/api/workout/favorite/simple/by/{username}",
+            } as const);
+
+      if (!isMe) {
+        if (openTab === "split" && !privacySettings.publicCurrentSplit)
+          delete (values as any)["Current"];
+
+        if (
+          (openTab === "split" && !privacySettings.publicCreatedSplits) ||
+          (openTab === "workout" && !privacySettings.publicCreatedWorkouts)
+        )
+          delete (values as any)["Created"];
+
+        if (
+          (openTab === "split" && !privacySettings.publicLikedSplits) ||
+          (openTab === "workout" && !privacySettings.publicLikedWorkouts)
+        )
+          delete (values as any)["Liked"];
+
+        if (
+          (openTab === "split" && !privacySettings.publicFavoriteSplits) ||
+          (openTab === "workout" && !privacySettings.publicFavoriteWorkouts)
+        )
+          delete (values as any)["Favorites"];
+      }
+
+      return (
         <Dropdown
           className="tabs-header-dropdown"
-          values={
-            openTab === "split"
-              ? ({
-                  Current: null,
-                  Created: "/api/split/simple/by/{username}",
-                  Liked: "/api/split/liked/simple/by/{username}",
-                  Favorites: "/api/split/favorite/simple/by/{username}",
-                } as const)
-              : ({
-                  Created: "/api/workout/simple/by/{username}",
-                  Liked: "/api/workout/liked/simple/by/{username}",
-                  Favorites: "/api/workout/favorite/simple/by/{username}",
-                } as const)
-          }
-          defaultValue={openTab === "split" ? "Current" : "Created"}
-          onSelectionChanged={(_x, y) => void setEndpoint(y ?? null)}
+          values={values}
+          onSelectionChanged={(_x, y) => {
+            setEndpoint(y ?? null);
+          }}
         />
-      ),
-      [openTab, split]
-    );
+      );
+    }, [openTab]);
 
     const containerMemo = useMemo(() => {
       if (endpoint === null) return null;
@@ -198,23 +241,29 @@ const ProfileTabs = memo(
       );
     }, [endpoint, searchTerm]);
 
-    return (
+    return !showSplitTab && !showWorkoutTab ? null : (
       <div className="profile-workout-tabs-container">
         <div className="tabs-header">
           <div className="tabs">
-            <div className="tab">
-              <button onClick={() => handleOpenTab("split")}>Split</button>
-              {openTab === "split" && (
-                <portals.OutPortal node={activeIndicatorPortalNode} />
-              )}
-            </div>
+            {showSplitTab && (
+              <div className="tab">
+                <button onClick={() => handleOpenTab("split")}>Split</button>
+                {openTab === "split" && (
+                  <portals.OutPortal node={activeIndicatorPortalNode} />
+                )}
+              </div>
+            )}
 
-            <div className="tab">
-              <button onClick={() => handleOpenTab("workout")}>Workouts</button>
-              {openTab === "workout" && (
-                <portals.OutPortal node={activeIndicatorPortalNode} />
-              )}
-            </div>
+            {showWorkoutTab && (
+              <div className="tab">
+                <button onClick={() => handleOpenTab("workout")}>
+                  Workouts
+                </button>
+                {openTab === "workout" && (
+                  <portals.OutPortal node={activeIndicatorPortalNode} />
+                )}
+              </div>
+            )}
           </div>
 
           <div className="filters-container">

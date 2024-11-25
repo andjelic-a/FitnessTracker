@@ -37,8 +37,12 @@ export default function Privacy() {
       setIsFollowingDisabled(!settings.publicFollowing);
       setIsStreakDisabled(!settings.publicStreak);
       setIsCurrentSplitDisabled(!settings.publicCurrentSplit);
+
+      setIsCreatedWorkoutsDisabled(!settings.publicCreatedWorkouts);
       setIsLikedWorkoutsDisabled(!settings.publicLikedWorkouts);
       setIsFavoriteWorkoutsDisabled(!settings.publicFavoriteWorkouts);
+
+      setIsCreatedSplitsDisabled(!settings.publicCreatedSplits);
       setIsLikedSplitsDisabled(!settings.publicLikedSplits);
       setIsFavoriteSplitsDisabled(!settings.publicFavoriteSplits);
 
@@ -54,11 +58,11 @@ export default function Privacy() {
         publicCurrentSplit: !isCurrentSplitDisabled,
         publicCreatedSplits: !isCreatedSplitsDisabled,
         publicCreatedWorkouts: !isCreatedWorkoutsDisabled,
+        publicLikedSplits: !isLikedSplitsDisabled,
         publicLikedWorkouts: !isLikedWorkoutsDisabled,
         publicFavoriteSplits: !isFavoriteSplitsDisabled,
         publicFavoriteWorkouts: !isFavoriteWorkoutsDisabled,
         publicFollowing: !isFollowingDisabled,
-        publicLikedSplits: !isLikedSplitsDisabled,
       },
     });
   }

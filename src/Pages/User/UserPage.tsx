@@ -114,6 +114,7 @@ function InnerProfile({
 
         <ProfileTabs
           key={loaderDataState.user.content.username + "-tabs"}
+          privacySettings={loaderDataState.privacySettings}
           latestActivity={
             loaderDataState.latestWeekOfActivity.code === "OK"
               ? loaderDataState.latestWeekOfActivity.content

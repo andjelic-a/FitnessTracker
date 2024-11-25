@@ -67,7 +67,6 @@ const ExerciseChart = memo(({ exercise }: ExerciseChartProps) => {
           "6 months": 6,
           "1 year": 12,
         }}
-        defaultValue={"3 months"}
         onSelectionChanged={(_key, value) => setSelectedTimeFrame(value)}
       />
     ),
