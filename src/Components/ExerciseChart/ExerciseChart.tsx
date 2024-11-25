@@ -38,7 +38,7 @@ const ExerciseChart = memo(({ exercise }: ExerciseChartProps) => {
 
     setChartData(
       sendAPIRequest(
-        "/api/workout/{creator}/{name}/mock-exercise-chart-data/{exerciseId}",
+        "/api/workout/{creator}/{name}/exercise-chart-data/{exerciseId}",
         {
           method: "get",
           parameters: {
