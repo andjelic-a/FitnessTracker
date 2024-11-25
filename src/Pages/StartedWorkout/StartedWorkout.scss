@@ -10,26 +10,8 @@
 
   background-color: $dark-200;
   border: 3px solid $dark-200;
-  padding-bottom: 3rem;
 
-  overflow: auto;
-
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: $dark-300;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: $dark-500;
-    border-radius: 10px;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: $dark-600;
-  }
+  overflow: hidden;
 
   .started-workout-header {
     display: flex;
@@ -78,14 +60,35 @@
     flex-direction: column;
     gap: 3rem;
 
+    height: calc(100% - 10rem);
+    padding-bottom: 3rem;
+
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+  
+    &::-webkit-scrollbar-track {
+      background: $dark-300;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background: $dark-500;
+      border-radius: 10px;
+    }
+  
+    &::-webkit-scrollbar-thumb:hover {
+      background: $dark-600;
+    }
+
     .started-workout-set {
       display: flex;
       flex-direction: column;
 
       max-width: 60rem;
       width: 100%;
-      height: auto;
-      min-height: 18rem;
+      min-height: fit-content;
       border-radius: 1rem;
 
       gap: 1rem;
