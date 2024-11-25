@@ -33,7 +33,10 @@ const WorkoutCreator = WindowFC(
     }, [currentSets]);
 
     const validateTitle = (): boolean => {
-      if (!titleInputRef.current?.value) {
+      if (
+        !titleInputRef.current?.value ||
+        titleInputRef.current.value.includes("·")
+      ) {
         titleInputRef.current?.classList.add("invalid");
         return false;
       }

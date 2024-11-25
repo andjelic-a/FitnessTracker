@@ -1,6 +1,7 @@
 import { redirect } from "react-router-dom";
 import createLoader from "../../BetterRouter/CreateLoader";
 import sendAPIRequest from "../../Data/SendAPIRequest";
+import { getNameFromURLParam } from "../../Utility/FormatURLNameParam";
 
 const exerciseChartLoader = createLoader(
   ({ params: { exerciseId, name, username } }) => {
@@ -13,7 +14,7 @@ const exerciseChartLoader = createLoader(
           method: "get",
           parameters: {
             creator: username,
-            name: name.replace(/-/g, " "),
+            name: getNameFromURLParam(name),
             exerciseId: +exerciseId,
           },
         }
