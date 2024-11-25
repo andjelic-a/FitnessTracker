@@ -11,7 +11,7 @@ type ActivityItemsProps = {
 
 const ActivityItems = memo<ActivityItemsProps>(({ streak, year }) => {
   function getFillClass(completed: number, total: number) {
-    if (completed >= total) return "fill-red";
+    if (completed === total) return "fill-red";
     return `fill-${completed}-of-${total}`;
   }
 
