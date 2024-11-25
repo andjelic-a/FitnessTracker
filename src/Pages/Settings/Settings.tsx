@@ -106,6 +106,7 @@ const Settings = WindowFC(({}, { close }) => {
           onClick={() => {
             logout().then(() => {
               sessionStorage.setItem("revalidate-main", "true");
+              sessionStorage.setItem("revalidate-profile", "true");
               navigate("..");
             });
           }}
