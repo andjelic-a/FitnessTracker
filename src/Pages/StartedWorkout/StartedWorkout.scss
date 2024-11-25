@@ -50,6 +50,10 @@
         cursor: pointer;
         background-color: $primary-400;
       }
+
+      &:focus-visible {
+        outline: 1px solid white;
+      }
     }
   }
 
@@ -225,6 +229,10 @@
             &:hover {
               cursor: pointer;
               background-color: $primary-400;
+            }
+
+            &:focus-visible {
+              outline: 1px solid white;
             }
           }
         }
