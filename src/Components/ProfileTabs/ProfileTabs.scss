@@ -64,6 +64,11 @@
 
       .tabs-header-dropdown {
         min-width: 11rem;
+
+        button {
+          font-size: 1.5rem;
+          font-weight: 400;
+        }
       }
 
       .search-bar-container {
