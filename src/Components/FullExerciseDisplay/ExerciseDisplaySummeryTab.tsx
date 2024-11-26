@@ -32,7 +32,7 @@ export default function ExerciseDisplaySummeryTab({
 
       <div className="full-exercise-display-info-muscle-equipment-section">
         <div className="full-exercise-display-info-muscle-equipment">
-          <h3>Primary Muscles:</h3>
+          <h3>Primary Muscles:</h3>&nbsp;
           <p>
             {exercise.primaryMuscles.length > 0
               ? exercise.primaryMuscles.map((muscle) => muscle.name).join(", ")
@@ -41,7 +41,7 @@ export default function ExerciseDisplaySummeryTab({
         </div>
 
         <div className="full-exercise-display-info-muscle-equipment">
-          <h3>Secondary Muscles:</h3>
+          <h3>Secondary Muscles:</h3>&nbsp;
           <p>
             {exercise.secondaryMuscles.length > 0
               ? exercise.secondaryMuscles
@@ -52,7 +52,7 @@ export default function ExerciseDisplaySummeryTab({
         </div>
 
         <div className="full-exercise-display-info-muscle-equipment">
-          <h3>Equipment:</h3>
+          <h3>Equipment:</h3>&nbsp;
           <p>
             {exercise.equipment.length > 0
               ? exercise.equipment.map((equipment) => equipment.name).join(", ")
