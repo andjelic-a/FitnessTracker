@@ -34,6 +34,8 @@ export default function ExerciseSelector({
     ExerciseSchema | ExerciseSchema[]
   >([]);
 
+  const [isSavedFilterSelected, setIsSavedFilterSelected] = useState<boolean>();
+
   const [exercisePromises, setExercisePromises] = useState<
     Promise<ExerciseSchema[]>[]
   >([]);
@@ -223,7 +225,14 @@ export default function ExerciseSelector({
         <div className="filters-container">
           {muscleGroupDropdown}
 
-          <button className="filters-saved">Saved</button>
+          <button
+            className={`filters-saved ${!isSavedFilterSelected ? "saved-not-selected" : ""}`}
+            onClick={() => {
+              setIsSavedFilterSelected((prevState) => !prevState);
+            }}
+          >
+            Saved
+          </button>
 
           {equipmentDropdown}
         </div>
