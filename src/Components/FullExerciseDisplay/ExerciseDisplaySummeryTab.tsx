@@ -100,7 +100,12 @@ export default function ExerciseDisplaySummeryTab({
               {unit}
             </p>
           </div>
-        </div>
+        </div> 
+      </div>
+
+      <div className="full-exercise-display-info-footer">
+        <Icon name="bookmark"/>
+        <p>{exercise.favorites}</p>
       </div>
     </div>
   );

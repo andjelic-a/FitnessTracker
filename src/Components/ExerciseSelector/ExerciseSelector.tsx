@@ -226,7 +226,7 @@ export default function ExerciseSelector({
           {muscleGroupDropdown}
 
           <button
-            className={`filters-saved ${!isSavedFilterSelected ? "saved-not-selected" : ""}`}
+            className={`filters-saved${!isSavedFilterSelected ? " saved-not-selected" : ""}`}
             onClick={() => {
               setIsSavedFilterSelected((prevState) => !prevState);
             }}
