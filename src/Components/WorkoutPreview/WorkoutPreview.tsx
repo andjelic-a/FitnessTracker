@@ -28,7 +28,7 @@ export default function WorkoutPreview({
       <div className="workout-preview-body" {...headerProps}>
         <Link
           className="workout-preview-body-name"
-          to={`/${workout.creator.username}/workout/${workout.name}`}
+          to={`/${workout.creator.username}/workout/${getURLNameParam(workout.name)}`}
         >
           {workout.name}
         </Link>
