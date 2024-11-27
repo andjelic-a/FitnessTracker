@@ -3,6 +3,7 @@ import { Schema } from "../../Types/Endpoints/SchemaParser";
 import Icon from "../Icon/Icon";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { getURLNameParam } from "../../Utility/FormatURLNameParam";
 
 type PinProps = {
   pin: Schema<"PinResponseDTO">;
@@ -36,7 +37,11 @@ export default function Pin({ pin, includeDragHandle }: PinProps) {
       }}
     >
       <div className="pin-header">
-        <Link to={`${pin.type === 0 ? "workout" : "split"}/${pin.name}`}>
+        <Link
+          to={`${pin.type === 0 ? "workout" : "split"}/${getURLNameParam(
+            pin.name
+          )}`}
+        >
           <h3>{pin.name}</h3>
           &nbsp;
           <p className="pin-type">{pin.type === 0 ? "(Workout)" : "(Split)"}</p>

@@ -3,6 +3,7 @@ import { Schema } from "../../Types/Endpoints/SchemaParser";
 import User from "../User/User";
 import { Link } from "react-router-dom";
 import { HTMLProps } from "../../Types/Utility/HTMLProps";
+import { getURLNameParam } from "../../Utility/FormatURLNameParam";
 
 type WorkoutPreviewDisplayProps = {
   workout: Schema<"SimpleWorkoutResponseDTO">;

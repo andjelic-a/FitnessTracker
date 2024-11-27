@@ -1,38 +1,48 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import "./Privacy.scss";
 import sendAPIRequest from "../../../Data/SendAPIRequest";
+import basicProfileInfoContext from "../../../Contexts/BasicProfileInfoContext";
 
 export default function Privacy() {
   const [isFollowingDisabled, setIsFollowingDisabled] = useState(false);
-  const [isCompletedWorkoutsDisabled, setIsCompletedWorkoutsDisabled] =
-    useState(false);
   const [isStreakDisabled, setIsStreakDisabled] = useState(false);
   const [isCurrentSplitDisabled, setIsCurrentSplitDisabled] = useState(false);
+  const [isCreatedWorkoutsDisabled, setIsCreatedWorkoutsDisabled] =
+    useState(false);
   const [isLikedWorkoutsDisabled, setIsLikedWorkoutsDisabled] = useState(false);
   const [isFavoriteWorkoutsDisabled, setIsFavoriteWorkoutsDisabled] =
     useState(false);
+  const [isCreatedSplitsDisabled, setIsCreatedSplitsDisabled] = useState(false);
   const [isLikedSplitsDisabled, setIsLikedSplitsDisabled] = useState(false);
   const [isFavoriteSplitsDisabled, setIsFavoriteSplitsDisabled] =
     useState(false);
 
   const loadedSettings = useRef<boolean>(false);
 
+  const basicUserInfo = useContext(basicProfileInfoContext);
+
   useEffect(() => {
-    if (loadedSettings.current) return;
+    if (loadedSettings.current || !basicUserInfo) return;
     loadedSettings.current = true;
 
-    sendAPIRequest("/api/user/settings", {
+    sendAPIRequest("/api/user/{username}/settings", {
       method: "get",
+      parameters: {
+        username: basicUserInfo.username,
+      },
     }).then((data) => {
       const settings = data.code === "OK" ? data.content : null;
       if (!settings) return;
 
       setIsFollowingDisabled(!settings.publicFollowing);
-      setIsCompletedWorkoutsDisabled(!settings.publicCompletedWorkouts);
       setIsStreakDisabled(!settings.publicStreak);
       setIsCurrentSplitDisabled(!settings.publicCurrentSplit);
+
+      setIsCreatedWorkoutsDisabled(!settings.publicCreatedWorkouts);
       setIsLikedWorkoutsDisabled(!settings.publicLikedWorkouts);
       setIsFavoriteWorkoutsDisabled(!settings.publicFavoriteWorkouts);
+
+      setIsCreatedSplitsDisabled(!settings.publicCreatedSplits);
       setIsLikedSplitsDisabled(!settings.publicLikedSplits);
       setIsFavoriteSplitsDisabled(!settings.publicFavoriteSplits);
 
@@ -44,14 +54,15 @@ export default function Privacy() {
     sendAPIRequest("/api/user/settings", {
       method: "put",
       payload: {
-        publicCompletedWorkouts: !isCompletedWorkoutsDisabled,
         publicStreak: !isStreakDisabled,
         publicCurrentSplit: !isCurrentSplitDisabled,
+        publicCreatedSplits: !isCreatedSplitsDisabled,
+        publicCreatedWorkouts: !isCreatedWorkoutsDisabled,
+        publicLikedSplits: !isLikedSplitsDisabled,
         publicLikedWorkouts: !isLikedWorkoutsDisabled,
         publicFavoriteSplits: !isFavoriteSplitsDisabled,
         publicFavoriteWorkouts: !isFavoriteWorkoutsDisabled,
         publicFollowing: !isFollowingDisabled,
-        publicLikedSplits: !isLikedSplitsDisabled,
       },
     });
   }
@@ -91,45 +102,6 @@ export default function Privacy() {
             <div
               className={`privacy-container-button-tail ${
                 isFollowingDisabled ? "button-disabled" : ""
-              }`}
-            ></div>
-          </button>
-        </div>
-      </div>
-
-      <div className="privacy-container">
-        <div className="privacy-container-text">
-          <div className="privacy-container-text-header">
-            <h3>Completed Workouts</h3>
-            <div
-              className={`privacy-container-status-indicator ${
-                isCompletedWorkoutsDisabled && "status-indicator-disabled"
-              }`}
-            >
-              {isCompletedWorkoutsDisabled ? "Private" : "Public"}
-            </div>
-          </div>
-          <p>
-            {isCompletedWorkoutsDisabled
-              ? "Your completed workouts, along with your overall progress, are hidden from everyone."
-              : "Your completed workouts, along with your overall progress, are visible to everyone."}
-          </p>
-        </div>
-        <div className="privacy-container-button">
-          <button
-            className="privacy-container-button-background"
-            onClick={() =>
-              setIsCompletedWorkoutsDisabled(!isCompletedWorkoutsDisabled)
-            }
-          >
-            <div
-              className={`privacy-container-button-icon ${
-                isCompletedWorkoutsDisabled ? "button-disabled" : ""
-              }`}
-            ></div>
-            <div
-              className={`privacy-container-button-tail ${
-                isCompletedWorkoutsDisabled ? "button-disabled" : ""
               }`}
             ></div>
           </button>
@@ -213,6 +185,45 @@ export default function Privacy() {
       <div className="privacy-container">
         <div className="privacy-container-text">
           <div className="privacy-container-text-header">
+            <h3>Created workouts</h3>
+            <div
+              className={`privacy-container-status-indicator ${
+                isCreatedWorkoutsDisabled && "status-indicator-disabled"
+              }`}
+            >
+              {isCreatedWorkoutsDisabled ? "Private" : "Public"}
+            </div>
+          </div>
+          <p>
+            {isCreatedWorkoutsDisabled
+              ? "Workouts you created are hidden from everyone."
+              : "Others can see the workouts you created."}
+          </p>
+        </div>
+        <div className="privacy-container-button">
+          <button
+            className="privacy-container-button-background"
+            onClick={() =>
+              setIsCreatedWorkoutsDisabled(!isCreatedWorkoutsDisabled)
+            }
+          >
+            <div
+              className={`privacy-container-button-icon ${
+                isCreatedWorkoutsDisabled ? "button-disabled" : ""
+              }`}
+            ></div>
+            <div
+              className={`privacy-container-button-tail ${
+                isCreatedWorkoutsDisabled ? "button-disabled" : ""
+              }`}
+            ></div>
+          </button>
+        </div>
+      </div>
+
+      <div className="privacy-container">
+        <div className="privacy-container-text">
+          <div className="privacy-container-text-header">
             <h3>Liked workouts</h3>
             <div
               className={`privacy-container-status-indicator ${
@@ -280,6 +291,43 @@ export default function Privacy() {
             <div
               className={`privacy-container-button-tail ${
                 isFavoriteWorkoutsDisabled ? "button-disabled" : ""
+              }`}
+            ></div>
+          </button>
+        </div>
+      </div>
+
+      <div className="privacy-container">
+        <div className="privacy-container-text">
+          <div className="privacy-container-text-header">
+            <h3>Created splits</h3>
+            <div
+              className={`privacy-container-status-indicator ${
+                isCreatedSplitsDisabled && "status-indicator-disabled"
+              }`}
+            >
+              {isCreatedSplitsDisabled ? "Private" : "Public"}
+            </div>
+          </div>
+          <p>
+            {isCreatedSplitsDisabled
+              ? "Splits you created are hidden from everyone."
+              : "Others can see the splits you created."}
+          </p>
+        </div>
+        <div className="privacy-container-button">
+          <button
+            className="privacy-container-button-background"
+            onClick={() => setIsCreatedSplitsDisabled(!isCreatedSplitsDisabled)}
+          >
+            <div
+              className={`privacy-container-button-icon ${
+                isCreatedSplitsDisabled ? "button-disabled" : ""
+              }`}
+            ></div>
+            <div
+              className={`privacy-container-button-tail ${
+                isCreatedSplitsDisabled ? "button-disabled" : ""
               }`}
             ></div>
           </button>

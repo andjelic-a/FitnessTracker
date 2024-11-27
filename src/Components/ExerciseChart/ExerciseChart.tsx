@@ -38,7 +38,7 @@ const ExerciseChart = memo(({ exercise }: ExerciseChartProps) => {
 
     setChartData(
       sendAPIRequest(
-        "/api/workout/{creator}/{name}/mock-exercise-chart-data/{exerciseId}",
+        "/api/workout/{creator}/{name}/exercise-chart-data/{exerciseId}",
         {
           method: "get",
           parameters: {
@@ -67,7 +67,6 @@ const ExerciseChart = memo(({ exercise }: ExerciseChartProps) => {
           "6 months": 6,
           "1 year": 12,
         }}
-        defaultValue={"3 months"}
         onSelectionChanged={(_key, value) => setSelectedTimeFrame(value)}
       />
     ),

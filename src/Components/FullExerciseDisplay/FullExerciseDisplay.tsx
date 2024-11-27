@@ -1,5 +1,5 @@
 import "./FullExerciseDisplay.scss";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import useLoaderData from "../../BetterRouter/UseLoaderData";
 import singleExerciseLoader from "./SingleExerciseLoader";
 import Async from "../Async/Async";
@@ -9,6 +9,8 @@ import ExerciseDisplayHistoryTab from "./ExerciseDisplayHistoryTab";
 import ExerciseDisplayHowToTab from "./ExerciseDisplayHowToTab";
 import { useNavigate } from "react-router-dom";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
+import { Schema } from "../../Types/Endpoints/SchemaParser";
+import sendAPIRequest from "../../Data/SendAPIRequest";
 
 export default function FullExerciseDisplay() {
   const data = useLoaderData<typeof singleExerciseLoader>();
@@ -36,6 +38,7 @@ export default function FullExerciseDisplay() {
         return (
           <div className="full-exercise-display">
             <ExerciseDisplayPopup
+              exercise={exercise.content}
               isOpened={activeExerciseDisplayPopup}
               handleUnitSwitch={handleUnitSwitch}
               currentUnit={unit}
@@ -133,6 +136,7 @@ type ExerciseDisplayPopupProps = {
   currentUnit: "kg" | "lbs";
   closePopup: () => void;
   ellipsisButtonRef: React.RefObject<HTMLButtonElement>;
+  exercise: Schema<"DetailedExerciseResponseDTO">;
 };
 
 function ExerciseDisplayPopup({
@@ -141,12 +145,28 @@ function ExerciseDisplayPopup({
   currentUnit,
   closePopup,
   ellipsisButtonRef,
+  exercise,
 }: ExerciseDisplayPopupProps) {
   const popupRef = useRef<HTMLDivElement>(null);
 
   useOutsideClick([popupRef, ellipsisButtonRef], closePopup);
 
   const nextUnit = currentUnit === "kg" ? "lbs" : "kg";
+  const [isFavorite, setIsFavorite] = useState(false);
+  useEffect(() => setIsFavorite(exercise.isFavorite), [exercise]);
+
+  function handleFavorite() {
+    sendAPIRequest("/api/exercise/{id}/favorite", {
+      method: isFavorite ? "delete" : "post",
+      parameters: {
+        id: exercise.id,
+      },
+    }).then(
+      (x) =>
+        (x.code === "Created" || x.code === "No Content") &&
+        void setIsFavorite(!isFavorite)
+    );
+  }
 
   return (
     <div
@@ -154,7 +174,9 @@ function ExerciseDisplayPopup({
       ref={popupRef}
     >
       <button onClick={handleUnitSwitch}>Switch to {nextUnit}</button>
-      <button>Add to favorites</button>
+      <button onClick={handleFavorite}>
+        {isFavorite ? "Remove from favorites" : "Add to favorites"}
+      </button>
     </div>
   );
 }

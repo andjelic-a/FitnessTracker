@@ -11,6 +11,6 @@ export function addMonths(date: Date, months: number) {
 }
 
 export function getStartOfWeek(date: Date): Date {
-  const diff = (7 + (date.getDay() - 1)) % 7;
+  const diff = (7 + date.getDay()) % 7;
   return new Date(date.getTime() - diff * 86400000); // 24 * 60 * 60 * 1000
 }
