@@ -488,6 +488,13 @@ type MappedEndpoints = {
             };
           },
           {
+            name: "favoritesOnly";
+            in: "query";
+            schema: {
+              type: "boolean";
+            };
+          },
+          {
             name: "limit";
             in: "query";
             schema: {

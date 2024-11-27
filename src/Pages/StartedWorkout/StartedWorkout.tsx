@@ -9,6 +9,8 @@ import StartedWorkoutSet from "./StartedWorkoutSet";
 import sendAPIRequest from "../../Data/SendAPIRequest";
 import { useNavigate } from "react-router-dom";
 import ConfirmModalDialog from "../../Components/ConfirmModalDialog/ConfirmModalDialog";
+import Icon from "../../Components/Icon/Icon";
+import useOutsideClick from "../../Hooks/UseOutsideClick";
 
 export default function StartedWorkout() {
   const loaderData = useLoaderData<typeof startedWorkoutLoader>();
@@ -24,6 +26,9 @@ export default function StartedWorkout() {
     status: "invalid",
     completedPercent: -1,
   });
+  const [activeExerciseDisplayPopup, setActiveExerciseDisplayPopup] =
+    useState<boolean>(false);
+  const ellipsisButtonRef = useRef<HTMLButtonElement>(null);
 
   async function validateSets(): Promise<"invalid" | "not-complete" | "valid"> {
     if (completedSets.length === 0) return "invalid";
@@ -73,6 +78,15 @@ export default function StartedWorkout() {
     });
   }
 
+  const [unit, setUnit] = useState<"kg" | "lbs">("kg");
+  const handleUnitSwitch = () => {
+    setUnit((prevUnit) => (prevUnit === "kg" ? "lbs" : "kg"));
+  };
+
+  const closePopup = () => {
+    setActiveExerciseDisplayPopup(false);
+  };
+
   return (
     <div className="started-workout-container">
       <Async await={loaderData?.todaysWorkout}>
@@ -81,12 +95,32 @@ export default function StartedWorkout() {
 
           return (
             <>
+              <EllipsisPopup
+                isOpened={activeExerciseDisplayPopup}
+                handleUnitSwitch={handleUnitSwitch}
+                currentUnit={unit}
+                closePopup={closePopup}
+                ellipsisButtonRef={ellipsisButtonRef}
+              />
+
               <div className="started-workout-header">
                 <h1>{workout.content.name}</h1>
 
-                <button onClick={handleSaveBtnClick} className="save-button">
-                  Save
-                </button>
+                <div className="buttons-container">
+                  <button onClick={handleSaveBtnClick} className="save-button">
+                    Save
+                  </button>
+
+                  <button
+                    ref={ellipsisButtonRef}
+                    onClick={() =>
+                      setActiveExerciseDisplayPopup((prevState) => !prevState)
+                    }
+                    className="ellipsis-button"
+                  >
+                    <Icon name="ellipsis-vertical" />
+                  </button>
+                </div>
               </div>
 
               <Inner
@@ -177,4 +211,32 @@ function Inner({
   ));
 
   return <div className="started-workout-sets-container">{items}</div>;
+}
+
+type ExerciseDisplayPopupProps = {
+  isOpened: boolean;
+  handleUnitSwitch: () => void;
+  currentUnit: "kg" | "lbs";
+  closePopup: () => void;
+  ellipsisButtonRef: React.RefObject<HTMLButtonElement>;
+};
+
+function EllipsisPopup({
+  isOpened,
+  handleUnitSwitch,
+  currentUnit,
+  closePopup,
+  ellipsisButtonRef,
+}: ExerciseDisplayPopupProps) {
+  const popupRef = useRef<HTMLDivElement>(null);
+
+  useOutsideClick([popupRef, ellipsisButtonRef], closePopup);
+
+  const nextUnit = currentUnit === "kg" ? "lbs" : "kg";
+
+  return (
+    <div className={`ellipsis-popup ${!isOpened && "closed"}`} ref={popupRef}>
+      <button onClick={handleUnitSwitch}>Switch to {nextUnit}</button>
+    </div>
+  );
 }
