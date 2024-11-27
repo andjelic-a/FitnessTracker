@@ -12,6 +12,8 @@ import ConfirmModalDialog from "../../Components/ConfirmModalDialog/ConfirmModal
 import Icon from "../../Components/Icon/Icon";
 import useOutsideClick from "../../Hooks/UseOutsideClick";
 
+export type Unit = "kg" | "lbs";
+
 export default function StartedWorkout() {
   const loaderData = useLoaderData<typeof startedWorkoutLoader>();
   const [completedSets, setCompletedSets] = useState<CompletedSet[]>([]);
@@ -72,13 +74,13 @@ export default function StartedWorkout() {
           .map((x) => ({
             setId: x.id,
             repsCompleted: x.reps,
-            weightUsed: x.weight,
+            weightUsed: unit === "kg" ? x.weight : x.weight / 2.20462,
           })),
       },
     });
   }
 
-  const [unit, setUnit] = useState<"kg" | "lbs">("kg");
+  const [unit, setUnit] = useState<Unit>("kg");
   const handleUnitSwitch = () => {
     setUnit((prevUnit) => (prevUnit === "kg" ? "lbs" : "kg"));
   };
@@ -127,6 +129,7 @@ export default function StartedWorkout() {
                 workout={workout.content}
                 completedSets={completedSets}
                 setCompletedSets={setCompletedSets}
+                unit={unit}
               />
 
               <ConfirmModalDialog
@@ -184,12 +187,14 @@ type StartedWorkoutCarouselProps = {
   workout: Schema<"DetailedWorkoutResponseDTO">;
   completedSets: CompletedSet[];
   setCompletedSets: Dispatch<SetStateAction<CompletedSet[]>>;
+  unit: Unit;
 };
 
 function Inner({
   workout,
   completedSets,
   setCompletedSets,
+  unit,
 }: StartedWorkoutCarouselProps) {
   const sets = useMemo(() => extractSetsNoMapping(workout), [workout]);
 
@@ -207,6 +212,7 @@ function Inner({
           return sets.slice();
         });
       }}
+      unit={unit}
     />
   ));
 
