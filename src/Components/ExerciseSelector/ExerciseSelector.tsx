@@ -67,6 +67,7 @@ export default function ExerciseSelector({
     name: string | undefined;
     muscleGroupId: number | undefined;
     equipmentId: number | undefined;
+    favoritesOnly: boolean | undefined;
   } {
     let name: string | undefined = searchBarRef.current?.value?.trim() ?? "";
     if (name.length === 0) name = undefined;
@@ -79,6 +80,7 @@ export default function ExerciseSelector({
         muscleGroupFilter.current === -1
           ? undefined
           : muscleGroupFilter.current,
+      favoritesOnly: isSavedFilterSelected,
     };
   }
 
@@ -226,7 +228,9 @@ export default function ExerciseSelector({
           {muscleGroupDropdown}
 
           <button
-            className={`filters-saved${!isSavedFilterSelected ? " saved-not-selected" : ""}`}
+            className={`filters-saved${
+              !isSavedFilterSelected ? " saved-not-selected" : ""
+            }`}
             onClick={() => {
               setIsSavedFilterSelected((prevState) => !prevState);
             }}
