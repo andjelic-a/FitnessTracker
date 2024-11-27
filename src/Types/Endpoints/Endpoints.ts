@@ -488,6 +488,13 @@ type MappedEndpoints = {
             };
           },
           {
+            name: "favoritesOnly";
+            in: "query";
+            schema: {
+              type: "boolean";
+            };
+          },
+          {
             name: "limit";
             in: "query";
             schema: {
@@ -8065,128 +8072,6 @@ type MappedEndpoints = {
       };
     };
     "/api/workout/{creator}/{name}/exercise-chart-data/{exerciseId}": {
-      get: {
-        tags: ["Workout"];
-        parameters: [
-          {
-            name: "creator";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-            };
-          },
-          {
-            name: "name";
-            in: "path";
-            required: true;
-            schema: {
-              type: "string";
-            };
-          },
-          {
-            name: "exerciseId";
-            in: "path";
-            required: true;
-            schema: {
-              type: "integer";
-              format: "int32";
-            };
-          },
-          {
-            name: "startDate";
-            in: "query";
-            schema: {
-              type: "string";
-              format: "date-time";
-            };
-          }
-        ];
-        responses: {
-          "200": {
-            description: "OK";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/WorkoutExerciseChartDataResponseDTO";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/WorkoutExerciseChartDataResponseDTO";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/WorkoutExerciseChartDataResponseDTO";
-                };
-              };
-            };
-          };
-          "401": {
-            description: "Unauthorized";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "404": {
-            description: "Not Found";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-          "429": {
-            description: "Too Many Requests";
-            content: {
-              "text/plain": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-              "text/json": {
-                schema: {
-                  $ref: "#/components/schemas/ProblemDetails";
-                };
-              };
-            };
-          };
-        };
-      };
-    };
-    "/api/workout/{creator}/{name}/mock-exercise-chart-data/{exerciseId}": {
       get: {
         tags: ["Workout"];
         parameters: [

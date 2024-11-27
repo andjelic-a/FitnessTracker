@@ -34,6 +34,8 @@ export default function ExerciseSelector({
     ExerciseSchema | ExerciseSchema[]
   >([]);
 
+  const [isSavedFilterSelected, setIsSavedFilterSelected] = useState<boolean>();
+
   const [exercisePromises, setExercisePromises] = useState<
     Promise<ExerciseSchema[]>[]
   >([]);
@@ -65,6 +67,7 @@ export default function ExerciseSelector({
     name: string | undefined;
     muscleGroupId: number | undefined;
     equipmentId: number | undefined;
+    favoritesOnly: boolean | undefined;
   } {
     let name: string | undefined = searchBarRef.current?.value?.trim() ?? "";
     if (name.length === 0) name = undefined;
@@ -77,6 +80,7 @@ export default function ExerciseSelector({
         muscleGroupFilter.current === -1
           ? undefined
           : muscleGroupFilter.current,
+      favoritesOnly: isSavedFilterSelected,
     };
   }
 
@@ -222,6 +226,17 @@ export default function ExerciseSelector({
 
         <div className="filters-container">
           {muscleGroupDropdown}
+
+          <button
+            className={`filters-saved${
+              !isSavedFilterSelected ? " saved-not-selected" : ""
+            }`}
+            onClick={() => {
+              setIsSavedFilterSelected((prevState) => !prevState);
+            }}
+          >
+            Saved
+          </button>
 
           {equipmentDropdown}
         </div>

@@ -57,11 +57,10 @@ const ActivityItems = memo<ActivityItemsProps>(({ streak, year }) => {
 
       if (streak.length >= 52) return streak;
 
-      let yearStart = getStartOfWeek(
+      let yearStart =
         year === "latest"
-          ? addDays(new Date(), -358)
-          : new Date(`${year}-01-01`)
-      );
+          ? addDays(getStartOfWeek(new Date()), -357)
+          : getStartOfWeek(new Date(`${year}-01-01`));
 
       if (year !== "latest" && yearStart < new Date(`${year}-01-01`))
         yearStart = addDays(yearStart, 7);

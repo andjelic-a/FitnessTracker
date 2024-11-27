@@ -1,6 +1,6 @@
 import { CompositionEvent, useRef, useState } from "react";
 import { extractSetsNoMapping } from "../../Utility/ExtractSetsFromWorkout";
-import { CompletedSet } from "./StartedWorkout";
+import { CompletedSet, Unit } from "./StartedWorkout";
 import { Link } from "react-router-dom";
 import Icon from "../../Components/Icon/Icon";
 
@@ -8,12 +8,14 @@ type StartedWorkoutSetsProps = {
   set: ReturnType<typeof extractSetsNoMapping>[number];
   completedInfo: CompletedSet | null;
   setCompletedInfo: (completedInfo: CompletedSet) => void;
+  unit: Unit;
 };
 
 export default function StartedWorkoutSet({
   set,
   completedInfo,
   setCompletedInfo,
+  unit,
 }: StartedWorkoutSetsProps) {
   return (
     <div className="started-workout-set">
@@ -39,6 +41,7 @@ export default function StartedWorkoutSet({
       <div className="started-workout-set-body">
         {set.sets.map((innerSet, index) => (
           <SingleSet
+            unit={unit}
             index={index}
             set={innerSet}
             completedInfo={
@@ -72,6 +75,7 @@ type StartedWorkoutSetProps = {
   set: ReturnType<typeof extractSetsNoMapping>[number]["sets"][number];
   completedInfo: CompletedSet["sets"][number] | null;
   setCompletedInfo: (completedInfo: CompletedSet["sets"][number]) => void;
+  unit: Unit;
 };
 
 function SingleSet({
@@ -79,6 +83,7 @@ function SingleSet({
   set,
   completedInfo,
   setCompletedInfo,
+  unit,
 }: StartedWorkoutSetProps) {
   const [isEditing, setIsEditing] = useState(false);
 
@@ -99,15 +104,17 @@ function SingleSet({
   return (
     <div className="started-set" key={set.id}>
       <p>
-        {set.type === 0
-          ? index + 1
-          : set.type === 1
-          ? <Icon name="w"/>
-          : set.type === 2
-          ? <Icon name="d"/>
-          : set.type === 3
-          ? <Icon name="f"/>
-          : ""}
+        {set.type === 0 ? (
+          index + 1
+        ) : set.type === 1 ? (
+          <Icon name="w" />
+        ) : set.type === 2 ? (
+          <Icon name="d" />
+        ) : set.type === 3 ? (
+          <Icon name="f" />
+        ) : (
+          ""
+        )}
       </p>
 
       <div className="complete-inputs">
@@ -135,7 +142,7 @@ function SingleSet({
           disabled={!isEditing && completedInfo ? true : false}
         />
 
-        <p>KG</p>
+        <p>{unit === "kg" ? "KG" : "LBS"}</p>
       </div>
 
       <button

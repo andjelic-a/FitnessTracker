@@ -3,6 +3,7 @@ import { Schema } from "../../Types/Endpoints/SchemaParser";
 import User from "../User/User";
 import { Link } from "react-router-dom";
 import { HTMLProps } from "../../Types/Utility/HTMLProps";
+import { getURLNameParam } from "../../Utility/FormatURLNameParam";
 
 type WorkoutPreviewDisplayProps = {
   workout: Schema<"SimpleWorkoutResponseDTO">;
@@ -27,7 +28,7 @@ export default function WorkoutPreview({
       <div className="workout-preview-body" {...headerProps}>
         <Link
           className="workout-preview-body-name"
-          to={`/${workout.creator.username}/workout/${workout.name}`}
+          to={`/${workout.creator.username}/workout/${getURLNameParam(workout.name)}`}
         >
           {workout.name}
         </Link>

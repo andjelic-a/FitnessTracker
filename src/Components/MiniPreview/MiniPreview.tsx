@@ -3,6 +3,7 @@ import { Schema } from "../../Types/Endpoints/SchemaParser";
 import { HTMLProps } from "../../Types/Utility/HTMLProps";
 import User from "../User/User";
 import "./MiniPreview.scss";
+import { getURLNameParam } from "../../Utility/FormatURLNameParam";
 
 type MiniPreviewDisplayProps = {
   data: Schema<"SimpleSplitResponseDTO"> | Schema<"SimpleWorkoutResponseDTO">;
@@ -28,7 +29,7 @@ export default function MiniPreview({
       <div className="mini-preview-header" {...headerProps}>
         <Link
           className="mini-preview-preview-header-name"
-          to={`/${data.creator.username}/${type}/${data.name}`}
+          to={`/${data.creator.username}/${type}/${getURLNameParam(data.name)}`}
         >
           {data.name}
         </Link>

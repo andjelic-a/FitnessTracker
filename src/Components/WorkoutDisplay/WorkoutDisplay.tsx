@@ -187,6 +187,11 @@ const WorkoutDisplay = WindowFC(({}, { close, overrideCloseFunction }) => {
   function handleOpenChartWindow(
     exercise: Schema<"SimpleExerciseResponseDTO">
   ) {
+    if (!userInfo) {
+      navigate("/authentication");
+      return;
+    }
+
     setOpenChartWindowForExercise(exercise);
     isChartWindowOpen.current = true;
   }

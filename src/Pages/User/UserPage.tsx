@@ -124,7 +124,7 @@ function InnerProfile({
           isMe={isMe}
         />
 
-        {loaderDataState.privacySettings.publicStreak &&
+        {(isMe || loaderDataState.privacySettings.publicStreak) &&
           loaderDataState.user.code === "OK" && (
             <ActivityGrid
               key={loaderDataState.user.content.username + "-activity"}

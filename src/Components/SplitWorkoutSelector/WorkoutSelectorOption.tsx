@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Schema } from "../../Types/Endpoints/SchemaParser";
 import Icon from "../Icon/Icon";
 import { Tooltip } from "react-tooltip";
+import { getURLNameParam } from "../../Utility/FormatURLNameParam";
 
 type WorkoutSelectorOptionProps = {
   workout: Schema<"SimpleWorkoutOptionResponseDTO"> | null;
@@ -38,7 +39,7 @@ export default function WorkoutSelectorOption({
 
       {workout && (
         <Link
-          to={`/${workout.creator.username}/workout/${workout.name}`}
+          to={`/${workout.creator.username}/workout/${getURLNameParam(workout.name)}`}
           target="_blank"
           className="view-details-link"
           data-tooltip-id={`link-tooltip-${workout.id}`}
