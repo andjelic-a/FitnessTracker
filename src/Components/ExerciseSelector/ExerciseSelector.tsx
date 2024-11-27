@@ -223,6 +223,8 @@ export default function ExerciseSelector({
         <div className="filters-container">
           {muscleGroupDropdown}
 
+          <button className="filters-saved">Saved</button>
+
           {equipmentDropdown}
         </div>
       </div>

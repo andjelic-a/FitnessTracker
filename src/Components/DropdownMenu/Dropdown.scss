@@ -120,3 +120,11 @@
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
 }
+
+
+@media screen and (max-width: 799.98px) {
+  .dropdown-menu {
+    width: 12rem;
+    height: 4;
+  }
+}
